@@ -8,7 +8,7 @@ spring:
 #Spring-Data-JPA설정
   jpa:
     hibernate:
-      ddl-auto: update # create = ddl 자동생성, create-drop은 재시작
+      ddl-auto: none # create = ddl 자동생성, create-drop은 재시작
       #create이후에는 update, 테이블만들어놓고하면 none
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl # column명 전략

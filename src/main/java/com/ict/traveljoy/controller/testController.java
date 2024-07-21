@@ -13,4 +13,9 @@ public class testController {
 	public String test() {
 		return "success";
 	}
+	
+	@GetMapping("/api/hello")
+	public String test2() {
+		return "success hello";
+	}
 }
