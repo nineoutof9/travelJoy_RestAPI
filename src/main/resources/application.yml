@@ -4,6 +4,11 @@ spring:
     url: jdbc:oracle:thin:@211.109.103.98:51521/XEPDB1
     username: ICTUSER
     password: ICT1234
+    
+    hikari:
+      auto-commit: true #default(false)
+      connection-timeout: 30000 # default(30000)
+      maximum-pool-size: 50 # default(10)
 
 #Spring-Data-JPA설정
   jpa:
