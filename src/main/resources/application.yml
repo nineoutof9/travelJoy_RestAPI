@@ -9,7 +9,11 @@ spring:
       auto-commit: true #default(false)
       connection-timeout: 30000 # default(30000)
       maximum-pool-size: 50 # default(10)
-
+      
+  security:
+      user:
+          name: user
+          password: 1234
 #Spring-Data-JPA설정
   jpa:
     hibernate:
