@@ -1,4 +1,4 @@
-package com.ict.traveljoy.repository.members;
+package com.ict.traveljoy.repository.users;
 
 import java.time.LocalDateTime;
 
@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "members")
+@Table(name = "users")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -31,8 +31,9 @@ import lombok.Setter;
 public class Users {
 	
 	@Id
-	@SequenceGenerator(name = "seq_members",sequenceName = "seq_members",allocationSize = 1,initialValue = 1)
-	@GeneratedValue(generator = "seq_members",strategy = GenerationType.SEQUENCE)
+	@SequenceGenerator(name = "seq_users",sequenceName = "seq_users",allocationSize = 1,initialValue = 1)
+	@GeneratedValue(generator = "seq_users",strategy = GenerationType.SEQUENCE)
+	@Column(name="user_id")
 	private long id;
 	
 	@Column(length = 320, unique = true, nullable = false)
@@ -71,7 +72,7 @@ public class Users {
 	private boolean isNaver;
 	
 	@Convert(converter = PermissionToNumberConverter.class)
-	@Column(name = "permission")
+	@Column
 	private String permission;
 	
 	@Column
@@ -107,7 +108,7 @@ public class Users {
 	
 	@Column(nullable = false)
 	@ColumnDefault("true")
-	private boolean state;
+	private boolean isActive;
 	
 	@Column
 	@ColumnDefault("SYSDATE")
