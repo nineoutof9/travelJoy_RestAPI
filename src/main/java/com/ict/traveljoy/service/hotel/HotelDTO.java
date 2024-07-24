@@ -1,6 +1,6 @@
-package com.ict.traveljoy.service.hotels;
+package com.ict.traveljoy.service.hotel;
 
-import com.ict.traveljoy.repository.hotels.Hotels;
+import com.ict.traveljoy.repository.hotel.Hotel;
 import com.ict.traveljoy.repository.region.Region;
 
 import lombok.AllArgsConstructor;
@@ -14,7 +14,7 @@ import lombok.Setter;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class HotelsDTO {
+public class HotelDTO {
 	private Long id;
 	private Region region;
 	private char isHasImage;
@@ -27,8 +27,8 @@ public class HotelsDTO {
 	private Long totalReviewCount;
 	private float averageReviewRate;
 		
-	public Hotels toEntity() {
-		return Hotels.builder()
+	public Hotel toEntity() {
+		return Hotel.builder()
 					 .id(id)
 					 .region(region)
 					 .isHasImage(isHasImage)
@@ -43,8 +43,8 @@ public class HotelsDTO {
 					 .build();
 	}
 	
-	public static HotelsDTO toDto(Hotels hotels) {
-		return HotelsDTO.builder()
+	public static HotelDTO toDto(Hotel hotels) {
+		return HotelDTO.builder()
 						.id(hotels.getId())
 						.region(hotels.getRegion())
 						.isHasImage(hotels.getIsHasImage())

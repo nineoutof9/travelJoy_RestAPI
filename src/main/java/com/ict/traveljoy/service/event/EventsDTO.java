@@ -1,8 +1,8 @@
-package com.ict.traveljoy.service.events;
+package com.ict.traveljoy.service.event;
 
 import java.time.LocalDateTime;
 
-import com.ict.traveljoy.repository.events.Events;
+import com.ict.traveljoy.repository.event.Event;
 import com.ict.traveljoy.repository.region.Region;
 
 import lombok.AllArgsConstructor;
@@ -31,8 +31,8 @@ public class EventsDTO {
     private Long totalReviewCount;
     private Float averageReviewRate;
 
-    public Events toEntity() {
-        return Events.builder()
+    public Event toEntity() {
+        return Event.builder()
                 .id(id)
                 .region(region)
                 .isHasImage(isHasImage)
@@ -49,7 +49,7 @@ public class EventsDTO {
                 .build();
     }
 
-    public static EventsDTO toDto(Events events) {
+    public static EventsDTO toDto(Event events) {
         return EventsDTO.builder()
                 .id(events.getId())
                 .region(events.getRegion())

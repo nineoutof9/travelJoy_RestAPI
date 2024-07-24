@@ -1,4 +1,4 @@
-package com.ict.traveljoy.repository.sights;
+package com.ict.traveljoy.repository.food;
 
 import com.ict.traveljoy.repository.region.Region;
 
@@ -19,33 +19,36 @@ import lombok.Setter;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
 @Setter
+@Getter
 @Builder
-public class Sights {
+public class Food {
 	@Id
-	@SequenceGenerator(name = "seq_sights" ,sequenceName = "seq_sights", allocationSize = 1, initialValue = 1)
-	@GeneratedValue(generator = "seq_sights", strategy = GenerationType.SEQUENCE )
-	@Column(name = "sight_id")
+	@SequenceGenerator(name = "seq_foods" ,sequenceName = "seq_foods", allocationSize = 1, initialValue = 1)
+	@GeneratedValue(generator = "seq_foods", strategy = GenerationType.SEQUENCE )
+	@Column(name = "food_id")
 	private Long id;
 	
 	@ManyToOne
 	@JoinColumn(name = "region_id",nullable = false)
 	private Region region;
 	
-	@Column(name="is_has_image",nullable = false, columnDefinition = "CHAR(1 BYTE) default 'F'"  )
+	@Column(name = "food_type", length = 50)
+	private String foodType;
+	
+	@Column(name = "is_has_image",nullable = false, columnDefinition = "CHAR(1 BYTE) default 'F'" )
 	private char isHasImage;
 	
-	@Column(name = "entrance_fee")
-	private float entranceFee;
+	@Column(name="average_price")
+	private float averagePrice;
 	
-	@Column(name="sight_name",length = 50, nullable = false)
-	private String sightName;
+	@Column(name="food_name",length = 50)
+	private String foodName;
 	
 	@Column(length = 2000)
 	private String descriptions;
 	
-	@Column(nullable = false, length = 200)
+	@Column(length = 200)
 	private String address;
 	
 	@Column
@@ -59,5 +62,4 @@ public class Sights {
 	
 	@Column(name = "average_review_rate")
 	private float averageReviewRate;
-	
 }

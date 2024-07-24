@@ -1,6 +1,6 @@
-package com.ict.traveljoy.service.foods;
+package com.ict.traveljoy.service.food;
 
-import com.ict.traveljoy.repository.foods.Foods;
+import com.ict.traveljoy.repository.food.Food;
 import com.ict.traveljoy.repository.region.Region;
 
 import lombok.AllArgsConstructor;
@@ -14,7 +14,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class FoodsDTO {
+public class FoodDTO {
 	private Long id;
 	private Region region;
 	private String foodType;
@@ -28,8 +28,8 @@ public class FoodsDTO {
 	private Long totalReviewCount;
 	private float averageReviewRate;
 		
-		public Foods toEntity() {
-			return Foods.builder()
+		public Food toEntity() {
+			return Food.builder()
 						.id(id)
 						.region(region)
 						.foodType(foodType)
@@ -45,8 +45,8 @@ public class FoodsDTO {
 						.build();
 		}
 		
-		public static FoodsDTO toDto(Foods foods) {
-			return FoodsDTO.builder()
+		public static FoodDTO toDto(Food foods) {
+			return FoodDTO.builder()
 							.id(foods.getId())
 							.region(foods.getRegion())
 							.foodType(foods.getFoodType())

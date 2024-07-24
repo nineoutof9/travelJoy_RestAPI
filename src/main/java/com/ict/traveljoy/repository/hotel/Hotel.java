@@ -1,4 +1,4 @@
-package com.ict.traveljoy.repository.hotels;
+package com.ict.traveljoy.repository.hotel;
 
 import com.ict.traveljoy.repository.region.Region;
 
@@ -22,7 +22,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class Hotels {
+public class Hotel {
 	@Id
 	@SequenceGenerator(name = "seq_hotels",sequenceName = "seq_hotels",allocationSize = 1,initialValue = 1)
 	@GeneratedValue(generator = "seq_hotels",strategy = GenerationType.SEQUENCE)

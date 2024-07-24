@@ -1,4 +1,4 @@
-package com.ict.traveljoy.repository.events;
+package com.ict.traveljoy.repository.event;
 
 import java.time.LocalDateTime;
 
@@ -25,7 +25,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Events {
+public class Event {
 
     @Id
     @SequenceGenerator(name = "seq_events" ,sequenceName = "seq_events", allocationSize = 1, initialValue = 1)

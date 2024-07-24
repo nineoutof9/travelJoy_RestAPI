@@ -1,4 +1,4 @@
-package com.ict.traveljoy.service.events;
+package com.ict.traveljoy.service.event;
 
 import java.util.List;
 import java.util.Optional;
@@ -7,8 +7,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ict.traveljoy.repository.events.Events;
-import com.ict.traveljoy.repository.events.EventsRepository;
+import com.ict.traveljoy.repository.event.Event;
+import com.ict.traveljoy.repository.event.EventRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -17,7 +17,7 @@ import jakarta.transaction.Transactional;
 public class EventsService {
 
     @Autowired
-    private EventsRepository eventsRepository;
+    private EventRepository eventsRepository;
 
     // 모든 이벤트 검색
     public List<EventsDTO> findAllEvents() {
@@ -39,7 +39,7 @@ public class EventsService {
             throw new IllegalArgumentException("이벤트 이름이 비어있으면 안돼요");
         }
 
-        Events event = eventsDto.toEntity();
+        Event event = eventsDto.toEntity();
         event = eventsRepository.save(event);
         return EventsDTO.toDto(event);
     }

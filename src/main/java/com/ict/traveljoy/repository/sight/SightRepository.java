@@ -1,0 +1,10 @@
+package com.ict.traveljoy.repository.sight;
+
+import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface SightRepository extends JpaRepository<Sight, Long> {
+    List<Sight> findByRegion_Id(Long regionId);
+    List<Sight> findBySightName(String sightName);
+    List<Sight> findByAverageReviewRate(float reviewRate);
+}

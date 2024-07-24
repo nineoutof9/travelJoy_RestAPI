@@ -1,8 +1,8 @@
-package com.ict.traveljoy.service.sights;
+package com.ict.traveljoy.service.sight;
 
 
 import com.ict.traveljoy.repository.region.Region;
-import com.ict.traveljoy.repository.sights.Sights;
+import com.ict.traveljoy.repository.sight.Sight;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +15,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SightsDTO {
+public class SightDTO {
 	private Long id;
 	private Region region;
 	private char isHasImage;
@@ -28,8 +28,8 @@ public class SightsDTO {
 	private Long totalReviewCount;
 	private float averageReviewRate;
 	
-	public Sights toEntity() {
-		return Sights.builder()
+	public Sight toEntity() {
+		return Sight.builder()
 					 .id(id)
 					 .region(region)
 					 .isHasImage(isHasImage)
@@ -44,8 +44,8 @@ public class SightsDTO {
 					 .build();
 	}
 	
-	public static SightsDTO toDto(Sights sights) {
-		return SightsDTO.builder()
+	public static SightDTO toDto(Sight sights) {
+		return SightDTO.builder()
 						.id(sights.getId())
 						.region(sights.getRegion())
 						.isHasImage(sights.getIsHasImage())

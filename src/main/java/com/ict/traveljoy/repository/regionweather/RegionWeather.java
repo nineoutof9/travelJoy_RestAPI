@@ -8,16 +8,17 @@ import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
-
-import com.ict.traveljoy.repository.region.Region;
 import com.ict.traveljoy.repository.weather.Weather;
+import com.ict.traveljoy.repository.region.Region;
+
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -25,22 +26,23 @@ import com.ict.traveljoy.repository.weather.Weather;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(name = "REGION_WEATHER")
 public class RegionWeather {
 
     @Id
     @SequenceGenerator(name = "seq_region_weather", sequenceName = "seq_region_weather", allocationSize = 1, initialValue = 1)
     @GeneratedValue(generator = "seq_region_weather", strategy = GenerationType.SEQUENCE)
-    @Column(name = "id")
+    @Column(name = "REGION_WEATHER_ID")
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "weather_id", nullable = false)
+    @JoinColumn(name = "WEATHER_ID", nullable = false)
     private Weather weather;
 
     @ManyToOne
-    @JoinColumn(name = "region_id", nullable = false)
+    @JoinColumn(name = "REGION_ID", nullable = false)
     private Region region;
 
-    @Column(name = "date", nullable = true)
+    @Column(name = "REGION_WEATHER_DATE", nullable = true)
     private LocalDate date;
 }

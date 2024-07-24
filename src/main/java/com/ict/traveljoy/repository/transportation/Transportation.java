@@ -9,6 +9,9 @@ import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
+
+import com.ict.traveljoy.repository.move.Move;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

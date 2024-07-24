@@ -1,5 +1,6 @@
 package com.ict.traveljoy.service.transportation;
 
+import com.ict.traveljoy.repository.move.Move;
 import com.ict.traveljoy.repository.transportation.Transportation;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

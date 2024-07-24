@@ -35,8 +35,8 @@ public class WeatherService {
     // 날씨 정보 저장
     public WeatherDTO saveWeather(WeatherDTO weatherDto) {
         // 데이터 유효성 검증
-        if (weatherDto.getTemperature() == 0.0) {
-            throw new IllegalArgumentException("온도는 비어있으면 안돼요");
+        if (weatherDto.getStatus() == null) {
+            throw new IllegalArgumentException("날씨 상태는 비어있으면 안돼요");
         }
 
         Weather weather = weatherDto.toEntity();
