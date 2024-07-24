@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicInsert;
 
 import com.ict.traveljoy.repository.converter.PermissionToNumberConverter;
 
@@ -23,6 +24,7 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "members")
+@DynamicInsert
 @Getter
 @Setter
 @NoArgsConstructor
@@ -35,16 +37,16 @@ public class Users {
 	@GeneratedValue(generator = "seq_members",strategy = GenerationType.SEQUENCE)
 	private long id;
 	
-	@Column(length = 320, unique = true, nullable = false)
+	@Column(length = 320, unique = true, nullable = true)
 	private String email;
 	
-	@Column(length = 64,nullable = false)
+	@Column(length = 64,nullable = true)
 	private String password;
 	
 	@Column(length = 30)
 	private String name;
 	
-	@Column(length = 30,nullable = false)
+	@Column(length = 30,nullable = true)
 	private String nickname;
 	
 	@Column
@@ -58,16 +60,13 @@ public class Users {
 	@Column
 	private boolean gender;
 	
-	@Column(nullable = false)
-	@ColumnDefault("false")
+	@Column(nullable = true)
 	private boolean isKakao;
 	
-	@Column(nullable = false)
-	@ColumnDefault("false")
+	@Column(nullable = true)
 	private boolean isGoogle;
 	
-	@Column(nullable = false)
-	@ColumnDefault("false")
+	@Column(nullable = true)
 	private boolean isNaver;
 	
 	@Convert(converter = PermissionToNumberConverter.class)
@@ -77,36 +76,31 @@ public class Users {
 	@Column
 	private boolean handicap;
 	
-	@Column(nullable = false)
-	@ColumnDefault("false")
+	@Column(nullable = true)
 	private boolean handicapAllow;
 	
 	@Column
 	private boolean allergy;
 	
-	@Column(nullable = false)
-	@ColumnDefault("false")
+	@Column(nullable = true)
 	private boolean allergyAllow;
 	
 	@Column
 	private boolean interest;
 	
-	@Column(nullable = false)
-	@ColumnDefault("false")
+	@Column(nullable = true)
 	private boolean interestAllow;
 	
 	@Column
 	private long reported;
 	
-	@Column(nullable = false)
-	@ColumnDefault("false")
+	@Column(nullable = true)
 	private boolean isDeleteId;
 	
 	@Column
 	private LocalDateTime deleteIdDate;
 	
-	@Column(nullable = false)
-	@ColumnDefault("true")
+	@Column(nullable = true)
 	private boolean state;
 	
 	@Column
