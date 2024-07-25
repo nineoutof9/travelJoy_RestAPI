@@ -38,7 +38,7 @@ public class TripReviewDto {
 				.build();
 	}
 	
-	public TripReviewDto toDto(TripReview trw) {
+	public static TripReviewDto toDto(TripReview trw) {
 		return TripReviewDto.builder()
 				.tripReviewId(trw.getTripReviewId())
 				.planId(trw.getPlanId())

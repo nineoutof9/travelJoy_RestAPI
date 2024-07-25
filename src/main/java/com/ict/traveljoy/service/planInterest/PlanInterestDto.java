@@ -24,7 +24,7 @@ public class PlanInterestDto {
 				.build();
 	}
 	
-	public PlanInterestDto toDto(PlanInterest pinter) {
+	public static PlanInterestDto toDto(PlanInterest pinter) {
 		return PlanInterestDto.builder()
 				.planInterestId(pinter.getInterestId())
 				.planId(pinter.getPlanId())
