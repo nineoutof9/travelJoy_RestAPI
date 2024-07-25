@@ -1,8 +1,8 @@
-package com.ict.traveljoy.service.plans;
+package com.ict.traveljoy.service.plan;
 
 import java.time.LocalDateTime;
 
-import com.ict.traveljoy.repository.plans.Plans;
+import com.ict.traveljoy.repository.plan.Plan;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +15,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PlansDto {
+public class PlanDto {
 	private long planId;
 	private String planName;
 	private String planDescriptions;
@@ -25,8 +25,8 @@ public class PlansDto {
 	private LocalDateTime deleteDate;
 	private Integer progress;
 	
-	public Plans toEntity() {
-		return Plans.builder()
+	public Plan toEntity() {
+		return Plan.builder()
 				.planId(planId)
 				.planName(planName)
 				.planDescriptions(planDescriptions)
@@ -37,8 +37,8 @@ public class PlansDto {
 				.progress(progress)
 				.build();
 	}
-	public static PlansDto toDto(Plans plans) {
-		return PlansDto.builder()
+	public static PlanDto toDto(Plan plans) {
+		return PlanDto.builder()
 				.planId(plans.getPlanId())
 				.planName(plans.getPlanName())
 				.planDescriptions(plans.getPlanDescriptions())

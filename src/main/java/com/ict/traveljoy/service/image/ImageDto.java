@@ -1,6 +1,6 @@
-package com.ict.traveljoy.service.images;
+package com.ict.traveljoy.service.image;
 
-import com.ict.traveljoy.repository.images.Images;
+import com.ict.traveljoy.repository.image.Image;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,19 +13,19 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ImagesDto {
+public class ImageDto {
 	private long imageId;
 	private String imageUrl;
 	
-	public Images toEntity() {
-		return Images.builder()
+	public Image toEntity() {
+		return Image.builder()
 				.imageId(imageId)
 				.imageUrl(imageUrl)
 				.build();
 	}
 	
-	public ImagesDto toDto(Images img) {
-		return ImagesDto.builder()
+	public ImageDto toDto(Image img) {
+		return ImageDto.builder()
 				.imageId(img.getImageId())
 				.imageUrl(img.getImageUrl())
 				.build();

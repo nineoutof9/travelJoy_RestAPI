@@ -1,4 +1,4 @@
-package com.ict.traveljoy.repository.images;
+package com.ict.traveljoy.repository.image;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,17 +14,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "images")
+@Table(name = "image")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Images {
+public class Image {
 
     @Id
-    @SequenceGenerator(name = "seq_images",sequenceName = "seq_images",allocationSize = 1,initialValue = 1)
-    @GeneratedValue(generator = "seq_images", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "seq_image",sequenceName = "seq_image",allocationSize = 1,initialValue = 1)
+    @GeneratedValue(generator = "seq_image", strategy = GenerationType.SEQUENCE)
     @Column(name = "IMAGE_ID", nullable = false)
     private Long imageId;
 
