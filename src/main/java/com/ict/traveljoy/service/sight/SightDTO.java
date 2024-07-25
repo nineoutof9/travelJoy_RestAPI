@@ -18,7 +18,7 @@ import lombok.Setter;
 public class SightDTO {
 	private Long id;
 	private Region region;
-	private char isHasImage;
+	private boolean isHasImage;
 	private float entranceFee;
 	private String sightName;
 	private String descriptions;

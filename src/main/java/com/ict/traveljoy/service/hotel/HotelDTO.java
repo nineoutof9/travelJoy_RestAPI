@@ -17,7 +17,7 @@ import lombok.Setter;
 public class HotelDTO {
 	private Long id;
 	private Region region;
-	private char isHasImage;
+	private boolean isHasImage;
 	private float averagePrice;
 	private String hotelname;
 	private String descriptions;

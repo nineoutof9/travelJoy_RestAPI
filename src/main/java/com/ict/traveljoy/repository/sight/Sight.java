@@ -34,7 +34,7 @@ public class Sight {
 	private Region region;
 	
 	@Column(name="is_has_image",nullable = false, columnDefinition = "CHAR(1 BYTE) default 'F'"  )
-	private char isHasImage;
+	private boolean isHasImage;
 	
 	@Column(name = "entrance_fee")
 	private float entranceFee;

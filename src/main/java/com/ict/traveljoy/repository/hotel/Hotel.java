@@ -34,7 +34,7 @@ public class Hotel {
 	private Region region;
 	
 	@Column(name="is_has_image",nullable = false, columnDefinition = "CHAR(1 BYTE) default 'F'"  )
-	private char isHasImage;
+	private boolean isHasImage;
 	
 	@Column(name="average_price", nullable = false)
 	private float averagePrice;

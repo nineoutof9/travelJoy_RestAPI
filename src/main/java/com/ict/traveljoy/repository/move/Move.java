@@ -32,14 +32,6 @@ public class Move {
     @Column(name = "MOVE_ID")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "START_DETAIL_PLAN_ID", nullable = true)
-    private DetailPlan startDetailPlan;
-
-    @ManyToOne
-    @JoinColumn(name = "END_DETAIL_PLAN_ID", nullable = true)
-    private DetailPlan endDetailPlan;
-
     @OneToMany(mappedBy = "move")
     private List<Transportation> transportations;
 }

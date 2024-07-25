@@ -38,19 +38,19 @@ public class Transportation {
     private Move move;
 
     @Column(name = "IS_BUS", nullable = false)
-    private char isBus;
+    private boolean isBus;
 
     @Column(name = "IS_TRAIN", nullable = false)
-    private char isTrain;
+    private boolean isTrain;
 
-    @Column(name = "IS_AIRPLAIN", nullable = false)
-    private char isAirplain;
+    @Column(name = "IS_AIRPLANE", nullable = false)
+    private boolean isAirplane;
 
     @Column(name = "IS_DRIVE", nullable = false)
-    private char isDrive;
+    private boolean isDrive;
 
     @Column(name = "IS_WALK", nullable = false)
-    private char isWalk;
+    private boolean isWalk;
 
     @Column(name = "START_DATE")
     private LocalDateTime startDate;

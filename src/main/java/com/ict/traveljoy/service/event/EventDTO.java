@@ -16,10 +16,10 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class EventsDTO {
+public class EventDTO {
     private Long id;
     private Region region;
-    private char isHasImage;
+    private boolean isHasImage;
     private LocalDateTime eventStartDate;
     private LocalDateTime eventEndDate;
     private Float entranceFee;
@@ -49,21 +49,21 @@ public class EventsDTO {
                 .build();
     }
 
-    public static EventsDTO toDto(Event events) {
-        return EventsDTO.builder()
-                .id(events.getId())
-                .region(events.getRegion())
-                .isHasImage(events.getIsHasImage())
-                .eventStartDate(events.getEventStartDate())
-                .eventEndDate(events.getEventEndDate())
-                .entranceFee(events.getEntranceFee())
-                .eventName(events.getEventName())
-                .descriptions(events.getDescriptions())
-                .address(events.getAddress())
-                .lat(events.getLat())
-                .lng(events.getLng())
-                .totalReviewCount(events.getTotalReviewCount())
-                .averageReviewRate(events.getAverageReviewRate())
+    public static EventDTO toDto(Event event) {
+        return EventDTO.builder()
+                .id(event.getId())
+                .region(event.getRegion())
+                .isHasImage(event.getIsHasImage())
+                .eventStartDate(event.getEventStartDate())
+                .eventEndDate(event.getEventEndDate())
+                .entranceFee(event.getEntranceFee())
+                .eventName(event.getEventName())
+                .descriptions(event.getDescriptions())
+                .address(event.getAddress())
+                .lat(event.getLat())
+                .lng(event.getLng())
+                .totalReviewCount(event.getTotalReviewCount())
+                .averageReviewRate(event.getAverageReviewRate())
                 .build();
     }
 }

@@ -15,8 +15,8 @@ public interface FoodRepository extends JpaRepository<Food, Long> {
     List<Food> findByFoodName(String foodName);
 
     // 특정 가격 이하의 음식 검색
-    List<Food> findByAveragePrice(float maxPrice);
+    List<Food> findByAveragePriceLessThanEqual(float maxPrice);
 
     // 특정 리뷰 평점 이상의 음식 검색
-    List<Food> findByAverageReviewRate(float reviewRate);
+    List<Food> findByAverageReviewRateGreaterThanEqual(float reviewRate);
 }

@@ -37,7 +37,7 @@ public class Food {
 	private String foodType;
 	
 	@Column(name = "is_has_image",nullable = false, columnDefinition = "CHAR(1 BYTE) default 'F'" )
-	private char isHasImage;
+	private boolean isHasImage;
 	
 	@Column(name="average_price")
 	private float averagePrice;

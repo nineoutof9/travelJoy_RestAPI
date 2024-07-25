@@ -18,11 +18,11 @@ import java.time.LocalDateTime;
 public class TransportationDTO {
     private Long id;
     private Move move;
-    private char isBus;
-    private char isTrain;
-    private char isAirplain;
-    private char isDrive;
-    private char isWalk;
+    private boolean isBus;
+    private boolean isTrain;
+    private boolean isAirplane;
+    private boolean isDrive;
+    private boolean isWalk;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private String startAddress;
@@ -39,7 +39,7 @@ public class TransportationDTO {
                 .move(move)
                 .isBus(isBus)
                 .isTrain(isTrain)
-                .isAirplain(isAirplain)
+                .isAirplane(isAirplane)
                 .isDrive(isDrive)
                 .isWalk(isWalk)
                 .startDate(startDate)
@@ -60,7 +60,7 @@ public class TransportationDTO {
                 .move(transportation.getMove())
                 .isBus(transportation.getIsBus())
                 .isTrain(transportation.getIsTrain())
-                .isAirplain(transportation.getIsAirplain())
+                .isAirplane(transportation.getIsAirplane())
                 .isDrive(transportation.getIsDrive())
                 .isWalk(transportation.getIsWalk())
                 .startDate(transportation.getStartDate())

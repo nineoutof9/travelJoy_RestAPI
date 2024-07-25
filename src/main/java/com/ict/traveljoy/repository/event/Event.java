@@ -38,7 +38,7 @@ public class Event {
     private Region region;
 
     @Column(name = "IS_HAS_IMAGE", nullable = false)
-    private char isHasImage;
+    private boolean isHasImage;
 
     @Column(name = "EVENT_START_DATE")
     private LocalDateTime eventStartDate;

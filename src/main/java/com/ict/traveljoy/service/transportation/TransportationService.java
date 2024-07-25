@@ -23,14 +23,14 @@ public class TransportationService {
     // 모든 교통수단 정보 검색
     public List<TransportationDTO> findAllTransportations() {
         return transportationRepository.findAll().stream()
-                .map(transportation -> TransportationDTO.toDto(transportation))
+                .map(TransportationDTO::toDto)
                 .collect(Collectors.toList());
     }
 
     // ID로 교통수단 정보 검색
     public Optional<TransportationDTO> findTransportationById(Long id) {
         return transportationRepository.findById(id)
-                .map(transportation -> TransportationDTO.toDto(transportation));
+                .map(TransportationDTO::toDto);
     }
 
     // 교통수단 정보 저장
@@ -39,6 +39,7 @@ public class TransportationService {
         if (transportationDto.getStartDate() == null) {
             throw new IllegalArgumentException("출발 날짜는 비어있으면 안돼요");
         }
+        // 다른 필수 필드 검증 추가 가능
 
         Transportation transportation = transportationDto.toEntity();
         transportation = transportationRepository.save(transportation);
@@ -57,40 +58,39 @@ public class TransportationService {
     // 이동 유형에 따른 검색
     public List<TransportationDTO> findTransportationsByIsBus(char isBus) {
         return transportationRepository.findByIsBus(isBus).stream()
-                .map(transportation -> TransportationDTO.toDto(transportation))
+                .map(TransportationDTO::toDto)
                 .collect(Collectors.toList());
     }
 
     public List<TransportationDTO> findTransportationsByIsTrain(char isTrain) {
         return transportationRepository.findByIsTrain(isTrain).stream()
-                .map(transportation -> TransportationDTO.toDto(transportation))
+                .map(TransportationDTO::toDto)
                 .collect(Collectors.toList());
     }
 
-    public List<TransportationDTO> findTransportationsByIsAirplain(char isAirplain) {
-        return transportationRepository.findByIsAirplain(isAirplain).stream()
-                .map(transportation -> TransportationDTO.toDto(transportation))
+    public List<TransportationDTO> findTransportationsByIsAirplane(char isAirplane) {
+        return transportationRepository.findByIsAirplane(isAirplane).stream()
+                .map(TransportationDTO::toDto)
                 .collect(Collectors.toList());
     }
 
     public List<TransportationDTO> findTransportationsByIsDrive(char isDrive) {
         return transportationRepository.findByIsDrive(isDrive).stream()
-                .map(transportation -> TransportationDTO.toDto(transportation))
+                .map(TransportationDTO::toDto)
                 .collect(Collectors.toList());
     }
 
-
     // 특정 기간 내의 교통수단 검색
     public List<TransportationDTO> findTransportationsByDateRange(LocalDateTime startDate, LocalDateTime endDate) {
-        return transportationRepository.findByStartDate(startDate, endDate).stream()
-                .map(transportation -> TransportationDTO.toDto(transportation))
+        return transportationRepository.findByStartDateBetween(startDate, endDate).stream()
+                .map(TransportationDTO::toDto)
                 .collect(Collectors.toList());
     }
 
     // 가격 범위 내의 교통수단 검색
     public List<TransportationDTO> findTransportationsByPrice(float minPrice, float maxPrice) {
-        return transportationRepository.findByPrice(minPrice, maxPrice).stream()
-                .map(transportation -> TransportationDTO.toDto(transportation))
+        return transportationRepository.findByPriceBetween(minPrice, maxPrice).stream()
+                .map(TransportationDTO::toDto)
                 .collect(Collectors.toList());
     }
 }
