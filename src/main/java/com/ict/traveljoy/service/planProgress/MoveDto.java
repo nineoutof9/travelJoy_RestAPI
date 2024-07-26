@@ -28,7 +28,7 @@ public class MoveDto {
 				.build();
 	}
 	
-	public MoveDto toDto(Move move) {
+	public static MoveDto toDto(Move move) {
 		return MoveDto.builder()
 				.moveId(move.getMoveId())
 				.startDetailPlanId(move.getStartDetailPlanId())

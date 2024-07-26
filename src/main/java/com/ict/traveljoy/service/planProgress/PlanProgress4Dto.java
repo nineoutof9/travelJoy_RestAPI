@@ -26,7 +26,7 @@ public class PlanProgress4Dto {
 				.build();
 	}
 	
-	public PlanProgress4Dto toDto(PlanProgress4 pp4) {
+	public static PlanProgress4Dto toDto(PlanProgress4 pp4) {
 		return PlanProgress4Dto.builder()
 				.planProgress4Id(pp4.getPlanProgress4Id())
 				.planId(pp4.getPlanId())

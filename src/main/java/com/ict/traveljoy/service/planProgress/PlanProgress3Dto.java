@@ -40,7 +40,7 @@ public class PlanProgress3Dto {
 				.build();
 	}
 	
-	public PlanProgress3Dto toDto(PlanProgress3 pp3) {
+	public static PlanProgress3Dto toDto(PlanProgress3 pp3) {
 		return PlanProgress3Dto.builder()
 				.planProgress3Id(pp3.getPlanProgress3Id())
 				.planId(pp3.getPlanId())

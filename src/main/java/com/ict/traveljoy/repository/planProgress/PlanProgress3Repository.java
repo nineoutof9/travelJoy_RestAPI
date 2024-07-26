@@ -38,6 +38,4 @@ public interface PlanProgress3Repository extends JpaRepository<PlanProgress3, Lo
     // 특정 계획 ID와 최소 비용, 최대 비용 범위에 해당하는 PlanProgress3 엔티티를 조회하는 메서드
     List<PlanProgress3> findByPlanIdAndMinimumCostLessThanEqualAndMaximumCostGreaterThanEqual(Long planId, Long minCost, Long maxCost);
     
-    // 특정 계획 ID에 해당하는 PlanProgress3 엔티티를 삭제하는 메서드
-    void deleteByPlanId(Long planId);
 }

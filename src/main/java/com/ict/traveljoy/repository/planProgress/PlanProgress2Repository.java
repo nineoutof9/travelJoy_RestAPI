@@ -26,7 +26,4 @@ public interface PlanProgress2Repository extends JpaRepository<PlanProgress2, Lo
     // 특정 계획 ID와 상세 계획 시작일, 종료일에 해당하는 PlanProgress2 엔티티를 조회하는 메서드
     List<PlanProgress2> findByPlanIdAndDetailPlanStartDateBetween(Long planId, java.sql.Timestamp startDate, java.sql.Timestamp endDate);
 
-    // 특정 계획 ID에 해당하는 PlanProgress2 엔티티를 삭제하는 메서드
-    void deleteByPlanId(Long planId);
-
 }
