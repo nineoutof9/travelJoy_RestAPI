@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @CrossOrigin
 @RestController // If you need to expose RESTful APIs
 @RequiredArgsConstructor
-public class TestController {
+public class testController {
 
     private final UsersService usersService;
     private final ObjectMapper objectMapper;
