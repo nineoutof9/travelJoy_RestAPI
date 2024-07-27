@@ -43,14 +43,19 @@ public class Favorite {
 	
 	@Column(name="is_event")
 	private char isEvent;
+	
 	@Column(name="is_food")
 	private char isFood;
+	
 	@Column(name="is_sight")
 	private char isSight;
+	
 	@Column(name="is_hotel")
 	private char isHotel;
+	
 	@Column(name="is_active")
 	private char isActive;
+	
 	@Column(name="is_delete")
 	private char isDelete;
 	
