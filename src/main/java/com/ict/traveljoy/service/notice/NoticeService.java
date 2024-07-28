@@ -1,7 +1,12 @@
 package com.ict.traveljoy.service.notice;
 
-import org.springframework.stereotype.Service;
+import java.util.List;
 
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ict.traveljoy.repository.notice.NoticeRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -9,6 +14,29 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class NoticeService {
 	
+	private final NoticeRepository noticeRepository;
 	
+	@Transactional
+	public NoticeDto createNotice(NoticeDto noticeDto) {
+		return null;
+	}
+	
+	@Transactional
+	public List<NoticeDto> findAll(NoticeDto noticeDto) {
+		return null;
+	}
+
+	@Transactional
+	public NoticeDto noticeUpdate(NoticeDto noticeDto) {
+		return null;
+	}
+
+	public NoticeDto noticeDelete(NoticeDto noticeDto) {
+		return null;
+	}
+
+	public NoticeDto findById(Long id) {
+		return null;
+	}
 	
 }
