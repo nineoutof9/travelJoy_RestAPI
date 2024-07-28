@@ -52,19 +52,6 @@ public class NoticeController {
     		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     	}
     }
-    
-    @CrossOrigin
-    @GetMapping("/noticeview/{id}")
-    @Operation(summary = "공지사항 id로 조회하기", description = "공지사항  id로 조회 컨트롤러입니다")
-	public ResponseEntity<NoticeDto> findById(@PathVariable Long id) {
-    	try {
-            NoticeDto noticeDto = noticeService.findById(id);
-            return ResponseEntity.ok(noticeDto);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
-	}
 
     @CrossOrigin
     @PutMapping("/noticeUpdate")

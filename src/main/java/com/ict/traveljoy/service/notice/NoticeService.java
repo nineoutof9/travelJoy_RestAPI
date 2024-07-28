@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ict.traveljoy.repository.notice.Notice;
 import com.ict.traveljoy.repository.notice.NoticeRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,8 @@ public class NoticeService {
 	
 	@Transactional
 	public NoticeDto createNotice(NoticeDto noticeDto) {
-		return null;
+		Notice notice= noticeRepository.save(noticeDto.toEntity());
+		return NoticeDto.toDto(notice);
 	}
 	
 	@Transactional
@@ -32,10 +33,6 @@ public class NoticeService {
 	}
 
 	public NoticeDto noticeDelete(NoticeDto noticeDto) {
-		return null;
-	}
-
-	public NoticeDto findById(Long id) {
 		return null;
 	}
 	

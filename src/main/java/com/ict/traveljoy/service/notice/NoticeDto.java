@@ -3,6 +3,8 @@ package com.ict.traveljoy.service.notice;
 
 import java.time.LocalDateTime;
 
+import com.ict.traveljoy.repository.notice.Notice;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,13 +37,13 @@ public class NoticeDto {
     }
 
     // 엔티티를 DTO로 변환
-    public static NoticeDto fromEntity(NoticeDto entity) {
+    public static NoticeDto toDto(Notice notice) {
         return NoticeDto.builder()
-                .title(entity.getTitle())
-                .content(entity.getContent())
-                .writer(entity.getWriter())
-                .isDelete(entity.getIsDelete())
-                .isActive(entity.getIsActive())
+                .title(notice.getTitle())
+                .content(notice.getContent())
+                .writer(notice.getWriter())
+                .isDelete(notice.getIsDelete())
+                .isActive(notice.getIsActive())
                 .build();
     }
 }
