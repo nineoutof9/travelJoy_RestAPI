@@ -16,13 +16,6 @@ import lombok.RequiredArgsConstructor;
 @Tag(name="문의 API",description = "사용자")
 @RequestMapping("/help")
 public class HelpController{
-
-	@GetMapping("/select") //react에서 구현
-	public String select(@PathVariable String select) {
-		if(select=="agent")
-			return "agent";
-		else return "chatbot";
-	}
 	
 	@GetMapping("/chat/{select}")
 	public String chatbot(@PathVariable String select) {
@@ -36,8 +29,9 @@ public class HelpController{
 
 	
 	//채팅방 재입장
-	@GetMapping("/chat/room")
+	@GetMapping("/chat/{userId}")
 	public String getChatRoomByUserId() {
+		
 		return "userid에 해당하는 chatroom id";
 	}
 	

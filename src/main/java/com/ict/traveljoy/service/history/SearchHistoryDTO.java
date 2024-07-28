@@ -29,12 +29,22 @@ public class SearchHistoryDTO {
 	public SearchHistory toEntity() {
 		return SearchHistory.builder()
 				.id(id)
+				.userId(userId)
+				.searchWord(searchWord)
+				.searchDate(searchDate)
+				.isActive(isActive==true?'T':'F')
+				.isDelete(isDelete==true?'T':'F')
 				.build();
 	}
 	
-	public static SearchHistoryDTO toDTO(SearchHistory history) {
+	public static SearchHistoryDTO toDTO(SearchHistory searchHistory) {
 		return SearchHistoryDTO.builder()
-				.id(history.getId())
+				.id(searchHistory.getId())
+				.userId(searchHistory.getUserId())
+				.searchWord(searchHistory.getSearchWord())
+				.searchDate(searchHistory.getSearchDate())
+				.isActive(searchHistory.getIsActive()=='T'?true:false)
+				.isDelete(searchHistory.getIsDelete()=='T'?true:false)
 				.build();
 	}
 }
