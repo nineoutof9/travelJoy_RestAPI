@@ -1,4 +1,4 @@
-package com.ict.traveljoy.controller.help;
+package com.ict.traveljoy.controller.ask;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,8 +14,8 @@ import lombok.RequiredArgsConstructor;
 @RestController
 //@RequiredArgsConstructor
 @Tag(name="문의 API",description = "사용자")
-@RequestMapping("/help")
-public class HelpController{
+@RequestMapping("/ask")
+public class AskController{
 	
 	@GetMapping("/chat/{select}")
 	public String chatbot(@PathVariable String select) {
@@ -34,6 +34,14 @@ public class HelpController{
 		
 		return "userid에 해당하는 chatroom id";
 	}
+	
+	@PostMapping("/chat/{userId}")
+	public String postMethodName(@RequestBody String entity) {
+		
+		
+		return "새로운 채팅방 생성";
+	}
+	
 	
 	
 	
