@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name="message")
+@Table
 @Getter
 @Setter
 @NoArgsConstructor
@@ -28,38 +28,36 @@ import lombok.Setter;
 public class Message {
 
 	@Id
-	@Column(name="message_id")
 	@SequenceGenerator(name = "seq_message",sequenceName = "seq_message",allocationSize = 1,initialValue = 1)
 	@GeneratedValue(generator = "seq_message",strategy = GenerationType.SEQUENCE)
 	private long id;
 	
-	@Column(name="chat_room_id")
+
 	private long chatRoomId;
 	
-	@Column(name="user_id")
 	private long userId;
 	
-	@Column(name="message_content",length=2000)
+	@Column(length=2000)
 	private String messageContent;
 	
 	//보낸시간이랑 받은시간 같지 않은지?
-	@Column(name="message_send_date")
+
 	@ColumnDefault("SYSDATE")
 	@CreationTimestamp
 	private LocalDateTime messageSendDate;
 	
-	@Column(name="message_receive_date")
 	@ColumnDefault("SYSDATE")
 	@CreationTimestamp
 	private LocalDateTime messageReceiveDate;
-	
-	
+
+	@ColumnDefault("'T'")
 	private char isActive;
 	
+	@ColumnDefault("'F'")
 	private char isDelete;
 	
 	//메세지 삭제 기능 넣을것인지?
-	@Column(name="delete_date")
+
 	@CreationTimestamp
 	private LocalDateTime deleteDate;
 }

@@ -36,7 +36,8 @@ public class AskController{
 	}
 	
 	@PostMapping("/chat/{userId}")
-	public String postMethodName(@RequestBody String entity) {
+	public String postMethodName() {
+
 		
 		
 		return "새로운 채팅방 생성";

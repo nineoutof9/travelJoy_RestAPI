@@ -4,12 +4,11 @@ server:
 spring:
   datasource:
     driver-class-name: oracle.jdbc.OracleDriver
-#    url: jdbc:oracle:thin:@211.109.103.98:51521/XEPDB1
-#    username: ICTUSER
-#    password: ICT1234
-    url: jdbc:oracle:thin:@localhost:1521/XEPDB1
-    username: skstudy
-    password: sk1234
+    url: jdbc:oracle:thin:@211.109.103.98:51521/XEPDB1
+    username: ICTUSER
+    password: ICT1234
+
+
     
     hikari:
       auto-commit: true # default(false)
@@ -23,8 +22,9 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create-drop # create = ddl 자동생성, create-drop은 재시작
-      #create이후에는 update, 테이블만들어놓고하면 none
+      ddl-auto: none # create = ddl 자동생성, create-drop은 재시작
+      #create이후에는 update, 테이블만들어놓고하면 none, 비교만 하려면 valid
+
       naming:
         physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy # column명 전략
     properties:

@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name="chat_room")
+@Table
 @Getter
 @Setter
 @NoArgsConstructor
@@ -30,28 +30,23 @@ import lombok.Setter;
 public class ChatRoom {
 	
 	@Id
-	@Column(name="chat_room_id")
 	@SequenceGenerator(name = "seq_chatroom",sequenceName = "seq_chatroom",allocationSize = 1,initialValue = 1)
 	@GeneratedValue(generator = "seq_chatroom",strategy = GenerationType.SEQUENCE)
 	private long id;
 	
-	@Column(name="create_date",nullable = false)
 	@ColumnDefault("SYSDATE")
 	@CreationTimestamp
     private LocalDateTime createDate;
-	
-	@Column(name="delete_date")
+
 	@ColumnDefault("SYSDATE")
 	@CreationTimestamp
     private LocalDateTime deleteDate;
-	
-	@Column(name="is_active")
-	@ColumnDefault("y")
+
+	@ColumnDefault("'T'")
 	private char isActive;
 	
-	@Column(name="is_delete")
-	@ColumnDefault("n")
+	@ColumnDefault("'F'")
+
 	private char isDelete;
-	
 	
 }
