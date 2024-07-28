@@ -1,4 +1,4 @@
-package com.ict.traveljoy.repository.members;
+package com.ict.traveljoy.repository.users;
 
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
