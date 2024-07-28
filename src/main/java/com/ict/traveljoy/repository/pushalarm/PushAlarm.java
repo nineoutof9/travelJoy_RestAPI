@@ -41,11 +41,11 @@ public class PushAlarm {
 	private String pushAlarmContent;
 	
 	@Column(nullable = false)
-	@ColumnDefault("true")
+	@ColumnDefault("'T'")
 	private char isActive;
 	
 	@Column(nullable = false)
-	@ColumnDefault("false")
+	@ColumnDefault("'F'")
 	private char isDelete;
 	
 	@Column

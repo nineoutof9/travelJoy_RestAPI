@@ -1,5 +1,5 @@
 package com.ict.traveljoy.repository.chat;
-//우째해야하는가?
+//어케 할지
 public class EnterChatRoom {
 
 	private long chatRoomId;
