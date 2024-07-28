@@ -1,19 +1,17 @@
 package com.ict.traveljoy.service.notice;
 
 import java.util.List;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.ict.traveljoy.repository.notice.Notice;
 import com.ict.traveljoy.repository.notice.NoticeRepository;
-
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor 
 @Service
+@RequiredArgsConstructor 
 public class NoticeService {
 	
+
 	private final NoticeRepository noticeRepository;
 	
 	@Transactional

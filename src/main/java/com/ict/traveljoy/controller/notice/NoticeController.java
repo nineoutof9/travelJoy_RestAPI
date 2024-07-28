@@ -1,5 +1,4 @@
 package com.ict.traveljoy.controller.notice;
-
 import java.util.List;
 
 import org.springframework.http.HttpHeaders;
@@ -80,5 +79,6 @@ public class NoticeController {
         	return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
+
     
 }
