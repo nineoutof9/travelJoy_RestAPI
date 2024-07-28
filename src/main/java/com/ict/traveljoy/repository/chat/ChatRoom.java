@@ -37,7 +37,7 @@ public class ChatRoom {
 	@ColumnDefault("SYSDATE")
 	@CreationTimestamp
     private LocalDateTime createDate;
-	
+
 	@ColumnDefault("SYSDATE")
 	@CreationTimestamp
     private LocalDateTime deleteDate;
@@ -46,7 +46,7 @@ public class ChatRoom {
 	private char isActive;
 	
 	@ColumnDefault("'F'")
+
 	private char isDelete;
-	
 	
 }

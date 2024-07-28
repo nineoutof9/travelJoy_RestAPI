@@ -4,10 +4,10 @@ server:
 spring:
   datasource:
     driver-class-name: oracle.jdbc.OracleDriver
-
     url: jdbc:oracle:thin:@211.109.103.98:51521/XEPDB1
     username: ICTUSER
     password: ICT1234
+
 
     
     hikari:
@@ -31,7 +31,6 @@ spring:
       hibernate:
         format_sql: true #DDL문을 가독성 있게 표시
     show-sql: true  #JPA로그 확인용
-
 
   # Swagger 설정
   springdoc:

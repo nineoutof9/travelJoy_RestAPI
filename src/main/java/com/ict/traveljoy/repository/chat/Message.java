@@ -32,6 +32,7 @@ public class Message {
 	@GeneratedValue(generator = "seq_message",strategy = GenerationType.SEQUENCE)
 	private long id;
 	
+
 	private long chatRoomId;
 	
 	private long userId;
@@ -40,6 +41,7 @@ public class Message {
 	private String messageContent;
 	
 	//보낸시간이랑 받은시간 같지 않은지?
+
 	@ColumnDefault("SYSDATE")
 	@CreationTimestamp
 	private LocalDateTime messageSendDate;
@@ -47,7 +49,7 @@ public class Message {
 	@ColumnDefault("SYSDATE")
 	@CreationTimestamp
 	private LocalDateTime messageReceiveDate;
-	
+
 	@ColumnDefault("'T'")
 	private char isActive;
 	
@@ -55,6 +57,7 @@ public class Message {
 	private char isDelete;
 	
 	//메세지 삭제 기능 넣을것인지?
+
 	@CreationTimestamp
 	private LocalDateTime deleteDate;
 }

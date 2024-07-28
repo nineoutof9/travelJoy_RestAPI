@@ -1,8 +1,6 @@
 package com.ict.traveljoy.service.notice;
 
-
 import java.time.LocalDateTime;
-
 
 import com.ict.traveljoy.repository.notice.Notice;
 
@@ -45,6 +43,7 @@ public class NoticeDto {
                 .writer(notice.getWriter())
                 .isDelete(notice.getIsDelete())
                 .isActive(notice.getIsActive())
+
                 .build();
     }
 }
