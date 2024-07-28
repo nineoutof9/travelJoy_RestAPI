@@ -35,12 +35,13 @@ public class AskController{
 		return "userid에 해당하는 chatroom id";
 	}
 	
-	@PostMapping("/chat/{userId}")
-	public String postMethodName() {
-		
-		
-		return "새로운 채팅방 생성";
-	}
+//	
+//	@PostMapping("/chat/{userId}")
+//	public String postMethodName() {
+//		
+//		
+//		return "새로운 채팅방 생성";
+//	}
 	
 	
 	
