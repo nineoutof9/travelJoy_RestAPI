@@ -17,44 +17,41 @@ import com.ict.traveljoy.service.users.UsersService;
 
 import lombok.RequiredArgsConstructor;
 
-
-@RestController
+@CrossOrigin
+@RestController // If you need to expose RESTful APIs
 @RequiredArgsConstructor
 public class testController {
 
-	private final UsersService usersService;
-	private final ObjectMapper objectMapper;
-	
-	@GetMapping("/api")
-	public String test() {
-		
-		return "success";
-	}
-	
-	@GetMapping("/api/hello")
-	public String test2() {
-		return "success hello";
-	}
-	
-	@CrossOrigin
-	@PostMapping("/users")
-	//1)DTO로 받기
-	//public ResponseEntity<UsersDto> signUp(UsersDto dto){ //@RequestParam붙이면 400번대 에러
-	//2)Map으로 받기
-	public ResponseEntity<UsersDto> signUp(@RequestParam Map map){
-		try {
-			System.out.println(map.get("kakao"));
-			
-			//2)맵을 DTO로 변환
-			UsersDto dto = objectMapper.convertValue(map, UsersDto.class);
-			
-			UsersDto insertedDto = usersService.signUp(dto);
-			
-			return ResponseEntity.ok(insertedDto);
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-		}
-	}
+    private final UsersService usersService;
+    private final ObjectMapper objectMapper;
+    
+    @GetMapping("/api")
+    public String test() {
+        return "success";
+    }
+    
+    @GetMapping("/api/hello")
+    public String test2() {
+        return "success hello";
+    }
+    
+    @PostMapping("/users")
+    public ResponseEntity<UsersDto> signUp(@RequestParam Map<String, Object> map) {
+        try {
+            System.out.println(map.get("kakao"));
+            
+            UsersDto dto = objectMapper.convertValue(map, UsersDto.class);
+            UsersDto insertedDto = usersService.signUp(dto);
+            
+            return ResponseEntity.ok(insertedDto);
+        } catch(Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+    
+    @GetMapping("/react")
+    public String frontend() {
+        return "react/index";
+    }
 }

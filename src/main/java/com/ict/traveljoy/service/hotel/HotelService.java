@@ -21,6 +21,7 @@ public class HotelService {
 
     public List<HotelDTO> findAllHotels() {
         return hotelRepository.findAll().stream()
+<<<<<<< HEAD
                 .map(hotel -> HotelDTO.toDto(hotel))
                 .collect(Collectors.toList());
     }
@@ -70,6 +71,57 @@ public class HotelService {
     public List<HotelDTO> findHotelsByReviewRate(float reviewRate) {
         return hotelRepository.findByAverageReviewRateGreaterThanEqual(reviewRate).stream()
                 .map(hotel -> HotelDTO.toDto(hotel))
+=======
+                .map(HotelDTO::toDto)
+                .collect(Collectors.toList());
+    }
+
+    public Optional<HotelDTO> findHotelById(Long id) {
+        return hotelRepository.findById(id)
+                .map(HotelDTO::toDto);
+    }
+
+    public HotelDTO saveHotel(HotelDTO hotelDTO) {
+        if (hotelDTO.getHotelname().isEmpty()) {
+            throw new IllegalArgumentException("숙소 이름이 비어있어요");
+        }
+        Hotel hotel = hotelDTO.toEntity();
+        hotel = hotelRepository.save(hotel);
+        return HotelDTO.toDto(hotel);
+    }
+
+    public void deleteHotel(Long id) {
+        hotelRepository.deleteById(id);
+    }
+
+    public List<HotelDTO> findHotelsByRegionId(Long regionId) {
+        return hotelRepository.findByRegion_Id(regionId).stream()
+                .map(HotelDTO::toDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<HotelDTO> findHotelsByName(String hotelName) {
+        return hotelRepository.findByHotelName(hotelName).stream()
+                .map(HotelDTO::toDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<HotelDTO> findHotelsByPriceRange(float minPrice, float maxPrice) {
+        return hotelRepository.findByAveragePriceBetween(minPrice, maxPrice).stream()
+                .map(HotelDTO::toDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<HotelDTO> findHotelsByReviewCount(Long reviewCount) {
+        return hotelRepository.findByTotalReviewCountGreaterThanEqual(reviewCount).stream()
+                .map(HotelDTO::toDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<HotelDTO> findHotelsByReviewRate(float reviewRate) {
+        return hotelRepository.findByAverageReviewRateGreaterThanEqual(reviewRate).stream()
+                .map(HotelDTO::toDto)
+>>>>>>> branch 'main' of https://github.com/nineoutof9/travelJoy_RestAPI.git
                 .collect(Collectors.toList());
     }
 }
