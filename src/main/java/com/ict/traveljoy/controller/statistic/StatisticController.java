@@ -12,26 +12,23 @@ import java.util.Map;
 
 @Tag(name = "통계 관리", description = "통계 Rest Api 컨트롤러입니다")
 @RestController
-@RequestMapping("/api/statistics")
+@RequestMapping("/statistics")
 public class StatisticController {
 
     private Map<String, Long> statistics = new HashMap<>();
 
-    public StatisticController() {
-        // 초기 통계 데이터 설정
-        statistics.put("userCount", 1234L);
-        statistics.put("tripCount", 567L);
-    }
-
     @CrossOrigin
     @GetMapping("/user-count")
+    //@Operation= Swagger에서 API 엔드포인트에 대한 설명
     @Operation(summary = "유저 수 조회하기", description = "유저 수 조회 컨트롤러입니다")
-    public ResponseEntity<Long> getUserCount() {
+    public ResponseEntity<Long> getUserCount() {//ResponseEntity: Http 응답을 표현하는 객체 
         try {
-            Long userCount = statistics.getOrDefault("userCount", 0L);
+            Long userCount = statistics.getOrDefault("userCount", 0L);//키가 존재하지 않는 경우 0L반환
             return ResponseEntity.ok(userCount);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
+            //500 Internal Server Error와 함께 본문이 null인 ResponseEntity 객체를 생성하여 반환
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -43,7 +40,8 @@ public class StatisticController {
         try {
             Long tripCount = statistics.getOrDefault("tripCount", 0L);
             return ResponseEntity.ok(tripCount);
-        } catch (Exception e) {
+        } 
+        catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
@@ -57,7 +55,8 @@ public class StatisticController {
             Long count = payload.get("count");
             statistics.put("userCount", count);
             return ResponseEntity.ok("유저 수가 " + count + "(으)로 수정되었습니다.");
-        } catch (Exception e) {
+        } 
+        catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("유저 수 수정 중 오류가 발생했습니다.");
         }
@@ -85,10 +84,12 @@ public class StatisticController {
             if (statistics.containsKey("userCount")) {
                 statistics.remove("userCount");
                 return ResponseEntity.ok("유저 수가 삭제되었습니다.");
-            } else {
+            } 
+            else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("유저 수를 찾을 수 없습니다.");
             }
-        } catch (Exception e) {
+        } 
+        catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("유저 수 삭제 중 오류가 발생했습니다.");
         }
@@ -102,10 +103,12 @@ public class StatisticController {
             if (statistics.containsKey("tripCount")) {
                 statistics.remove("tripCount");
                 return ResponseEntity.ok("여행 수가 삭제되었습니다.");
-            } else {
+            } 
+            else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("여행 수를 찾을 수 없습니다.");
             }
-        } catch (Exception e) {
+        } 
+        catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("여행 수 삭제 중 오류가 발생했습니다.");
         }
