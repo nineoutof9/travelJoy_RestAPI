@@ -50,4 +50,8 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> branch 'main' of https://github.com/nineoutof9/travelJoy_RestAPI.git

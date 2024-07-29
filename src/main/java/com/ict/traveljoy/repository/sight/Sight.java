@@ -1,5 +1,7 @@
 package com.ict.traveljoy.repository.sight;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import com.ict.traveljoy.repository.region.Region;
 
 import jakarta.persistence.Column;
@@ -33,7 +35,8 @@ public class Sight {
 	@JoinColumn(name = "region_id",nullable = false)
 	private Region region;
 	
-	@Column(name="is_has_image",nullable = false, columnDefinition = "CHAR(1 BYTE) default 'F'"  )
+	@Column(name="is_has_image",nullable = false)
+	@ColumnDefault("F")
 	private boolean isHasImage;
 	
 	@Column(name = "entrance_fee")
