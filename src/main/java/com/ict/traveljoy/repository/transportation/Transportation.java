@@ -10,7 +10,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
 
-<<<<<<< HEAD
 import org.hibernate.annotations.ColumnDefault;
 
 import com.ict.traveljoy.repository.move.Move;
@@ -58,48 +57,6 @@ public class Transportation {
 
     @Column(name = "IS_WALK", nullable = false)
     @ColumnDefault("F")
-=======
-import com.ict.traveljoy.repository.move.Move;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-
-@Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class Transportation {
-
-    @Id
-    @SequenceGenerator(name = "seq_transportation", sequenceName = "seq_transportation", allocationSize = 1, initialValue = 1)
-    @GeneratedValue(generator = "seq_transportation", strategy = GenerationType.SEQUENCE)
-    @Column(name = "TRANSPORTATION_ID")
-    private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "MOVE_ID")
-    private Move move;
-
-    @Column(name = "IS_BUS", nullable = false)
-    private boolean isBus;
-
-    @Column(name = "IS_TRAIN", nullable = false)
-    private boolean isTrain;
-
-    @Column(name = "IS_AIRPLANE", nullable = false)
-    private boolean isAirplane;
-
-    @Column(name = "IS_DRIVE", nullable = false)
-    private boolean isDrive;
-
-    @Column(name = "IS_WALK", nullable = false)
->>>>>>> branch 'main' of https://github.com/nineoutof9/travelJoy_RestAPI.git
     private boolean isWalk;
 
     @Column(name = "START_DATE")

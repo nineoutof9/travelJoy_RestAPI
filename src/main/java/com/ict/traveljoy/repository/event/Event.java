@@ -2,6 +2,8 @@ package com.ict.traveljoy.repository.event;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import com.ict.traveljoy.repository.region.Region;
 
 import jakarta.persistence.Entity;
@@ -38,6 +40,7 @@ public class Event {
     private Region region;
 
     @Column(name = "IS_HAS_IMAGE", nullable = false)
+    @ColumnDefault("F")
     private boolean isHasImage;
 
     @Column(name = "EVENT_START_DATE")

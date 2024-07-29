@@ -7,15 +7,7 @@ spring:
     url: jdbc:oracle:thin:@211.109.103.98:51521/XEPDB1
     username: ICTUSER
     password: ICT1234
-<<<<<<< HEAD
-  
-  security:
-    user:
-      name: user
-      password: 1234
-=======
 
->>>>>>> branch 'main' of https://github.com/nineoutof9/travelJoy_RestAPI.git
 
     
     hikari:
@@ -30,14 +22,9 @@ spring:
 
   jpa:
     hibernate:
-<<<<<<< HEAD
-      ddl-auto: update # create = ddl 자동생성, create-drop은 재시작
-      #create이후에는 update, 테이블만들어놓고하면 none
-=======
       ddl-auto: none # create = ddl 자동생성, create-drop은 재시작
       #create이후에는 update, 테이블만들어놓고하면 none, 비교만 하려면 valid
 
->>>>>>> branch 'main' of https://github.com/nineoutof9/travelJoy_RestAPI.git
       naming:
         physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy # column명 전략
     properties:
