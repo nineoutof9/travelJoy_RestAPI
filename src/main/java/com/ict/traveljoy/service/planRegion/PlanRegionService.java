@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,16 +25,14 @@ public class PlanRegionService {
 
     // PlanId로 PlanRegion 목록 조회
     public List<PlanRegionDto> getPlanRegionsByPlanId(Long planId) {
-        List<PlanRegion> planRegions = planRegionRepository.findByPlanId(planId);
-        return planRegions.stream()
+        return planRegionRepository.findByPlanId(planId).stream()
                 .map(PlanRegionDto::toDto)
                 .collect(Collectors.toList());
     }
 
     // RegionId로 PlanRegion 목록 조회
     public List<PlanRegionDto> getPlanRegionsByRegionId(Long regionId) {
-        List<PlanRegion> planRegions = planRegionRepository.findByRegionId(regionId);
-        return planRegions.stream()
+        return planRegionRepository.findByRegionId(regionId).stream()
                 .map(PlanRegionDto::toDto)
                 .collect(Collectors.toList());
     }
@@ -51,17 +50,19 @@ public class PlanRegionService {
         return PlanRegionDto.toDto(savedPlanRegion);
     }
 
- // PlanRegion 수정
+    // PlanRegion 수정
     public PlanRegionDto updatePlanRegion(PlanRegionDto planRegionDto) {
-        PlanRegion existingPlanRegion = planRegionRepository.findById(planRegionDto.getPlanRegionId()).orElse(null);
-        if (existingPlanRegion != null) {
-            // 기존 PlanRegion의 Plan과 Region 객체를 새로운 ID로 설정
+        Optional<PlanRegion> existingPlanRegionOpt = planRegionRepository.findById(planRegionDto.getPlanRegionId());
+        if (existingPlanRegionOpt.isPresent()) {
+            PlanRegion existingPlanRegion = existingPlanRegionOpt.get();
+
+            // 업데이트할 Plan과 Region 설정
             Plan plan = new Plan();
             plan.setPlanId(planRegionDto.getPlanId());
             existingPlanRegion.setPlan(plan);
 
             Region region = new Region();
-            region.setRegionId(planRegionDto.getRegionId());
+            region.setId(planRegionDto.getRegionId());
             existingPlanRegion.setRegion(region);
 
             PlanRegion updatedPlanRegion = planRegionRepository.save(existingPlanRegion);

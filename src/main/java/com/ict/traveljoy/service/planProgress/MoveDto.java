@@ -33,6 +33,12 @@ public class MoveDto {
             move.setEndDetailPlan(endDetailPlan);
         }
 
+        if (transportationId != null) {
+            Transportation transportation = new Transportation();
+            transportation.setId(transportationId);
+            move.setTransportation(transportation);
+        }
+
         return move;
     }
 
@@ -41,7 +47,7 @@ public class MoveDto {
                 .moveId(move.getMoveId())
                 .startDetailPlanId(move.getStartDetailPlan() != null ? move.getStartDetailPlan().getPlanProgress2Id() : null)
                 .endDetailPlanId(move.getEndDetailPlan() != null ? move.getEndDetailPlan().getPlanProgress2Id() : null)
-                .transportationId(move.getTransportation() != null ? move.getTransportation().getTransportationId() : null)
+                .transportationId(move.getTransportation() != null ? move.getTransportation().getId() : null)
                 .build();
     }
 }
