@@ -21,13 +21,13 @@ public class HotelService {
 
     public List<HotelDTO> findAllHotels() {
         return hotelRepository.findAll().stream()
-                .map(HotelDTO::toDto)
+                .map(hotel -> HotelDTO.toDto(hotel))
                 .collect(Collectors.toList());
     }
 
     public Optional<HotelDTO> findHotelById(Long id) {
         return hotelRepository.findById(id)
-                .map(HotelDTO::toDto);
+                .map(hotel -> HotelDTO.toDto(hotel));
     }
 
     public HotelDTO saveHotel(HotelDTO hotelDTO) {
@@ -45,31 +45,31 @@ public class HotelService {
 
     public List<HotelDTO> findHotelsByRegionId(Long regionId) {
         return hotelRepository.findByRegion_Id(regionId).stream()
-                .map(HotelDTO::toDto)
+                .map(hotel -> HotelDTO.toDto(hotel))
                 .collect(Collectors.toList());
     }
 
     public List<HotelDTO> findHotelsByName(String hotelName) {
         return hotelRepository.findByHotelName(hotelName).stream()
-                .map(HotelDTO::toDto)
+                .map(hotel -> HotelDTO.toDto(hotel))
                 .collect(Collectors.toList());
     }
 
     public List<HotelDTO> findHotelsByPriceRange(float minPrice, float maxPrice) {
         return hotelRepository.findByAveragePriceBetween(minPrice, maxPrice).stream()
-                .map(HotelDTO::toDto)
+                .map(hotel -> HotelDTO.toDto(hotel))
                 .collect(Collectors.toList());
     }
 
     public List<HotelDTO> findHotelsByReviewCount(Long reviewCount) {
         return hotelRepository.findByTotalReviewCountGreaterThanEqual(reviewCount).stream()
-                .map(HotelDTO::toDto)
+                .map(hotel -> HotelDTO.toDto(hotel))
                 .collect(Collectors.toList());
     }
 
     public List<HotelDTO> findHotelsByReviewRate(float reviewRate) {
         return hotelRepository.findByAverageReviewRateGreaterThanEqual(reviewRate).stream()
-                .map(HotelDTO::toDto)
+                .map(hotel -> HotelDTO.toDto(hotel))
                 .collect(Collectors.toList());
     }
 }

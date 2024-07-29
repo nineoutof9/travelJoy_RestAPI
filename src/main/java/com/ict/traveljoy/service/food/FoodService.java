@@ -22,14 +22,14 @@ public class FoodService {
     // 모든 음식 검색
     public List<FoodDTO> findAllFoods() {
         return foodRepository.findAll().stream()
-                .map(FoodDTO::toDto)
+                .map(food -> FoodDTO.toDto(food))
                 .collect(Collectors.toList());
     }
 
     // ID로 음식 검색
     public Optional<FoodDTO> findFoodById(Long id) {
         return foodRepository.findById(id)
-                .map(FoodDTO::toDto);
+                .map(food -> FoodDTO.toDto(food));
     }
 
     // 음식 저장
@@ -51,28 +51,28 @@ public class FoodService {
     // 특정 지역의 음식 검색
     public List<FoodDTO> findFoodsByRegionId(Long regionId) {
         return foodRepository.findByRegion_Id(regionId).stream()
-                .map(FoodDTO::toDto)
+                .map(food -> FoodDTO.toDto(food))
                 .collect(Collectors.toList());
     }
 
     // 음식 이름으로 검색
     public List<FoodDTO> findFoodsByName(String foodName) {
         return foodRepository.findByFoodName(foodName).stream()
-                .map(FoodDTO::toDto)
+                .map(food -> FoodDTO.toDto(food))
                 .collect(Collectors.toList());
     }
 
     // 특정 가격 이하의 음식 검색
     public List<FoodDTO> findFoodsByPrice(float maxPrice) {
         return foodRepository.findByAveragePriceLessThanEqual(maxPrice).stream()
-                .map(FoodDTO::toDto)
+                .map(food -> FoodDTO.toDto(food))
                 .collect(Collectors.toList());
     }
 
     // 특정 리뷰 평점 이상의 음식 검색
     public List<FoodDTO> findFoodsByReviewRate(float reviewRate) {
         return foodRepository.findByAverageReviewRateGreaterThanEqual(reviewRate).stream()
-                .map(FoodDTO::toDto)
+                .map(food -> FoodDTO.toDto(food))
                 .collect(Collectors.toList());
     }
 }

@@ -60,15 +60,15 @@ public class Users {
 	private boolean gender;
 	
 	@Column(nullable = false)
-	@ColumnDefault("false")
+	@ColumnDefault("'F'")
 	private boolean isKakao;
 	
 	@Column(nullable = false)
-	@ColumnDefault("false")
+	@ColumnDefault("'F'")
 	private boolean isGoogle;
 	
 	@Column(nullable = false)
-	@ColumnDefault("false")
+	@ColumnDefault("'F'")
 	private boolean isNaver;
 	
 	@Convert(converter = PermissionToNumberConverter.class)
@@ -79,35 +79,35 @@ public class Users {
 	private boolean handicap;
 	
 	@Column(nullable = false)
-	@ColumnDefault("false")
+	@ColumnDefault("'F'")
 	private boolean handicapAllow;
 	
 	@Column
 	private boolean allergy;
 	
 	@Column(nullable = false)
-	@ColumnDefault("false")
+	@ColumnDefault("'F'")
 	private boolean allergyAllow;
 	
 	@Column
 	private boolean interest;
 	
 	@Column(nullable = false)
-	@ColumnDefault("false")
+	@ColumnDefault("'F'")
 	private boolean interestAllow;
 	
 	@Column
 	private long reported;
 	
 	@Column(nullable = false)
-	@ColumnDefault("false")
+	@ColumnDefault("'F'")
 	private boolean isDeleteId;
 	
 	@Column
 	private LocalDateTime deleteIdDate;
 	
 	@Column(nullable = false)
-	@ColumnDefault("true")
+	@ColumnDefault("'T'")
 	private boolean isActive;
 	
 	@Column

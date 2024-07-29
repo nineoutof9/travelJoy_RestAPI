@@ -22,14 +22,14 @@ public class EventService {
     // 모든 이벤트 검색
     public List<EventDTO> findAllEvents() {
         return eventRepository.findAll().stream()
-                .map(EventDTO::toDto)
+                .map(event -> EventDTO.toDto(event))
                 .collect(Collectors.toList());
     }
 
     // ID로 이벤트 검색
     public Optional<EventDTO> findEventById(Long id) {
         return eventRepository.findById(id)
-                .map(EventDTO::toDto);
+                .map(event -> EventDTO.toDto(event));
     }
 
     // 이벤트 저장
@@ -57,21 +57,21 @@ public class EventService {
     // 특정 지역의 이벤트 검색
     public List<EventDTO> findEventsByRegionId(Long regionId) {
         return eventRepository.findByRegion_Id(regionId).stream()
-                .map(EventDTO::toDto)
+                .map(event -> EventDTO.toDto(event))
                 .collect(Collectors.toList());
     }
 
     // 이벤트 이름으로 검색
     public List<EventDTO> findEventsByName(String eventName) {
         return eventRepository.findByEventName(eventName).stream()
-                .map(EventDTO::toDto)
+                .map(event -> EventDTO.toDto(event))
                 .collect(Collectors.toList());
     }
 
     // 특정 리뷰 평점 이상의 이벤트 검색
     public List<EventDTO> findEventsByReviewRate(float reviewRate) {
         return eventRepository.findByAverageReviewRateGreaterThanEqual(reviewRate).stream()
-                .map(EventDTO::toDto)
+                .map(event -> EventDTO.toDto(event))
                 .collect(Collectors.toList());
     }
 }

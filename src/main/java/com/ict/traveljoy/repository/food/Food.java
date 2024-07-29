@@ -1,5 +1,7 @@
 package com.ict.traveljoy.repository.food;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import com.ict.traveljoy.repository.region.Region;
 
 import jakarta.persistence.Column;
@@ -36,7 +38,8 @@ public class Food {
 	@Column(name = "food_type", length = 50)
 	private String foodType;
 	
-	@Column(name = "is_has_image",nullable = false, columnDefinition = "CHAR(1 BYTE) default 'F'" )
+	@Column(name = "is_has_image",nullable = false)
+	@ColumnDefault("F")
 	private boolean isHasImage;
 	
 	@Column(name="average_price")

@@ -22,14 +22,14 @@ public class SightService {
     // 모든 명소 검색
     public List<SightDTO> findAllSights() {
         return sightRepository.findAll().stream()
-                .map(SightDTO::toDto)
+                .map(sight -> SightDTO.toDto(sight))
                 .collect(Collectors.toList());
     }
 
     // ID로 명소 검색
     public Optional<SightDTO> findSightById(Long id) {
         return sightRepository.findById(id)
-                .map(SightDTO::toDto);
+                .map(sight -> SightDTO.toDto(sight));
     }
 
     // 명소 저장
@@ -57,21 +57,21 @@ public class SightService {
     // 특정 지역의 명소 검색
     public List<SightDTO> findSightsByRegionId(Long regionId) {
         return sightRepository.findByRegion_Id(regionId).stream()
-                .map(SightDTO::toDto)
+                .map(sight -> SightDTO.toDto(sight))
                 .collect(Collectors.toList());
     }
 
     // 명소 이름으로 검색
     public List<SightDTO> findSightsByName(String sightName) {
         return sightRepository.findBySightName(sightName).stream()
-                .map(SightDTO::toDto)
+                .map(sight -> SightDTO.toDto(sight))
                 .collect(Collectors.toList());
     }
 
     // 특정 리뷰 평점 이상의 명소 검색
     public List<SightDTO> findSightsByReviewRate(float reviewRate) {
         return sightRepository.findByAverageReviewRateGreaterThanEqual(reviewRate).stream()
-                .map(SightDTO::toDto)
+                .map(sight -> SightDTO.toDto(sight))
                 .collect(Collectors.toList());
     }
 }
