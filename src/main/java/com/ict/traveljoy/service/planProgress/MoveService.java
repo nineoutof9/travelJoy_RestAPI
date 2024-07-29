@@ -4,6 +4,7 @@ import com.ict.traveljoy.repository.planProgress.Move;
 import com.ict.traveljoy.repository.planProgress.MoveRepository;
 import com.ict.traveljoy.repository.planProgress.PlanProgress2;
 import com.ict.traveljoy.repository.transportation.Transportation;
+import com.ict.traveljoy.repository.transportation.TransportationRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,10 +18,12 @@ import java.util.stream.Collectors;
 public class MoveService {
 
     private final MoveRepository moveRepository;
+    private final TransportationRepository transportationRepository;
 
     @Autowired
-    public MoveService(MoveRepository moveRepository) {
+    public MoveService(MoveRepository moveRepository, TransportationRepository transportationRepository) {
         this.moveRepository = moveRepository;
+        this.transportationRepository = transportationRepository;
     }
 
     // startDetailPlanId로 Move 목록 조회
@@ -50,11 +53,19 @@ public class MoveService {
     // Move 저장
     public MoveDto saveMove(MoveDto moveDto) {
         Move move = moveDto.toEntity();
+
+        // 외래 키로 지정된 Transportation 엔티티 설정
+        if (moveDto.getTransportationId() != null) {
+            Transportation transportation = transportationRepository.findById(moveDto.getTransportationId())
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid transportation ID: " + moveDto.getTransportationId()));
+            move.setTransportation(transportation);
+        }
+
         Move savedMove = moveRepository.save(move);
         return MoveDto.toDto(savedMove);
     }
 
- // Move 수정
+    // Move 수정
     public MoveDto updateMove(MoveDto moveDto) {
         Move existingMove = moveRepository.findById(moveDto.getMoveId()).orElse(null);
         if (existingMove != null) {
@@ -78,8 +89,8 @@ public class MoveService {
 
             // Set transportation
             if (moveDto.getTransportationId() != null) {
-                Transportation transportation = new Transportation();
-                transportation.setTransportationId(moveDto.getTransportationId());
+                Transportation transportation = transportationRepository.findById(moveDto.getTransportationId())
+                        .orElseThrow(() -> new IllegalArgumentException("Invalid transportation ID: " + moveDto.getTransportationId()));
                 existingMove.setTransportation(transportation);
             } else {
                 existingMove.setTransportation(null);
@@ -90,7 +101,6 @@ public class MoveService {
         }
         return null; // 수정할 Move가 없는 경우
     }
-
 
     // Move 삭제
     public void deleteMove(Long moveId) {

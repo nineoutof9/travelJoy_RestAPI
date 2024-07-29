@@ -23,6 +23,7 @@ public class TripReviewDto {
     private String isDelete;
     private Timestamp deleteDate;
 
+    // TripReviewDto를 TripReview 엔티티로 변환
     public TripReview toEntity() {
         TripReview tripReview = new TripReview();
         tripReview.setTripReviewId(tripReviewId);
@@ -42,6 +43,7 @@ public class TripReviewDto {
         return tripReview;
     }
 
+    // TripReview 엔티티를 TripReviewDto로 변환
     public static TripReviewDto toDto(TripReview tripReview) {
         return TripReviewDto.builder()
                 .tripReviewId(tripReview.getTripReviewId())

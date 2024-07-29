@@ -4,6 +4,8 @@ import com.ict.traveljoy.repository.tripReview.TripReview;
 import com.ict.traveljoy.repository.image.Image;
 import com.ict.traveljoy.repository.tripReview.TripReviewPhoto;
 import com.ict.traveljoy.repository.tripReview.TripReviewPhotoRepository;
+import com.ict.traveljoy.repository.tripReview.TripReviewRepository;
+import com.ict.traveljoy.repository.image.ImageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,10 +18,18 @@ import java.util.stream.Collectors;
 public class TripReviewPhotoService {
 
     private final TripReviewPhotoRepository tripReviewPhotoRepository;
+    private final TripReviewRepository tripReviewRepository;  // 추가: TripReviewRepository
+    private final ImageRepository imageRepository;  // 추가: ImageRepository
 
     @Autowired
-    public TripReviewPhotoService(TripReviewPhotoRepository tripReviewPhotoRepository) {
+    public TripReviewPhotoService(
+            TripReviewPhotoRepository tripReviewPhotoRepository,
+            TripReviewRepository tripReviewRepository,  // 추가: TripReviewRepository 주입
+            ImageRepository imageRepository  // 추가: ImageRepository 주입
+    ) {
         this.tripReviewPhotoRepository = tripReviewPhotoRepository;
+        this.tripReviewRepository = tripReviewRepository;  // 초기화
+        this.imageRepository = imageRepository;  // 초기화
     }
 
     // TripReviewId로 TripReviewPhoto 목록 조회
@@ -46,28 +56,34 @@ public class TripReviewPhotoService {
 
     // TripReviewPhoto 저장
     public TripReviewPhotoDto saveTripReviewPhoto(TripReviewPhotoDto tripReviewPhotoDto) {
+        TripReview tripReview = tripReviewRepository.findById(tripReviewPhotoDto.getTripReviewId())
+                .orElseThrow(() -> new RuntimeException("TripReview not found"));
+        Image image = imageRepository.findById(tripReviewPhotoDto.getImageId())
+                .orElseThrow(() -> new RuntimeException("Image not found"));
+
         TripReviewPhoto tripReviewPhoto = tripReviewPhotoDto.toEntity();
+        tripReviewPhoto.setTripReview(tripReview);
+        tripReviewPhoto.setImage(image);
+
         TripReviewPhoto savedTripReviewPhoto = tripReviewPhotoRepository.save(tripReviewPhoto);
         return TripReviewPhotoDto.toDto(savedTripReviewPhoto);
     }
 
-    //TripReviewPhoto 수정
+    // TripReviewPhoto 수정
     public TripReviewPhotoDto updateTripReviewPhoto(TripReviewPhotoDto tripReviewPhotoDto) {
-        TripReviewPhoto existingTripReviewPhoto = tripReviewPhotoRepository.findById(tripReviewPhotoDto.getTripReviewPhotoId()).orElse(null);
-        if (existingTripReviewPhoto != null) {
-            TripReview tripReview = new TripReview();
-            tripReview.setTripReviewId(tripReviewPhotoDto.getTripReviewId());
+        TripReviewPhoto existingTripReviewPhoto = tripReviewPhotoRepository.findById(tripReviewPhotoDto.getTripReviewPhotoId())
+                .orElseThrow(() -> new RuntimeException("TripReviewPhoto not found"));
 
-            Image image = new Image();
-            image.setImageId(tripReviewPhotoDto.getImageId());
+        TripReview tripReview = tripReviewRepository.findById(tripReviewPhotoDto.getTripReviewId())
+                .orElseThrow(() -> new RuntimeException("TripReview not found"));
+        Image image = imageRepository.findById(tripReviewPhotoDto.getImageId())
+                .orElseThrow(() -> new RuntimeException("Image not found"));
 
-            existingTripReviewPhoto.setTripReview(tripReview);
-            existingTripReviewPhoto.setImage(image);
+        existingTripReviewPhoto.setTripReview(tripReview);
+        existingTripReviewPhoto.setImage(image);
 
-            TripReviewPhoto updatedTripReviewPhoto = tripReviewPhotoRepository.save(existingTripReviewPhoto);
-            return TripReviewPhotoDto.toDto(updatedTripReviewPhoto);
-        }
-        return null;
+        TripReviewPhoto updatedTripReviewPhoto = tripReviewPhotoRepository.save(existingTripReviewPhoto);
+        return TripReviewPhotoDto.toDto(updatedTripReviewPhoto);
     }
 
     // TripReviewPhoto 삭제 (TripReviewId와 ImageId로 조회)
