@@ -30,7 +30,7 @@ public class TripReviewDto {
 
         return TripReview.builder()
                 .tripReviewId(tripReviewId)
-                .plan(plan)
+                .planId(plan)
                 .writer(writer)
                 .title(title)
                 .reviewContent(reviewContent)
@@ -46,7 +46,7 @@ public class TripReviewDto {
     public static TripReviewDto fromEntity(TripReview tripReview) {
         return TripReviewDto.builder()
                 .tripReviewId(tripReview.getTripReviewId())
-                .planId(tripReview.getPlan() != null ? tripReview.getPlan().getPlanId() : null)
+                .planId(tripReview.getPlanId() != null ? tripReview.getPlanId().getPlanId() : null)
                 .writer(tripReview.getWriter())
                 .title(tripReview.getTitle())
                 .reviewContent(tripReview.getReviewContent())

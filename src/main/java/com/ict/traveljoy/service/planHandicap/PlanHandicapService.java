@@ -27,7 +27,7 @@ public class PlanHandicapService {
     }
 
     public List<PlanHandicapDto> getPlanHandicapsByPlanId(Long planId) {
-        return planHandicapRepository.findByPlanId(planId).stream()
+        return planHandicapRepository.findByPlan_PlanId(planId).stream()
                 .map(PlanHandicapDto::toDto)
                 .collect(Collectors.toList());
     }

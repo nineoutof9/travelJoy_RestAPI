@@ -28,7 +28,7 @@ public class PlanProgress2Service {
 
     // 특정 계획 ID에 해당하는 PlanProgress2 엔티티를 조회하는 메서드
     public List<PlanProgress2Dto> getPlanProgressesByPlanId(Long planId) {
-        List<PlanProgress2> planProgresses = planProgress2Repository.findByPlanId(planId);
+        List<PlanProgress2> planProgresses = planProgress2Repository.findByPlan_PlanId(planId);
         return planProgresses.stream()
                 .map(PlanProgress2Dto::toDto)
                 .collect(Collectors.toList());
@@ -68,7 +68,7 @@ public class PlanProgress2Service {
 
     // 특정 계획 ID와 상세 계획 시작일, 종료일에 해당하는 PlanProgress2 엔티티를 조회하는 메서드
     public List<PlanProgress2Dto> getPlanProgressesByPlanIdAndDetailPlanStartDateBetween(Long planId, Timestamp startDate, Timestamp endDate) {
-        List<PlanProgress2> planProgresses = planProgress2Repository.findByPlanIdAndDetailPlanStartDateBetween(planId, startDate, endDate);
+        List<PlanProgress2> planProgresses = planProgress2Repository.findByPlan_PlanIdAndDetailPlanStartDateBetween(planId, startDate, endDate);
         return planProgresses.stream()
                 .map(PlanProgress2Dto::toDto)
                 .collect(Collectors.toList());

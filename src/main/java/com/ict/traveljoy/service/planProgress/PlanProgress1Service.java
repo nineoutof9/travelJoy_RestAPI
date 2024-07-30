@@ -53,7 +53,7 @@ public class PlanProgress1Service {
 
     // 특정 계획 ID에 해당하는 PlanProgress1 엔티티를 조회하는 메서드
     public List<PlanProgress1Dto> getPlanProgressesByPlanId(Long planId) {
-        List<PlanProgress1> planProgresses = planProgress1Repository.findByPlanId(planId);
+        List<PlanProgress1> planProgresses = planProgress1Repository.findByPlan_PlanId(planId);
         return planProgresses.stream()
                 .map(PlanProgress1Dto::toDto)
                 .collect(Collectors.toList());

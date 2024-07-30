@@ -38,7 +38,7 @@ public class TripReview {
 
     @ManyToOne
     @JoinColumn(name = "PLAN_ID")
-    private Plan plan;
+    private Plan planId;
 
     @Column(name = "WRITER", length = 30)
     private String writer;

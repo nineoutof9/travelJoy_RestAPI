@@ -33,12 +33,12 @@ public class TripReviewService {
     @Transactional
     public TripReviewDto saveTripReview(TripReviewDto tripReviewDto) {
         TripReview tripReview = tripReviewDto.toEntity();
-        if (tripReview.getPlan() != null) {
-            Optional<Plan> planOptional = planRepository.findById(tripReview.getPlan().getPlanId());
+        if (tripReview.getPlanId() != null) {
+            Optional<Plan> planOptional = planRepository.findById(tripReview.getPlanId().getPlanId());
             if (planOptional.isEmpty()) {
-                throw new IllegalArgumentException("Plan with ID " + tripReview.getPlan().getPlanId() + " does not exist.");
+                throw new IllegalArgumentException("Plan with ID " + tripReview.getPlanId().getPlanId() + " does not exist.");
             }
-            tripReview.setPlan(planOptional.get());
+            tripReview.setPlanId(null);
         }
         TripReview savedTripReview = tripReviewRepository.save(tripReview);
         return TripReviewDto.fromEntity(savedTripReview);
@@ -67,7 +67,7 @@ public class TripReviewService {
             if (planOptional.isEmpty()) {
                 throw new IllegalArgumentException("Plan with ID " + tripReviewDto.getPlanId() + " does not exist.");
             }
-            tripReview.setPlan(planOptional.get());
+            tripReview.setPlanId(null);
         }
 
         TripReview updatedTripReview = tripReviewRepository.save(tripReview);
@@ -110,7 +110,7 @@ public class TripReviewService {
 
     // 특정 Plan ID로 TripReview 조회
     public List<TripReviewDto> getTripReviewsByPlanId(Long planId) {
-        List<TripReview> tripReviews = tripReviewRepository.findByPlanId(planId);
+        List<TripReview> tripReviews = tripReviewRepository.findByPlanId(null);
         return tripReviews.stream().map(TripReviewDto::fromEntity).toList();
     }
 

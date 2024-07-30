@@ -27,7 +27,7 @@ public class PlanProgress4Service {
 
     // 특정 계획 ID에 해당하는 PlanProgress4 엔티티를 조회하는 메서드
     public List<PlanProgress4Dto> getPlanProgressesByPlanId(Long planId) {
-        List<PlanProgress4> planProgresses = planProgress4Repository.findByPlanId(planId);
+        List<PlanProgress4> planProgresses = planProgress4Repository.findByAiMadePlan_PlanId(planId);
         return planProgresses.stream()
                 .map(PlanProgress4Dto::toDto)
                 .collect(Collectors.toList());
@@ -35,7 +35,7 @@ public class PlanProgress4Service {
 
     // 특정 AI 생성 계획 ID에 해당하는 PlanProgress4 엔티티를 조회하는 메서드
     public List<PlanProgress4Dto> getPlanProgressesByAiMadePlanId(Long aiMadePlanId) {
-        List<PlanProgress4> planProgresses = planProgress4Repository.findByAiMadePlanId(aiMadePlanId);
+        List<PlanProgress4> planProgresses = planProgress4Repository.findByAiMadePlan_PlanId(aiMadePlanId);
         return planProgresses.stream()
                 .map(PlanProgress4Dto::toDto)
                 .collect(Collectors.toList());
@@ -43,7 +43,7 @@ public class PlanProgress4Service {
 
     // 특정 계획 ID와 AI 생성 계획 ID에 해당하는 PlanProgress4 엔티티를 조회하는 메서드
     public List<PlanProgress4Dto> getPlanProgressesByPlanIdAndAiMadePlanId(Long planId, Long aiMadePlanId) {
-        List<PlanProgress4> planProgresses = planProgress4Repository.findByPlanIdAndAiMadePlanId(planId, aiMadePlanId);
+        List<PlanProgress4> planProgresses = planProgress4Repository.findByPlan_PlanIdAndAiMadePlan_PlanId(planId, aiMadePlanId);
         return planProgresses.stream()
                 .map(PlanProgress4Dto::toDto)
                 .collect(Collectors.toList());

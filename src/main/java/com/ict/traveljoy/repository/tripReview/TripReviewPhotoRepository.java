@@ -14,13 +14,11 @@ public interface TripReviewPhotoRepository extends JpaRepository<TripReviewPhoto
     List<TripReviewPhoto> findByTripReview_TripReviewId(Long tripReviewId);
 
     // 특정 Image ID로 모든 TripReviewPhoto 찾기
-    List<TripReviewPhoto> findByImage_ImageId(Long imageId);
+    List<TripReviewPhoto> findByImage_Id(Long imageId);
 
     // 특정 TripReview와 Image로 TripReviewPhoto 찾기
-    Optional<TripReviewPhoto> findByTripReview_TripReviewIdAndImage_ImageId(Long tripReviewId, Long imageId);
+    Optional<TripReviewPhoto> findByTripReview_TripReviewIdAndImage_Id(Long tripReviewId, Long imageId);
 
     // TripReviewPhoto ID로 TripReviewPhoto 찾기
     Optional<TripReviewPhoto> findByTripReviewPhotoId(Long tripReviewPhotoId);
-    
-    TripReviewPhoto findByTripReview_TripReviewIdAndImage_Id(Long tripReviewId, Long imageId);
 }

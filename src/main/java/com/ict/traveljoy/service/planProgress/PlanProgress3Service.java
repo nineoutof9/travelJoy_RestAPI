@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,14 +24,14 @@ public class PlanProgress3Service {
 
     // 특정 계획 ID에 해당하는 PlanProgress3 엔티티를 조회하는 메서드
     public List<PlanProgress3Dto> getPlanProgressesByPlanId(Long planId) {
-        List<PlanProgress3> planProgresses = planProgress3Repository.findByPlanId(planId);
+        List<PlanProgress3> planProgresses = planProgress3Repository.findByPlan_PlanId(planId);
         return planProgresses.stream()
                 .map(PlanProgress3Dto::toDto)
                 .collect(Collectors.toList());
     }
 
     // 특정 교통 여부에 해당하는 PlanProgress3 엔티티를 조회하는 메서드
-    public List<PlanProgress3Dto> getPlanProgressesByIsTransportation(char isTransportation) {
+    public List<PlanProgress3Dto> getPlanProgressesByIsTransportation(boolean isTransportation) {
         List<PlanProgress3> planProgresses = planProgress3Repository.findByIsTransportation(isTransportation);
         return planProgresses.stream()
                 .map(PlanProgress3Dto::toDto)
@@ -38,7 +39,7 @@ public class PlanProgress3Service {
     }
 
     // 특정 거리 여부에 해당하는 PlanProgress3 엔티티를 조회하는 메서드
-    public List<PlanProgress3Dto> getPlanProgressesByIsDistance(char isDistance) {
+    public List<PlanProgress3Dto> getPlanProgressesByIsDistance(boolean isDistance) {
         List<PlanProgress3> planProgresses = planProgress3Repository.findByIsDistance(isDistance);
         return planProgresses.stream()
                 .map(PlanProgress3Dto::toDto)
@@ -46,7 +47,7 @@ public class PlanProgress3Service {
     }
 
     // 특정 비용 여부에 해당하는 PlanProgress3 엔티티를 조회하는 메서드
-    public List<PlanProgress3Dto> getPlanProgressesByIsPrice(char isPrice) {
+    public List<PlanProgress3Dto> getPlanProgressesByIsPrice(boolean isPrice) {
         List<PlanProgress3> planProgresses = planProgress3Repository.findByIsPrice(isPrice);
         return planProgresses.stream()
                 .map(PlanProgress3Dto::toDto)
@@ -54,7 +55,7 @@ public class PlanProgress3Service {
     }
 
     // 특정 평가 여부에 해당하는 PlanProgress3 엔티티를 조회하는 메서드
-    public List<PlanProgress3Dto> getPlanProgressesByIsRate(char isRate) {
+    public List<PlanProgress3Dto> getPlanProgressesByIsRate(boolean isRate) {
         List<PlanProgress3> planProgresses = planProgress3Repository.findByIsRate(isRate);
         return planProgresses.stream()
                 .map(PlanProgress3Dto::toDto)
@@ -92,15 +93,7 @@ public class PlanProgress3Service {
                 .map(PlanProgress3Dto::toDto)
                 .collect(Collectors.toList());
     }
-
-    // 특정 계획 ID와 최소 비용, 최대 비용 범위에 해당하는 PlanProgress3 엔티티를 조회하는 메서드
-    public List<PlanProgress3Dto> getPlanProgressesByPlanIdAndCostRange(Long planId, Long minCost, Long maxCost) {
-        List<PlanProgress3> planProgresses = planProgress3Repository.findByPlanIdAndMinimumCostLessThanEqualAndMaximumCostGreaterThanEqual(planId, minCost, maxCost);
-        return planProgresses.stream()
-                .map(PlanProgress3Dto::toDto)
-                .collect(Collectors.toList());
-    }
-
+    
     // PlanProgress3 저장
     public PlanProgress3Dto savePlanProgress3(PlanProgress3Dto planProgress3Dto) {
         PlanProgress3 planProgress3 = planProgress3Dto.toEntity();
