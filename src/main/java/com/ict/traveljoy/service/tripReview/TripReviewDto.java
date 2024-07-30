@@ -25,29 +25,28 @@ public class TripReviewDto {
 
     // TripReviewDto를 TripReview 엔티티로 변환
     public TripReview toEntity() {
-        TripReview tripReview = new TripReview();
-        tripReview.setTripReviewId(tripReviewId);
-        tripReview.setWriter(writer);
-        tripReview.setTitle(title);
-        tripReview.setReviewContent(reviewContent);
-        tripReview.setUrl(url);
-        tripReview.setPostDate(postDate);
-        tripReview.setIsActive(isActive);
-        tripReview.setIsDelete(isDelete);
-        tripReview.setDeleteDate(deleteDate);
-
         Plan plan = new Plan();
         plan.setPlanId(planId);
-        tripReview.setPlan(plan);
 
-        return tripReview;
+        return TripReview.builder()
+                .tripReviewId(tripReviewId)
+                .plan(plan)
+                .writer(writer)
+                .title(title)
+                .reviewContent(reviewContent)
+                .url(url)
+                .postDate(postDate)
+                .isActive(isActive)
+                .isDelete(isDelete)
+                .deleteDate(deleteDate)
+                .build();
     }
 
     // TripReview 엔티티를 TripReviewDto로 변환
-    public static TripReviewDto toDto(TripReview tripReview) {
+    public static TripReviewDto fromEntity(TripReview tripReview) {
         return TripReviewDto.builder()
                 .tripReviewId(tripReview.getTripReviewId())
-                .planId(tripReview.getPlan().getPlanId())
+                .planId(tripReview.getPlan() != null ? tripReview.getPlan().getPlanId() : null)
                 .writer(tripReview.getWriter())
                 .title(tripReview.getTitle())
                 .reviewContent(tripReview.getReviewContent())

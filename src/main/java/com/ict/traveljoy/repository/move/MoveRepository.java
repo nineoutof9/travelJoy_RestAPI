@@ -1,4 +1,4 @@
-package com.ict.traveljoy.repository.planProgress;
+package com.ict.traveljoy.repository.move;
 
 import java.util.List;
 
