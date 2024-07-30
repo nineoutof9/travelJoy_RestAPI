@@ -27,7 +27,7 @@ import lombok.Setter;
 public class TripReviewPhoto {
 
     @Id
-    @SequenceGenerator(name = "seq_trip_review_photo",sequenceName = "seq_trip_review_photo",allocationSize = 1,initialValue = 1)
+    @SequenceGenerator(name = "seq_trip_review_photo", sequenceName = "seq_trip_review_photo", allocationSize = 1, initialValue = 1)
     @GeneratedValue(generator = "seq_trip_review_photo", strategy = GenerationType.SEQUENCE)
     @Column(name = "TRIP_REVIEW_PHOTO_ID")
     private Long tripReviewPhotoId;

@@ -1,21 +1,10 @@
 package com.ict.traveljoy.repository.plan;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
@@ -28,8 +17,8 @@ import org.hibernate.annotations.CreationTimestamp;
 public class Plan {
 
     @Id
-    @SequenceGenerator(name = "seq_plan",sequenceName = "seq_plan",allocationSize = 1,initialValue = 1)
-    @GeneratedValue(generator = "seq_plan",strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "seq_plan", sequenceName = "seq_plan", allocationSize = 1, initialValue = 1)
+    @GeneratedValue(generator = "seq_plan", strategy = GenerationType.SEQUENCE)
     @Column(name = "PLAN_ID", nullable = false)
     private Long planId;
 
@@ -39,23 +28,19 @@ public class Plan {
     @Column(name = "PLAN_DESCRIPTIONS", length = 300)
     private String planDescriptions;
 
-    @Column(name = "CREATE_DATE", nullable = false)
-    @ColumnDefault("SYSDATE")
+    @Column(name = "CREATE_DATE", nullable = false, updatable = false)
     @CreationTimestamp
     private LocalDateTime createDate;
 
-    @Column(name = "IS_ACTIVE", length = 1, nullable = false)
-    @ColumnDefault("true")
-    private String isActive;
+    @Column(name = "IS_ACTIVE", nullable = false)
+    private Boolean isActive = true;
 
-    @Column(name = "IS_DELETE", length = 1, nullable = false)
-    @ColumnDefault("false")
-    private String isDelete;
+    @Column(name = "IS_DELETE", nullable = false)
+    private Boolean isDelete = false;
 
     @Column(name = "DELETE_DATE")
     private LocalDateTime deleteDate;
 
     @Column(name = "PROGRESS", nullable = false)
     private Integer progress;
-
 }

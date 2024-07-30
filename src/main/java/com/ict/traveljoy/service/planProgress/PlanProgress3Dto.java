@@ -14,10 +14,10 @@ public class PlanProgress3Dto {
 
     private Long planProgress3Id;
     private Long planId;
-    private char isTransportation;
-    private char isDistance;
-    private char isPrice;
-    private char isRate;
+    private boolean isTransportation;
+    private boolean isDistance;
+    private boolean isPrice;
+    private boolean isRate;
     private Long minimumCost;
     private Long maximumCost;
     private Integer minimumRate;

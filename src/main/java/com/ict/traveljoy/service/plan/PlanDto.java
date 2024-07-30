@@ -20,8 +20,8 @@ public class PlanDto {
 	private String planName;
 	private String planDescriptions;
 	private LocalDateTime createDate;
-	private String isActive;
-	private String isDelete;
+	private boolean isActive;
+	private boolean isDelete;
 	private LocalDateTime deleteDate;
 	private Integer progress;
 	

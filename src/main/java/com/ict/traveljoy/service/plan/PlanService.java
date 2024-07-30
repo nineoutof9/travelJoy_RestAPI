@@ -82,7 +82,7 @@ public class PlanService {
     public boolean deletePlan(Long planId) {
         Plan existingPlan = planRepository.findByPlanId(planId);
         if (existingPlan != null) {
-            existingPlan.setIsDelete("Y");
+            existingPlan.setIsDelete(null);
             existingPlan.setDeleteDate(LocalDateTime.now());
             planRepository.save(existingPlan);
             return true;

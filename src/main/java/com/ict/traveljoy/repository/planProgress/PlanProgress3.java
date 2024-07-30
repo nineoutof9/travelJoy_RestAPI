@@ -40,19 +40,19 @@ public class PlanProgress3 {
 
     @Column(name = "IS_TRANSPORTATION", nullable = false)
     @ColumnDefault("false")
-    private char isTransportation;
+    private boolean isTransportation;
 
     @Column(name = "IS_DISTANCE", nullable = false)
     @ColumnDefault("false")
-    private char isDistance;
+    private boolean isDistance;
 
     @Column(name = "IS_PRICE", nullable = false)
     @ColumnDefault("false")
-    private char isPrice;
+    private boolean isPrice;
 
     @Column(name = "IS_RATE", nullable = false)
     @ColumnDefault("false")
-    private char isRate;
+    private boolean isRate;
 
     @Column(name = "MINIMUM_COST")
     @ColumnDefault("100000")

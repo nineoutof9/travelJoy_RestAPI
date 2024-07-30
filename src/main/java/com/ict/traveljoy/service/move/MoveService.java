@@ -1,7 +1,7 @@
-package com.ict.traveljoy.service.planProgress;
+package com.ict.traveljoy.service.move;
 
-import com.ict.traveljoy.repository.planProgress.Move;
-import com.ict.traveljoy.repository.planProgress.MoveRepository;
+import com.ict.traveljoy.repository.move.Move;
+import com.ict.traveljoy.repository.move.MoveRepository;
 import com.ict.traveljoy.repository.planProgress.PlanProgress2;
 import com.ict.traveljoy.repository.transportation.Transportation;
 import com.ict.traveljoy.repository.transportation.TransportationRepository;
@@ -28,7 +28,7 @@ public class MoveService {
 
     // startDetailPlanId로 Move 목록 조회
     public List<MoveDto> getMovesByStartDetailPlanId(Long startDetailPlanId) {
-        List<Move> moves = moveRepository.findByStartDetailPlanId(startDetailPlanId);
+        List<Move> moves = moveRepository.findByStartDetailPlan_PlanProgress2Id(startDetailPlanId);
         return moves.stream()
                 .map(MoveDto::toDto)
                 .collect(Collectors.toList());
@@ -36,7 +36,7 @@ public class MoveService {
 
     // endDetailPlanId로 Move 목록 조회
     public List<MoveDto> getMovesByEndDetailPlanId(Long endDetailPlanId) {
-        List<Move> moves = moveRepository.findByEndDetailPlanId(endDetailPlanId);
+        List<Move> moves = moveRepository.findByEndDetailPlan_PlanProgress2Id(endDetailPlanId);
         return moves.stream()
                 .map(MoveDto::toDto)
                 .collect(Collectors.toList());

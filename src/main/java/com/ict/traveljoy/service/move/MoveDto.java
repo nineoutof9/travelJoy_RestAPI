@@ -1,6 +1,6 @@
-package com.ict.traveljoy.service.planProgress;
+package com.ict.traveljoy.service.move;
 
-import com.ict.traveljoy.repository.planProgress.Move;
+import com.ict.traveljoy.repository.move.Move;
 import com.ict.traveljoy.repository.planProgress.PlanProgress2;
 import com.ict.traveljoy.repository.transportation.Transportation;
 

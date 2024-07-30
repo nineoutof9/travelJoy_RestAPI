@@ -4,17 +4,18 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PlanRegionRepository extends JpaRepository<PlanRegion, Long> {
 
-    List<PlanRegion> findByPlanId(Long planId);
+    List<PlanRegion> findByPlan_PlanId(Long planId);
 
-    List<PlanRegion> findByRegionId(Long regionId);
+    List<PlanRegion> findByRegion_Id(Long regionId);
 
-    PlanRegion findByPlanIdAndRegionId(Long planId, Long regionId);
+    Optional<PlanRegion> findByPlan_PlanIdAndRegion_Id(Long planId, Long regionId);
 
-    void deleteByPlanId(Long planId);
+    void deleteByPlan_PlanId(Long planId);
 
-    void deleteByRegionId(Long regionId);
+    void deleteByRegion_Id(Long regionId);
 }
