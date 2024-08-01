@@ -2,95 +2,128 @@ package com.ict.traveljoy.controller.tripReview;
 
 import com.ict.traveljoy.service.tripReview.TripReviewDto;
 import com.ict.traveljoy.service.tripReview.TripReviewPhotoDto;
-import com.ict.traveljoy.service.tripReview.TripReviewPhotoService;
 import com.ict.traveljoy.service.tripReview.TripReviewService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.ict.traveljoy.service.tripReview.TripReviewPhotoService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+
 import java.util.List;
 
+@Tag(name = "여행 리뷰 관리", description = "여행 리뷰 및 리뷰 사진을 관리")
 @RestController
-@RequestMapping("/api/trip-reviews")
+@RequiredArgsConstructor
+@RequestMapping("/api")
 public class TripReviewController {
 
     private final TripReviewService tripReviewService;
     private final TripReviewPhotoService tripReviewPhotoService;
 
-    @Autowired
-    public TripReviewController(TripReviewService tripReviewService, TripReviewPhotoService tripReviewPhotoService) {
-        this.tripReviewService = tripReviewService;
-        this.tripReviewPhotoService = tripReviewPhotoService;
-    }
-
-    // TripReview 저장
-    @PostMapping
+    @CrossOrigin
+    @PostMapping("/trip-reviews")
+    @Operation(summary = "여행 리뷰 생성하기", description = "여행 리뷰를 생성하는 컨트롤러")
     public ResponseEntity<TripReviewDto> createTripReview(@RequestBody TripReviewDto tripReviewDto) {
-        TripReviewDto savedTripReview = tripReviewService.saveTripReview(tripReviewDto);
-        return ResponseEntity.ok(savedTripReview);
+        try {
+            TripReviewDto createdTripReview = tripReviewService.saveTripReview(tripReviewDto);
+            return new ResponseEntity<>(createdTripReview, HttpStatus.CREATED);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    // TripReview 업데이트
-    @PutMapping("/{id}")
+    @CrossOrigin
+    @PutMapping("/trip-reviews/{id}")
+    @Operation(summary = "여행 리뷰 수정하기", description = "여행 리뷰를 수정하는 컨트롤러")
     public ResponseEntity<TripReviewDto> updateTripReview(@PathVariable("id") Long tripReviewId, @RequestBody TripReviewDto tripReviewDto) {
-        TripReviewDto updatedTripReview = tripReviewService.updateTripReview(tripReviewId, tripReviewDto);
-        return ResponseEntity.ok(updatedTripReview);
+        try {
+            TripReviewDto updatedTripReview = tripReviewService.updateTripReview(tripReviewId, tripReviewDto);
+            return new ResponseEntity<>(updatedTripReview, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    // TripReview 삭제
-    @DeleteMapping("/{id}")
+    @CrossOrigin
+    @DeleteMapping("/trip-reviews/{id}")
+    @Operation(summary = "여행 리뷰 삭제하기", description = "여행 리뷰를 삭제하는 컨트롤러")
     public ResponseEntity<Void> deleteTripReview(@PathVariable("id") Long tripReviewId) {
-        tripReviewService.deleteTripReview(tripReviewId);
-        return ResponseEntity.noContent().build();
+        try {
+            tripReviewService.deleteTripReview(tripReviewId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    // TripReview 조회
-    @GetMapping("/{id}")
+    @CrossOrigin
+    @GetMapping("/trip-reviews/{id}")
+    @Operation(summary = "여행 리뷰 조회하기", description = "특정 ID로 여행 리뷰를 조회하는 컨트롤러")
     public ResponseEntity<TripReviewDto> getTripReview(@PathVariable("id") Long tripReviewId) {
-        TripReviewDto tripReviewDto = tripReviewService.getTripReview(tripReviewId);
-        return ResponseEntity.ok(tripReviewDto);
+        try {
+            TripReviewDto tripReviewDto = tripReviewService.getTripReview(tripReviewId);
+            return new ResponseEntity<>(tripReviewDto, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
-    // 모든 TripReview 조회
-    @GetMapping
-    public ResponseEntity<List<TripReviewDto>> getAllTripReviews() {
-        List<TripReviewDto> tripReviews = tripReviewService.getAllTripReviews();
-        return ResponseEntity.ok(tripReviews);
+    @CrossOrigin
+    @PostMapping("/trip-reviews/photos")
+    @Operation(summary = "여행 리뷰 사진 저장하기", description = "여행 리뷰에 대한 사진을 저장하는 컨트롤러")
+    public ResponseEntity<TripReviewPhotoDto> createTripReviewPhoto(@RequestBody TripReviewPhotoDto tripReviewPhotoDto) {
+        try {
+            TripReviewPhotoDto createdTripReviewPhoto = tripReviewPhotoService.savePhoto(tripReviewPhotoDto);
+            return new ResponseEntity<>(createdTripReviewPhoto, HttpStatus.CREATED);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    // 특정 Writer의 TripReview 조회
-    @GetMapping("/writer/{writer}")
-    public ResponseEntity<List<TripReviewDto>> getTripReviewsByWriter(@PathVariable("writer") String writer) {
-        List<TripReviewDto> tripReviews = tripReviewService.getTripReviewsByWriter(writer);
-        return ResponseEntity.ok(tripReviews);
+    @CrossOrigin
+    @PutMapping("/trip-reviews/photos/{id}")
+    @Operation(summary = "여행 리뷰 사진 수정하기", description = "여행 리뷰 사진을 수정하는 컨트롤러")
+    public ResponseEntity<TripReviewPhotoDto> updateTripReviewPhoto(@PathVariable("id") Long tripReviewPhotoId, @RequestBody TripReviewPhotoDto tripReviewPhotoDto) {
+        try {
+            TripReviewPhotoDto updatedTripReviewPhoto = tripReviewPhotoService.updatePhoto(tripReviewPhotoId, tripReviewPhotoDto);
+            return new ResponseEntity<>(updatedTripReviewPhoto, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    // 특정 Plan ID로 TripReview 조회
-    @GetMapping("/plan/{planId}")
-    public ResponseEntity<List<TripReviewDto>> getTripReviewsByPlanId(@PathVariable("planId") Long planId) {
-        List<TripReviewDto> tripReviews = tripReviewService.getTripReviewsByPlanId(planId);
-        return ResponseEntity.ok(tripReviews);
+    @CrossOrigin
+    @DeleteMapping("/trip-reviews/photos/{id}")
+    @Operation(summary = "여행 리뷰 사진 삭제하기", description = "여행 리뷰 사진을 삭제하는 컨트롤러")
+    public ResponseEntity<Void> deleteTripReviewPhoto(@PathVariable("id") Long tripReviewPhotoId) {
+        try {
+            tripReviewPhotoService.deletePhoto(tripReviewPhotoId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    // 제목에 특정 문자열이 포함된 TripReview 조회
-    @GetMapping("/title/{title}")
-    public ResponseEntity<List<TripReviewDto>> getTripReviewsByTitleContaining(@PathVariable("title") String title) {
-        List<TripReviewDto> tripReviews = tripReviewService.getTripReviewsByTitleContaining(title);
-        return ResponseEntity.ok(tripReviews);
-    }
-
-    // TripReviewPhoto 저장
-    @PostMapping("/{tripReviewId}/photos")
-    public ResponseEntity<TripReviewPhotoDto> createTripReviewPhoto(@PathVariable("tripReviewId") Long tripReviewId, @RequestBody TripReviewPhotoDto tripReviewPhotoDto) {
-        tripReviewPhotoDto.setTripReviewId(tripReviewId);
-        TripReviewPhotoDto savedTripReviewPhoto = tripReviewPhotoService.saveTripReviewPhoto(tripReviewPhotoDto);
-        return ResponseEntity.ok(savedTripReviewPhoto);
-    }
-
-    // 특정 TripReviewId에 해당하는 모든 TripReviewPhoto 삭제
-    @DeleteMapping("/{tripReviewId}/photos")
-    public ResponseEntity<Void> deleteAllTripReviewPhotosByTripReviewId(@PathVariable("tripReviewId") Long tripReviewId) {
-        tripReviewPhotoService.deleteAllTripReviewPhotosByTripReviewId(tripReviewId);
-        return ResponseEntity.noContent().build();
+    @CrossOrigin
+    @GetMapping("/trip-reviews/photos/{id}")
+    @Operation(summary = "여행 리뷰 사진 조회하기", description = "특정 ID로 여행 리뷰 사진을 조회하는 컨트롤러")
+    public ResponseEntity<TripReviewPhotoDto> getTripReviewPhoto(@PathVariable("id") Long tripReviewPhotoId) {
+        try {
+            TripReviewPhotoDto tripReviewPhotoDto = tripReviewPhotoService.getPhotoById(tripReviewPhotoId);
+            return new ResponseEntity<>(tripReviewPhotoDto, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }
