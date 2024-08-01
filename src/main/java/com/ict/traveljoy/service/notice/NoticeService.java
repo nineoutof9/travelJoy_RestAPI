@@ -2,14 +2,18 @@ package com.ict.traveljoy.service.notice;
 
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.ict.traveljoy.repository.notice.Notice;
 import com.ict.traveljoy.repository.notice.NoticeRepository;
+import com.ict.traveljoy.service.question.QuestionDTO;
+
 import lombok.RequiredArgsConstructor;
 
 @Service
-@RequiredArgsConstructor 
+@RequiredArgsConstructor
 public class NoticeService {
 	
 
@@ -17,22 +21,39 @@ public class NoticeService {
 	
 	@Transactional
 	public NoticeDto createNotice(NoticeDto noticeDto) {
-		Notice notice= noticeRepository.save(noticeDto.toEntity());
-		return NoticeDto.toDto(notice);
+		Notice notice = noticeDto.toEntity();
+        Notice savedNotice = noticeRepository.save(notice);
+        return NoticeDto.toDto(savedNotice);
 	}
 	
 	@Transactional
-	public List<NoticeDto> findAll(NoticeDto noticeDto) {
-		return null;
+	public List<NoticeDto> findAll() {
+		List<Notice> notices = noticeRepository.findAll();
+        return notices.stream()
+                      .map(NoticeDto::toDto)
+                      .collect(Collectors.toList());
+	}
+	
+	@Transactional
+	public NoticeDto noticeUpdate(NoticeDto noticeDto) {
+		Notice notice = noticeDto.toEntity();
+        Notice updatedNotice = noticeRepository.save(notice);
+        return NoticeDto.toDto(updatedNotice);
 	}
 
 	@Transactional
-	public NoticeDto noticeUpdate(NoticeDto noticeDto) {
-		return null;
+	public NoticeDto noticeDelete(Long id) {
+		Notice notice = noticeRepository.findById(id).orElseThrow(() -> new RuntimeException("Notice not found"));
+        noticeRepository.delete(notice);
+        return NoticeDto.toDto(notice);
 	}
 
-	public NoticeDto noticeDelete(NoticeDto noticeDto) {
-		return null;
+	@Transactional
+	public List<NoticeDto> findByTitle(String title) {
+		List<Notice> notices = noticeRepository.findByTitleContaining(title);
+        return notices.stream()
+                      .map(NoticeDto::toDto)
+                      .collect(Collectors.toList());
 	}
 
 	

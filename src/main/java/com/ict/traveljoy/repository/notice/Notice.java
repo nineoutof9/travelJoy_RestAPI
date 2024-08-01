@@ -2,6 +2,9 @@ package com.ict.traveljoy.repository.notice;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,27 +28,28 @@ import lombok.Setter;
 public class Notice {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "notice_seq")
-    @SequenceGenerator(name = "notice_seq", sequenceName = "notice_seq", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_notice")
+    @SequenceGenerator(name = "seq_notice", sequenceName = "seq_notice", allocationSize = 1)
     @Column(nullable = false, name = "NOTICE_ID")
 	private long id;
 	
-	@Column(nullable = false,name = "NOTICE_DATE")
+	@ColumnDefault("SYSDATE")
+	@CreationTimestamp
 	private LocalDateTime date;
 	
 	@Column(nullable = false,name="NOTICE_TITLE")
 	private String title; 
 	
-	@Column(nullable = false,name="NOTICE_CONTENT")
+	@Column(nullable = false,name="NOTICE_CONTENT",length = 2000)
 	private String content;
 	
 	@Column(nullable = false)
 	private String writer;
 	
-	@Column(nullable = false,name = "IS_DELETE")
+	@ColumnDefault("'F'")
 	private boolean isDelete;
 	
-	@Column(nullable = false,name = "IS_ACTIVE")
+	@ColumnDefault("'T'")
 	private boolean isActive;
 
 }
