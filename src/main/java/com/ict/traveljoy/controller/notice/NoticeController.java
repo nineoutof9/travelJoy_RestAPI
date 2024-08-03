@@ -1,14 +1,13 @@
 package com.ict.traveljoy.controller.notice;
 import java.util.List;
 
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ict.traveljoy.service.notice.NoticeDto;
-import com.ict.traveljoy.service.notice.NoticeService;
+import com.ict.traveljoy.notice.service.NoticeDto;
+import com.ict.traveljoy.notice.service.NoticeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
