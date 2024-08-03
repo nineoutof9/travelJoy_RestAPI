@@ -1,9 +1,9 @@
 package com.ict.traveljoy.controller.tripReview;
 
-import com.ict.traveljoy.service.tripReview.TripReviewDto;
-import com.ict.traveljoy.service.tripReview.TripReviewPhotoDto;
-import com.ict.traveljoy.service.tripReview.TripReviewService;
-import com.ict.traveljoy.service.tripReview.TripReviewPhotoService;
+import com.ict.traveljoy.tripReview.service.TripReviewDto;
+import com.ict.traveljoy.tripReview.service.TripReviewPhotoDto;
+import com.ict.traveljoy.tripReview.service.TripReviewService;
+import com.ict.traveljoy.tripReview.service.TripReviewPhotoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-
-import java.util.List;
 
 @Tag(name = "여행 리뷰 관리", description = "여행 리뷰 및 리뷰 사진을 관리")
 @RestController

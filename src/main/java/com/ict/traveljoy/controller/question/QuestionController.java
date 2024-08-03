@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ict.traveljoy.service.question.QuestionDTO;
-import com.ict.traveljoy.service.question.QuestionService;
+import com.ict.traveljoy.question.service.QuestionDTO;
+import com.ict.traveljoy.question.service.QuestionService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

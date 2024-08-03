@@ -3,16 +3,13 @@ package com.ict.traveljoy.controller.mypage;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ict.traveljoy.service.food.FoodDTO;
-import com.ict.traveljoy.service.food.FoodService;
-import com.ict.traveljoy.service.hotel.HotelDTO;
-import com.ict.traveljoy.service.hotel.HotelService;
-import com.ict.traveljoy.service.sight.SightDTO;
-import com.ict.traveljoy.service.sight.SightService;
-import com.ict.traveljoy.service.users.UsersService;
+import com.ict.traveljoy.place.food.service.FoodDTO;
+import com.ict.traveljoy.place.food.service.FoodService;
+import com.ict.traveljoy.place.hotel.service.HotelDTO;
+import com.ict.traveljoy.place.hotel.service.HotelService;
+import com.ict.traveljoy.place.sight.service.SightDTO;
+import com.ict.traveljoy.place.sight.service.SightService;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
@@ -21,14 +18,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
@@ -60,7 +55,7 @@ public class MypageController {
 	}
 	
 	//숙소 조회
-	@GetMapping
+	@GetMapping("/hotel/{hotel}")
     public ResponseEntity<List<HotelDTO>> getHotels(
             @RequestParam(required = false) Long id,
             @RequestParam(required = false) Long regionId,
@@ -135,7 +130,7 @@ public class MypageController {
 		
 	}
 	//음식 조회
-	@GetMapping
+	@GetMapping("/food/{food}")
     public ResponseEntity<List<FoodDTO>> getFood(
             @RequestParam(required = false) Long id,
             @RequestParam(required = false) Long regionId,
@@ -193,7 +188,7 @@ public class MypageController {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}
 	}
-	@GetMapping
+	@GetMapping("/sight/{sight}")
     public ResponseEntity<List<SightDTO>> getSight(
             @RequestParam(required = false) Long id,
             @RequestParam(required = false) Long regionId,
