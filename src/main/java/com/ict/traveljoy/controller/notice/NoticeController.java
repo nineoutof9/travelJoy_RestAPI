@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ict.traveljoy.service.notice.NoticeDto;
 import com.ict.traveljoy.service.notice.NoticeService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class NoticeController {
 	
 	private final NoticeService noticeService;
+	private final ObjectMapper objectMapper;
 	    
     @CrossOrigin
     @PostMapping("/notice")
@@ -41,9 +43,9 @@ public class NoticeController {
     @CrossOrigin
     @GetMapping("/noticeview")
     @Operation(summary = "공지사항 조회하기", description = "공지사항 조회 컨트롤러입니다")
-    public ResponseEntity<List<NoticeDto>> getAllNotices(@RequestBody NoticeDto noticeDto) {
+    public ResponseEntity<List<NoticeDto>> getAllNotices() {
     	try {
-	        List<NoticeDto> noticeView = noticeService.findAll(noticeDto);
+	        List<NoticeDto> noticeView = noticeService.findAll();
 	        return ResponseEntity.ok(noticeView);
     	}
     	catch(Exception e) {
@@ -69,9 +71,9 @@ public class NoticeController {
     @CrossOrigin
     @DeleteMapping("/noticeUpdate")
     @Operation(summary = "공지사항 삭제하기", description = "공지사항 삭제 컨트롤러입니다")
-    public ResponseEntity<NoticeDto> noticeDelete(@RequestBody NoticeDto noticeDto) {
+    public ResponseEntity<NoticeDto> noticeDelete(@PathVariable Long id) {
         try {
-        	NoticeDto deleteDto=noticeService.noticeDelete(noticeDto);
+        	NoticeDto deleteDto=noticeService.noticeDelete(id);
         	return ResponseEntity.ok(deleteDto);
         }
         catch(Exception e) {
