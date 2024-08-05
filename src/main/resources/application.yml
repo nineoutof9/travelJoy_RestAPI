@@ -9,7 +9,6 @@ spring:
     username: ICTUSER
     password: ICT1234
 
-
     
     hikari:
       auto-commit: true # default(false)
