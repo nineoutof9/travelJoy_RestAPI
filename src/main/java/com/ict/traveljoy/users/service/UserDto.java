@@ -1,8 +1,10 @@
-package com.ict.traveljoy.users;
+package com.ict.traveljoy.users.service;
 
 
 import java.sql.Date;
 import java.time.LocalDateTime;
+
+import com.ict.traveljoy.users.repository.Users;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -9,8 +9,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.ict.traveljoy.users.UserRepository;
-import com.ict.traveljoy.users.Users;
+import com.ict.traveljoy.users.repository.UserRepository;
+import com.ict.traveljoy.users.repository.Users;
 
 import lombok.RequiredArgsConstructor;
 

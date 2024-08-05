@@ -6,7 +6,7 @@ import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.ict.traveljoy.users.Users;
+import com.ict.traveljoy.users.repository.Users;
 
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;

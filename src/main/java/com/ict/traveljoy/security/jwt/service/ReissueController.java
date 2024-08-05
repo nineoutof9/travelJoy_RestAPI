@@ -1,4 +1,4 @@
-package com.ict.traveljoy.security.jwt;
+package com.ict.traveljoy.security.jwt.service;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.swagger.v3.oas.annotations.Hidden;
@@ -11,8 +11,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ict.traveljoy.users.UserService;
-import com.ict.traveljoy.users.Users;
+import com.ict.traveljoy.security.jwt.refreshtoken.RefreshToken;
+import com.ict.traveljoy.security.jwt.util.JwtUtility;
+import com.ict.traveljoy.users.repository.Users;
+import com.ict.traveljoy.users.service.UserService;
 
 import java.util.Optional;
 

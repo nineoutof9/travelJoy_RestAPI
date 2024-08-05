@@ -9,8 +9,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.ict.traveljoy.security.CustomUserDetails;
-import com.ict.traveljoy.security.jwt.JwtUtility;
-import com.ict.traveljoy.users.Users;
+import com.ict.traveljoy.security.jwt.util.JwtUtility;
+import com.ict.traveljoy.users.repository.Users;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;

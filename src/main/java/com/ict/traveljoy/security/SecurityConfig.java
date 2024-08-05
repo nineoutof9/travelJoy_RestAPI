@@ -31,9 +31,9 @@ import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 import com.ict.traveljoy.security.filter.JwtAuthenticationFilter;
 import com.ict.traveljoy.security.filter.LoginFilter;
-import com.ict.traveljoy.security.jwt.JwtUtility;
-import com.ict.traveljoy.security.jwt.RefreshService;
-import com.ict.traveljoy.users.UserService;
+import com.ict.traveljoy.security.jwt.service.RefreshService;
+import com.ict.traveljoy.security.jwt.util.JwtUtility;
+import com.ict.traveljoy.users.service.UserService;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -75,7 +75,7 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 // HTTP 요청에 대한 접근 권한을 설정합니다.
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/register","/logout", "/login", "/reissue", "/swagger-ui/**").permitAll() // 해당 경로들은 인증 없이 접근 가능합니다.
+                        .requestMatchers("/api/**","/register","/logout", "/login", "/reissue", "/swagger-ui/**").permitAll() // 해당 경로들은 인증 없이 접근 가능합니다.
                         .anyRequest().authenticated()) // 그 외의 모든 요청은 인증을 요구합니다.
                 // JWTFilter와 LoginFilter를 필터 체인에 등록합니다.
                 .addFilterBefore(new JwtAuthenticationFilter(jwtUtility), LoginFilter.class)

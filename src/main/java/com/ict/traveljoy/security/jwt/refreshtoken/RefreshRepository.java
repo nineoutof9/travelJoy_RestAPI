@@ -1,4 +1,4 @@
-package com.ict.traveljoy.security.jwt;
+package com.ict.traveljoy.security.jwt.refreshtoken;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

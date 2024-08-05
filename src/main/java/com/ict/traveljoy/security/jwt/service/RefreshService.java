@@ -1,7 +1,10 @@
-package com.ict.traveljoy.security.jwt;
+package com.ict.traveljoy.security.jwt.service;
 
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+
+import com.ict.traveljoy.security.jwt.refreshtoken.RefreshRepository;
+import com.ict.traveljoy.security.jwt.refreshtoken.RefreshToken;
 
 import java.util.Optional;
 import java.util.UUID;

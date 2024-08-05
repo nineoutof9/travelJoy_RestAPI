@@ -9,11 +9,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.web.client.RestTemplate;
 
-import com.ict.traveljoy.security.jwt.JwtUtility;
-import com.ict.traveljoy.security.jwt.RefreshService;
-import com.ict.traveljoy.security.jwt.RefreshToken;
-import com.ict.traveljoy.users.UserService;
-import com.ict.traveljoy.users.Users;
+import com.ict.traveljoy.security.jwt.refreshtoken.RefreshToken;
+import com.ict.traveljoy.security.jwt.service.RefreshService;
+import com.ict.traveljoy.security.jwt.util.JwtUtility;
+import com.ict.traveljoy.users.repository.Users;
+import com.ict.traveljoy.users.service.UserService;
 
 import java.io.IOException;
 import java.util.Optional;

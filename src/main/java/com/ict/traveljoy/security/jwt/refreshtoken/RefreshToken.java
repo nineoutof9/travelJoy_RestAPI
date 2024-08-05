@@ -1,15 +1,11 @@
-package com.ict.traveljoy.security.jwt;
+package com.ict.traveljoy.security.jwt.refreshtoken;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
-import com.ict.traveljoy.users.Users;
-import com.ict.traveljoy.users.special.UserAllergy;
-import com.ict.traveljoy.users.special.UserHandicap;
-import com.ict.traveljoy.users.special.UserInterest;
+import com.ict.traveljoy.users.repository.Users;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

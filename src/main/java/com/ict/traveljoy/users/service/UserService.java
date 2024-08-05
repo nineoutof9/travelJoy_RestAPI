@@ -1,4 +1,4 @@
-package com.ict.traveljoy.users;
+package com.ict.traveljoy.users.service;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ict.traveljoy.users.repository.UserRepository;
+import com.ict.traveljoy.users.repository.Users;
 
 import lombok.RequiredArgsConstructor;
 

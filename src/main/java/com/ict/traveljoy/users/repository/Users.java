@@ -1,4 +1,4 @@
-package com.ict.traveljoy.users;
+package com.ict.traveljoy.users.repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -6,10 +6,10 @@ import java.util.List;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
-import com.ict.traveljoy.repository.converter.PermissionToNumberConverter;
-import com.ict.traveljoy.users.special.UserAllergy;
-import com.ict.traveljoy.users.special.UserHandicap;
-import com.ict.traveljoy.users.special.UserInterest;
+import com.ict.traveljoy.converter.PermissionToNumberConverter;
+import com.ict.traveljoy.info.userinfo.repository.UserAllergy;
+import com.ict.traveljoy.info.userinfo.repository.UserHandicap;
+import com.ict.traveljoy.info.userinfo.repository.UserInterest;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

@@ -1,8 +1,10 @@
-package com.ict.traveljoy.users;
+package com.ict.traveljoy.controller.user;
 
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ict.traveljoy.users.service.UserDto;
+import com.ict.traveljoy.users.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 

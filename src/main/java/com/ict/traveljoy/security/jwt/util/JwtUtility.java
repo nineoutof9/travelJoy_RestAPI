@@ -1,4 +1,4 @@
-package com.ict.traveljoy.security.jwt;
+package com.ict.traveljoy.security.jwt.util;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
@@ -11,8 +11,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import com.ict.traveljoy.users.UserRepository;
-import com.ict.traveljoy.users.Users;
+import com.ict.traveljoy.users.repository.UserRepository;
+import com.ict.traveljoy.users.repository.Users;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
