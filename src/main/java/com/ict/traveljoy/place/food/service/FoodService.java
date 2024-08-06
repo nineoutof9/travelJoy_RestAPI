@@ -33,13 +33,37 @@ public class FoodService {
     }
 
     // 음식 저장
+    @Transactional
     public FoodDTO saveFood(FoodDTO foodDto) {
+    	if (foodDto.getFoodName().isEmpty()) {
+    		throw new IllegalArgumentException("음식 이름이 비어있어요");
+    	}
         Food food = foodDto.toEntity();
         food = foodRepository.save(food);
         return FoodDTO.toDto(food);
     }
+    
+ // 음식 수정
+    @Transactional
+    public FoodDTO updateFood(Long id, FoodDTO foodDto) {
+        Optional<Food> foodOpt = foodRepository.findById(id);
+
+        if (foodOpt.isPresent()) {
+            Food food = foodOpt.get();
+            food.setFoodName(foodDto.getFoodName());
+            food.setRegion(foodDto.getRegion());
+            food.setAveragePrice(foodDto.getAveragePrice());
+            food.setAverageReviewRate(foodDto.getAverageReviewRate());
+            
+            Food updatedFood = foodRepository.save(food);
+            return FoodDTO.toDto(updatedFood);
+        } else {
+            throw new IllegalArgumentException("주어진 번호의 음식을 찾을 수 없어요");
+        }
+    }
 
     // ID로 음식 삭제
+    @Transactional
     public void deleteFood(Long id) {
         if (foodRepository.existsById(id)) {
             foodRepository.deleteById(id);

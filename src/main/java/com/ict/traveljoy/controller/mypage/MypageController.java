@@ -3,12 +3,18 @@ package com.ict.traveljoy.controller.mypage;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ict.traveljoy.controller.tripReview.TripReviewController;
 import com.ict.traveljoy.place.food.service.FoodDTO;
 import com.ict.traveljoy.place.food.service.FoodService;
 import com.ict.traveljoy.place.hotel.service.HotelDTO;
 import com.ict.traveljoy.place.hotel.service.HotelService;
 import com.ict.traveljoy.place.sight.service.SightDTO;
 import com.ict.traveljoy.place.sight.service.SightService;
+import com.ict.traveljoy.tripReview.repository.TripReview;
+import com.ict.traveljoy.tripReview.service.TripReviewDto;
+import com.ict.traveljoy.tripReview.service.TripReviewPhotoDto;
+import com.ict.traveljoy.tripReview.service.TripReviewPhotoService;
+import com.ict.traveljoy.tripReview.service.TripReviewService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -24,6 +31,8 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
@@ -35,10 +44,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class MypageController {
 	
+	@Autowired
 	private final HotelService hotelService;
+	@Autowired
 	private final FoodService foodService;
+	@Autowired
 	private final SightService sightService;
+	@Autowired
+	private final TripReviewService tripReviewService;
+	@Autowired
+	private final TripReviewPhotoService tripReviewPhotoService;
 	
+
 	
 
 //////////////////////////////////숙소
@@ -95,19 +112,20 @@ public class MypageController {
     }
 
 	//숙소 수정
-	/*
-	@PutMapping("/hotel/{hotel}")
-	public ResponseEntity<Optional<HotelDTO>> updateHotel(@PathVariable Long id, @RequestBody HotelDTO dto) {
-		
-		try {
-		Optional<HotelDTO> updateDTO = hotelService.findHotelById(id);
-		return ResponseEntity.ok(updateDTO);
-		} catch(Exception e) {e.printStackTrace();
-		
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);}
-		
 
-	}*/
+		@PutMapping("/hotel/{hotel}")
+		public ResponseEntity<Optional<HotelDTO>> updateHotel(@PathVariable Long id, @RequestBody HotelDTO dto) {
+			
+			try {
+			Optional<HotelDTO> updateDTO = hotelService.findHotelById(id);
+			return ResponseEntity.ok(updateDTO);
+			} catch(Exception e) {e.printStackTrace();
+			
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);}
+			
+
+		}
+
 	
 	//숙소 삭제
 	@DeleteMapping("/hotel/{hotel}")
@@ -164,11 +182,19 @@ public class MypageController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ArrayList<>());
         }
     }
-	/*
-	@PutMapping("/food/{food}")
-	public String updateFood() {
-		return "음식 수정";
-	}*/
+	//음식 수정
+
+		@PutMapping("/food/{food}")
+		public ResponseEntity<Optional<FoodDTO>> updateFood(@PathVariable Long id, @RequestBody FoodDTO dto) {
+			
+			try {
+			Optional<FoodDTO> updateDTO = foodService.findFoodById(id);
+			return ResponseEntity.ok(updateDTO);
+			} catch(Exception e) {e.printStackTrace();
+			
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);}
+		}
+
 	//음식 삭제
 	@DeleteMapping("/food/{food}")
 	public String deleteFood(@PathVariable Long id) {
@@ -188,6 +214,7 @@ public class MypageController {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}
 	}
+	
 	@GetMapping("/sight/{sight}")
     public ResponseEntity<List<SightDTO>> getSight(
             @RequestParam(required = false) Long id,
@@ -219,11 +246,19 @@ public class MypageController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ArrayList<>());
         }
     }
-	/*
+	
+	//명소 수정
 	@PutMapping("/sight/{sight}")
-	public String updateSight() {
-		return "명소 저장";
-	}*/
+	public ResponseEntity<Optional<SightDTO>> updateSight(@PathVariable Long id, @RequestBody SightDTO dto) {
+		
+		try {
+		Optional<SightDTO> updateDTO = sightService.findSightById(id);
+		return ResponseEntity.ok(updateDTO);
+		} catch(Exception e) {e.printStackTrace();
+		
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);}
+	}
+
 	
 	@DeleteMapping("/sight/{sight}")
 	public String deleteSight(@PathVariable Long id) {
@@ -237,16 +272,127 @@ public class MypageController {
 
 		return "즐겨찾기한 관광지, 숙소, 맛집 등 장소 불러오기";
 	}
+	///////여행 리뷰 	
+	@PostMapping("/trip-reviews")
+	public ResponseEntity<TripReviewDto> saveTripReview(@RequestBody TripReviewDto tripReviewDto) {
+		try {
+			TripReviewDto saveDTO = tripReviewService.saveTripReview(tripReviewDto);
+			return ResponseEntity.ok(saveDTO);
+		}catch(Exception e) {e.printStackTrace();
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+		}
+}
 	
-	@GetMapping("/setReview")
-	public String setReview() {
-		return "작성한 후기 수정 / 저장 / 삭제";
+	@PostMapping("/trip-reviews/photo")
+	public ResponseEntity<TripReviewPhotoDto> saveTripReviewPhoto(@RequestBody TripReviewPhotoDto tripReviewPhotoDto) {
+		
+		try {
+			TripReviewPhotoDto saveDTO = tripReviewPhotoService.savePhoto(tripReviewPhotoDto);
+			return ResponseEntity.ok(saveDTO);
+		}catch(Exception e) {e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+		}
+}
+	
+	@GetMapping("/trip-reviews")
+	public ResponseEntity<List<TripReviewDto>> getTripReview(
+	        @RequestParam(required = false) Long tripReviewId,
+	        @RequestParam(required = false) String writer,
+	        @RequestParam(required = false) Long planId,
+	        @RequestParam(required = false) String title) {
+		try {
+	        if (tripReviewId != null) {
+	            TripReviewDto dto = tripReviewService.getTripReview(tripReviewId);
+	            return ResponseEntity.ok(List.of(dto));
+	        } else if (writer != null) {
+	            return ResponseEntity.ok(tripReviewService.getTripReviewsByWriter(writer));
+	        } else if (planId != null) {
+	            return ResponseEntity.ok(tripReviewService.getTripReviewsByPlanId(planId));
+	        } else if (title != null) {
+	            return ResponseEntity.ok(tripReviewService.getTripReviewsByTitleContaining(title));
+	        } else {
+	            return ResponseEntity.ok(tripReviewService.getAllTripReviews());
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ArrayList<>());
+	    }
+	}
+
+	
+	@GetMapping("/trip-reviews/photo")
+	public ResponseEntity<List<TripReviewPhotoDto>> getTripReviewPhoto(
+	        @RequestParam(required = false) Long tripReviewId,
+	        @RequestParam(required = false) Long imageId,
+	        @RequestParam(required = false) Long tripReviewPhotoId) {
+		try {
+	        if (tripReviewId != null && imageId != null) {
+	        	TripReviewPhotoDto dto = tripReviewPhotoService.getPhotoByTripReviewIdAndImageId(tripReviewId, imageId);
+	            return ResponseEntity.ok(List.of(dto));
+	        } else if (tripReviewPhotoId != null) {
+	            return ResponseEntity.ok(List.of(tripReviewPhotoService.getPhotoById(tripReviewPhotoId)));
+	        } else if (imageId != null) {
+	            return ResponseEntity.ok(tripReviewPhotoService.getPhotosByImageId(imageId));
+	        } else if (tripReviewId != null) {
+	            return ResponseEntity.ok(tripReviewPhotoService.getPhotosByTripReviewId(tripReviewId));
+	        } else {
+	            return ResponseEntity.ok(new ArrayList<>());
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ArrayList<>());
+	    }
 	}
 	
-	@GetMapping("/getReview")
-	public String getReview() {
-		return "작성한 후기 불러오기";
+	
+	@PutMapping("/trip-reviews/{id}")
+	public ResponseEntity<TripReviewDto> updateTripReview(@PathVariable Long tripReviewId,
+	        @RequestBody TripReviewDto tripReviewDto) {
+	    try {
+	        TripReviewDto updatedDTO = tripReviewService.updateTripReview(tripReviewId, tripReviewDto);
+	        return ResponseEntity.ok(updatedDTO);
+	    }catch(Exception e) {e.printStackTrace();
+		
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);}
 	}
+
+	
+	@PutMapping("/trip-reviews/photo/{id}")
+	public ResponseEntity<TripReviewPhotoDto> updateTripReviewPhoto(@PathVariable Long tripReviewPhotoId,
+	        @RequestBody TripReviewPhotoDto tripReviewPhotoDto) {
+	    try {
+	        TripReviewPhotoDto updatedDTO = tripReviewPhotoService.updatePhoto(tripReviewPhotoId, tripReviewPhotoDto);
+	        return ResponseEntity.ok(updatedDTO);
+	    }catch(Exception e) {e.printStackTrace();
+		
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);}
+
+	}
+	
+	
+	@DeleteMapping("/trip-reviews/{id}")
+	public ResponseEntity<String> deleteTripReview(@PathVariable Long tripReviewId) {
+	    try {
+	        tripReviewService.deleteTripReview(tripReviewId);
+	        return ResponseEntity.ok("여행 리뷰 삭제 성공");
+	    }catch(Exception e) {e.printStackTrace();
+		
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);}
+
+	}
+	
+	@DeleteMapping("/trip-reviews/photo/{id}")
+	public ResponseEntity<String> deleteTripReviewAndPhoto(@PathVariable Long tripReviewPhotoId) {
+	    try {
+	        tripReviewPhotoService.deletePhoto(tripReviewPhotoId);
+	        return ResponseEntity.ok("여행 리뷰 사진 삭제 성공");
+	    }catch(Exception e) {e.printStackTrace();
+		
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);}
+
+	}
+	
+
 	
 	@GetMapping("/setSchedule")
 	public String setSchedule() {

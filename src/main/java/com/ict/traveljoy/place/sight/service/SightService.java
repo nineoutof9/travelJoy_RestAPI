@@ -33,6 +33,7 @@ public class SightService {
     }
 
     // 명소 저장
+    @Transactional
     public SightDTO saveSight(SightDTO sightDto) {
         // 데이터 유효성 검증
         if (sightDto.getSightName() == null || sightDto.getSightName().isEmpty()) {
@@ -44,8 +45,27 @@ public class SightService {
         sight = sightRepository.save(sight);
         return SightDTO.toDto(sight);
     }
+    
+    // 명소 수정
+    
+    @Transactional
+    public SightDTO updateSight(Long id, SightDTO sightDto) {
+        Optional<Sight> sightOpt = sightRepository.findById(id);
+
+        if (sightOpt.isPresent()) {
+            Sight sight = sightOpt.get();
+        	sight.setSightName(sightDto.getSightName());
+            sight.setRegion(sightDto.getRegion());
+            sight.setAverageReviewRate(sightDto.getAverageReviewRate());
+            Sight updatedSight = sightRepository.save(sight);
+            return SightDTO.toDto(updatedSight);
+        } else {
+            throw new IllegalArgumentException("주어진 번호의 관광지를 찾을 수 없어요");
+        }
+    }
 
     // ID로 명소 삭제
+    @Transactional
     public void deleteSight(Long id) {
         if (sightRepository.existsById(id)) {
             sightRepository.deleteById(id);
