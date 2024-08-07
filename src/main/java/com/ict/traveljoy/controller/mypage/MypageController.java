@@ -3,7 +3,6 @@ package com.ict.traveljoy.controller.mypage;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ict.traveljoy.controller.tripReview.TripReviewController;
 import com.ict.traveljoy.place.food.service.FoodDTO;
 import com.ict.traveljoy.place.food.service.FoodService;
 import com.ict.traveljoy.place.hotel.service.HotelDTO;
