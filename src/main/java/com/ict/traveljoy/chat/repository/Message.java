@@ -40,24 +40,30 @@ public class Message {
 	@Column(length=2000)
 	private String messageContent;
 	
-	//보낸시간이랑 받은시간 같지 않은지?
+	
 
 	@ColumnDefault("SYSDATE")
 	@CreationTimestamp
 	private LocalDateTime messageSendDate;
 	
+	
+
+	@ColumnDefault("'T'")
+	private boolean isActive;
+	
+	/*
+	//보낸시간이랑 받은시간 같지 않은지?
+	
 	@ColumnDefault("SYSDATE")
 	@CreationTimestamp
 	private LocalDateTime messageReceiveDate;
-
-	@ColumnDefault("'T'")
-	private char isActive;
 	
 	@ColumnDefault("'F'")
-	private char isDelete;
+	private boolean isDelete;
 	
 	//메세지 삭제 기능 넣을것인지?
 
 	@CreationTimestamp
 	private LocalDateTime deleteDate;
+	*/
 }

@@ -19,8 +19,8 @@ public class TripReviewDto {
     private String reviewContent;
     private String url;
     private Timestamp postDate;
-    private String isActive;
-    private String isDelete;
+    private boolean isActive;
+    private boolean isDelete;
     private Timestamp deleteDate;
 
     // TripReviewDto를 TripReview 엔티티로 변환

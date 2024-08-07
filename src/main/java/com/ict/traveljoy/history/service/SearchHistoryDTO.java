@@ -32,8 +32,8 @@ public class SearchHistoryDTO {
 				.userId(userId)
 				.searchWord(searchWord)
 				.searchDate(searchDate)
-				.isActive(isActive==true?'T':'F')
-				.isDelete(isDelete==true?'T':'F')
+				.isActive(isActive)
+				.isDelete(isDelete)
 				.build();
 	}
 	
@@ -43,8 +43,8 @@ public class SearchHistoryDTO {
 				.userId(searchHistory.getUserId())
 				.searchWord(searchHistory.getSearchWord())
 				.searchDate(searchHistory.getSearchDate())
-				.isActive(searchHistory.getIsActive()=='T'?true:false)
-				.isDelete(searchHistory.getIsDelete()=='T'?true:false)
+				.isActive(searchHistory.getIsActive())
+				.isDelete(searchHistory.getIsDelete())
 				.build();
 	}
 }

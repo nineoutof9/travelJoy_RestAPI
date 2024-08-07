@@ -47,11 +47,13 @@ public class SearchHistory {
 	@CreationTimestamp
 	private LocalDateTime searchDate;
 	
-	@Column(name="is_active")
-	private char isActive;
+	@Column(name="is_active",nullable = false)
+	@ColumnDefault("'T'")
+	private boolean isActive;
 	
-	@Column(name="is_delete")
-	private char isDelete;
+	@Column(name="is_delete",nullable = false)
+	@ColumnDefault("'F'")
+	private boolean isDelete;
 	
 	@Column(name="delete_date")
 	@CreationTimestamp

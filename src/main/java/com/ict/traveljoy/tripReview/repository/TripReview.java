@@ -56,12 +56,12 @@ public class TripReview {
     private Timestamp postDate;
 
     @Column(name = "IS_ACTIVE", length = 1, nullable = false)
-    @ColumnDefault("false")
-    private String isActive;
+    @ColumnDefault("'T'")
+    private boolean isActive;
 
     @Column(name = "IS_DELETE", length = 1, nullable = false)
-    @ColumnDefault("false")
-    private String isDelete;
+    @ColumnDefault("'F'")
+    private boolean isDelete;
 
     @Column(name = "DELETE_DATE")
     private Timestamp deleteDate;

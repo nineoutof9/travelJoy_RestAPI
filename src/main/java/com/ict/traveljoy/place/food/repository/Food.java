@@ -39,7 +39,7 @@ public class Food {
 	private String foodType;
 	
 	@Column(name = "is_has_image",nullable = false)
-	@ColumnDefault("F")
+	@ColumnDefault("'F'")
 	private boolean isHasImage;
 	
 	@Column(name="average_price")

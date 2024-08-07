@@ -31,7 +31,7 @@ public class QuestionDTO {
 				.questionCategoryId(questionCategoryId)
 				.questionDate(questionDate)
 				.questionContent(questionContent)
-				.isHasAnswer(isHasAnswer==true?'T':'F')
+				.isHasAnswer(isHasAnswer)
 				.build();
 	}
 	
@@ -42,7 +42,7 @@ public class QuestionDTO {
 				.questionCategoryId(question.getQuestionCategoryId())
 				.questionDate(question.getQuestionDate())
 				.questionContent(question.getQuestionContent())
-				.isHasAnswer(question.getIsHasAnswer()=='T'?true:false)
+				.isHasAnswer(question.getIsHasAnswer())
 				.build();
 	}
 }
