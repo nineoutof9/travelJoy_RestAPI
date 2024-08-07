@@ -3,7 +3,9 @@ package com.ict.traveljoy.users.service;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
+
 import com.ict.traveljoy.users.repository.Users;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,8 +19,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class UsersDto {
+@Builder(toBuilder = true)
+public class UserDto {
 	//엔터티의 필드중 데이타 전달에 필요한 필드만 지정
 	private String email;
 	private String password;
@@ -69,8 +71,8 @@ public class UsersDto {
 				.build();
 	}
 	//ENTITY를 DTO로 변환하는 메소드
-	public static UsersDto toDto(Users users) {
-		return UsersDto.builder()
+	public static UserDto toDto(Users users) {
+		return UserDto.builder()
 				.email(users.getEmail())
 				.password(users.getPassword())
 				.name(users.getName())

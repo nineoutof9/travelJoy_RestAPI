@@ -1,6 +1,7 @@
 server:
-  port: 9090
-
+  port: 8080
+jwt:
+  secret: asfewyahew231daaqaasdWEFfwersdf3erwWet24easdf234aWEsdfwewrsWF56FeWGSWQR1qwetfzew23afwawqr31dAQ
 spring:
   datasource:
     driver-class-name: oracle.jdbc.OracleDriver
@@ -13,15 +14,11 @@ spring:
       auto-commit: true # default(false)
       connection-timeout: 30000 # default(30000)
       maximum-pool-size: 50 # default(10)
-      
-  security:
-    user:
-      name: user
-      password: 1234
+
 
   jpa:
     hibernate:
-      ddl-auto: none # create = ddl 자동생성, create-drop은 재시작
+      ddl-auto: update # create = ddl 자동생성, create-drop은 재시작
       #create이후에는 update, 테이블만들어놓고하면 none, 비교만 하려면 valid
 
       naming:
