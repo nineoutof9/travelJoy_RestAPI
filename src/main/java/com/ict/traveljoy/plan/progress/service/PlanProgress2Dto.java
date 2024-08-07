@@ -19,10 +19,10 @@ public class PlanProgress2Dto {
     private String detailPlanName;
     private Timestamp detailPlanStartDate;
     private Timestamp detailPlanEndDate;
-    private char isEvent;
-    private char isFood;
-    private char isSight;
-    private char isHotel;
+    private boolean isEvent;
+    private boolean isFood;
+    private boolean isSight;
+    private boolean isHotel;
     private Long eventId;
     private Long foodId;
     private Long sightId;

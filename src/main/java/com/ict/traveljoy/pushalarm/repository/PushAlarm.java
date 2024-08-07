@@ -40,11 +40,11 @@ public class PushAlarm {
 	
 	@Column(nullable = false)
 	@ColumnDefault("'T'")
-	private char isActive;
+	private boolean isActive;
 	
 	@Column(nullable = false)
 	@ColumnDefault("'F'")
-	private char isDelete;
+	private boolean isDelete;
 	
 	@Column
 	@ColumnDefault("SYSDATE")

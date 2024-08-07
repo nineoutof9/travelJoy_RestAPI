@@ -22,6 +22,7 @@ public class MessageDTO {
 	private String messageContent;
 	private LocalDateTime messageSendDate;
 	private LocalDateTime messageReceiveDate;
+	private boolean isActive;
 	
 	public Message toEnity() {
 		return Message.builder()
@@ -30,7 +31,8 @@ public class MessageDTO {
 				.userId(userId)
 				.messageContent(messageContent)
 				.messageSendDate(messageSendDate)
-				.messageReceiveDate(messageReceiveDate)
+				.isActive(isActive)
+				//.messageReceiveDate(messageReceiveDate)
 				.build();
 	}
 	
@@ -42,6 +44,7 @@ public class MessageDTO {
 				.messageContent(messageContent)
 				.messageSendDate(messageSendDate)
 				.messageReceiveDate(messageReceiveDate)
+				.isActive(getIsActive())
 				.build();
 	}
 }

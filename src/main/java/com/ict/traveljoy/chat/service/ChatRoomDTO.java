@@ -27,8 +27,8 @@ public class ChatRoomDTO {
 				.id(id)
 				.createDate(createDate)
 				.deleteDate(deleteDate)
-				.isActive(isActive==true?'T':'F')
-				.isDelete(isDelete==true?'T':'F')
+				.isActive(isActive)
+				.isDelete(isDelete)
 				.build();
 	}
 	
@@ -37,8 +37,8 @@ public class ChatRoomDTO {
 				.id(chatRoom.getId())
 				.createDate(chatRoom.getCreateDate())
 				.deleteDate(chatRoom.getDeleteDate())
-				.isActive(chatRoom.getIsActive()=='T'?true:false)
-				.isDelete(chatRoom.getIsDelete()=='T'?true:false)
+				.isActive(chatRoom.getIsActive())
+				.isDelete(chatRoom.getIsDelete())
 				.build();
 	}
 	

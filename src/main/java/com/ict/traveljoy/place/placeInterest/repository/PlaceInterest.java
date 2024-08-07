@@ -33,18 +33,18 @@ public class PlaceInterest {
     private Long interestId;
 
     @Column(name = "IS_EVENT", nullable = false)
-    @ColumnDefault("F")
+    @ColumnDefault("'F'")
     private boolean isEvent;
 
     @Column(name = "IS_FOOD", nullable = false)
-    @ColumnDefault("F")
+    @ColumnDefault("'F'")
     private boolean isFood;
 
     @Column(name = "IS_SIGHT", nullable = false)
-    @ColumnDefault("F")
+    @ColumnDefault("'F'")
     private boolean isSight;
 
     @Column(name = "IS_HOTEL", nullable = false)
-    @ColumnDefault("F")
+    @ColumnDefault("'F'")
     private boolean isHotel;
 }

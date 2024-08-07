@@ -40,23 +40,23 @@ public class Transportation {
     private Move move;
 
     @Column(name = "IS_BUS", nullable = false)
-    @ColumnDefault("F")
+    @ColumnDefault("'F'")
     private boolean isBus;
 
     @Column(name = "IS_TRAIN", nullable = false)
-    @ColumnDefault("F")
+    @ColumnDefault("'F'")
     private boolean isTrain;
 
     @Column(name = "IS_AIRPLANE", nullable = false)
-    @ColumnDefault("F")
+    @ColumnDefault("'F'")
     private boolean isAirplane;
 
     @Column(name = "IS_DRIVE", nullable = false)
-    @ColumnDefault("F")
+    @ColumnDefault("'F'")
     private boolean isDrive;
 
     @Column(name = "IS_WALK", nullable = false)
-    @ColumnDefault("F")
+    @ColumnDefault("'F'")
     private boolean isWalk;
 
     @Column(name = "START_DATE")

@@ -36,7 +36,7 @@ public class Sight {
 	private Region region;
 	
 	@Column(name="is_has_image",nullable = false)
-	@ColumnDefault("F")
+	@ColumnDefault("'F'")
 	private boolean isHasImage;
 	
 	@Column(name = "entrance_fee")

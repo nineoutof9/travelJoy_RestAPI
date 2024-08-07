@@ -29,8 +29,8 @@ import lombok.Setter;
 public class Event {
 
     @Id
-    @SequenceGenerator(name = "seq_events" ,sequenceName = "seq_events", allocationSize = 1, initialValue = 1)
-    @GeneratedValue(generator = "seq_events",strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "seq_event",sequenceName = "seq_event",allocationSize = 1,initialValue = 1)
+	@GeneratedValue(generator = "seq_event",strategy = GenerationType.SEQUENCE)
     @Column(name = "EVENT_ID")
     private Long id;
 
@@ -39,7 +39,7 @@ public class Event {
     private Region region;
 
     @Column(name = "IS_HAS_IMAGE", nullable = false)
-    @ColumnDefault("F")
+    @ColumnDefault("'F'")
     private boolean isHasImage;
 
     @Column(name = "EVENT_START_DATE")

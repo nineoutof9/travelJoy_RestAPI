@@ -40,10 +40,9 @@ public class ChatRoom {
     private LocalDateTime deleteDate;
 
 	@ColumnDefault("'T'")
-	private char isActive;
+	private boolean isActive;
 	
 	@ColumnDefault("'F'")
-
-	private char isDelete;
+	private boolean isDelete;
 	
 }

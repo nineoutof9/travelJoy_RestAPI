@@ -48,5 +48,5 @@ public class Question {
 	
 	@Column(nullable = false)
 	@ColumnDefault("'F'")
-	private char isHasAnswer;
+	private boolean isHasAnswer;
 }

@@ -40,22 +40,28 @@ public class Favorite {
 	private long targetId;
 	
 	@Column(name="is_event")
-	private char isEvent;
+	@ColumnDefault("'F'")
+	private boolean isEvent;
 	
 	@Column(name="is_food")
-	private char isFood;
+	@ColumnDefault("'F'")
+	private boolean isFood;
 	
 	@Column(name="is_sight")
-	private char isSight;
+	@ColumnDefault("'F'")
+	private boolean isSight;
 	
 	@Column(name="is_hotel")
-	private char isHotel;
+	@ColumnDefault("'F'")
+	private boolean isHotel;
 	
-	@Column(name="is_active")
-	private char isActive;
+	@Column(name="is_active",nullable = false)
+	@ColumnDefault("'T'")
+	private boolean isActive;
 	
-	@Column(name="is_delete")
-	private char isDelete;
+	@Column(name="is_delete",nullable = false)
+	@ColumnDefault("'F'")
+	private boolean isDelete;
 	
 	@Column(name="create_date",nullable = false)
 	@ColumnDefault("SYSDATE")

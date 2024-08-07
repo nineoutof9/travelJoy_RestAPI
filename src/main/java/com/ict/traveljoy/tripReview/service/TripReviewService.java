@@ -82,7 +82,7 @@ public class TripReviewService {
             throw new IllegalArgumentException("TripReview with ID " + tripReviewId + " does not exist.");
         }
         TripReview tripReview = tripReviewOptional.get();
-        tripReview.setIsDelete("true");
+        tripReview.setIsDelete(true);
         tripReview.setDeleteDate(new Timestamp(System.currentTimeMillis()));
         tripReviewRepository.save(tripReview);
     }
