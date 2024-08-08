@@ -42,7 +42,7 @@ public class NoticeService {
 
 	@Transactional
 	public NoticeDto noticeDelete(Long id) {
-		Notice notice = noticeRepository.findById(id).orElseThrow(() -> new RuntimeException("Notice not found"));
+		Notice notice = noticeRepository.findById(id).get();
         noticeRepository.delete(notice);
         return NoticeDto.toDto(notice);
 	}

@@ -19,14 +19,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 @Tag(name = "공지사항 관리", description = "공지사항 Rest Api 컨트롤러 입니다")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/notice")
 public class NoticeController {
 	
 	private final NoticeService noticeService;
-	private final ObjectMapper objectMapper;
 	    
     @CrossOrigin
-    @PostMapping("/notice")
+    @PostMapping("/create")
     @Operation(summary = "공지사항 생성하기", description = "공지사항 생성 컨트롤러입니다")
     public ResponseEntity<NoticeDto> createNotice(@RequestBody NoticeDto noticeDto){
     	try{
@@ -40,7 +39,7 @@ public class NoticeController {
     }
         
     @CrossOrigin
-    @GetMapping("/noticeview")
+    @GetMapping("/view")
     @Operation(summary = "공지사항 조회하기", description = "공지사항 조회 컨트롤러입니다")
     public ResponseEntity<List<NoticeDto>> getAllNotices() {
     	try {
@@ -52,9 +51,22 @@ public class NoticeController {
     		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     	}
     }
+    
+    @CrossOrigin
+    @GetMapping("/list")
+    @Operation(summary = "공지사항 목록 조회하기", description = "공지사항 목록 조회 컨트롤러입니다")
+    public ResponseEntity<List<NoticeDto>> findByTitle(@PathVariable String title) {
+        try {
+            List<NoticeDto> noticeList = noticeService.findByTitle(title);
+            return ResponseEntity.ok(noticeList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
 
     @CrossOrigin
-    @PutMapping("/noticeUpdate")
+    @PutMapping("/update")
     @Operation(summary = "공지사항 수정하기", description = "공지사항 수정 컨트롤러입니다")
     public ResponseEntity<NoticeDto> noticeUpdate(@RequestBody NoticeDto noticeDto) {
         try {
@@ -68,7 +80,7 @@ public class NoticeController {
     }
     
     @CrossOrigin
-    @DeleteMapping("/noticeUpdate")
+    @DeleteMapping("/delete")
     @Operation(summary = "공지사항 삭제하기", description = "공지사항 삭제 컨트롤러입니다")
     public ResponseEntity<NoticeDto> noticeDelete(@PathVariable Long id) {
         try {
