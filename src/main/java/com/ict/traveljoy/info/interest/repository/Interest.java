@@ -1,8 +1,9 @@
-package com.ict.traveljoy.info.repository;
+package com.ict.traveljoy.info.interest.repository;
 
 import java.util.List;
 
-import com.ict.traveljoy.info.userinfo.repository.UserInterest;
+import com.ict.traveljoy.info.userinterest.repository.UserInterest;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,7 +28,7 @@ public class Interest {
 	@Id
 	@SequenceGenerator(name = "seq_interest",sequenceName = "seq_interest",allocationSize = 1,initialValue = 1)
 	@GeneratedValue(generator = "seq_interest",strategy = GenerationType.SEQUENCE)
-	private long interestId;
+	private Long interestId;
 	
 	@Column(length = 50,nullable = false)
 	private String interestTopic;

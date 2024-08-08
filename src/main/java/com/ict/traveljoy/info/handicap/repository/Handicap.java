@@ -1,8 +1,9 @@
-package com.ict.traveljoy.info.repository;
+package com.ict.traveljoy.info.handicap.repository;
 
 import java.util.List;
 
-import com.ict.traveljoy.info.userinfo.repository.UserHandicap;
+import com.ict.traveljoy.info.userhandicap.repository.UserHandicap;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,7 +28,7 @@ public class Handicap {
 	@Id
 	@SequenceGenerator(name = "seq_handicap",sequenceName = "seq_handicap",allocationSize = 1,initialValue = 1)
 	@GeneratedValue(generator = "seq_handicap",strategy = GenerationType.SEQUENCE)
-	private long handicapId;
+	private Long handicapId;
 	
 	@Column(length = 50)
 	private String handicapCode;

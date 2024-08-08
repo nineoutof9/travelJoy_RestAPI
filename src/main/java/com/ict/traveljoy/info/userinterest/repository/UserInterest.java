@@ -1,6 +1,6 @@
-package com.ict.traveljoy.info.userinfo.repository;
+package com.ict.traveljoy.info.userinterest.repository;
 
-import com.ict.traveljoy.info.repository.Interest;
+import com.ict.traveljoy.info.interest.repository.Interest;
 import com.ict.traveljoy.users.repository.Users;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

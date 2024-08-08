@@ -1,4 +1,4 @@
-package com.ict.traveljoy.info.userinfo.repository;
+package com.ict.traveljoy.info.userinterest.repository;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -7,9 +7,9 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.ict.traveljoy.converter.PermissionToNumberConverter;
-import com.ict.traveljoy.info.userinfo.repository.UserAllergy;
-import com.ict.traveljoy.info.userinfo.repository.UserHandicap;
-import com.ict.traveljoy.info.userinfo.repository.UserInterest;
+import com.ict.traveljoy.info.userallergy.repository.UserAllergy;
+import com.ict.traveljoy.info.userhandicap.repository.UserHandicap;
+import com.ict.traveljoy.info.userinterest.repository.UserInterest;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
