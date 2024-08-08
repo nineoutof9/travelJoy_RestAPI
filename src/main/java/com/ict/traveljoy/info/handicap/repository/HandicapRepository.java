@@ -1,4 +1,4 @@
-package com.ict.traveljoy.info.repository;
+package com.ict.traveljoy.info.handicap.repository;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;

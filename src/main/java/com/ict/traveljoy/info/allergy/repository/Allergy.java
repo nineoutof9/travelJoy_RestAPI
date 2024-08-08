@@ -1,8 +1,9 @@
-package com.ict.traveljoy.info.repository;
+package com.ict.traveljoy.info.allergy.repository;
 
 import java.util.List;
 
-import com.ict.traveljoy.info.userinfo.repository.UserAllergy;
+import com.ict.traveljoy.info.userallergy.repository.UserAllergy;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,7 +28,8 @@ public class Allergy {
 	@Id
 	@SequenceGenerator(name = "seq_allergy",sequenceName = "seq_allergy",allocationSize = 1,initialValue = 1)
 	@GeneratedValue(generator = "seq_allergy",strategy = GenerationType.SEQUENCE)
-	private long allergyId;
+	@Column(name="allergy_id")
+	private Long id;
 	
 	@Column(length = 50,nullable = false)
 	private String interestTopic;
