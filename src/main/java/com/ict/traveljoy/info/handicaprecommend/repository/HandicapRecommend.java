@@ -3,6 +3,7 @@ package com.ict.traveljoy.info.handicaprecommend.repository;
 import java.util.List;
 
 import com.ict.traveljoy.info.handicap.repository.Handicap;
+import com.ict.traveljoy.info.handicaprecommend.service.HandicapRecommendDto;
 import com.ict.traveljoy.info.interest.repository.Interest;
 import com.ict.traveljoy.info.userhandicap.repository.UserHandicap;
 
@@ -18,6 +19,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,6 +30,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class HandicapRecommend {
 	@Id
 	@SequenceGenerator(name = "seq_handicap_recommend",sequenceName = "seq_handicap_recommend",allocationSize = 1,initialValue = 1)

@@ -13,6 +13,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,11 +24,13 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class UserAllergy {
 	@Id
 	@SequenceGenerator(name = "seq_user_allergy",sequenceName = "seq_user_allergy",allocationSize = 1,initialValue = 1)
 	@GeneratedValue(generator = "seq_user_allergy",strategy = GenerationType.SEQUENCE)
-	private long userAllergyId;
+	@Column(name = "user_allergy_id")
+	private Long id;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -38,5 +41,5 @@ public class UserAllergy {
     private Allergy allergy;
     
     @Column
-    private long allergyLevel;
+    private Long allergyLevel;
 }

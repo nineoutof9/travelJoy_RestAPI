@@ -14,6 +14,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,11 +25,13 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Interest {
 	@Id
 	@SequenceGenerator(name = "seq_interest",sequenceName = "seq_interest",allocationSize = 1,initialValue = 1)
 	@GeneratedValue(generator = "seq_interest",strategy = GenerationType.SEQUENCE)
-	private Long interestId;
+	@Column(name = "interest_id")
+	private Long id;
 	
 	@Column(length = 50,nullable = false)
 	private String interestTopic;
