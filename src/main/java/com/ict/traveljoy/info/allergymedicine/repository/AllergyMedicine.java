@@ -3,6 +3,7 @@ package com.ict.traveljoy.info.allergymedicine.repository;
 import java.util.List;
 
 import com.ict.traveljoy.info.allergy.repository.Allergy;
+
 import com.ict.traveljoy.info.medicine.repository.Medicine;
 import com.ict.traveljoy.info.userallergy.repository.UserAllergy;
 
@@ -41,6 +42,7 @@ public class AllergyMedicine {
 	@JoinColumn(name="allergy_id")
 	private Allergy allergy;
 	
+
 	@ManyToOne
 	@JoinColumn(name="medicine_id")
 	private Medicine medicine;
