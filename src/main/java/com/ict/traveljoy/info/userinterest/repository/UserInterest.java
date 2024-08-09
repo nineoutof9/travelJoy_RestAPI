@@ -1,7 +1,10 @@
 package com.ict.traveljoy.info.userinterest.repository;
 
 import com.ict.traveljoy.info.interest.repository.Interest;
+import com.ict.traveljoy.info.userhandicap.service.UserHandicapDto;
 import com.ict.traveljoy.users.repository.Users;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -12,6 +15,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,11 +26,13 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class UserInterest {
 	@Id
 	@SequenceGenerator(name = "seq_user_interest",sequenceName = "seq_user_interest",allocationSize = 1,initialValue = 1)
 	@GeneratedValue(generator = "seq_user_interest",strategy = GenerationType.SEQUENCE)
-	private long userInterestId;
+	@Column(name="user_interest_id")
+	private Long id;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)

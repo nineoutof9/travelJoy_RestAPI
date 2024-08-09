@@ -3,6 +3,7 @@ package com.ict.traveljoy.info.allergymedicine.repository;
 import java.util.List;
 
 import com.ict.traveljoy.info.allergy.repository.Allergy;
+import com.ict.traveljoy.info.medicine.repository.Medicine;
 import com.ict.traveljoy.info.userallergy.repository.UserAllergy;
 
 import jakarta.persistence.CascadeType;
@@ -17,6 +18,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,6 +29,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class AllergyMedicine {
 	@Id
 	@SequenceGenerator(name = "seq_allergy_medicine",sequenceName = "seq_allergy_medicine",allocationSize = 1,initialValue = 1)
@@ -38,7 +41,8 @@ public class AllergyMedicine {
 	@JoinColumn(name="allergy_id")
 	private Allergy allergy;
 	
-	@Column(length = 50)
-	private String allergyMedicineName;
+	@ManyToOne
+	@JoinColumn(name="medicine_id")
+	private Medicine medicine;
 	
 }
