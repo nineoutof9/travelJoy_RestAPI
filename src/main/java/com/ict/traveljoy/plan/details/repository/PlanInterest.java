@@ -1,5 +1,6 @@
 package com.ict.traveljoy.plan.details.repository;
 
+import com.ict.traveljoy.info.interest.repository.Interest;
 import com.ict.traveljoy.plan.repository.Plan;
 
 import jakarta.persistence.Column;
@@ -30,13 +31,14 @@ public class PlanInterest {
     @SequenceGenerator(name = "seq_plan_interest",sequenceName = "seq_plan_interest",allocationSize = 1,initialValue = 1)
     @GeneratedValue(generator = "seq_plan_interest",strategy = GenerationType.SEQUENCE)
     @Column(name = "PLAN_INTEREST_ID", nullable = false)
-    private Long planInterestId;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "PLAN_ID")
     private Plan plan;
 
-    @Column(name = "INTEREST_ID")
-    private Long interestId;
+    @ManyToOne
+    @JoinColumn(name = "INTEREST_ID")
+    private Interest interest;
 
 }

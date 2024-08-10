@@ -5,11 +5,15 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.ict.traveljoy.users.repository.Users;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -30,13 +34,18 @@ public class Question {
 	@Id
 	@SequenceGenerator(name = "seq_question",sequenceName = "seq_question",allocationSize = 1,initialValue = 1)
 	@GeneratedValue(generator = "seq_question",strategy = GenerationType.SEQUENCE)
-	private long id;
+	@Column(name = "question_id")
+	private Long id;
 	
 	
-	private long userId;
+	@ManyToOne
+    @JoinColumn(name = "user_id")
+	private Users user; //질문자
 	
+	@ManyToOne
+    @JoinColumn(name = "question_category_id")
+	private QuestionCategory questionCategory;
 	
-	private long questionCategoryId;
 	
 	@Column(nullable = false)
 	@ColumnDefault("SYSDATE")
@@ -46,7 +55,7 @@ public class Question {
 	@Column(length = 2000)
 	private String questionContent;
 	
-	@Column(nullable = false)
-	@ColumnDefault("'F'")
-	private boolean isHasAnswer;
+	@Column(nullable = false,columnDefinition = "NUMBER(1, 0)")
+    @ColumnDefault("0")
+    private Integer isHasAnswer;
 }

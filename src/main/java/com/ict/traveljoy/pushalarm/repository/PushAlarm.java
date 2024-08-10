@@ -30,7 +30,7 @@ public class PushAlarm {
 	@Id
 	@SequenceGenerator(name = "seq_push_alarm",sequenceName = "seq_push_alarm",allocationSize = 1,initialValue = 1)
 	@GeneratedValue(generator = "seq_push_alarm",strategy = GenerationType.SEQUENCE)
-	private long id;
+	private Long id;
 	
 	@Column(length=50)
 	private String title;
@@ -38,13 +38,13 @@ public class PushAlarm {
 	@Column(length=2000)
 	private String pushAlarmContent;
 	
-	@Column(nullable = false)
-	@ColumnDefault("'T'")
-	private boolean isActive;
+	@Column(nullable = false,columnDefinition = "NUMBER(1, 0)")
+    @ColumnDefault("1")
+    private Integer isActive;
 	
-	@Column(nullable = false)
-	@ColumnDefault("'F'")
-	private boolean isDelete;
+	@Column(nullable = false,columnDefinition = "NUMBER(1, 0)")
+    @ColumnDefault("0")
+    private Integer isDelete;
 	
 	@Column
 	@ColumnDefault("SYSDATE")

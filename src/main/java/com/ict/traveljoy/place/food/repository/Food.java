@@ -38,12 +38,12 @@ public class Food {
 	@Column(name = "food_type", length = 50)
 	private String foodType;
 	
-	@Column(name = "is_has_image",nullable = false)
-	@ColumnDefault("'F'")
-	private boolean isHasImage;
+	@Column(name = "is_has_image",nullable = false,columnDefinition = "NUMBER(1, 0)")
+    @ColumnDefault("0")
+    private Integer isHasImage;
 	
 	@Column(name="average_price")
-	private float averagePrice;
+	private Float averagePrice;
 	
 	@Column(name="food_name",length = 50)
 	private String foodName;
@@ -55,14 +55,14 @@ public class Food {
 	private String address;
 	
 	@Column
-	private float lat;
+	private Float lat;
 	
 	@Column
-	private float lng;
+	private Float lng;
 	
 	@Column(name = "total_review_count")
 	private Long totalReviewCount;
 	
 	@Column(name = "average_review_rate")
-	private float averageReviewRate;
+	private Float averageReviewRate;
 }

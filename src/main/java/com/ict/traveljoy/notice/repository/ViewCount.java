@@ -31,13 +31,13 @@ public class ViewCount {
 	@Column(name="view_count_id")
 	@SequenceGenerator(name = "seq_view_count",sequenceName = "seq_view_count",allocationSize = 1,initialValue = 1)
 	@GeneratedValue(generator = "seq_view_count",strategy = GenerationType.SEQUENCE)
-	private long id;
+	private Long id;
 	
 	@Column(name="notive_id")
-	private long noticeId;
+	private Long noticeId;
 	
 	@Column(name="user_id")
-	private long userId;
+	private Long userId;
 	
 	@Column(name="view_date")
 	@ColumnDefault("SYSDATE")

@@ -18,9 +18,9 @@ import lombok.Setter;
 @Builder
 public class ViewCountDTO {
 
-	private long id;
-	private long noticeId;
-	private long userId;
+	private Long id;
+	private Long noticeId;
+	private Long userId;
 	private LocalDateTime viewDate;
 	
 	public ViewCount toEntity() {

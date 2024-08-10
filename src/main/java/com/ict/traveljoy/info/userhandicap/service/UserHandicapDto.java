@@ -32,7 +32,7 @@ public class UserHandicapDto {
 				.handicap(handicap)
 				.build();
 	}
-	public UserHandicapDto toDto(UserHandicap userHandicap) {
+	public static UserHandicapDto toDto(UserHandicap userHandicap) {
 		return UserHandicapDto.builder()
 				.id(userHandicap.getId())
 				.userId(userHandicap.getUser() != null ? userHandicap.getUser().getId() : null)

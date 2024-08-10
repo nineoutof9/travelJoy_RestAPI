@@ -100,7 +100,7 @@ public class PlanProgressController2 {
 	
 	@GetMapping("/progress2/{planProgressByEvent}")
 	@Operation(summary = "2단계 조회(Event여부)", description = "특정 Event여부로 조회")
-	public ResponseEntity<PlanProgress2Dto> getPlanProgressesByEvent(char isEvent){
+	public ResponseEntity<PlanProgress2Dto> getPlanProgressesByEvent(Integer isEvent){
 		
 		try {
 		List<PlanProgress2Dto> planProgressByEvent = planProgress2Service.getPlanProgressesByIsEvent(isEvent);
@@ -117,7 +117,7 @@ public class PlanProgressController2 {
 	
 	@GetMapping("/progress2/{planProgressByFood}")
 	@Operation(summary = "2단계 조회(Food여부)", description = "특정 식사 여부로 조회")
-	public ResponseEntity<PlanProgress2Dto> getPlanProgressesByFood(char isFood){
+	public ResponseEntity<PlanProgress2Dto> getPlanProgressesByFood(Integer isFood){
 		
 		try {
 		List<PlanProgress2Dto> planProgressByFood = planProgress2Service.getPlanProgressesByIsFood(isFood);
@@ -134,7 +134,7 @@ public class PlanProgressController2 {
 	
 	@GetMapping("/progress2/{planProgressBySight}")
 	@Operation(summary = "2단계 조회(Sight여부)", description = "특정 관광지 여부로 조회")
-	public ResponseEntity<PlanProgress2Dto> getPlanProgressesBySight(char isSight){
+	public ResponseEntity<PlanProgress2Dto> getPlanProgressesBySight(Integer isSight){
 		
 		try {
 		List<PlanProgress2Dto> planProgressBySight = planProgress2Service.getPlanProgressesByIsSight(isSight);
@@ -151,7 +151,7 @@ public class PlanProgressController2 {
 	
 	@GetMapping("/progress2/{planProgressByHotel}")
 	@Operation(summary = "2단계 조회(Hotel여부)", description = "특정 숙박 여부로 조회")
-	public ResponseEntity<PlanProgress2Dto> getPlanProgressesByHotel(char isHotel){
+	public ResponseEntity<PlanProgress2Dto> getPlanProgressesByHotel(Integer isHotel){
 		
 		try {
 		List<PlanProgress2Dto> planProgressByHotel = planProgress2Service.getPlanProgressesByIsHotel(isHotel);

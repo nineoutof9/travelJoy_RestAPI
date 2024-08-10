@@ -32,19 +32,19 @@ public class PlaceInterest {
     @Column(name = "INTEREST_ID", nullable = true)
     private Long interestId;
 
-    @Column(name = "IS_EVENT", nullable = false)
-    @ColumnDefault("'F'")
-    private boolean isEvent;
+    @Column(name = "IS_EVENT", nullable = false,columnDefinition = "NUMBER(1, 0)")
+    @ColumnDefault("0")
+    private Integer isEvent;
 
-    @Column(name = "IS_FOOD", nullable = false)
-    @ColumnDefault("'F'")
-    private boolean isFood;
+    @Column(name = "IS_FOOD", nullable = false,columnDefinition = "NUMBER(1, 0)")
+    @ColumnDefault("0")
+    private Integer isFood;
 
-    @Column(name = "IS_SIGHT", nullable = false)
-    @ColumnDefault("'F'")
-    private boolean isSight;
+    @Column(name = "IS_SIGHT", nullable = false,columnDefinition = "NUMBER(1, 0)")
+    @ColumnDefault("0")
+    private Integer isSight;
 
-    @Column(name = "IS_HOTEL", nullable = false)
-    @ColumnDefault("'F'")
-    private boolean isHotel;
+    @Column(name = "IS_HOTEL", nullable = false,columnDefinition = "NUMBER(1, 0)")
+    @ColumnDefault("0")
+    private Integer isHotel;
 }

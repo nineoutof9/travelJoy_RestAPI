@@ -23,7 +23,7 @@ public class FeedbackService {
 
     // planId로 Feedback 조회
     public List<FeedbackDto> getFeedbacksByPlanId(Long planId) {
-        List<Feedback> feedbacks = feedbackRepository.findByPlan_PlanId(planId);
+        List<Feedback> feedbacks = feedbackRepository.findByPlan_id(planId);
         return feedbacks.stream()
                 .map(FeedbackDto::toDto)
                 .collect(Collectors.toList());
@@ -50,7 +50,7 @@ public class FeedbackService {
         Feedback feedback = feedbackDto.toEntity();
         if (feedbackDto.getPlanId() != null) {
             Plan plan = new Plan();
-            plan.setPlanId(feedbackDto.getPlanId());
+            plan.setId(feedbackDto.getPlanId());
             feedback.setPlan(plan);
         }
         Feedback savedFeedback = feedbackRepository.save(feedback);
@@ -62,7 +62,7 @@ public class FeedbackService {
         Feedback existingFeedback = feedbackRepository.findById(feedbackDto.getFeedbackId()).orElse(null);
         if (existingFeedback != null) {
             Plan plan = new Plan();
-            plan.setPlanId(feedbackDto.getPlanId());
+            plan.setId(feedbackDto.getPlanId());
             existingFeedback.setPlan(plan);
             existingFeedback.setOwner(feedbackDto.getOwner());
             existingFeedback.setRate(feedbackDto.getRate());

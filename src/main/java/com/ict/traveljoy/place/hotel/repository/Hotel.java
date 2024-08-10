@@ -35,12 +35,12 @@ public class Hotel {
 	@JoinColumn(name ="region_id", nullable = false)
 	private Region region;
 	
-	@Column(name="is_has_image",nullable = false)
-	@ColumnDefault("'F'")
-	private boolean isHasImage;
+	@Column(name="is_has_image",nullable = false,columnDefinition = "NUMBER(1, 0)")
+    @ColumnDefault("0")
+    private Integer isHasImage;
 	
 	@Column(name="average_price", nullable = false)
-	private float averagePrice;
+	private Float averagePrice;
 	
 	@Column(name="hotel_name", length = 50, nullable = false)
 	private String hotelName;
@@ -52,16 +52,16 @@ public class Hotel {
 	private String address;
 	
 	@Column(name = "lat")
-	private float lat;
+	private Float lat;
 	
 	@Column(name = "lng")
-    private float lng;
+    private Float lng;
 	
 	@Column(name = "TOTAL_REVIEW_COUNT")
 	private Long totalReviewCount;
 	
 	@Column(name = "AVERAGE_REVIEW_RATE")
-	private float averageReviewRate;
+	private Float averageReviewRate;
 	
 	
 }

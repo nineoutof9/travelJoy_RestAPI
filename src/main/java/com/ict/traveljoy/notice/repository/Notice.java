@@ -36,7 +36,7 @@ public class Notice {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_notice")
     @SequenceGenerator(name = "seq_notice", sequenceName = "seq_notice", allocationSize = 1)
     @Column(nullable = false, name = "NOTICE_ID")
-	private long id;
+	private Long id;
 	
 	@ColumnDefault("SYSDATE")
 	@CreationTimestamp
@@ -48,11 +48,13 @@ public class Notice {
 	@Column(nullable = false,name="NOTICE_CONTENT",length = 2000)
 	private String content;
 	
-	@ColumnDefault("'F'")
-	private boolean isDelete;
+	@Column(columnDefinition = "NUMBER(1, 0)")
+	@ColumnDefault("0")
+	private Integer isDelete;
 	
-	@ColumnDefault("'T'")
-	private boolean isActive;
+	@Column(columnDefinition = "NUMBER(1, 0)")
+	@ColumnDefault("1")
+	private Integer isActive;
 	
 	@Column(nullable = false)
 	private String writer;

@@ -38,9 +38,9 @@ public class Event {
 	@JoinColumn(name = "region_id",nullable = false)
     private Region region;
 
-    @Column(name = "IS_HAS_IMAGE", nullable = false)
-    @ColumnDefault("'F'")
-    private boolean isHasImage;
+    @Column(name = "IS_HAS_IMAGE", nullable = false,columnDefinition = "NUMBER(1, 0)")
+    @ColumnDefault("0")
+    private Integer isHasImage;
 
     @Column(name = "EVENT_START_DATE")
     private LocalDateTime eventStartDate;

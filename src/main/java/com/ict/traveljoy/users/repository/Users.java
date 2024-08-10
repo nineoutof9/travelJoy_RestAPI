@@ -1,5 +1,6 @@
 package com.ict.traveljoy.users.repository;
 
+import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -55,67 +56,67 @@ public class Users {
 	private String nickname;
 	
 	@Column
-	private java.sql.Date birthDate;
+	private Date birthDate;
 	
 	@Column(nullable = false)
 	@ColumnDefault("SYSDATE")
 	@CreationTimestamp
 	private LocalDateTime signInDate;
 	
-	@Column
-	private boolean gender;
+	@Column(columnDefinition = "NUMBER(1, 0)")
+    private Integer gender;
 	
-	@Column(nullable = false)
-	@ColumnDefault("'F'")
-	private boolean isKakao;
+	@Column(nullable = false,columnDefinition = "NUMBER(1, 0)")
+    @ColumnDefault("0")
+    private Integer isKakao;
 	
-	@Column(nullable = false)
-	@ColumnDefault("'F'")
-	private boolean isGoogle;
+	@Column(nullable = false,columnDefinition = "NUMBER(1, 0)")
+    @ColumnDefault("0")
+    private Integer isGoogle;
 	
-	@Column(nullable = false)
-	@ColumnDefault("'F'")
-	private boolean isNaver;
+	@Column(nullable = false,columnDefinition = "NUMBER(1, 0)")
+    @ColumnDefault("0")
+    private Integer isNaver;
 	
 	@Convert(converter = PermissionToNumberConverter.class)
 	@Column
 	@ColumnDefault("0")
 	private String permission;
 	
+	@Column(columnDefinition = "NUMBER(1, 0)")
+    private Integer handicap;
+	
+	@Column(nullable = false,columnDefinition = "NUMBER(1, 0)")
+    @ColumnDefault("0")
+    private Integer handicapAllow;
+	
+	@Column(columnDefinition = "NUMBER(1, 0)")
+    private Integer allergy;
+	
+	@Column(nullable = false,columnDefinition = "NUMBER(1, 0)")
+    @ColumnDefault("0")
+    private Integer allergyAllow;
+	
+	@Column(columnDefinition = "NUMBER(1, 0)")
+    private Integer interest;
+	
+	@Column(nullable = false,columnDefinition = "NUMBER(1, 0)")
+    @ColumnDefault("0")
+    private Integer interestAllow;
+	
 	@Column
-	private boolean handicap;
+	private Long reported;
 	
-	@Column(nullable = false)
-	@ColumnDefault("'F'")
-	private boolean handicapAllow;
-	
-	@Column
-	private boolean allergy;
-	
-	@Column(nullable = false)
-	@ColumnDefault("'F'")
-	private boolean allergyAllow;
-	
-	@Column
-	private boolean interest;
-	
-	@Column(nullable = false)
-	@ColumnDefault("'F'")
-	private boolean interestAllow;
-	
-	@Column
-	private long reported;
-	
-	@Column(nullable = false)
-	@ColumnDefault("'F'")
-	private boolean isDeleteId;
+	@Column(nullable = false,columnDefinition = "NUMBER(1, 0)")
+    @ColumnDefault("0")
+    private Integer isDeleteId;
 	
 	@Column
 	private LocalDateTime deleteIdDate;
 	
-	@Column(nullable = false)
-	@ColumnDefault("'T'")
-	private boolean isActive;
+	@Column(nullable = false,columnDefinition = "NUMBER(1, 0)")
+    @ColumnDefault("1")
+    private Integer isActive;
 	
 	@Column
 	@ColumnDefault("SYSDATE")

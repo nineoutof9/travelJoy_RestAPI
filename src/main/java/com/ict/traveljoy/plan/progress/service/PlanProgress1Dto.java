@@ -19,12 +19,12 @@ public class PlanProgress1Dto {
     private Date planStartDate;
     private Date planEndDate;
     private Integer travelers;
-    private BigDecimal travelCost;
+    private Long travelCost;
     private Long planId;
 
     public PlanProgress1 toEntity() {
         Plan plan = new Plan();
-        plan.setPlanId(planId);
+        plan.setId(planId);
 
         return PlanProgress1.builder()
                 .planProgress1Id(planProgress1Id)
@@ -43,7 +43,7 @@ public class PlanProgress1Dto {
                 .planEndDate(planProgress1.getPlanEndDate())
                 .travelers(planProgress1.getTravelers())
                 .travelCost(planProgress1.getTravelCost())
-                .planId(planProgress1.getPlan() != null ? planProgress1.getPlan().getPlanId() : null)
+                .planId(planProgress1.getPlan() != null ? planProgress1.getPlan().getId() : null)
                 .build();
     }
 }

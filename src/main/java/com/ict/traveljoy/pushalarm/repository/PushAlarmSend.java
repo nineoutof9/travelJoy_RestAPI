@@ -30,11 +30,11 @@ public class PushAlarmSend {
 	@Id
 	@SequenceGenerator(name = "seq_push_alarm_send",sequenceName = "seq_push_alarm_send",allocationSize = 1,initialValue = 1)
 	@GeneratedValue(generator = "seq_push_alarm_send",strategy = GenerationType.SEQUENCE)
-	private long id;
+	private Long id;
 	
-	private long pushAlarmId;
+	private Long pushAlarmId;
 	
-	private long userId;
+	private Long userId;
 	
 	@Column(nullable = false)
 	@ColumnDefault("SYSDATE")

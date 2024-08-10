@@ -19,7 +19,7 @@ import lombok.Setter;
 public class EventDTO {
     private Long id;
     private Region region;
-    private boolean isHasImage;
+    private Boolean isHasImage;
     private LocalDateTime eventStartDate;
     private LocalDateTime eventEndDate;
     private Float entranceFee;
@@ -35,7 +35,7 @@ public class EventDTO {
         return Event.builder()
                 .id(id)
                 .region(region)
-                .isHasImage(isHasImage)
+                .isHasImage(isHasImage == true ? 1 : 0)
                 .eventStartDate(eventStartDate)
                 .eventEndDate(eventEndDate)
                 .entranceFee(entranceFee)
@@ -53,7 +53,7 @@ public class EventDTO {
         return EventDTO.builder()
                 .id(event.getId())
                 .region(event.getRegion())
-                .isHasImage(event.getIsHasImage())
+                .isHasImage(event.getIsHasImage() == 1 ? true : false)
                 .eventStartDate(event.getEventStartDate())
                 .eventEndDate(event.getEventEndDate())
                 .entranceFee(event.getEntranceFee())

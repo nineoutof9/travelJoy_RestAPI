@@ -15,18 +15,18 @@ import lombok.Setter;
 @Builder
 public class QuestionCategoryDTO {
 
-	private long questionCategoryId;
+	private Long questionCategoryId;
 	private String questionCategoryName;
 	
 	public QuestionCategory toEntity() {
 		return QuestionCategory.builder()
-				.questionCategoryId(questionCategoryId)
+				.id(questionCategoryId)
 				.questionCategoryName(questionCategoryName)
 				.build();
 	}
 	public static QuestionCategoryDTO toDTO(QuestionCategory questionCategory) {
 		return QuestionCategoryDTO.builder()
-				.questionCategoryId(questionCategory.getQuestionCategoryId())
+				.questionCategoryId(questionCategory.getId())
 				.questionCategoryName(questionCategory.getQuestionCategoryName())
 				.build();
 	}

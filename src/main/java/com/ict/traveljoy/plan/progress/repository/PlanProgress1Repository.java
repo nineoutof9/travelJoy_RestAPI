@@ -20,8 +20,8 @@ public interface PlanProgress1Repository extends JpaRepository<PlanProgress1, Lo
     List<PlanProgress1> findByTravelCostLessThanEqual(BigDecimal maxTravelCost);
 
     // 특정 계획 ID에 해당하는 PlanProgress1 엔티티를 조회하는 메서드
-    List<PlanProgress1> findByPlan_PlanId(Long planId);
+    List<PlanProgress1> findByPlan_id(Long planId);
 
     // 특정 계획 ID에 해당하는 PlanProgress1 엔티티를 삭제하는 메서드
-    void deleteByPlan_PlanId(Long planId);
+    void deleteByPlan_id(Long planId);
 }

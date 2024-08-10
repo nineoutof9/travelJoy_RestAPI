@@ -25,8 +25,8 @@ public class QuestionCategory {
 	@Id
 	@SequenceGenerator(name = "seq_question_category",sequenceName = "seq_question_category",allocationSize = 1,initialValue = 1)
 	@GeneratedValue(generator = "seq_question_category",strategy = GenerationType.SEQUENCE)
-	@Column(name="user_id")
-	private long questionCategoryId;
+	@Column(name="question_category_id")
+	private Long id;
 	
 	@Column(length = 50)
 	private String questionCategoryName;

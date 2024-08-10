@@ -5,11 +5,16 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.ict.traveljoy.users.repository.Users;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -30,26 +35,30 @@ public class Message {
 	@Id
 	@SequenceGenerator(name = "seq_message",sequenceName = "seq_message",allocationSize = 1,initialValue = 1)
 	@GeneratedValue(generator = "seq_message",strategy = GenerationType.SEQUENCE)
-	private long id;
+	@Column(name = "message_id")
+	private Long id;
 	
-
-	private long chatRoomId;
+	@ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "chat_room_id", nullable = false)
+	private ChatRoom chatRoom;
 	
-	private long userId;
+	@ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+	private Users user;
 	
 	@Column(length=2000)
 	private String messageContent;
 	
 	
-
 	@ColumnDefault("SYSDATE")
 	@CreationTimestamp
 	private LocalDateTime messageSendDate;
 	
 	
 
-	@ColumnDefault("'T'")
-	private boolean isActive;
+	@ColumnDefault("1")
+	@Column(columnDefinition = "NUMBER(1, 0)")
+	private Integer isActive;
 	
 	/*
 	//보낸시간이랑 받은시간 같지 않은지?

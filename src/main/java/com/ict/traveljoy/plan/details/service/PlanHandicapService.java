@@ -33,7 +33,7 @@ public class PlanHandicapService {
     }
 
     public List<PlanHandicapDto> getPlanHandicapsByPlanId(Long planId) {
-        return planHandicapRepository.findByPlan_PlanId(planId).stream()
+        return planHandicapRepository.findByPlan_id(planId).stream()
                 .map(PlanHandicapDto::toDto)
                 .collect(Collectors.toList());
     }
@@ -53,10 +53,10 @@ public class PlanHandicapService {
     
     @Transactional
     public PlanHandicapDto updatePlanHandicap(PlanHandicapDto planHandicapDto) {
-    	PlanHandicap existingPlanHandicap = planHandicapRepository.findByPlan_PlanIdAndHandicapId(planHandicapDto.getPlanId(), planHandicapDto.getPlanHandicapId());
+    	PlanHandicap existingPlanHandicap = planHandicapRepository.findByPlan_idAndHandicapId(planHandicapDto.getPlanId(), planHandicapDto.getPlanHandicapId());
     	if (existingPlanHandicap != null) {
     		Plan plan = new Plan();
-    		plan.setPlanId(planHandicapDto.getPlanId());;
+    		plan.setId(planHandicapDto.getPlanId());;
     		
     		existingPlanHandicap.setPlan(plan);
     		

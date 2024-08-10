@@ -35,12 +35,12 @@ public class Sight {
 	@JoinColumn(name = "region_id",nullable = false)
 	private Region region;
 	
-	@Column(name="is_has_image",nullable = false)
-	@ColumnDefault("'F'")
-	private boolean isHasImage;
+	@Column(name="is_has_image",nullable = false,columnDefinition = "NUMBER(1, 0)")
+    @ColumnDefault("0")
+    private Integer isHasImage;
 	
 	@Column(name = "entrance_fee")
-	private float entranceFee;
+	private Float entranceFee;
 	
 	@Column(name="sight_name",length = 50, nullable = false)
 	private String sightName;
@@ -52,15 +52,15 @@ public class Sight {
 	private String address;
 	
 	@Column
-	private float lat;
+	private Float lat;
 	
 	@Column
-	private float lng;
+	private Float lng;
 	
 	@Column(name = "total_review_count")
 	private Long totalReviewCount;
 	
 	@Column(name = "average_review_rate")
-	private float averageReviewRate;
+	private Float averageReviewRate;
 	
 }

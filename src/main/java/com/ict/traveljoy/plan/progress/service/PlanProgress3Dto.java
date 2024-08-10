@@ -14,10 +14,10 @@ public class PlanProgress3Dto {
 
     private Long planProgress3Id;
     private Long planId;
-    private boolean isTransportation;
-    private boolean isDistance;
-    private boolean isPrice;
-    private boolean isRate;
+    private Boolean isTransportation;
+    private Boolean isDistance;
+    private Boolean isPrice;
+    private Boolean isRate;
     private Long minimumCost;
     private Long maximumCost;
     private Integer minimumRate;
@@ -25,15 +25,15 @@ public class PlanProgress3Dto {
 
     public PlanProgress3 toEntity() {
         Plan plan = new Plan();
-        plan.setPlanId(planId);
+        plan.setId(planId);
 
         return PlanProgress3.builder()
                 .planProgress3Id(planProgress3Id)
                 .plan(plan)
-                .isTransportation(isTransportation)
-                .isDistance(isDistance)
-                .isPrice(isPrice)
-                .isRate(isRate)
+                .isTransportation(isTransportation == true ? 1 : 0)
+                .isDistance(isDistance == true ? 1 : 0)
+                .isPrice(isPrice == true ? 1 : 0)
+                .isRate(isRate == true ? 1 : 0)
                 .minimumCost(minimumCost)
                 .maximumCost(maximumCost)
                 .minimumRate(minimumRate)
@@ -44,11 +44,11 @@ public class PlanProgress3Dto {
     public static PlanProgress3Dto toDto(PlanProgress3 planProgress3) {
         return PlanProgress3Dto.builder()
                 .planProgress3Id(planProgress3.getPlanProgress3Id())
-                .planId(planProgress3.getPlan() != null ? planProgress3.getPlan().getPlanId() : null)
-                .isTransportation(planProgress3.getIsTransportation())
-                .isDistance(planProgress3.getIsDistance())
-                .isPrice(planProgress3.getIsPrice())
-                .isRate(planProgress3.getIsRate())
+                .planId(planProgress3.getPlan() != null ? planProgress3.getPlan().getId() : null)
+                .isTransportation(planProgress3.getIsTransportation() == 1 ? true : false)
+                .isDistance(planProgress3.getIsDistance() == 1 ? true : false)
+                .isPrice(planProgress3.getIsPrice() == 1 ? true : false)
+                .isRate(planProgress3.getIsRate() == 1 ? true : false)
                 .minimumCost(planProgress3.getMinimumCost())
                 .maximumCost(planProgress3.getMaximumCost())
                 .minimumRate(planProgress3.getMinimumRate())

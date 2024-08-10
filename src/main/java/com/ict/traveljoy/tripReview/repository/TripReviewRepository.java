@@ -12,9 +12,9 @@ public interface TripReviewRepository extends JpaRepository<TripReview, Long> {
 
     List<TripReview> findByWriter(String writer);
 
-    List<TripReview> findByIsActive(String isActive);
+    List<TripReview> findByIsActive(Integer isActive);
 
-    List<TripReview> findByPlanId(Plan planId);
+    List<TripReview> findByPlan_id(Long planId);
 
     List<TripReview> findByTitleContaining(String title);
 }

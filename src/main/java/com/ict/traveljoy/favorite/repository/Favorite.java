@@ -31,37 +31,37 @@ public class Favorite {
 	@Column(name="favorite_id")
 	@SequenceGenerator(name = "seq_favorite",sequenceName = "seq_favorite",allocationSize = 1,initialValue = 1)
 	@GeneratedValue(generator = "seq_favorite",strategy = GenerationType.SEQUENCE)
-	private long id;
+	private Long id;
 	
 	@Column(name="user_id")
-	private long userId;
+	private Long userId;
 	
 	@Column(name="target_id")
-	private long targetId;
+	private Long targetId;
 	
-	@Column(name="is_event")
-	@ColumnDefault("'F'")
-	private boolean isEvent;
+	@Column(name="is_event", columnDefinition = "NUMBER(1, 0)")
+	@ColumnDefault("0")
+	private Integer isEvent;
 	
-	@Column(name="is_food")
-	@ColumnDefault("'F'")
-	private boolean isFood;
+	@Column(name="is_food", columnDefinition = "NUMBER(1, 0)")
+	@ColumnDefault("0")
+	private Integer isFood;
 	
-	@Column(name="is_sight")
-	@ColumnDefault("'F'")
-	private boolean isSight;
+	@Column(name="is_sight", columnDefinition = "NUMBER(1, 0)")
+	@ColumnDefault("0")
+	private Integer isSight;
 	
-	@Column(name="is_hotel")
-	@ColumnDefault("'F'")
-	private boolean isHotel;
+	@Column(name="is_hotel", columnDefinition = "NUMBER(1, 0)")
+	@ColumnDefault("0")
+	private Integer isHotel;
 	
-	@Column(name="is_active",nullable = false)
-	@ColumnDefault("'T'")
-	private boolean isActive;
+	@Column(name="is_active",nullable = false, columnDefinition = "NUMBER(1, 0)")
+	@ColumnDefault("1")
+	private Integer isActive;
 	
-	@Column(name="is_delete",nullable = false)
-	@ColumnDefault("'F'")
-	private boolean isDelete;
+	@Column(name="is_delete",nullable = false, columnDefinition = "NUMBER(1, 0)")
+	@ColumnDefault("0")
+	private Integer isDelete;
 	
 	@Column(name="create_date",nullable = false)
 	@ColumnDefault("SYSDATE")
