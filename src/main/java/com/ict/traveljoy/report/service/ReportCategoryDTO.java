@@ -15,7 +15,7 @@ import lombok.Setter;
 @Builder
 public class ReportCategoryDTO {
 
-	private long id;
+	private Long id;
 	private String reportCategoryName;
 	
 	public ReportCategory toEntity() {

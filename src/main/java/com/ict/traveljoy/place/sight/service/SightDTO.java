@@ -18,21 +18,21 @@ import lombok.Setter;
 public class SightDTO {
 	private Long id;
 	private Region region;
-	private boolean isHasImage;
-	private float entranceFee;
+	private Boolean isHasImage;
+	private Float entranceFee;
 	private String sightName;
 	private String descriptions;
 	private String address;
-	private float lat;
-	private float lng;
+	private Float lat;
+	private Float lng;
 	private Long totalReviewCount;
-	private float averageReviewRate;
+	private Float averageReviewRate;
 	
 	public Sight toEntity() {
 		return Sight.builder()
 					 .id(id)
 					 .region(region)
-					 .isHasImage(isHasImage)
+					 .isHasImage(isHasImage == true ? 1 : 0)
 					 .entranceFee(entranceFee)
 					 .sightName(sightName)
 					 .descriptions(descriptions)
@@ -48,7 +48,7 @@ public class SightDTO {
 		return SightDTO.builder()
 						.id(sights.getId())
 						.region(sights.getRegion())
-						.isHasImage(sights.getIsHasImage())
+						.isHasImage(sights.getIsHasImage() == 1 ? true : false)
 						.entranceFee(sights.getEntranceFee())
 						.sightName(sights.getSightName())
 						.descriptions(sights.getDescriptions())

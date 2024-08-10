@@ -16,12 +16,12 @@ import lombok.Setter;
 public class NoticeDto {
 
 	//필드
-	private long id;
+	private Long id;
     private String title;
     private String content;
     private String writer;
-    private boolean isDelete;
-    private boolean isActive;
+    private Boolean isDelete;
+    private Boolean isActive;
  
     // DTO를 엔티티로 변환
     public Notice toEntity() {
@@ -30,8 +30,8 @@ public class NoticeDto {
                 .title(title)
                 .content(content)
                 .writer(writer)
-                .isDelete(isDelete)
-                .isActive(isActive)
+                .isDelete(isDelete == true ? 1 : 0)
+                .isActive(isActive == true ? 1 : 0)
                 .build();
     }
 
@@ -42,8 +42,8 @@ public class NoticeDto {
                 .title(notice.getTitle())
                 .content(notice.getContent())
                 .writer(notice.getWriter())
-                .isDelete(notice.getIsDelete())
-                .isActive(notice.getIsActive())
+                .isDelete(notice.getIsDelete() == 1 ? true : false)
+                .isActive(notice.getIsActive() == 1 ? true : false)
 
                 .build();
     }

@@ -38,7 +38,7 @@ public class TripReview {
 
     @ManyToOne
     @JoinColumn(name = "PLAN_ID")
-    private Plan planId;
+    private Plan plan;
 
     @Column(name = "WRITER", length = 30)
     private String writer;
@@ -55,13 +55,13 @@ public class TripReview {
     @Column(name = "POST_DATE")
     private Timestamp postDate;
 
-    @Column(name = "IS_ACTIVE", length = 1, nullable = false)
-    @ColumnDefault("'T'")
-    private boolean isActive;
+    @Column(name = "IS_ACTIVE", length = 1, nullable = false,columnDefinition = "NUMBER(1, 0)")
+    @ColumnDefault("1")
+    private Integer isActive;
 
-    @Column(name = "IS_DELETE", length = 1, nullable = false)
-    @ColumnDefault("'F'")
-    private boolean isDelete;
+    @Column(name = "IS_DELETE", length = 1, nullable = false,columnDefinition = "NUMBER(1, 0)")
+    @ColumnDefault("0")
+    private Integer isDelete;
 
     @Column(name = "DELETE_DATE")
     private Timestamp deleteDate;

@@ -5,11 +5,16 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.ict.traveljoy.question.repository.QuestionCategory;
+import com.ict.traveljoy.users.repository.Users;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -32,18 +37,19 @@ public class Report {
 	@Column(name="report_id")
 	@SequenceGenerator(name = "seq_report",sequenceName = "seq_report",allocationSize = 1,initialValue = 1)
 	@GeneratedValue(generator = "seq_report",strategy = GenerationType.SEQUENCE)
-    private long id;
+    private Long id;
     
-    //신고자
-	@Column(name="user_id",nullable=false)
-    private long userId;
+	@ManyToOne
+    @JoinColumn(name = "user_id")
+	private Users user;
     
     //신고대상
-	@Column(name="report_category_id",nullable=false)
-    private int reportCategoryId;
+	@ManyToOne
+    @JoinColumn(name = "report_category_id")
+	private ReportCategory reportCategory;
     
 	@Column(nullable=false)
-    private long targetId;
+    private Long targetId;
     
     //신고일자
 	@Column(name="report_date", nullable = false)
@@ -57,7 +63,7 @@ public class Report {
     
     //신고처리 결과
 	@Column(nullable=false)
-    private long reportHandlerId;
+    private Long reportHandlerId;
     
 	@Column(length=50, nullable=false)
     private String reportHandlerName;

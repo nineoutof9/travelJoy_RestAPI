@@ -52,11 +52,11 @@ public class CustomUserDetailsService implements UserDetailsService {
         Users user = userRepository.findByEmail(inputUser.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("존재하지 않는 이메일입니다: " + inputUser.getEmail()));
         // 사용자 계정이 삭제된 경우 UsernameNotFoundException 예외를 발생시킵니다.
-        if (user.getIsDeleteId()) {
+        if (user.getIsDeleteId() == 1 ? true : false) {
             throw new DisabledException ("삭제된 계정입니다: " + inputUser.getEmail());
         }
         // 사용자 계정이 활성화되지 않은 경우 UsernameNotFoundException 예외를 발생시킵니다.
-        if (user.getIsActive()) {
+        if (user.getIsActive() == 1 ? true : false) {
             throw new LockedException("활성화되지 않은 계정입니다: " + inputUser.getEmail());
         }
         return user; // 유효한 사용자 정보를 반환합니다.

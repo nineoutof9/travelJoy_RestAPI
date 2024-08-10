@@ -19,10 +19,10 @@ public class PlanProgress2Dto {
     private String detailPlanName;
     private Timestamp detailPlanStartDate;
     private Timestamp detailPlanEndDate;
-    private boolean isEvent;
-    private boolean isFood;
-    private boolean isSight;
-    private boolean isHotel;
+    private Boolean isEvent;
+    private Boolean isFood;
+    private Boolean isSight;
+    private Boolean isHotel;
     private Long eventId;
     private Long foodId;
     private Long sightId;
@@ -30,7 +30,7 @@ public class PlanProgress2Dto {
 
     public PlanProgress2 toEntity() {
         Plan plan = new Plan();
-        plan.setPlanId(planId);
+        plan.setId(planId);
 
         return PlanProgress2.builder()
                 .planProgress2Id(planProgress2Id)
@@ -38,10 +38,10 @@ public class PlanProgress2Dto {
                 .detailPlanName(detailPlanName)
                 .detailPlanStartDate(detailPlanStartDate)
                 .detailPlanEndDate(detailPlanEndDate)
-                .isEvent(isEvent)
-                .isFood(isFood)
-                .isSight(isSight)
-                .isHotel(isHotel)
+                .isEvent(isEvent == true ? 1 : 0)
+                .isFood(isFood == true ? 1 : 0)
+                .isSight(isSight == true ? 1 : 0)
+                .isHotel(isHotel == true ? 1 : 0)
                 .eventId(eventId)
                 .foodId(foodId)
                 .sightId(sightId)
@@ -52,14 +52,14 @@ public class PlanProgress2Dto {
     public static PlanProgress2Dto toDto(PlanProgress2 planProgress2) {
         return PlanProgress2Dto.builder()
                 .planProgress2Id(planProgress2.getPlanProgress2Id())
-                .planId(planProgress2.getPlan() != null ? planProgress2.getPlan().getPlanId() : null)
+                .planId(planProgress2.getPlan() != null ? planProgress2.getPlan().getId() : null)
                 .detailPlanName(planProgress2.getDetailPlanName())
                 .detailPlanStartDate(planProgress2.getDetailPlanStartDate())
                 .detailPlanEndDate(planProgress2.getDetailPlanEndDate())
-                .isEvent(planProgress2.getIsEvent())
-                .isFood(planProgress2.getIsFood())
-                .isSight(planProgress2.getIsSight())
-                .isHotel(planProgress2.getIsHotel())
+                .isEvent(planProgress2.getIsEvent()== 1 ? true : false)
+                .isFood(planProgress2.getIsFood()== 1 ? true : false)
+                .isSight(planProgress2.getIsSight()== 1 ? true : false)
+                .isHotel(planProgress2.getIsHotel()== 1 ? true : false)
                 .eventId(planProgress2.getEventId())
                 .foodId(planProgress2.getFoodId())
                 .sightId(planProgress2.getSightId())

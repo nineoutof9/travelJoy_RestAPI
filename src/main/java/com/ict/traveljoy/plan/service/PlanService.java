@@ -23,7 +23,7 @@ public class PlanService {
 
     // planId로 Plans 조회
     public PlanDto getPlanById(Long planId) {
-        Plan plan = planRepository.findByPlanId(planId);
+        Plan plan = planRepository.findById(planId).get();
         if (plan != null) {
             return PlanDto.toDto(plan);
         }
@@ -31,7 +31,7 @@ public class PlanService {
     }
 
     // isActive 여부로 Plan 목록 조회
-    public List<PlanDto> getPlansByIsActive(String isActive) {
+    public List<PlanDto> getPlansByIsActive(Integer isActive) {
         List<Plan> plans = planRepository.findByIsActive(isActive);
         return plans.stream()
                 .map(PlanDto::toDto)
@@ -63,13 +63,13 @@ public class PlanService {
 
     // Plan 수정
     public PlanDto updatePlan(PlanDto planDto) {
-        Plan existingPlan = planRepository.findByPlanId(planDto.getPlanId());
+        Plan existingPlan = planRepository.findById(planDto.getPlanId()).get();
         if (existingPlan != null) {
             existingPlan.setPlanName(planDto.getPlanName());
             existingPlan.setPlanDescriptions(planDto.getPlanDescriptions());
             existingPlan.setCreateDate(planDto.getCreateDate());
-            existingPlan.setIsActive(planDto.getIsActive());
-            existingPlan.setIsDelete(planDto.getIsDelete());
+            existingPlan.setIsActive(planDto.getIsActive() == true ? 1 : 0);
+            existingPlan.setIsDelete(planDto.getIsDelete() == true ? 1 : 0);
             existingPlan.setDeleteDate(planDto.getDeleteDate());
             existingPlan.setProgress(planDto.getProgress());
             Plan updatedPlan = planRepository.save(existingPlan);
@@ -80,7 +80,7 @@ public class PlanService {
 
     // Plan 삭제 (논리 삭제)
     public boolean deletePlan(Long planId) {
-        Plan existingPlan = planRepository.findByPlanId(planId);
+        Plan existingPlan = planRepository.findById(planId).get();
         if (existingPlan != null) {
             existingPlan.setIsDelete(null);
             existingPlan.setDeleteDate(LocalDateTime.now());

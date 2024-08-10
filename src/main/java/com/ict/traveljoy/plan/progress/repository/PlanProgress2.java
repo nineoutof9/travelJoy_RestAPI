@@ -49,21 +49,21 @@ public class PlanProgress2 {
     @Column(name = "DETAIL_PLAN_END_DATE")
     private Timestamp detailPlanEndDate;
 
-    @Column(name = "IS_EVENT", length = 1, nullable = false)
-    @ColumnDefault("'F'")
-    private boolean isEvent;
+    @Column(name = "IS_EVENT", length = 1, nullable = false,columnDefinition = "NUMBER(1, 0)")
+    @ColumnDefault("0")
+    private Integer isEvent;
 
-    @Column(name = "IS_FOOD", length = 1, nullable = false)
-    @ColumnDefault("'F'")
-    private boolean isFood;
+    @Column(name = "IS_FOOD", length = 1, nullable = false,columnDefinition = "NUMBER(1, 0)")
+    @ColumnDefault("0")
+    private Integer isFood;
 
-    @Column(name = "IS_SIGHT", length = 1, nullable = false)
-    @ColumnDefault("'F'")
-    private boolean isSight;
+    @Column(name = "IS_SIGHT", length = 1, nullable = false,columnDefinition = "NUMBER(1, 0)")
+    @ColumnDefault("0")
+    private Integer isSight;
 
-    @Column(name = "IS_HOTEL", length = 1, nullable = false)
-    @ColumnDefault("'F'")
-    private boolean isHotel;
+    @Column(name = "IS_HOTEL", length = 1, nullable = false,columnDefinition = "NUMBER(1, 0)")
+    @ColumnDefault("0")
+    private Integer isHotel;
 
     @Column(name = "EVENT_ID")
     private Long eventId;

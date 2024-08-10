@@ -23,7 +23,7 @@ public class PlanInterestService {
 
     // planId로 PlanInterest 조회
     public List<PlanInterestDto> getPlanInterestsByPlanId(Long planId) {
-        List<PlanInterest> planInterests = planInterestRepository.findByPlan_PlanId(planId);
+        List<PlanInterest> planInterests = planInterestRepository.findByPlan_id(planId);
         return planInterests.stream()
                 .map(PlanInterestDto::toDto)
                 .collect(Collectors.toList());
@@ -39,7 +39,7 @@ public class PlanInterestService {
 
     // planId와 interestId로 PlanInterest 조회
     public PlanInterestDto getPlanInterestByPlanIdAndInterestId(Long planId, Long interestId) {
-        PlanInterest planInterest = planInterestRepository.findByPlan_PlanIdAndInterestId(planId, interestId);
+        PlanInterest planInterest = planInterestRepository.findByPlan_idAndInterestId(planId, interestId);
         if (planInterest != null) {
             return PlanInterestDto.toDto(planInterest);
         }
@@ -63,10 +63,10 @@ public class PlanInterestService {
 
     // PlanInterest 수정
     public PlanInterestDto updatePlanInterest(PlanInterestDto planInterestDto) {
-        PlanInterest existingPlanInterest = planInterestRepository.findByPlan_PlanIdAndInterestId(planInterestDto.getPlanId(), planInterestDto.getInterestId());
+        PlanInterest existingPlanInterest = planInterestRepository.findByPlan_idAndInterestId(planInterestDto.getPlanId(), planInterestDto.getInterestId());
         if (existingPlanInterest != null) {
             Plan plan = new Plan();
-            plan.setPlanId(planInterestDto.getPlanId());
+            plan.setId(planInterestDto.getPlanId());
             
             existingPlanInterest.setPlan(plan);
             // 필요한 경우 다른 필드도 업데이트할 수 있습니다.
@@ -79,6 +79,6 @@ public class PlanInterestService {
 
     // planId로 PlanInterest 삭제
     public void deletePlanInterestByPlanId(Long planId) {
-        planInterestRepository.deleteByPlan_PlanId(planId);
+        planInterestRepository.deleteByPlan_id(planId);
     }
 }

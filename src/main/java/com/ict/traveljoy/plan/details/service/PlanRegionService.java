@@ -23,7 +23,7 @@ public class PlanRegionService {
     }
 
     public List<PlanRegionDto> getPlanRegionsByPlanId(Long planId) {
-        return planRegionRepository.findByPlan_PlanId(planId).stream()
+        return planRegionRepository.findByPlan_id(planId).stream()
                 .map(PlanRegionDto::toDto)
                 .collect(Collectors.toList());
     }
@@ -35,7 +35,7 @@ public class PlanRegionService {
     }
 
     public PlanRegionDto getPlanRegionByPlanIdAndRegionId(Long planId, Long regionId) {
-        return planRegionRepository.findByPlan_PlanIdAndRegion_Id(planId, regionId)
+        return planRegionRepository.findByPlan_idAndRegion_Id(planId, regionId)
                 .map(PlanRegionDto::toDto)
                 .orElse(null);
     }
@@ -51,7 +51,7 @@ public class PlanRegionService {
                 .map(existingPlanRegion -> {
 
                     Plan plan = new Plan();
-                    plan.setPlanId(planRegionDto.getPlanId());
+                    plan.setId(planRegionDto.getPlanId());
                     existingPlanRegion.setPlan(plan);
 
                     Region region = new Region();
@@ -65,7 +65,7 @@ public class PlanRegionService {
     }
     
     public void deletePlanRegionByPlanId(Long planId) {
-        planRegionRepository.deleteByPlan_PlanId(planId);
+        planRegionRepository.deleteByPlan_id(planId);
     }
 
     public void deletePlanRegionByRegionId(Long regionId) {

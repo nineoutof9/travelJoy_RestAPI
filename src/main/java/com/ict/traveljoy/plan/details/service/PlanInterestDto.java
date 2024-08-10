@@ -1,6 +1,7 @@
 package com.ict.traveljoy.plan.details.service;
 
 import com.ict.traveljoy.plan.repository.Plan;
+import com.ict.traveljoy.info.interest.repository.Interest;
 import com.ict.traveljoy.plan.details.repository.PlanInterest;
 
 import lombok.*;
@@ -18,20 +19,23 @@ public class PlanInterestDto {
 
     public PlanInterest toEntity() {
         Plan plan = new Plan();
-        plan.setPlanId(planId);
-
+        Interest interest = new Interest();
+        
+        plan.setId(planId);
+        interest.setId(interestId);
+        
         return PlanInterest.builder()
-                .planInterestId(planInterestId)
+                .id(planInterestId)
                 .plan(plan)
-                .interestId(interestId)
+                .interest(interest)
                 .build();
     }
 
     public static PlanInterestDto toDto(PlanInterest planInterest) {
         return PlanInterestDto.builder()
-                .planInterestId(planInterest.getPlanInterestId())
-                .planId(planInterest.getPlan().getPlanId())
-                .interestId(planInterest.getInterestId())
+                .planInterestId(planInterest.getId())
+                .planId(planInterest.getPlan()!=null ?planInterest.getPlan().getId():null)
+                .interestId(planInterest.getInterest()!=null?planInterest.getInterest().getId():null)
                 .build();
     }
 }

@@ -32,7 +32,7 @@ public class UserInterestDto {
 				.interest(interest)
 				.build();
 	}
-	public UserInterestDto toDto(UserInterest userInterest) {
+	public static UserInterestDto toDto(UserInterest userInterest) {
 		return UserInterestDto.builder()
 				.id(userInterest.getId())
 				.userId(userInterest.getUser() != null ? userInterest.getUser().getId() : null)

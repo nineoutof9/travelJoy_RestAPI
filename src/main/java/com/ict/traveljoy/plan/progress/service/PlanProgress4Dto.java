@@ -18,10 +18,10 @@ public class PlanProgress4Dto {
 
     public PlanProgress4 toEntity() {
         Plan plan = new Plan();
-        plan.setPlanId(planId);
+        plan.setId(planId);
 
         Plan aiMadePlan = new Plan();
-        aiMadePlan.setPlanId(aiMadePlanId);
+        aiMadePlan.setId(aiMadePlanId);
 
         return PlanProgress4.builder()
                 .planProgress4Id(planProgress4Id)
@@ -33,8 +33,8 @@ public class PlanProgress4Dto {
     public static PlanProgress4Dto toDto(PlanProgress4 planProgress4) {
         return PlanProgress4Dto.builder()
                 .planProgress4Id(planProgress4.getPlanProgress4Id())
-                .planId(planProgress4.getPlan() != null ? planProgress4.getPlan().getPlanId() : null)
-                .aiMadePlanId(planProgress4.getAiMadePlan() != null ? planProgress4.getAiMadePlan().getPlanId() : null)
+                .planId(planProgress4.getPlan() != null ? planProgress4.getPlan().getId() : null)
+                .aiMadePlanId(planProgress4.getAiMadePlan() != null ? planProgress4.getAiMadePlan().getId() : null)
                 .build();
     }
 }

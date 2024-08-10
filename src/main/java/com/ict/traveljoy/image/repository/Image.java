@@ -31,7 +31,7 @@ public class Image {
 	@SequenceGenerator(name = "seq_image",sequenceName = "seq_image",allocationSize = 1,initialValue = 1)
 	@GeneratedValue(generator = "seq_image",strategy = GenerationType.SEQUENCE)
 	@Column(name="image_id")
-	private long id;
+	private Long id;
 	
 	@Column(length = 200)
 	private String imageUrl;
@@ -41,13 +41,13 @@ public class Image {
 	@CreationTimestamp
 	private LocalDateTime saveDate;
 	
-	@Column(name="is_active",nullable = false)
-	@ColumnDefault("'T'")
-	private boolean isActive;
+	@Column(name="is_active",nullable = false, columnDefinition = "NUMBER(1, 0)")
+	@ColumnDefault("1")
+	private Integer isActive;
 	
-	@Column(name="is_delete",nullable = false)
-	@ColumnDefault("'F'")
-	private boolean isDelete;
+	@Column(name="is_delete",nullable = false, columnDefinition = "NUMBER(1, 0)")
+	@ColumnDefault("0")
+	private Integer isDelete;
 	
 	@Column(name="delete_date")
 	@CreationTimestamp

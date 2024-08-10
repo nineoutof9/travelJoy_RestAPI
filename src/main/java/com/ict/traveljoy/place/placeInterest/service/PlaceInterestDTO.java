@@ -17,19 +17,19 @@ import lombok.Setter;
 public class PlaceInterestDTO {
     private Long id;
     private Long interestId;
-    private boolean isEvent;
-    private boolean isFood;
-    private boolean isSight;
-    private boolean isHotel;
+    private Boolean isEvent;
+    private Boolean isFood;
+    private Boolean isSight;
+    private Boolean isHotel;
     
     public PlaceInterest toEntity() {
         return PlaceInterest.builder()
                             .id(id)
                             .interestId(interestId)
-                            .isEvent(isEvent)
-                            .isFood(isFood)
-                            .isSight(isSight)
-                            .isHotel(isHotel)
+                            .isEvent(isEvent == true ? 1 : 0)
+                            .isFood(isFood == true ? 1 : 0)
+                            .isSight(isSight == true ? 1 : 0)
+                            .isHotel(isHotel == true ? 1 : 0)
                             .build();
     }
     
@@ -37,10 +37,10 @@ public class PlaceInterestDTO {
         return PlaceInterestDTO.builder()
                                .id(placeInterest.getId())
                                .interestId(placeInterest.getInterestId())
-                               .isEvent(placeInterest.getIsEvent())
-                               .isFood(placeInterest.getIsFood())
-                               .isSight(placeInterest.getIsSight())
-                               .isHotel(placeInterest.getIsHotel())
+                               .isEvent(placeInterest.getIsEvent() == 1 ? true : false)
+                               .isFood(placeInterest.getIsFood() == 1 ? true : false)
+                               .isSight(placeInterest.getIsSight() == 1 ? true : false)
+                               .isHotel(placeInterest.getIsHotel() == 1 ? true : false)
                                .build();
     }
 }

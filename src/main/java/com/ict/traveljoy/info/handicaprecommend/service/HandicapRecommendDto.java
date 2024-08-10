@@ -36,7 +36,7 @@ public class HandicapRecommendDto {
 				.build();
 	}
 	
-	public HandicapRecommendDto toDto(HandicapRecommend handicapRecommend) {
+	public static HandicapRecommendDto toDto(HandicapRecommend handicapRecommend) {
 		
 		return HandicapRecommendDto.builder()
 				.id(handicapRecommend.getId())

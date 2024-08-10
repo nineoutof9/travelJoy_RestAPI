@@ -17,21 +17,21 @@ import lombok.Setter;
 public class HotelDTO {
 	private Long id;
 	private Region region;
-	private boolean isHasImage;
-	private float averagePrice;
+	private Boolean isHasImage;
+	private Float averagePrice;
 	private String hotelname;
 	private String descriptions;
 	private String address;
-	private float lat;
-	private float lng;
+	private Float lat;
+	private Float lng;
 	private Long totalReviewCount;
-	private float averageReviewRate;
+	private Float averageReviewRate;
 		
 	public Hotel toEntity() {
 		return Hotel.builder()
 					 .id(id)
 					 .region(region)
-					 .isHasImage(isHasImage)
+					 .isHasImage(isHasImage == true ? 1 : 0)
 					 .averagePrice(averagePrice)
 					 .hotelName(hotelname)
 					 .descriptions(descriptions)
@@ -47,7 +47,7 @@ public class HotelDTO {
 		return HotelDTO.builder()
 						.id(hotels.getId())
 						.region(hotels.getRegion())
-						.isHasImage(hotels.getIsHasImage())
+						.isHasImage(hotels.getIsHasImage() == 1 ? true : false)
 						.averagePrice(hotels.getAveragePrice())
 						.hotelname(hotels.getHotelName())
 						.descriptions(hotels.getDescriptions())

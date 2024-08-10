@@ -33,12 +33,12 @@ public class TripReviewService {
     @Transactional
     public TripReviewDto saveTripReview(TripReviewDto tripReviewDto) {
         TripReview tripReview = tripReviewDto.toEntity();
-        if (tripReview.getPlanId() != null) {
-            Optional<Plan> planOptional = planRepository.findById(tripReview.getPlanId().getPlanId());
+        if (tripReview.getPlan() != null) {
+            Optional<Plan> planOptional = planRepository.findById(tripReview.getPlan().getId());
             if (planOptional.isEmpty()) {
-                throw new IllegalArgumentException("Plan with ID " + tripReview.getPlanId().getPlanId() + " does not exist.");
+                throw new IllegalArgumentException("Plan with ID " + tripReview.getPlan().getId() + " does not exist.");
             }
-            tripReview.setPlanId(null);
+            tripReview.setPlan(null);
         }
         TripReview savedTripReview = tripReviewRepository.save(tripReview);
         return TripReviewDto.fromEntity(savedTripReview);
@@ -58,8 +58,8 @@ public class TripReviewService {
         tripReview.setReviewContent(tripReviewDto.getReviewContent());
         tripReview.setUrl(tripReviewDto.getUrl());
         tripReview.setPostDate(tripReviewDto.getPostDate());
-        tripReview.setIsActive(tripReviewDto.getIsActive());
-        tripReview.setIsDelete(tripReviewDto.getIsDelete());
+        tripReview.setIsActive(tripReviewDto.getIsActive() == true ? 1 : 0);
+        tripReview.setIsDelete(tripReviewDto.getIsDelete() == true ? 1 : 0);
         tripReview.setDeleteDate(tripReviewDto.getDeleteDate());
 
         if (tripReviewDto.getPlanId() != null) {
@@ -67,7 +67,7 @@ public class TripReviewService {
             if (planOptional.isEmpty()) {
                 throw new IllegalArgumentException("Plan with ID " + tripReviewDto.getPlanId() + " does not exist.");
             }
-            tripReview.setPlanId(null);
+            tripReview.setPlan(null);
         }
 
         TripReview updatedTripReview = tripReviewRepository.save(tripReview);
@@ -82,7 +82,7 @@ public class TripReviewService {
             throw new IllegalArgumentException("TripReview with ID " + tripReviewId + " does not exist.");
         }
         TripReview tripReview = tripReviewOptional.get();
-        tripReview.setIsDelete(true);
+        tripReview.setIsDelete(1);
         tripReview.setDeleteDate(new Timestamp(System.currentTimeMillis()));
         tripReviewRepository.save(tripReview);
     }
@@ -110,7 +110,7 @@ public class TripReviewService {
 
     // 특정 Plan ID로 TripReview 조회
     public List<TripReviewDto> getTripReviewsByPlanId(Long planId) {
-        List<TripReview> tripReviews = tripReviewRepository.findByPlanId(null);
+        List<TripReview> tripReviews = tripReviewRepository.findByPlan_id(planId);
         return tripReviews.stream().map(TripReviewDto::fromEntity).toList();
     }
 

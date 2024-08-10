@@ -34,10 +34,10 @@ public class SearchHistory {
 	@Column(name="search_history_id")
 	@SequenceGenerator(name = "seq_search_history",sequenceName = "seq_search_history",allocationSize = 1,initialValue = 1)
 	@GeneratedValue(generator = "seq_search_history",strategy = GenerationType.SEQUENCE)
-	private long id;
+	private Long id;
 	
 	@Column(name="user_id")
-	private long userId;
+	private Long userId;
 	
 	@Column(name="search_word")
 	private String searchWord;
@@ -47,13 +47,13 @@ public class SearchHistory {
 	@CreationTimestamp
 	private LocalDateTime searchDate;
 	
-	@Column(name="is_active",nullable = false)
-	@ColumnDefault("'T'")
-	private boolean isActive;
+	@Column(name="is_active",nullable = false, columnDefinition = "NUMBER(1, 0)")
+	@ColumnDefault("1")
+	private Integer isActive;
 	
-	@Column(name="is_delete",nullable = false)
-	@ColumnDefault("'F'")
-	private boolean isDelete;
+	@Column(name="is_delete",nullable = false, columnDefinition = "NUMBER(1, 0)")
+	@ColumnDefault("0")
+	private Integer isDelete;
 	
 	@Column(name="delete_date")
 	@CreationTimestamp

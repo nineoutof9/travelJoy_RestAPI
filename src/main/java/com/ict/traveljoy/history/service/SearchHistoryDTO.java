@@ -18,12 +18,12 @@ import lombok.Setter;
 @Builder
 public class SearchHistoryDTO {
 
-	private long id;
-	private long userId;
+	private Long id;
+	private Long userId;
 	private String searchWord;
 	private LocalDateTime searchDate;
-	private boolean isActive;
-	private boolean isDelete;
+	private Boolean isActive;
+	private Boolean isDelete;
 	private LocalDateTime deleteDate;
 	
 	public SearchHistory toEntity() {
@@ -32,8 +32,8 @@ public class SearchHistoryDTO {
 				.userId(userId)
 				.searchWord(searchWord)
 				.searchDate(searchDate)
-				.isActive(isActive)
-				.isDelete(isDelete)
+				.isActive(isActive == true ? 1 : 0)
+				.isDelete(isDelete == true ? 1 : 0)
 				.build();
 	}
 	
@@ -43,8 +43,8 @@ public class SearchHistoryDTO {
 				.userId(searchHistory.getUserId())
 				.searchWord(searchHistory.getSearchWord())
 				.searchDate(searchHistory.getSearchDate())
-				.isActive(searchHistory.getIsActive())
-				.isDelete(searchHistory.getIsDelete())
+				.isActive(searchHistory.getIsActive() == 1 ? true : false)
+				.isDelete(searchHistory.getIsDelete() == 1 ? true : false)
 				.build();
 	}
 }

@@ -8,11 +8,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PlanRepository extends JpaRepository<Plan, Long> {
 	
-	// planId로 Plans 조회
-    Plan findByPlanId(Long planId);
+	
 
     // isActive 여부로 Plans 조회
-    List<Plan> findByIsActive(String isActive);
+    List<Plan> findByIsActive(Integer isActive);
 
     // 특정 날짜 이후에 생성된 Plans 조회
     List<Plan> findByCreateDateAfter(LocalDateTime createDate);

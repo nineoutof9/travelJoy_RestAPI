@@ -16,19 +16,19 @@ import lombok.Setter;
 @Builder
 public class ChatRoomDTO {
 
-	private long id;
+	private Long id;
 	private LocalDateTime createDate;
 	private LocalDateTime deleteDate;
-	private boolean isActive;
-	private boolean isDelete;
+	private Boolean isActive;
+	private Boolean isDelete;
 	
 	public ChatRoom toEntity() {
 		return ChatRoom.builder()
 				.id(id)
 				.createDate(createDate)
 				.deleteDate(deleteDate)
-				.isActive(isActive)
-				.isDelete(isDelete)
+				.isActive(isActive == true ? 1 : 0)
+				.isDelete(isDelete == true ? 1 : 0)
 				.build();
 	}
 	
@@ -37,8 +37,8 @@ public class ChatRoomDTO {
 				.id(chatRoom.getId())
 				.createDate(chatRoom.getCreateDate())
 				.deleteDate(chatRoom.getDeleteDate())
-				.isActive(chatRoom.getIsActive())
-				.isDelete(chatRoom.getIsDelete())
+				.isActive(chatRoom.getIsActive() == 1 ? true : false)
+				.isDelete(chatRoom.getIsDelete() == 1 ? true : false)
 				.build();
 	}
 	

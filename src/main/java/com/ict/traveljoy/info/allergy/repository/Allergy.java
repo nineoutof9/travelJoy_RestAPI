@@ -41,8 +41,8 @@ public class Allergy {
 	@Column(length = 50,nullable = false)
 	private String interestTopic;
 	
-	@Column
-	private boolean activityPlace;
+	@Column(columnDefinition = "NUMBER(1, 0)")
+	private Integer activityPlace;
 	
 	@Column(length = 50)
 	private String classification;

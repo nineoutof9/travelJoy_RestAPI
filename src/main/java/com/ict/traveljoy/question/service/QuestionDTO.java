@@ -3,6 +3,8 @@ package com.ict.traveljoy.question.service;
 import java.time.LocalDateTime;
 
 import com.ict.traveljoy.question.repository.Question;
+import com.ict.traveljoy.question.repository.QuestionCategory;
+import com.ict.traveljoy.users.repository.Users;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,32 +19,37 @@ import lombok.Setter;
 @Builder
 public class QuestionDTO {
 
-	private long id;
-	private long userId;
-	private long questionCategoryId;
+	private Long id;
+	private Long userId;
+	private Long questionCategoryId;
 	private LocalDateTime questionDate;
 	private String questionContent;
-	private boolean isHasAnswer;
+	private Boolean isHasAnswer;
 	
 	public Question toEntity() {
+		Users user = new Users();
+		QuestionCategory questionCategory = new QuestionCategory();
+		
+		user.setId(userId);
+		questionCategory.setId(questionCategoryId);
 		return Question.builder()
 				.id(id)
-				.userId(userId)
-				.questionCategoryId(questionCategoryId)
+				.user(user)
+				.questionCategory(questionCategory)
 				.questionDate(questionDate)
 				.questionContent(questionContent)
-				.isHasAnswer(isHasAnswer)
+				.isHasAnswer(isHasAnswer== true ? 1 : 0)
 				.build();
 	}
 	
 	public static QuestionDTO toDTO(Question question) {
 		return QuestionDTO.builder()
 				.id(question.getId())
-				.userId(question.getUserId())
-				.questionCategoryId(question.getQuestionCategoryId())
+				.userId(question.getUser()!=null ? question.getUser().getId():null)
+				.questionCategoryId(question.getQuestionCategory()!=null ? question.getQuestionCategory().getId():null)
 				.questionDate(question.getQuestionDate())
 				.questionContent(question.getQuestionContent())
-				.isHasAnswer(question.getIsHasAnswer())
+				.isHasAnswer(question.getIsHasAnswer() == 1 ? true : false)
 				.build();
 	}
 }

@@ -18,7 +18,7 @@ public class PlanRegionDto {
 
     public PlanRegion toEntity() {
         Plan plan = new Plan();
-        plan.setPlanId(planId);
+        plan.setId(planId);
 
         Region region = new Region();
         region.setId(regionId);
@@ -33,8 +33,8 @@ public class PlanRegionDto {
     public static PlanRegionDto toDto(PlanRegion planRegion) {
         return PlanRegionDto.builder()
                 .planRegionId(planRegion.getPlanRegionId())
-                .planId(planRegion.getPlan().getPlanId())
-                .regionId(planRegion.getRegion().getId())
+                .planId(planRegion.getPlan()!=null?planRegion.getPlan().getId():null)
+                .regionId(planRegion.getRegion()!=null?planRegion.getRegion().getId():null)
                 .build();
     }
 }

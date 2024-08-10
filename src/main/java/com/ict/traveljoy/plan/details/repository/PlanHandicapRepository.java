@@ -8,13 +8,13 @@ import java.util.List;
 @Repository
 public interface PlanHandicapRepository extends JpaRepository<PlanHandicap, Long> {
 
-    List<PlanHandicap> findByPlan_PlanId(Long planId);
+    List<PlanHandicap> findByPlan_id(Long planId);
 
     List<PlanHandicap> findByHandicapId(Long handicapId);
 
-    PlanHandicap findByPlan_PlanIdAndHandicapId(Long planId, Long handicapId);
+    PlanHandicap findByPlan_idAndHandicapId(Long planId, Long handicapId);
 
-    void deleteByPlan_PlanId(Long planId);
+    void deleteByPlan_id(Long planId);
 
     void deleteByHandicapId(Long handicapId);
 }

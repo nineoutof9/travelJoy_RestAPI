@@ -26,7 +26,7 @@ public class HandicapDto {
 				.handicapType(handicapType)
 				.build();
 	}
-	public HandicapDto toDto(Handicap handicap) {
+	public static HandicapDto toDto(Handicap handicap) {
 		return HandicapDto.builder()
 				.id(handicap.getId())
 				.handicapCode(handicap.getHandicapCode())

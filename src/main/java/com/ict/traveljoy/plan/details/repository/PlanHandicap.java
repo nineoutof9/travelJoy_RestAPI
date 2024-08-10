@@ -1,5 +1,6 @@
 package com.ict.traveljoy.plan.details.repository;
 
+import com.ict.traveljoy.info.handicap.repository.Handicap;
 import com.ict.traveljoy.plan.repository.Plan;
 
 import jakarta.persistence.Column;
@@ -35,7 +36,8 @@ public class PlanHandicap {
     @ManyToOne
     @JoinColumn(name = "PLAN_ID")
     private Plan plan;
-
-    @Column(name = "HANDICAP_ID")
-    private Long handicapId;
+    
+    @ManyToOne
+    @JoinColumn(name = "HANDICAP_ID")
+    private Handicap handicap;
 }

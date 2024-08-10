@@ -20,14 +20,14 @@ import lombok.Setter;
 public class AllergyDto {
 	private Long id;
 	private String interestTopic;
-	private boolean activityPlace;
+	private Boolean activityPlace;
 	private String classification;
 	
 	public Allergy toEntity() {
 		return Allergy.builder()
 				.id(id)
 				.interestTopic(interestTopic)
-				.activityPlace(activityPlace)
+				.activityPlace(activityPlace == true ? 1 : 0)
 				.classification(classification)
 				.build();
 	}
@@ -36,7 +36,7 @@ public class AllergyDto {
 		return AllergyDto.builder()
 				.id(allergy.getId())
 				.interestTopic(allergy.getInterestTopic())
-				.activityPlace(allergy.getActivityPlace())
+				.activityPlace(allergy.getActivityPlace() == 1 ? true : false)
 				.classification(allergy.getClassification())
 				.build();
 	}

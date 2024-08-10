@@ -35,7 +35,7 @@ public class AllergyMedicineDto {
 		
 	}
 	
-	public AllergyMedicineDto toDto(AllergyMedicine allergyMedicine) {
+	public static AllergyMedicineDto toDto(AllergyMedicine allergyMedicine) {
 		return AllergyMedicineDto.builder()
 				.id(allergyMedicine.getId())
 				.allergyId(allergyMedicine.getAllergy() != null ? allergyMedicine.getAllergy().getId() : null)

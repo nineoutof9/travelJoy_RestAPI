@@ -35,7 +35,7 @@ public class UserAllergyDto {
 				.allergyLevel(allergyLevel)
 				.build();
 	}
-	public UserAllergyDto toDto(UserAllergy userAllergy) {
+	public static UserAllergyDto toDto(UserAllergy userAllergy) {
 		return UserAllergyDto.builder()
 				.id(userAllergy.getId())
 				.userId(userAllergy.getUser() != null ? userAllergy.getUser().getId() : null)

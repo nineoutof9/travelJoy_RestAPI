@@ -19,25 +19,25 @@ public class TripReviewDto {
     private String reviewContent;
     private String url;
     private Timestamp postDate;
-    private boolean isActive;
-    private boolean isDelete;
+    private Boolean isActive;
+    private Boolean isDelete;
     private Timestamp deleteDate;
 
     // TripReviewDto를 TripReview 엔티티로 변환
     public TripReview toEntity() {
         Plan plan = new Plan();
-        plan.setPlanId(planId);
+        plan.setId(planId);
 
         return TripReview.builder()
                 .tripReviewId(tripReviewId)
-                .planId(plan)
+                .plan(plan)
                 .writer(writer)
                 .title(title)
                 .reviewContent(reviewContent)
                 .url(url)
                 .postDate(postDate)
-                .isActive(isActive)
-                .isDelete(isDelete)
+                .isActive(isActive == true ? 1 : 0)
+                .isDelete(isDelete == true ? 1 : 0)
                 .deleteDate(deleteDate)
                 .build();
     }
@@ -46,14 +46,14 @@ public class TripReviewDto {
     public static TripReviewDto fromEntity(TripReview tripReview) {
         return TripReviewDto.builder()
                 .tripReviewId(tripReview.getTripReviewId())
-                .planId(tripReview.getPlanId() != null ? tripReview.getPlanId().getPlanId() : null)
+                .planId(tripReview.getPlan() != null ? tripReview.getPlan().getId() : null)
                 .writer(tripReview.getWriter())
                 .title(tripReview.getTitle())
                 .reviewContent(tripReview.getReviewContent())
                 .url(tripReview.getUrl())
                 .postDate(tripReview.getPostDate())
-                .isActive(tripReview.getIsActive())
-                .isDelete(tripReview.getIsDelete())
+                .isActive(tripReview.getIsActive() == 1 ? true : false)
+                .isDelete(tripReview.getIsDelete() == 1 ? true : false)
                 .deleteDate(tripReview.getDeleteDate())
                 .build();
     }

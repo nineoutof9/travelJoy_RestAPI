@@ -23,39 +23,39 @@ public class PlanProgress3Service {
 
     // 특정 계획 ID에 해당하는 PlanProgress3 엔티티를 조회하는 메서드
     public List<PlanProgress3Dto> getPlanProgressesByPlanId(Long planId) {
-        List<PlanProgress3> planProgresses = planProgress3Repository.findByPlan_PlanId(planId);
+        List<PlanProgress3> planProgresses = planProgress3Repository.findByPlan_id(planId);
         return planProgresses.stream()
                 .map(PlanProgress3Dto::toDto)
                 .collect(Collectors.toList());
     }
 
     // 특정 교통 여부에 해당하는 PlanProgress3 엔티티를 조회하는 메서드
-    public List<PlanProgress3Dto> getPlanProgressesByIsTransportation(boolean isTransportation) {
-        List<PlanProgress3> planProgresses = planProgress3Repository.findByIsTransportation(isTransportation);
+    public List<PlanProgress3Dto> getPlanProgressesByIsTransportation(Boolean isTransportation) {
+        List<PlanProgress3> planProgresses = planProgress3Repository.findByIsTransportation(isTransportation== true ? 1 : 0);
         return planProgresses.stream()
                 .map(PlanProgress3Dto::toDto)
                 .collect(Collectors.toList());
     }
 
     // 특정 거리 여부에 해당하는 PlanProgress3 엔티티를 조회하는 메서드
-    public List<PlanProgress3Dto> getPlanProgressesByIsDistance(boolean isDistance) {
-        List<PlanProgress3> planProgresses = planProgress3Repository.findByIsDistance(isDistance);
+    public List<PlanProgress3Dto> getPlanProgressesByIsDistance(Boolean isDistance) {
+        List<PlanProgress3> planProgresses = planProgress3Repository.findByIsDistance(isDistance== true ? 1 : 0);
         return planProgresses.stream()
                 .map(PlanProgress3Dto::toDto)
                 .collect(Collectors.toList());
     }
 
     // 특정 비용 여부에 해당하는 PlanProgress3 엔티티를 조회하는 메서드
-    public List<PlanProgress3Dto> getPlanProgressesByIsPrice(boolean isPrice) {
-        List<PlanProgress3> planProgresses = planProgress3Repository.findByIsPrice(isPrice);
+    public List<PlanProgress3Dto> getPlanProgressesByIsPrice(Boolean isPrice) {
+        List<PlanProgress3> planProgresses = planProgress3Repository.findByIsPrice(isPrice== true ? 1 : 0);
         return planProgresses.stream()
                 .map(PlanProgress3Dto::toDto)
                 .collect(Collectors.toList());
     }
 
     // 특정 평가 여부에 해당하는 PlanProgress3 엔티티를 조회하는 메서드
-    public List<PlanProgress3Dto> getPlanProgressesByIsRate(boolean isRate) {
-        List<PlanProgress3> planProgresses = planProgress3Repository.findByIsRate(isRate);
+    public List<PlanProgress3Dto> getPlanProgressesByIsRate(Boolean isRate) {
+        List<PlanProgress3> planProgresses = planProgress3Repository.findByIsRate(isRate== true ? 1 : 0);
         return planProgresses.stream()
                 .map(PlanProgress3Dto::toDto)
                 .collect(Collectors.toList());
@@ -107,14 +107,14 @@ public class PlanProgress3Service {
 
         if (planProgress3Dto.getPlanId() != null) {
             Plan plan = new Plan();
-            plan.setPlanId(planProgress3Dto.getPlanId());
+            plan.setId(planProgress3Dto.getPlanId());
             existingPlanProgress3.setPlan(plan);
         }
 
-        existingPlanProgress3.setIsTransportation(planProgress3Dto.getIsTransportation());
-        existingPlanProgress3.setIsDistance(planProgress3Dto.getIsDistance());
-        existingPlanProgress3.setIsPrice(planProgress3Dto.getIsPrice());
-        existingPlanProgress3.setIsRate(planProgress3Dto.getIsRate());
+        existingPlanProgress3.setIsTransportation(planProgress3Dto.getIsTransportation() == true ? 1 : 0);
+        existingPlanProgress3.setIsDistance(planProgress3Dto.getIsDistance() == true ? 1 : 0);
+        existingPlanProgress3.setIsPrice(planProgress3Dto.getIsPrice() == true ? 1 : 0);
+        existingPlanProgress3.setIsRate(planProgress3Dto.getIsRate() == true ? 1 : 0);
         existingPlanProgress3.setMinimumCost(planProgress3Dto.getMinimumCost());
         existingPlanProgress3.setMaximumCost(planProgress3Dto.getMaximumCost());
         existingPlanProgress3.setMinimumRate(planProgress3Dto.getMinimumRate());

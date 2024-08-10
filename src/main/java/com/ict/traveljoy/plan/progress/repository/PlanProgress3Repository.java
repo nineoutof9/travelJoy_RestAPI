@@ -9,19 +9,19 @@ import org.springframework.stereotype.Repository;
 public interface PlanProgress3Repository extends JpaRepository<PlanProgress3, Long> {
 
     // 특정 계획 ID에 해당하는 PlanProgress3 엔티티를 조회하는 메서드
-    List<PlanProgress3> findByPlan_PlanId(Long planId);
+    List<PlanProgress3> findByPlan_id(Long planId);
 
     // 특정 교통 여부에 해당하는 PlanProgress3 엔티티를 조회하는 메서드
-    List<PlanProgress3> findByIsTransportation(boolean isTransportation);
+    List<PlanProgress3> findByIsTransportation(Integer isTransportation);
 
     // 특정 거리 여부에 해당하는 PlanProgress3 엔티티를 조회하는 메서드
-    List<PlanProgress3> findByIsDistance(boolean isDistance);
+    List<PlanProgress3> findByIsDistance(Integer isDistance);
 
     // 특정 비용 여부에 해당하는 PlanProgress3 엔티티를 조회하는 메서드
-    List<PlanProgress3> findByIsPrice(boolean isPrice);
+    List<PlanProgress3> findByIsPrice(Integer isPrice);
 
     // 특정 평가 여부에 해당하는 PlanProgress3 엔티티를 조회하는 메서드
-    List<PlanProgress3> findByIsRate(boolean isRate);
+    List<PlanProgress3> findByIsRate(Integer isRate);
 
     // 특정 최소 비용에 해당하는 PlanProgress3 엔티티를 조회하는 메서드
     List<PlanProgress3> findByMinimumCost(Long minimumCost);

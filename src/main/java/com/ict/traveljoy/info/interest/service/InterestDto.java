@@ -17,23 +17,23 @@ import lombok.Setter;
 public class InterestDto {
 	private Long id;
 	private String interestTopic;
-	private boolean activityPlace;
+	private Boolean activityPlace;
 	private String classification;
 	
 	public Interest toEntity() {
 		return Interest.builder()
 				.id(id)
 				.interestTopic(interestTopic)
-				.activityPlace(activityPlace)
+				.activityPlace(activityPlace == true ? 1 : 0)
 				.classification(classification)
 				.build();
 	}
 	
-	public InterestDto toDto(Interest interest) {
+	public static InterestDto toDto(Interest interest) {
 		return InterestDto.builder()
 				.id(interest.getId())
 				.interestTopic(interest.getInterestTopic())
-				.activityPlace(interest.getActivityPlace())
+				.activityPlace(interest.getActivityPlace() == 1 ? true : false)
 				.classification(interest.getClassification())
 				.build();
 	}

@@ -18,11 +18,11 @@ import lombok.Setter;
 @Builder
 public class ImageDTO {
 	
-	private long id;
+	private Long id;
 	private String imageUrl;
 	private LocalDateTime saveDate;
-	private boolean isActive;
-	private boolean isDelete;
+	private Boolean isActive;
+	private Boolean isDelete;
 	private LocalDateTime deleteDate;
 	
 	public Image toImage() {
@@ -30,8 +30,8 @@ public class ImageDTO {
 				.id(id)
 				.imageUrl(imageUrl)
 				.saveDate(saveDate)
-				.isActive(isActive)
-				.isDelete(isDelete)
+				.isActive(isActive == true ? 1 : 0)
+				.isDelete(isDelete == true ? 1 : 0)
 				.deleteDate(deleteDate)
 				.build();
 	}
@@ -41,8 +41,8 @@ public class ImageDTO {
 				.id(image.getId())
 				.imageUrl(image.getImageUrl())
 				.saveDate(image.getSaveDate())
-				.isActive(image.getIsActive())
-				.isDelete(image.getIsDelete())
+				.isActive(image.getIsActive()== 1 ? true : false)
+				.isDelete(image.getIsDelete()== 1 ? true : false)
 				.deleteDate(image.getDeleteDate())
 				.build();
 	}

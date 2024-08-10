@@ -17,15 +17,15 @@ import lombok.Setter;
 @Builder
 public class FavoriteDTO {
 
-	private long id;
-	private long userId;
-	private long targetId;
-	private boolean isEvent;
-	private boolean isFood;
-	private boolean isSight;
-	private boolean isHotel;
-	private boolean isActive;
-	private boolean isDelete;
+	private Long id;
+	private Long userId;
+	private Long targetId;
+	private Boolean isEvent;
+	private Boolean isFood;
+	private Boolean isSight;
+	private Boolean isHotel;
+	private Boolean isActive;
+	private Boolean isDelete;
 	private LocalDateTime createDate;
 	private LocalDateTime deleteDate;
 	
@@ -34,12 +34,12 @@ public class FavoriteDTO {
 				.id(id)
 				.userId(userId)
 				.targetId(targetId)
-				.isEvent(isEvent)
-				.isFood(isFood)
-				.isSight(isSight)
-				.isHotel(isHotel)
-				.isActive(isActive)
-				.isDelete(isDelete)
+				.isEvent(isEvent == true ? 1 : 0)
+				.isFood(isFood == true ? 1 : 0)
+				.isSight(isSight == true ? 1 : 0)
+				.isHotel(isHotel == true ? 1 : 0)
+				.isActive(isActive == true ? 1 : 0)
+				.isDelete(isDelete == true ? 1 : 0)
 				.createDate(createDate)
 				.deleteDate(deleteDate)
 				.build();
@@ -50,12 +50,12 @@ public class FavoriteDTO {
 				.id(favorite.getId())
 				.userId(favorite.getUserId())
 				.targetId(favorite.getTargetId())
-				.isEvent(favorite.getIsEvent())
-				.isFood(favorite.getIsEvent())
-				.isSight(favorite.getIsEvent())
-				.isHotel(favorite.getIsEvent())
-				.isActive(favorite.getIsEvent())
-				.isDelete(favorite.getIsEvent())
+				.isEvent(favorite.getIsEvent() == 1 ? true : false)
+				.isFood(favorite.getIsEvent() == 1 ? true : false)
+				.isSight(favorite.getIsEvent() == 1 ? true : false)
+				.isHotel(favorite.getIsEvent() == 1 ? true : false)
+				.isActive(favorite.getIsEvent() == 1 ? true : false)
+				.isDelete(favorite.getIsEvent() == 1 ? true : false)
 				.createDate(favorite.getCreateDate())
 				.deleteDate(favorite.getDeleteDate())
 				.build();

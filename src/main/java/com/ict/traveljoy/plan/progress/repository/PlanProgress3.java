@@ -38,21 +38,21 @@ public class PlanProgress3 {
     @JoinColumn(name = "PLAN_ID")
     private Plan plan;
 
-    @Column(name = "IS_TRANSPORTATION", nullable = false)
-    @ColumnDefault("'F'")
-    private boolean isTransportation;
+    @Column(name = "IS_TRANSPORTATION", nullable = false,columnDefinition = "NUMBER(1, 0)")
+    @ColumnDefault("0")
+    private Integer isTransportation;
 
-    @Column(name = "IS_DISTANCE", nullable = false)
-    @ColumnDefault("'F'")
-    private boolean isDistance;
+    @Column(name = "IS_DISTANCE", nullable = false,columnDefinition = "NUMBER(1, 0)")
+    @ColumnDefault("1")
+    private Integer isDistance;
 
-    @Column(name = "IS_PRICE", nullable = false)
-    @ColumnDefault("'F'")
-    private boolean isPrice;
+    @Column(name = "IS_PRICE", nullable = false,columnDefinition = "NUMBER(1, 0)")
+    @ColumnDefault("0")
+    private Integer isPrice;
 
-    @Column(name = "IS_RATE", nullable = false)
-    @ColumnDefault("'F'")
-    private boolean isRate;
+    @Column(name = "IS_RATE", nullable = false,columnDefinition = "NUMBER(1, 0)")
+    @ColumnDefault("0")
+    private Integer isRate;
 
     @Column(name = "MINIMUM_COST")
     @ColumnDefault("100000")

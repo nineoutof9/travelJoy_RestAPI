@@ -18,22 +18,22 @@ public class FoodDTO {
     private Long id;
     private Region region;
     private String foodType;
-    private boolean isHasImage;
-    private float averagePrice;
+    private Boolean isHasImage;
+    private Float averagePrice;
     private String foodName;
     private String descriptions;
     private String address;
-    private float lat;
-    private float lng;
+    private Float lat;
+    private Float lng;
     private Long totalReviewCount;
-    private float averageReviewRate;
+    private Float averageReviewRate;
 
     public Food toEntity() {
         return Food.builder()
                 .id(id)
                 .region(region)
                 .foodType(foodType)
-                .isHasImage(isHasImage)
+                .isHasImage(isHasImage == true ? 1 : 0)
                 .averagePrice(averagePrice)
                 .foodName(foodName)
                 .descriptions(descriptions)
@@ -50,7 +50,7 @@ public class FoodDTO {
                 .id(food.getId())
                 .region(food.getRegion())
                 .foodType(food.getFoodType())
-                .isHasImage(food.getIsHasImage())
+                .isHasImage(food.getIsHasImage() == 1 ? true : false)
                 .averagePrice(food.getAveragePrice())
                 .foodName(food.getFoodName())
                 .descriptions(food.getDescriptions())

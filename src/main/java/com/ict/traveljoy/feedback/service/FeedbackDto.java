@@ -26,7 +26,7 @@ public class FeedbackDto {
         
         if (planId != null) {
             Plan plan = new Plan();
-            plan.setPlanId(planId);
+            plan.setId(planId);
             feedback.setPlan(plan);
         }
         
@@ -39,7 +39,7 @@ public class FeedbackDto {
     public static FeedbackDto toDto(Feedback feedback) {
         return FeedbackDto.builder()
                 .feedbackId(feedback.getFeedbackId())
-                .planId(feedback.getPlan() != null ? feedback.getPlan().getPlanId() : null)
+                .planId(feedback.getPlan() != null ? feedback.getPlan().getId() : null)
                 .owner(feedback.getOwner())
                 .rate(feedback.getRate())
                 .build();

@@ -26,7 +26,7 @@ public class MedicineDto {
 				.build();
 		
 	}
-	public MedicineDto toDto(Medicine medicine) {
+	public static MedicineDto toDto(Medicine medicine) {
 		return MedicineDto.builder()
 				.id(medicine.getId())
 				.description(medicine.getDescription())

@@ -17,9 +17,9 @@ import lombok.Setter;
 @Builder
 public class PushAlarmSendDTO {
 
-	private long id;
-	private long pushAlarmId;
-	private long userId;
+	private Long id;
+	private Long pushAlarmId;
+	private Long userId;
 	private LocalDateTime pushAlarmSendDate;
 	
 	public PushAlarmSend toEntity() {

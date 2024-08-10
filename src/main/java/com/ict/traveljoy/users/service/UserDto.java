@@ -28,20 +28,20 @@ public class UserDto {
 	private String nickname;
 	private Date birthDate;
 	private LocalDateTime signInDate;
-	private boolean gender;
-	private boolean isKakao;
-	private boolean isGoogle;
-	private boolean isNaver;
-	private boolean handicap;
-	private boolean handicapAllow;
-	private boolean allergy;
-	private boolean allergyAllow;
-	private boolean interest;
-	private boolean interestAllow;
-	private long reported;
-	private boolean isDeleteId;
+	private Boolean gender;
+	private Boolean isKakao;
+	private Boolean isGoogle;
+	private Boolean isNaver;
+	private Boolean handicap;
+	private Boolean handicapAllow;
+	private Boolean allergy;
+	private Boolean allergyAllow;
+	private Boolean interest;
+	private Boolean interestAllow;
+	private Long reported;
+	private Boolean isDeleteId;
 	private LocalDateTime deleteIdDate;
-	private boolean isActive;
+	private Boolean isActive;
 	private LocalDateTime updateDate;
 	
 	//DTO를 ENTITY로 변환하는 메소드
@@ -53,20 +53,20 @@ public class UserDto {
 				.nickname(nickname)
 				.birthDate(birthDate)
 				.signInDate(signInDate)
-				.gender(gender)
-				.isKakao(isKakao)
-				.isGoogle(isGoogle)
-				.isNaver(isNaver)
-				.handicap(handicap)
-				.handicapAllow(handicapAllow)
-				.allergy(allergy)
-				.allergyAllow(allergyAllow)
-				.interest(interest)
-				.interestAllow(interestAllow)
+				.gender(gender == true ? 1 : 0)
+				.isKakao(isKakao == true ? 1 : 0)
+				.isGoogle(isGoogle == true ? 1 : 0)
+				.isNaver(isNaver == true ? 1 : 0)
+				.handicap(handicap == true ? 1 : 0)
+				.handicapAllow(handicapAllow == true ? 1 : 0)
+				.allergy(allergy == true ? 1 : 0)
+				.allergyAllow(allergyAllow == true ? 1 : 0)
+				.interest(interest == true ? 1 : 0)
+				.interestAllow(interestAllow == true ? 1 : 0)
 				.reported(reported)
-				.isDeleteId(isDeleteId)
+				.isDeleteId(isDeleteId == true ? 1 : 0)
 				.deleteIdDate(deleteIdDate)
-				.isActive(isActive)
+				.isActive(isActive == true ? 1 : 0)
 				.updateDate(updateDate)
 				.build();
 	}
@@ -79,20 +79,20 @@ public class UserDto {
 				.nickname(users.getNickname())
 				.birthDate(users.getBirthDate())
 				.signInDate(users.getSignInDate())
-				.gender(users.getGender())
-				.isKakao(users.getIsKakao())
-				.isGoogle(users.getIsGoogle())
-				.isNaver(users.getIsNaver())
-				.handicap(users.getHandicap())
-				.handicapAllow(users.getHandicapAllow())
-				.allergy(users.getAllergy())
-				.allergyAllow(users.getAllergyAllow())
-				.interest(users.getInterest())
-				.interestAllow(users.getInterestAllow())
+				.gender(users.getGender() == 1 ? true : false)
+				.isKakao(users.getIsKakao() == 1 ? true : false)
+				.isGoogle(users.getIsGoogle() == 1 ? true : false)
+				.isNaver(users.getIsNaver() == 1 ? true : false)
+				.handicap(users.getHandicap() == 1 ? true : false)
+				.handicapAllow(users.getHandicapAllow() == 1 ? true : false)
+				.allergy(users.getAllergy() == 1 ? true : false)
+				.allergyAllow(users.getAllergyAllow() == 1 ? true : false)
+				.interest(users.getInterest() == 1 ? true : false)
+				.interestAllow(users.getInterestAllow() == 1 ? true : false)
 				.reported(users.getReported())
-				.isDeleteId(users.getIsDeleteId())
+				.isDeleteId(users.getIsDeleteId() == 1 ? true : false)
 				.deleteIdDate(users.getDeleteIdDate())
-				.isActive(users.getIsActive())
+				.isActive(users.getIsActive() == 1 ? true : false)
 				.updateDate(users.getUpdateDate())
 				.build();
 	}

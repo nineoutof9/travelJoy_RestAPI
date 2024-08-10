@@ -52,7 +52,7 @@ public class PlanProgress1 {
     private Integer travelers;
 
     @Column(name = "TRAVEL_COST")
-    private BigDecimal travelCost;
+    private Long travelCost;
 
     @ManyToOne
     @JoinColumn(name = "PLAN_ID")
