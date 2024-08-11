@@ -5,11 +5,16 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.ict.traveljoy.users.repository.Users;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -31,13 +36,14 @@ import lombok.Setter;
 public class SearchHistory {
 	
 	@Id
-	@Column(name="search_history_id")
 	@SequenceGenerator(name = "seq_search_history",sequenceName = "seq_search_history",allocationSize = 1,initialValue = 1)
 	@GeneratedValue(generator = "seq_search_history",strategy = GenerationType.SEQUENCE)
+	@Column(name="search_history_id")
 	private Long id;
 	
-	@Column(name="user_id")
-	private Long userId;
+	@ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+	private Users user;
 	
 	@Column(name="search_word")
 	private String searchWord;

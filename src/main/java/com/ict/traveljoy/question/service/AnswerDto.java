@@ -17,22 +17,23 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AnswerDTO {
+public class AnswerDto {
 
 	private Long id;
-	private Long questionId;
-	private Long answerHandlerId;
+	private Question question;
+	private Users user;
+//	private Long answerHandlerId;
 	private String answerHandlerName;
 	private LocalDateTime answerDate;
 	private String answerContent;
 	
 	public Answer toEntity() {
 		
-		Question question = new Question();
-		Users user = new Users();
-		
-		question.setId(questionId);
-		user.setId(answerHandlerId);
+//		Question question = new Question();
+//		Users user = new Users();
+//		
+//		question.setId(questionId);
+//		user.setId(answerHandlerId);
 		
 		return Answer.builder()
 				.id(id)
@@ -43,11 +44,13 @@ public class AnswerDTO {
 				.build();
 	}
 	
-	public static AnswerDTO toDTO(Answer answer) {
-		return AnswerDTO.builder()
+	public static AnswerDto toDTO(Answer answer) {
+		return AnswerDto.builder()
 				.id(answer.getId())
-				.questionId(answer.getQuestion()!=null?answer.getQuestion().getId():null)
-				.answerHandlerId(answer.getUser()!=null?answer.getUser().getId():null)
+//				.questionId(answer.getQuestion()!=null?answer.getQuestion().getId():null)
+				.question(answer.getQuestion())
+				.user(answer.getUser())
+//				.answerHandlerId(answer.getUser()!=null?answer.getUser().getId():null)
 				.answerDate(answer.getAnswerDate())
 				.answerContent(answer.getAnswerContent())
 				.build();

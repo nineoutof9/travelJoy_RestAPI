@@ -20,20 +20,20 @@ public class WeatherService {
     private WeatherRepository weatherRepository;
 
     // 모든 날씨 정보 검색
-    public List<WeatherDTO> findAllWeathers() {
+    public List<WeatherDto> findAllWeathers() {
         return weatherRepository.findAll().stream()
-                .map(weather -> WeatherDTO.toDto(weather))
+                .map(weather -> WeatherDto.toDto(weather))
                 .collect(Collectors.toList());
     }
 
     // ID로 날씨 정보 검색
-    public Optional<WeatherDTO> findWeatherById(Long id) {
+    public Optional<WeatherDto> findWeatherById(Long id) {
         return weatherRepository.findById(id)
-                .map(weather -> WeatherDTO.toDto(weather));
+                .map(weather -> WeatherDto.toDto(weather));
     }
 
     // 날씨 정보 저장
-    public WeatherDTO saveWeather(WeatherDTO weatherDto) {
+    public WeatherDto saveWeather(WeatherDto weatherDto) {
         // 데이터 유효성 검증
         if (weatherDto.getStatus() == null) {
             throw new IllegalArgumentException("날씨 상태는 비어있으면 안돼요");
@@ -41,7 +41,7 @@ public class WeatherService {
 
         Weather weather = weatherDto.toEntity();
         weather = weatherRepository.save(weather);
-        return WeatherDTO.toDto(weather);
+        return WeatherDto.toDto(weather);
     }
 
     // ID로 날씨 정보 삭제

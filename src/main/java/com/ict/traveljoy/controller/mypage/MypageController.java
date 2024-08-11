@@ -283,14 +283,14 @@ public class MypageController {
 }
 	
 	@PostMapping("/trip-reviews/photo")
-	public ResponseEntity<TripReviewPhotoDto> saveTripReviewPhoto(@RequestBody TripReviewPhotoDto tripReviewPhotoDto) {
+	public ResponseEntity<TripReviewPhotoDto> saveTripReviewPhoto(@RequestBody TripReviewPhotoDto tripReviewPhotoDTO) {
 		
-		try {
-			TripReviewPhotoDto saveDTO = tripReviewPhotoService.savePhoto(tripReviewPhotoDto);
-			return ResponseEntity.ok(saveDTO);
-		}catch(Exception e) {e.printStackTrace();
+//		try {
+//			TripReviewPhotoDTO saveDTO = tripReviewPhotoService.savePhoto(tripReviewPhotoDTO);
+//			return ResponseEntity.ok(saveDTO);
+//		}catch(Exception e) {e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-		}
+//		}
 }
 	
 	@GetMapping("/trip-reviews")
@@ -359,12 +359,12 @@ public class MypageController {
 	@PutMapping("/trip-reviews/photo/{id}")
 	public ResponseEntity<TripReviewPhotoDto> updateTripReviewPhoto(@PathVariable Long tripReviewPhotoId,
 	        @RequestBody TripReviewPhotoDto tripReviewPhotoDto) {
-	    try {
-	        TripReviewPhotoDto updatedDTO = tripReviewPhotoService.updatePhoto(tripReviewPhotoId, tripReviewPhotoDto);
-	        return ResponseEntity.ok(updatedDTO);
-	    }catch(Exception e) {e.printStackTrace();
+//	    try {
+//	        TripReviewPhotoDTO updatedDTO = tripReviewPhotoService.updatePhoto(tripReviewPhotoId, tripReviewPhotoDTO);
+//	        return ResponseEntity.ok(updatedDTO);
+//	    }catch(Exception e) {e.printStackTrace();
 		
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);}
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);//}
 
 	}
 	

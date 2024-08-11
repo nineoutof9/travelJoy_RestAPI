@@ -12,7 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class WeatherDTO {
+public class WeatherDto {
     private Long id;
     private String status;
     private Float temperature;
@@ -33,8 +33,8 @@ public class WeatherDTO {
                 .build();
     }
 
-    public static WeatherDTO toDto(Weather weather) {
-        return WeatherDTO.builder()
+    public static WeatherDto toDto(Weather weather) {
+        return WeatherDto.builder()
                 .id(weather.getId())
                 .status(weather.getStatus())
                 .temperature(weather.getTemperature())

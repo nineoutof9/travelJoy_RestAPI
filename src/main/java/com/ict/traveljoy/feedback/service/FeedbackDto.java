@@ -15,33 +15,41 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class FeedbackDto {
-    private Long feedbackId;
-    private Long planId; 
+    private Long id;
+    private Plan plan; 
     private String owner;
     private Integer rate;
     
     public Feedback toEntity() {
-        Feedback feedback = new Feedback();
-        feedback.setFeedbackId(feedbackId);
-        
-        if (planId != null) {
-            Plan plan = new Plan();
-            plan.setId(planId);
-            feedback.setPlan(plan);
-        }
-        
-        feedback.setOwner(owner);
-        feedback.setRate(rate);
-        
-        return feedback;
+//        Feedback feedback = new Feedback();
+//        feedback.setFeedbackId(feedbackId);
+//        
+//        if (planId != null) {
+//            Plan plan = new Plan();
+//            plan.setId(planId);
+//            feedback.setPlan(plan);
+//        }
+//        
+//        feedback.setOwner(owner);
+//        feedback.setRate(rate);
+//        
+//        return feedback;
+    	return Feedback.builder()
+    			.id(id)
+    			.plan(plan)
+    			.owner(owner)
+    			.rate(rate)
+    			.build();
     }
     
     public static FeedbackDto toDto(Feedback feedback) {
         return FeedbackDto.builder()
-                .feedbackId(feedback.getFeedbackId())
-                .planId(feedback.getPlan() != null ? feedback.getPlan().getId() : null)
-                .owner(feedback.getOwner())
-                .rate(feedback.getRate())
-                .build();
+//                .feedbackId(feedback.getFeedbackId())
+//                .planId(feedback.getPlan() != null ? feedback.getPlan().getId() : null)
+        		.id(feedback.getId())
+        		.plan(feedback.getPlan())
+        		.owner(feedback.getOwner())
+        		.rate(feedback.getRate())
+        		.build();
     }
 }

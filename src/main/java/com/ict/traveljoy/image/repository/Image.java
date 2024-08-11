@@ -33,7 +33,7 @@ public class Image {
 	@Column(name="image_id")
 	private Long id;
 	
-	@Column(length = 200)
+	@Column(length = 200,name="image_url")
 	private String imageUrl;
 	
 	@Column

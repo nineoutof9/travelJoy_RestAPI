@@ -48,21 +48,21 @@ public class FeedbackService {
     // Feedback 저장
     public FeedbackDto saveFeedback(FeedbackDto feedbackDto) {
         Feedback feedback = feedbackDto.toEntity();
-        if (feedbackDto.getPlanId() != null) {
-            Plan plan = new Plan();
-            plan.setId(feedbackDto.getPlanId());
-            feedback.setPlan(plan);
-        }
+//        if (feedbackDto.getPlanId() != null) {
+//            Plan plan = new Plan();
+//            plan.setId(feedbackDto.getPlanId());
+//            feedback.setPlan(plan);
+//        }
         Feedback savedFeedback = feedbackRepository.save(feedback);
         return FeedbackDto.toDto(savedFeedback);
     }
 
     // Feedback 수정
     public FeedbackDto updateFeedback(FeedbackDto feedbackDto) {
-        Feedback existingFeedback = feedbackRepository.findById(feedbackDto.getFeedbackId()).orElse(null);
+        Feedback existingFeedback = feedbackRepository.findById(feedbackDto.getId()).orElse(null);
         if (existingFeedback != null) {
             Plan plan = new Plan();
-            plan.setId(feedbackDto.getPlanId());
+            //plan.setId(feedbackDto.getPlanId());
             existingFeedback.setPlan(plan);
             existingFeedback.setOwner(feedbackDto.getOwner());
             existingFeedback.setRate(feedbackDto.getRate());

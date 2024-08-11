@@ -5,11 +5,16 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.ict.traveljoy.users.repository.Users;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -28,13 +33,14 @@ import lombok.Setter;
 public class Favorite {
 
 	@Id
-	@Column(name="favorite_id")
 	@SequenceGenerator(name = "seq_favorite",sequenceName = "seq_favorite",allocationSize = 1,initialValue = 1)
 	@GeneratedValue(generator = "seq_favorite",strategy = GenerationType.SEQUENCE)
+	@Column(name="favorite_id")
 	private Long id;
 	
-	@Column(name="user_id")
-	private Long userId;
+	@ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+	private Users user;
 	
 	@Column(name="target_id")
 	private Long targetId;

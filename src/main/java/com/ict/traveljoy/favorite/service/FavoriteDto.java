@@ -3,6 +3,7 @@ package com.ict.traveljoy.favorite.service;
 import java.time.LocalDateTime;
 
 import com.ict.traveljoy.favorite.repository.Favorite;
+import com.ict.traveljoy.users.repository.Users;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,10 +16,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class FavoriteDTO {
+public class FavoriteDto {
 
 	private Long id;
-	private Long userId;
+	private Users user;
 	private Long targetId;
 	private Boolean isEvent;
 	private Boolean isFood;
@@ -32,7 +33,7 @@ public class FavoriteDTO {
 	public Favorite toEntity() {
 		return Favorite.builder()
 				.id(id)
-				.userId(userId)
+				.user(user)
 				.targetId(targetId)
 				.isEvent(isEvent == true ? 1 : 0)
 				.isFood(isFood == true ? 1 : 0)
@@ -45,10 +46,10 @@ public class FavoriteDTO {
 				.build();
 	}
 	
-	public static FavoriteDTO toDTO(Favorite favorite) {
-		return FavoriteDTO.builder()
+	public static FavoriteDto toDto(Favorite favorite) {
+		return FavoriteDto.builder()
 				.id(favorite.getId())
-				.userId(favorite.getUserId())
+				.user(favorite.getUser())
 				.targetId(favorite.getTargetId())
 				.isEvent(favorite.getIsEvent() == 1 ? true : false)
 				.isFood(favorite.getIsEvent() == 1 ? true : false)

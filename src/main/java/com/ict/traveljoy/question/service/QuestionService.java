@@ -15,7 +15,7 @@ public class QuestionService {
 	private final ObjectMapper objectMapper;
 	
 	
-	public QuestionDTO createQuestion(QuestionDTO questionDTO) {
+	public QuestionDto createQuestion(QuestionDto questionDTO) {
 		return questionDTO;
 		// TODO Auto-generated method stub
 		

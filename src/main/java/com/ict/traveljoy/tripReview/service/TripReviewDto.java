@@ -12,8 +12,8 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @Builder
 public class TripReviewDto {
-    private Long tripReviewId;
-    private Long planId;
+    private Long id;
+    private Plan plan;
     private String writer;
     private String title;
     private String reviewContent;
@@ -25,11 +25,12 @@ public class TripReviewDto {
 
     // TripReviewDto를 TripReview 엔티티로 변환
     public TripReview toEntity() {
-        Plan plan = new Plan();
-        plan.setId(planId);
+//        Plan plan = new Plan();
+//        plan.setId(planId);
 
         return TripReview.builder()
-                .tripReviewId(tripReviewId)
+                //.tripReviewId(tripReviewId)
+        		.id(id)
                 .plan(plan)
                 .writer(writer)
                 .title(title)
@@ -43,10 +44,11 @@ public class TripReviewDto {
     }
 
     // TripReview 엔티티를 TripReviewDto로 변환
-    public static TripReviewDto fromEntity(TripReview tripReview) {
+    public static TripReviewDto toDto(TripReview tripReview) {
         return TripReviewDto.builder()
-                .tripReviewId(tripReview.getTripReviewId())
-                .planId(tripReview.getPlan() != null ? tripReview.getPlan().getId() : null)
+                //.tripReviewId(tripReview.getTripReviewId())
+        		.id(tripReview.getId())
+                .plan(tripReview.getPlan())
                 .writer(tripReview.getWriter())
                 .title(tripReview.getTitle())
                 .reviewContent(tripReview.getReviewContent())

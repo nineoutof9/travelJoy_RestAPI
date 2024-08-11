@@ -56,9 +56,10 @@ public class TripReviewPhotoService {
     }
 
     // 새로운 TripReviewPhoto 저장
-    public TripReviewPhotoDto savePhoto(TripReviewPhotoDto tripReviewPhotoDto) {
-        Optional<TripReview> tripReviewOpt = tripReviewRepository.findById(tripReviewPhotoDto.getTripReviewId());
-        Optional<Image> imageOpt = imageRepository.findById(tripReviewPhotoDto.getImageId());
+    /*
+    public TripReviewPhotoDTO savePhoto(TripReviewPhotoDto tripReviewPhotoDto) {
+        Optional<TripReview> tripReviewOpt = tripReviewRepository.findById(tripReviewPhotoDto.getTripReview());
+        Optional<Image> imageOpt = imageRepository.findById(tripReviewPhotoDTO.getImage());
 
         if (tripReviewOpt.isPresent() && imageOpt.isPresent()) {
             TripReviewPhoto tripReviewPhoto = TripReviewPhoto.builder()
@@ -66,26 +67,29 @@ public class TripReviewPhotoService {
                     .image(imageOpt.get())
                     .build();
             TripReviewPhoto savedPhoto = tripReviewPhotoRepository.save(tripReviewPhoto);
-            return TripReviewPhotoDto.toDto(savedPhoto);
+            return TripReviewPhotoDTO.toDTO(savedPhoto);
         }
 
         throw new IllegalArgumentException("TripReview or Image not found");
     }
+    */
 
     // TripReviewPhoto 업데이트
-    public TripReviewPhotoDto updatePhoto(Long tripReviewPhotoId, TripReviewPhotoDto updatedDto) {
+    /*
+    public TripReviewPhotoDTO updatePhoto(Long tripReviewPhotoId, TripReviewPhotoDto updatedDto) {
         Optional<TripReviewPhoto> tripReviewPhotoOpt = tripReviewPhotoRepository.findByTripReviewPhotoId(tripReviewPhotoId);
-        Optional<Image> newImageOpt = imageRepository.findById(updatedDto.getImageId());
+        Optional<Image> newImageOpt = imageRepository.findByImage_Id(updatedDTO.getImage());
 
         if (tripReviewPhotoOpt.isPresent() && newImageOpt.isPresent()) {
             TripReviewPhoto tripReviewPhoto = tripReviewPhotoOpt.get();
             tripReviewPhoto.setImage(newImageOpt.get());
             TripReviewPhoto updatedPhoto = tripReviewPhotoRepository.save(tripReviewPhoto);
-            return TripReviewPhotoDto.toDto(updatedPhoto);
+            return TripReviewPhotoDTO.toDTO(updatedPhoto);
         }
 
         throw new IllegalArgumentException("TripReviewPhoto or Image not found");
     }
+    */
 
     // TripReviewPhoto 삭제
     public void deletePhoto(Long tripReviewPhotoId) {

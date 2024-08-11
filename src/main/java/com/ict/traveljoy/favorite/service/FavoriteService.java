@@ -17,9 +17,9 @@ public class FavoriteService {
 	private final FavoriteRepository favoriteRepository;
 	private final ObjectMapper objectMapper;
 	
-	public List<FavoriteDTO> favoriteAll() {
+	public List<FavoriteDto> favoriteAll() {
 		List<Favorite> favoriteEntityList =  favoriteRepository.findAll();
 		
-		return objectMapper.convertValue(favoriteEntityList, objectMapper.getTypeFactory().defaultInstance().constructCollectionType(List.class,FavoriteDTO.class));
+		return objectMapper.convertValue(favoriteEntityList, objectMapper.getTypeFactory().defaultInstance().constructCollectionType(List.class,FavoriteDto.class));
 	}
 }

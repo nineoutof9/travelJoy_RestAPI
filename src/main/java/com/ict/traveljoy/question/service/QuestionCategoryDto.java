@@ -13,7 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class QuestionCategoryDTO {
+public class QuestionCategoryDto {
 
 	private Long questionCategoryId;
 	private String questionCategoryName;
@@ -24,8 +24,8 @@ public class QuestionCategoryDTO {
 				.questionCategoryName(questionCategoryName)
 				.build();
 	}
-	public static QuestionCategoryDTO toDTO(QuestionCategory questionCategory) {
-		return QuestionCategoryDTO.builder()
+	public static QuestionCategoryDto toDTO(QuestionCategory questionCategory) {
+		return QuestionCategoryDto.builder()
 				.questionCategoryId(questionCategory.getId())
 				.questionCategoryName(questionCategory.getQuestionCategoryName())
 				.build();

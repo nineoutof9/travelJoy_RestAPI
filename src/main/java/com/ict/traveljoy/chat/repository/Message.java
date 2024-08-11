@@ -49,12 +49,9 @@ public class Message {
 	@Column(length=2000)
 	private String messageContent;
 	
-	
 	@ColumnDefault("SYSDATE")
 	@CreationTimestamp
 	private LocalDateTime messageSendDate;
-	
-	
 
 	@ColumnDefault("1")
 	@Column(columnDefinition = "NUMBER(1, 0)")
