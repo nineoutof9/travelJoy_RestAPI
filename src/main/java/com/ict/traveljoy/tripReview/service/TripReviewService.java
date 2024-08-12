@@ -32,16 +32,17 @@ public class TripReviewService {
     // TripReview 저장
     @Transactional
     public TripReviewDto saveTripReview(TripReviewDto tripReviewDto) {
-        TripReview tripReview = tripReviewDto.toEntity();
-        if (tripReview.getPlan() != null) {
-            Optional<Plan> planOptional = planRepository.findById(tripReview.getPlan().getId());
-            if (planOptional.isEmpty()) {
-                throw new IllegalArgumentException("Plan with ID " + tripReview.getPlan().getId() + " does not exist.");
-            }
-            tripReview.setPlan(null);
-        }
-        TripReview savedTripReview = tripReviewRepository.save(tripReview);
-        return TripReviewDto.toDto(savedTripReview);
+//        TripReview tripReview = tripReviewDto.toEntity();
+//        if (tripReview.getPlan() != null) {
+//            Optional<Plan> planOptional = planRepository.findById(tripReview.getPlan().getId());
+//            if (planOptional.isEmpty()) {
+//                throw new IllegalArgumentException("Plan with ID " + tripReview.getPlan().getId() + " does not exist.");
+//            }
+//            tripReview.setPlan(null);
+//        }
+//        TripReview savedTripReview = tripReviewRepository.save(tripReview);
+//        return TripReviewDto.toDto(savedTripReview);
+    	return null;
     }
 
     // TripReview 업데이트
