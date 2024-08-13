@@ -33,8 +33,8 @@ public class FavoriteService {
 		List<Favorite> favoriteEntityList;
 		switch(target) {
 			case "event":
-				favoriteEntityList = favoriteRepository.findAll();
-				break;
+				favoriteEntityList = favoriteRepository.findBy();
+				break;// findAllBy엔터티_필드명();
 //			case "food":
 //				favoriteEntityList = favoriteRepository.findByEvent_Id(Long.parseLong(target));
 //				break;
