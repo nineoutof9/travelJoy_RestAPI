@@ -9,8 +9,8 @@ spring:
 #    username: ICTUSER
 #    password: ICT1234
     url: jdbc:oracle:thin:@localhost:1521/XEPDB1
-    username: skstudy
-    password: sk1234
+    username: STUDY
+    password: STUDY
 
     
     hikari:

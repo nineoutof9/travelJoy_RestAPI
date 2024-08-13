@@ -20,58 +20,81 @@ public class FavoriteService {
 	private final ObjectMapper objectMapper;
 	
 	@Transactional(readOnly = true)
-	public List<FavoriteDto> favoriteAll() {
+	public List<FavoriteDTO> favoriteAll() {
 		List<Favorite> favoriteEntityList =  favoriteRepository.findAll();
 		
-		return objectMapper.convertValue(favoriteEntityList, objectMapper.getTypeFactory().defaultInstance().constructCollectionType(List.class,FavoriteDto.class));
+		return objectMapper.convertValue(favoriteEntityList, objectMapper.getTypeFactory().defaultInstance().constructCollectionType(List.class,FavoriteDTO.class));
 	}
 	
-	//target에 따라 favorite내용 다 가져오기
+	//target에 따라 favorite내용 모두 가져오기
 	@Transactional(readOnly = true)
-	public List<FavoriteDto> getFavoriteAllByTarget(String target){
+	public List<FavoriteDTO> getFavoriteAllByTarget(String target){
 		// target : event / food / sight / hotel
 		List<Favorite> favoriteEntityList;
 		switch(target) {
 			case "event":
-				favoriteEntityList = favoriteRepository.findBy();
+				favoriteEntityList = favoriteRepository.findAllByIsEvent(1);
 				break;// findAllBy엔터티_필드명();
-//			case "food":
-//				favoriteEntityList = favoriteRepository.findByEvent_Id(Long.parseLong(target));
-//				break;
-//			case "sight":
-//				favoriteEntityList = favoriteRepository.findByEvent_Id(Long.parseLong(target));
-//				break;
+			case "food":
+				favoriteEntityList = favoriteRepository.findAllByIsFood(1);
+				break;
+			case "sight":
+				favoriteEntityList = favoriteRepository.findAllByIsSight(1);
+				break;
 			default:
-//				favoriteEntityList = favoriteRepository.findByEvent_Id(Long.parseLong(target));
-				favoriteEntityList = favoriteRepository.findAll();
+				favoriteEntityList = favoriteRepository.findAllByIsHotel(1);
 				break;
 		}
 		
-		List<FavoriteDto> favoriteDtos = favoriteEntityList.stream().map(fav->FavoriteDto.toDto(fav)).collect(Collectors.toList());
+		List<FavoriteDTO> favoriteDtos = favoriteEntityList.stream().map(fav->FavoriteDTO.toDTO(fav)).collect(Collectors.toList());
 		return favoriteDtos;
 	}
 	
 	// targetId에 따라 내용 가져오기(url)
 	@Transactional(readOnly = true)
-	public FavoriteDto getFavoriteByTargetId(String targetId) {
-		FavoriteDto.builder()
-		.id(1234l)
-		.targetId(1212l)
-		.isActive(true)
-		.isDelete(false)
-		.isEvent(false)
-		.isFood(true)
-		.isSight(false)
-		.isHotel(false)
-		.build();
+	public FavoriteDTO getFavoriteByTargetId(String target,long targetId) {
+		Favorite favorite;
+		switch(target) {
+		case "event":
+//			favorite = favoriteRepository.findByEventId(targetId);
+			break;// findAllBy엔터티_필드명();
+		case "food":
+//			favorite = favoriteRepository.findByFoodId(targetId);
+			break;
+		case "sight":
+//			favorite = favoriteRepository.findBySightId(targetId);
+			break;
+		default:
+			//favorite = favoriteRepository.findByHotelId(targetId);
+			break;
+	}
+		
+		
 		return null;
 	}
 
 	
 	
 	//즐겨찾기 삭제
-	public FavoriteDto removebyId(String Id) {
-		// TODO Auto-generated method stub
+	public FavoriteDTO removebyId(long id) {
+//		if(cRepository.existsById(id)) {
+//		//삭제전 삭제할 한줄댓글 조회(반환용)
+//		Comments comments = cRepository.findById(id).get();
+//		//삭제처리
+//		cRepository.deleteById(id);
+//		return CommentsDTO.toDTO(comments);
+//	}
+//	else throw new IllegalArgumentException("해당하는 댓글 아이디가 없어요: "+id);
+		if(favoriteRepository.existsById(id)) {
+			Favorite favorite = favoriteRepository.findById(id).get();
+			favoriteRepository.deleteById(id);
+			return FavoriteDTO.toDTO(favorite);
+		}
+		else throw new IllegalArgumentException("오류");
+	}
+
+	public FavoriteDTO removeAll() {
+		favoriteRepository.deleteAll();
 		return null;
 	}
 }

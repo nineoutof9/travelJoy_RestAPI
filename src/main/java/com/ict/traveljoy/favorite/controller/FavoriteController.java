@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ict.traveljoy.favorite.service.FavoriteDto;
+import com.ict.traveljoy.favorite.service.FavoriteDTO;
 import com.ict.traveljoy.favorite.service.FavoriteService;
 
 import lombok.RequiredArgsConstructor;
@@ -30,10 +30,10 @@ public class FavoriteController {
 	//CRUD
 	//event
 	@GetMapping("/event")
-	public ResponseEntity<List<FavoriteDto>> getAllFavEvents(){
+	public ResponseEntity<List<FavoriteDTO>> getAllFavEvents(){
 		
 		try {
-			List<FavoriteDto> favorietEventList = favoriteService.getFavoriteAllByTarget("event");
+			List<FavoriteDTO> favorietEventList = favoriteService.getFavoriteAllByTarget("event");
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(favorietEventList);
 		}
 		catch(Exception e) {
@@ -43,9 +43,9 @@ public class FavoriteController {
 	}
 	
 	@GetMapping("/event/{targetId}")
-	public ResponseEntity<FavoriteDto> getFavEvent(@PathVariable String targetId) {
+	public ResponseEntity<FavoriteDTO> getFavEvent(@PathVariable String targetId) {
 		try {
-			FavoriteDto favorite = favoriteService.getFavoriteByTargetId(targetId);
+			FavoriteDTO favorite = favoriteService.getFavoriteByTargetId("event",Long.parseLong(targetId));
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(favorite);
 		}
 		catch(Exception e) {
@@ -55,9 +55,9 @@ public class FavoriteController {
 	
 	//food
 	@GetMapping("/food")
-	public ResponseEntity<List<FavoriteDto>> getAllFavFoods(){
+	public ResponseEntity<List<FavoriteDTO>> getAllFavFoods(){
 		try {
-			List<FavoriteDto> favorietEventList = favoriteService.getFavoriteAllByTarget("food");
+			List<FavoriteDTO> favorietEventList = favoriteService.getFavoriteAllByTarget("food");
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(favorietEventList);
 		}
 		catch(Exception e) {
@@ -67,9 +67,9 @@ public class FavoriteController {
 	}
 	
 	@GetMapping("/food/{targetId}")
-	public ResponseEntity<FavoriteDto> getFavFood(@PathVariable String targetId) {
+	public ResponseEntity<FavoriteDTO> getFavFood(@PathVariable String targetId) {
 		try {
-			FavoriteDto favorite = favoriteService.getFavoriteByTargetId(targetId);
+			FavoriteDTO favorite = favoriteService.getFavoriteByTargetId("food",Long.parseLong(targetId));
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(favorite);
 		}
 		catch(Exception e) {
@@ -78,9 +78,9 @@ public class FavoriteController {
 	}
 	//sight
 	@GetMapping("/sight")
-	public ResponseEntity<List<FavoriteDto>> getAllFavSights(){
+	public ResponseEntity<List<FavoriteDTO>> getAllFavSights(){
 		try {
-			List<FavoriteDto> favorietEventList = favoriteService.getFavoriteAllByTarget("sight");
+			List<FavoriteDTO> favorietEventList = favoriteService.getFavoriteAllByTarget("sight");
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(favorietEventList);
 		}
 		catch(Exception e) {
@@ -90,9 +90,9 @@ public class FavoriteController {
 	}
 	
 	@GetMapping("/sight/{targetId}")
-	public ResponseEntity<FavoriteDto> getFavSight(@PathVariable String targetId) {
+	public ResponseEntity<FavoriteDTO> getFavSight(@PathVariable String targetId) {
 		try {
-			FavoriteDto favorite = favoriteService.getFavoriteByTargetId(targetId);
+			FavoriteDTO favorite = favoriteService.getFavoriteByTargetId("sight",Long.parseLong(targetId));
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(favorite);
 		}
 		catch(Exception e) {
@@ -101,9 +101,9 @@ public class FavoriteController {
 	}
 	//hotel
 	@GetMapping("/hotel")
-	public ResponseEntity<List<FavoriteDto>> getAllFavHotels(){
+	public ResponseEntity<List<FavoriteDTO>> getAllFavHotels(){
 		try {
-			List<FavoriteDto> favorietEventList = favoriteService.getFavoriteAllByTarget("hotel");
+			List<FavoriteDTO> favorietEventList = favoriteService.getFavoriteAllByTarget("hotel");
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(favorietEventList);
 		}
 		catch(Exception e) {
@@ -113,9 +113,9 @@ public class FavoriteController {
 	}
 	
 	@GetMapping("/hotel/{targetId}")
-	public ResponseEntity<FavoriteDto> getFavHotel(@PathVariable String targetId) {
+	public ResponseEntity<FavoriteDTO> getFavHotel(@PathVariable String targetId) {
 		try {
-			FavoriteDto favorite = favoriteService.getFavoriteByTargetId(targetId);
+			FavoriteDTO favorite = favoriteService.getFavoriteByTargetId("hotel",Long.parseLong(targetId));
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(favorite);
 		}
 		catch(Exception e) {
@@ -126,9 +126,9 @@ public class FavoriteController {
 	
 	//즐겨찾기삭제 id로 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<FavoriteDto> removeFav(@PathVariable String id) {
+	public ResponseEntity<FavoriteDTO> removeOneById(@PathVariable String id) {
 		try {
-			FavoriteDto favorite = favoriteService.removebyId(id);
+			FavoriteDTO favorite = favoriteService.removebyId(Long.parseLong(id));
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(favorite);
 		}
 		catch(Exception e) {
@@ -136,4 +136,14 @@ public class FavoriteController {
 		}
 	}
 	
+	@DeleteMapping("/clear")
+	public ResponseEntity<FavoriteDTO> removeAll() {
+		try {
+			FavoriteDTO favorite = favoriteService.removeAll();
+			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(favorite);
+		}
+		catch(Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+	}
 }

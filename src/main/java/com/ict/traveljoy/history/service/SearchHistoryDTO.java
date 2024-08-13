@@ -17,7 +17,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SearchHistoryDto {
+public class SearchHistoryDTO {
 
 	private Long id;
 	private Users user;
@@ -38,8 +38,8 @@ public class SearchHistoryDto {
 				.build();
 	}
 	
-	public static SearchHistoryDto toDTO(SearchHistory searchHistory) {
-		return SearchHistoryDto.builder()
+	public static SearchHistoryDTO toDTO(SearchHistory searchHistory) {
+		return SearchHistoryDTO.builder()
 				.id(searchHistory.getId())
 				.user(searchHistory.getUser())
 				.searchWord(searchHistory.getSearchWord())

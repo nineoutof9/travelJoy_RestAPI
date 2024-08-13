@@ -16,7 +16,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class FavoriteDto {
+public class FavoriteDTO {
 
 	private Long id;
 	private Users user;
@@ -46,8 +46,8 @@ public class FavoriteDto {
 				.build();
 	}
 	
-	public static FavoriteDto toDto(Favorite favorite) {
-		return FavoriteDto.builder()
+	public static FavoriteDTO toDTO(Favorite favorite) {
+		return FavoriteDTO.builder()
 				.id(favorite.getId())
 				.user(favorite.getUser())
 				.targetId(favorite.getTargetId())
