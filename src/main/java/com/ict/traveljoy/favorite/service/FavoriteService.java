@@ -33,16 +33,17 @@ public class FavoriteService {
 		List<Favorite> favoriteEntityList;
 		switch(target) {
 			case "event":
-				favoriteEntityList = favoriteRepository.findByEvent_Id(Long.parseLong(target));
+				favoriteEntityList = favoriteRepository.findAll();
 				break;
-			case "food":
-				favoriteEntityList = favoriteRepository.findByEvent_Id(Long.parseLong(target));
-				break;
-			case "sight":
-				favoriteEntityList = favoriteRepository.findByEvent_Id(Long.parseLong(target));
-				break;
+//			case "food":
+//				favoriteEntityList = favoriteRepository.findByEvent_Id(Long.parseLong(target));
+//				break;
+//			case "sight":
+//				favoriteEntityList = favoriteRepository.findByEvent_Id(Long.parseLong(target));
+//				break;
 			default:
-				favoriteEntityList = favoriteRepository.findByEvent_Id(Long.parseLong(target));
+//				favoriteEntityList = favoriteRepository.findByEvent_Id(Long.parseLong(target));
+				favoriteEntityList = favoriteRepository.findAll();
 				break;
 		}
 		
@@ -53,7 +54,16 @@ public class FavoriteService {
 	// targetId에 따라 내용 가져오기(url)
 	@Transactional(readOnly = true)
 	public FavoriteDto getFavoriteByTargetId(String targetId) {
-		
+		FavoriteDto.builder()
+		.id(1234l)
+		.targetId(1212l)
+		.isActive(true)
+		.isDelete(false)
+		.isEvent(false)
+		.isFood(true)
+		.isSight(false)
+		.isHotel(false)
+		.build();
 		return null;
 	}
 

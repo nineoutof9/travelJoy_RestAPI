@@ -29,7 +29,7 @@ public class TripReviewPhotoService {
 
     // 특정 TripReview ID로 모든 TripReviewPhoto 찾기
     public List<TripReviewPhotoDto> getPhotosByTripReviewId(Long tripReviewId) {
-        List<TripReviewPhoto> tripReviewPhotos = tripReviewPhotoRepository.findByTripReview_TripReviewId(tripReviewId);
+        List<TripReviewPhoto> tripReviewPhotos = tripReviewPhotoRepository.findByTripReview_Id(tripReviewId);
         return tripReviewPhotos.stream()
                 .map(TripReviewPhotoDto::toDto)
                 .collect(Collectors.toList());
@@ -45,13 +45,13 @@ public class TripReviewPhotoService {
 
     // 특정 TripReview와 Image로 TripReviewPhoto 찾기
     public TripReviewPhotoDto getPhotoByTripReviewIdAndImageId(Long tripReviewId, Long imageId) {
-        Optional<TripReviewPhoto> tripReviewPhotoOpt = tripReviewPhotoRepository.findByTripReview_TripReviewIdAndImage_Id(tripReviewId, imageId);
+        Optional<TripReviewPhoto> tripReviewPhotoOpt = tripReviewPhotoRepository.findByTripReview_IdAndImage_Id(tripReviewId, imageId);
         return tripReviewPhotoOpt.map(TripReviewPhotoDto::toDto).orElse(null);
     }
 
     // TripReviewPhoto ID로 TripReviewPhoto 찾기
     public TripReviewPhotoDto getPhotoById(Long tripReviewPhotoId) {
-        Optional<TripReviewPhoto> tripReviewPhotoOpt = tripReviewPhotoRepository.findByTripReviewPhotoId(tripReviewPhotoId);
+        Optional<TripReviewPhoto> tripReviewPhotoOpt = tripReviewPhotoRepository.findById(tripReviewPhotoId);
         return tripReviewPhotoOpt.map(TripReviewPhotoDto::toDto).orElse(null);
     }
 
