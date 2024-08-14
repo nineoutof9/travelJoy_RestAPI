@@ -30,7 +30,7 @@ public class TripReviewPhoto {
     @SequenceGenerator(name = "seq_trip_review_photo", sequenceName = "seq_trip_review_photo", allocationSize = 1, initialValue = 1)
     @GeneratedValue(generator = "seq_trip_review_photo", strategy = GenerationType.SEQUENCE)
     @Column(name = "TRIP_REVIEW_PHOTO_ID")
-    private Long tripReviewPhotoId;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "TRIP_REVIEW_ID", nullable = false)

@@ -22,53 +22,53 @@ public class FeedbackService {
     }
 
     // planId로 Feedback 조회
-    public List<FeedbackDto> getFeedbacksByPlanId(Long planId) {
-        List<Feedback> feedbacks = feedbackRepository.findByPlan_id(planId);
+    public List<FeedbackDTO> getFeedbacksByPlanId(Long planId) {
+        List<Feedback> feedbacks = feedbackRepository.findByPlanId(planId);
         return feedbacks.stream()
-                .map(FeedbackDto::toDto)
+                .map(FeedbackDTO::toDto)
                 .collect(Collectors.toList());
     }
 
     // 소유자(owner)로 Feedback 조회
-    public List<FeedbackDto> getFeedbacksByOwner(String owner) {
+    public List<FeedbackDTO> getFeedbacksByOwner(String owner) {
         List<Feedback> feedbacks = feedbackRepository.findByOwner(owner);
         return feedbacks.stream()
-                .map(FeedbackDto::toDto)
+                .map(FeedbackDTO::toDto)
                 .collect(Collectors.toList());
     }
 
     // 평점(rate)으로 Feedback 조회
-    public List<FeedbackDto> getFeedbacksByRate(Integer rate) {
+    public List<FeedbackDTO> getFeedbacksByRate(Integer rate) {
         List<Feedback> feedbacks = feedbackRepository.findByRate(rate);
         return feedbacks.stream()
-                .map(FeedbackDto::toDto)
+                .map(FeedbackDTO::toDto)
                 .collect(Collectors.toList());
     }
 
     // Feedback 저장
-    public FeedbackDto saveFeedback(FeedbackDto feedbackDto) {
+    public FeedbackDTO saveFeedback(FeedbackDTO feedbackDto) {
         Feedback feedback = feedbackDto.toEntity();
-        if (feedbackDto.getPlanId() != null) {
-            Plan plan = new Plan();
-            plan.setId(feedbackDto.getPlanId());
-            feedback.setPlan(plan);
-        }
+//        if (feedbackDto.getPlanId() != null) {
+//            Plan plan = new Plan();
+//            plan.setId(feedbackDto.getPlanId());
+//            feedback.setPlan(plan);
+//        }
         Feedback savedFeedback = feedbackRepository.save(feedback);
-        return FeedbackDto.toDto(savedFeedback);
+        return FeedbackDTO.toDto(savedFeedback);
     }
 
     // Feedback 수정
-    public FeedbackDto updateFeedback(FeedbackDto feedbackDto) {
-        Feedback existingFeedback = feedbackRepository.findById(feedbackDto.getFeedbackId()).orElse(null);
+    public FeedbackDTO updateFeedback(FeedbackDTO feedbackDto) {
+        Feedback existingFeedback = feedbackRepository.findById(feedbackDto.getId()).orElse(null);
         if (existingFeedback != null) {
             Plan plan = new Plan();
-            plan.setId(feedbackDto.getPlanId());
+            //plan.setId(feedbackDto.getPlanId());
             existingFeedback.setPlan(plan);
             existingFeedback.setOwner(feedbackDto.getOwner());
             existingFeedback.setRate(feedbackDto.getRate());
 
             Feedback updatedFeedback = feedbackRepository.save(existingFeedback);
-            return FeedbackDto.toDto(updatedFeedback);
+            return FeedbackDTO.toDto(updatedFeedback);
         }
         return null; // 수정할 Feedback이 없는 경우
     }

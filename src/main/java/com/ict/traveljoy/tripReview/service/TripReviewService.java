@@ -1,6 +1,7 @@
 package com.ict.traveljoy.tripReview.service;
 
 import com.ict.traveljoy.image.repository.Image;
+import com.ict.traveljoy.image.repository.ImageRepository;
 import com.ict.traveljoy.plan.repository.Plan;
 import com.ict.traveljoy.plan.repository.PlanRepository;
 import com.ict.traveljoy.tripReview.repository.TripReview;
@@ -29,24 +30,22 @@ public class TripReviewService {
         this.planRepository = planRepository;
     }
 
-    // TripReview 저장
     @Transactional
-    public TripReviewDto saveTripReview(TripReviewDto tripReviewDto) {
+    public TripReviewDto createReview(TripReviewDto tripReviewDto) {
         TripReview tripReview = tripReviewDto.toEntity();
         if (tripReview.getPlan() != null) {
             Optional<Plan> planOptional = planRepository.findById(tripReview.getPlan().getId());
             if (planOptional.isEmpty()) {
                 throw new IllegalArgumentException("Plan with ID " + tripReview.getPlan().getId() + " does not exist.");
             }
-            tripReview.setPlan(null);
+            tripReview.setPlan(planOptional.get());
         }
         TripReview savedTripReview = tripReviewRepository.save(tripReview);
-        return TripReviewDto.fromEntity(savedTripReview);
+        return TripReviewDto.toDto(savedTripReview);
     }
 
-    // TripReview 업데이트
     @Transactional
-    public TripReviewDto updateTripReview(Long tripReviewId, TripReviewDto tripReviewDto) {
+    public TripReviewDto updateReview(Long tripReviewId, TripReviewDto tripReviewDto) {
         Optional<TripReview> tripReviewOptional = tripReviewRepository.findById(tripReviewId);
         if (tripReviewOptional.isEmpty()) {
             throw new IllegalArgumentException("TripReview with ID " + tripReviewId + " does not exist.");
@@ -58,25 +57,26 @@ public class TripReviewService {
         tripReview.setReviewContent(tripReviewDto.getReviewContent());
         tripReview.setUrl(tripReviewDto.getUrl());
         tripReview.setPostDate(tripReviewDto.getPostDate());
-        tripReview.setIsActive(tripReviewDto.getIsActive() == true ? 1 : 0);
-        tripReview.setIsDelete(tripReviewDto.getIsDelete() == true ? 1 : 0);
+        tripReview.setIsActive(tripReviewDto.getIsActive() ? 1 : 0);
+        tripReview.setIsDelete(tripReviewDto.getIsDelete() ? 1 : 0);
         tripReview.setDeleteDate(tripReviewDto.getDeleteDate());
 
-        if (tripReviewDto.getPlanId() != null) {
-            Optional<Plan> planOptional = planRepository.findById(tripReviewDto.getPlanId());
+        if (tripReviewDto.getPlan() != null) {
+            Optional<Plan> planOptional = planRepository.findById(tripReviewDto.getPlan().getId());
             if (planOptional.isEmpty()) {
-                throw new IllegalArgumentException("Plan with ID " + tripReviewDto.getPlanId() + " does not exist.");
+                throw new IllegalArgumentException("Plan with ID " + tripReviewDto.getPlan().getId() + " does not exist.");
             }
+            tripReview.setPlan(planOptional.get());
+        } else {
             tripReview.setPlan(null);
         }
 
         TripReview updatedTripReview = tripReviewRepository.save(tripReview);
-        return TripReviewDto.fromEntity(updatedTripReview);
+        return TripReviewDto.toDto(updatedTripReview);
     }
 
-    // TripReview 삭제
     @Transactional
-    public void deleteTripReview(Long tripReviewId) {
+    public void deleteReview(Long tripReviewId) {
         Optional<TripReview> tripReviewOptional = tripReviewRepository.findById(tripReviewId);
         if (tripReviewOptional.isEmpty()) {
             throw new IllegalArgumentException("TripReview with ID " + tripReviewId + " does not exist.");
@@ -85,76 +85,37 @@ public class TripReviewService {
         tripReview.setIsDelete(1);
         tripReview.setDeleteDate(new Timestamp(System.currentTimeMillis()));
         tripReviewRepository.save(tripReview);
+        System.out.println("Deleted review with ID: " + tripReviewId);
+        
+    }
+    
+    public List<TripReviewDto> getAllReviews() {
+        List<TripReview> tripReviews = tripReviewRepository.findAllActiveReviews();
+        return tripReviews.stream().map(TripReviewDto::toDto).toList();
     }
 
-    // TripReview 조회
-    public TripReviewDto getTripReview(Long tripReviewId) {
+    public TripReviewDto getReviewById(Long tripReviewId) {
         Optional<TripReview> tripReviewOptional = tripReviewRepository.findById(tripReviewId);
         if (tripReviewOptional.isEmpty()) {
             throw new IllegalArgumentException("TripReview with ID " + tripReviewId + " does not exist.");
         }
-        return TripReviewDto.fromEntity(tripReviewOptional.get());
+        return TripReviewDto.toDto(tripReviewOptional.get());
     }
 
-    // 모든 TripReview 조회
-    public List<TripReviewDto> getAllTripReviews() {
-        List<TripReview> tripReviews = tripReviewRepository.findAll();
-        return tripReviews.stream().map(TripReviewDto::fromEntity).toList();
-    }
-
-    // 특정 Writer의 TripReview 조회
-    public List<TripReviewDto> getTripReviewsByWriter(String writer) {
+    public List<TripReviewDto> getReviewsByWriter(String writer) {
         List<TripReview> tripReviews = tripReviewRepository.findByWriter(writer);
-        return tripReviews.stream().map(TripReviewDto::fromEntity).toList();
+        return tripReviews.stream().map(TripReviewDto::toDto).toList();
     }
 
-    // 특정 Plan ID로 TripReview 조회
-    public List<TripReviewDto> getTripReviewsByPlanId(Long planId) {
-        List<TripReview> tripReviews = tripReviewRepository.findByPlan_id(planId);
-        return tripReviews.stream().map(TripReviewDto::fromEntity).toList();
+    public List<TripReviewDto> getReviewsByPlanId(Long planId) {
+        Plan plan = new Plan();
+        plan.setId(planId);
+        List<TripReview> tripReviews = tripReviewRepository.findByPlan(plan);
+        return tripReviews.stream().map(TripReviewDto::toDto).toList();
     }
 
-    // 제목에 특정 문자열이 포함된 TripReview 조회
-    public List<TripReviewDto> getTripReviewsByTitleContaining(String title) {
+    public List<TripReviewDto> getReviewsByTitleContaining(String title) {
         List<TripReview> tripReviews = tripReviewRepository.findByTitleContaining(title);
-        return tripReviews.stream().map(TripReviewDto::fromEntity).toList();
-    }
-
-    // TripReviewPhoto 저장
-    @Transactional
-    public TripReviewPhotoDto saveTripReviewPhoto(TripReviewPhotoDto tripReviewPhotoDto) {
-        TripReviewPhoto tripReviewPhoto = tripReviewPhotoDto.toEntity();
-        TripReview tripReview = tripReviewRepository.findById(tripReviewPhoto.getTripReview().getTripReviewId())
-                .orElseThrow(() -> new IllegalArgumentException("TripReview with ID " + tripReviewPhoto.getTripReview().getTripReviewId() + " does not exist."));
-        tripReviewPhoto.setTripReview(tripReview);
-
-        Image image = tripReviewPhoto.getImage();
-        if (image != null) {
-            image = new Image(); // Here you should load the image entity from your image repository
-            image.setId(tripReviewPhoto.getImage().getId());
-            tripReviewPhoto.setImage(image);
-        }
-
-        TripReviewPhoto savedTripReviewPhoto = tripReviewPhotoRepository.save(tripReviewPhoto);
-        return TripReviewPhotoDto.toDto(savedTripReviewPhoto);
-    }
-
-    // TripReviewPhoto 조회
-    public TripReviewPhotoDto getTripReviewPhoto(Long tripReviewPhotoId) {
-        Optional<TripReviewPhoto> tripReviewPhotoOptional = tripReviewPhotoRepository.findById(tripReviewPhotoId);
-        if (tripReviewPhotoOptional.isEmpty()) {
-            throw new IllegalArgumentException("TripReviewPhoto with ID " + tripReviewPhotoId + " does not exist.");
-        }
-        return TripReviewPhotoDto.toDto(tripReviewPhotoOptional.get());
-    }
-
-    // TripReviewPhoto 삭제
-    @Transactional
-    public void deleteTripReviewPhoto(Long tripReviewPhotoId) {
-        Optional<TripReviewPhoto> tripReviewPhotoOptional = tripReviewPhotoRepository.findById(tripReviewPhotoId);
-        if (tripReviewPhotoOptional.isEmpty()) {
-            throw new IllegalArgumentException("TripReviewPhoto with ID " + tripReviewPhotoId + " does not exist.");
-        }
-        tripReviewPhotoRepository.deleteById(tripReviewPhotoId);
+        return tripReviews.stream().map(TripReviewDto::toDto).toList();
     }
 }

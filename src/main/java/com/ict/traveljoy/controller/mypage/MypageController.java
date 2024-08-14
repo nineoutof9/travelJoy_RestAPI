@@ -42,36 +42,36 @@ import org.springframework.web.bind.annotation.RequestParam;
 @CrossOrigin
 @RequiredArgsConstructor
 public class MypageController {
-	
-	@Autowired
-	private final HotelService hotelService;
-	@Autowired
-	private final FoodService foodService;
-	@Autowired
-	private final SightService sightService;
-	@Autowired
-	private final TripReviewService tripReviewService;
-	@Autowired
-	private final TripReviewPhotoService tripReviewPhotoService;
-	
+   
+   @Autowired
+   private final HotelService hotelService;
+   @Autowired
+   private final FoodService foodService;
+   @Autowired
+   private final SightService sightService;
+   @Autowired
+   private final TripReviewService tripReviewService;
+   @Autowired
+   private final TripReviewPhotoService tripReviewPhotoService;
+   
 
-	
+   
 
 //////////////////////////////////숙소
-	//숙소 저장
-	@PostMapping("/hotel/{hotel}")
-	public ResponseEntity<HotelDTO> saveHotel(HotelDTO hotelDTO) {
-		
-		try {
-		HotelDTO saveDTO = hotelService.saveHotel(hotelDTO);
-		return ResponseEntity.ok(saveDTO);
-		} catch(Exception e) {e.printStackTrace();
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-		}
-	}
-	
-	//숙소 조회
-	@GetMapping("/hotel/{hotel}")
+   //숙소 저장
+   @PostMapping("/hotel/{hotel}")
+   public ResponseEntity<HotelDTO> saveHotel(HotelDTO hotelDTO) {
+      
+      try {
+      HotelDTO saveDTO = hotelService.saveHotel(hotelDTO);
+      return ResponseEntity.ok(saveDTO);
+      } catch(Exception e) {e.printStackTrace();
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+      }
+   }
+   
+   //숙소 조회
+   @GetMapping("/hotel/{hotel}")
     public ResponseEntity<List<HotelDTO>> getHotels(
             @RequestParam(required = false) Long id,
             @RequestParam(required = false) Long regionId,
@@ -110,44 +110,44 @@ public class MypageController {
         }
     }
 
-	//숙소 수정
+   //숙소 수정
 
-		@PutMapping("/hotel/{hotel}")
-		public ResponseEntity<Optional<HotelDTO>> updateHotel(@PathVariable Long id, @RequestBody HotelDTO dto) {
-			
-			try {
-			Optional<HotelDTO> updateDTO = hotelService.findHotelById(id);
-			return ResponseEntity.ok(updateDTO);
-			} catch(Exception e) {e.printStackTrace();
-			
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);}
-			
+      @PutMapping("/hotel/{hotel}")
+      public ResponseEntity<Optional<HotelDTO>> updateHotel(@PathVariable Long id, @RequestBody HotelDTO dto) {
+         
+         try {
+         Optional<HotelDTO> updateDTO = hotelService.findHotelById(id);
+         return ResponseEntity.ok(updateDTO);
+         } catch(Exception e) {e.printStackTrace();
+         
+         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);}
+         
 
-		}
+      }
 
-	
-	//숙소 삭제
-	@DeleteMapping("/hotel/{hotel}")
-	public String deleteHotel(@PathVariable Long id) {
-		hotelService.deleteHotel(id);
-		return "숙소 삭제 성공";
-	}
-	
+   
+   //숙소 삭제
+   @DeleteMapping("/hotel/{hotel}")
+   public String deleteHotel(@PathVariable Long id) {
+      hotelService.deleteHotel(id);
+      return "숙소 삭제 성공";
+   }
+   
 //////////////////////////////////음식
-	//음식 저장
-	@PostMapping("/food/{food}")
-	public ResponseEntity<FoodDTO> saveFood(FoodDTO foodDTO) {
+   //음식 저장
+   @PostMapping("/food/{food}")
+   public ResponseEntity<FoodDTO> saveFood(FoodDTO foodDTO) {
 
-		try {
-		FoodDTO saveDTO = foodService.saveFood(foodDTO);
-		return ResponseEntity.ok(saveDTO);
-		} catch(Exception e) {e.printStackTrace();
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-		}
-		
-	}
-	//음식 조회
-	@GetMapping("/food/{food}")
+      try {
+      FoodDTO saveDTO = foodService.saveFood(foodDTO);
+      return ResponseEntity.ok(saveDTO);
+      } catch(Exception e) {e.printStackTrace();
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+      }
+      
+   }
+   //음식 조회
+   @GetMapping("/food/{food}")
     public ResponseEntity<List<FoodDTO>> getFood(
             @RequestParam(required = false) Long id,
             @RequestParam(required = false) Long regionId,
@@ -181,40 +181,40 @@ public class MypageController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ArrayList<>());
         }
     }
-	//음식 수정
+   //음식 수정
 
-		@PutMapping("/food/{food}")
-		public ResponseEntity<Optional<FoodDTO>> updateFood(@PathVariable Long id, @RequestBody FoodDTO dto) {
-			
-			try {
-			Optional<FoodDTO> updateDTO = foodService.findFoodById(id);
-			return ResponseEntity.ok(updateDTO);
-			} catch(Exception e) {e.printStackTrace();
-			
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);}
-		}
+      @PutMapping("/food/{food}")
+      public ResponseEntity<Optional<FoodDTO>> updateFood(@PathVariable Long id, @RequestBody FoodDTO dto) {
+         
+         try {
+         Optional<FoodDTO> updateDTO = foodService.findFoodById(id);
+         return ResponseEntity.ok(updateDTO);
+         } catch(Exception e) {e.printStackTrace();
+         
+         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);}
+      }
 
-	//음식 삭제
-	@DeleteMapping("/food/{food}")
-	public String deleteFood(@PathVariable Long id) {
-		foodService.deleteFood(id);
-		return "음식 삭제 성공";
-	}
-	
+   //음식 삭제
+   @DeleteMapping("/food/{food}")
+   public String deleteFood(@PathVariable Long id) {
+      foodService.deleteFood(id);
+      return "음식 삭제 성공";
+   }
+   
 //////////////////////////////////명소
-	//명소 저장
-	@PostMapping("/sight/{sight}")
-	public ResponseEntity<SightDTO> saveSight(SightDTO sightDTO) {
-	
-		try {
-		SightDTO saveDTO = sightService.saveSight(sightDTO);
-		return ResponseEntity.ok(saveDTO);
-		} catch(Exception e) {e.printStackTrace();
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-		}
-	}
-	
-	@GetMapping("/sight/{sight}")
+   //명소 저장
+   @PostMapping("/sight/{sight}")
+   public ResponseEntity<SightDTO> saveSight(SightDTO sightDTO) {
+   
+      try {
+      SightDTO saveDTO = sightService.saveSight(sightDTO);
+      return ResponseEntity.ok(saveDTO);
+      } catch(Exception e) {e.printStackTrace();
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+      }
+   }
+   
+   @GetMapping("/sight/{sight}")
     public ResponseEntity<List<SightDTO>> getSight(
             @RequestParam(required = false) Long id,
             @RequestParam(required = false) Long regionId,
@@ -245,165 +245,165 @@ public class MypageController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ArrayList<>());
         }
     }
-	
-	//명소 수정
-	@PutMapping("/sight/{sight}")
-	public ResponseEntity<Optional<SightDTO>> updateSight(@PathVariable Long id, @RequestBody SightDTO dto) {
-		
-		try {
-		Optional<SightDTO> updateDTO = sightService.findSightById(id);
-		return ResponseEntity.ok(updateDTO);
-		} catch(Exception e) {e.printStackTrace();
-		
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);}
-	}
+   
+   //명소 수정
+   @PutMapping("/sight/{sight}")
+   public ResponseEntity<Optional<SightDTO>> updateSight(@PathVariable Long id, @RequestBody SightDTO dto) {
+      
+      try {
+      Optional<SightDTO> updateDTO = sightService.findSightById(id);
+      return ResponseEntity.ok(updateDTO);
+      } catch(Exception e) {e.printStackTrace();
+      
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);}
+   }
 
-	
-	@DeleteMapping("/sight/{sight}")
-	public String deleteSight(@PathVariable Long id) {
-		sightService.deleteSight(id);
-		return "명소 삭제 성공";
-	}
-	
+   
+   @DeleteMapping("/sight/{sight}")
+   public String deleteSight(@PathVariable Long id) {
+      sightService.deleteSight(id);
+      return "명소 삭제 성공";
+   }
+   
 
-	@GetMapping("/getBookmark")
-	public String getBookmark() {
+   @GetMapping("/getBookmark")
+   public String getBookmark() {
 
-		return "즐겨찾기한 관광지, 숙소, 맛집 등 장소 불러오기";
-	}
-	///////여행 리뷰 	
-	@PostMapping("/trip-reviews")
-	public ResponseEntity<TripReviewDto> saveTripReview(@RequestBody TripReviewDto tripReviewDto) {
-		try {
-			TripReviewDto saveDTO = tripReviewService.saveTripReview(tripReviewDto);
-			return ResponseEntity.ok(saveDTO);
-		}catch(Exception e) {e.printStackTrace();
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-		}
+      return "즐겨찾기한 관광지, 숙소, 맛집 등 장소 불러오기";
+   }
+   ///////여행 리뷰    
+   @PostMapping("/trip-reviews")
+   public ResponseEntity<TripReviewDto> saveTripReview(@RequestBody TripReviewDto tripReviewDto) {
+      try {
+         TripReviewDto saveDTO = tripReviewService.saveTripReview(tripReviewDto);
+         return ResponseEntity.ok(saveDTO);
+      }catch(Exception e) {e.printStackTrace();
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+      }
 }
-	
-	@PostMapping("/trip-reviews/photo")
-	public ResponseEntity<TripReviewPhotoDto> saveTripReviewPhoto(@RequestBody TripReviewPhotoDto tripReviewPhotoDto) {
-		
-		try {
-			TripReviewPhotoDto saveDTO = tripReviewPhotoService.savePhoto(tripReviewPhotoDto);
-			return ResponseEntity.ok(saveDTO);
-		}catch(Exception e) {e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-		}
+   
+   @PostMapping("/trip-reviews/photo")
+   public ResponseEntity<TripReviewPhotoDto> saveTripReviewPhoto(@RequestBody TripReviewPhotoDto tripReviewPhotoDTO) {
+      
+//      try {
+//         TripReviewPhotoDTO saveDTO = tripReviewPhotoService.savePhoto(tripReviewPhotoDTO);
+//         return ResponseEntity.ok(saveDTO);
+//      }catch(Exception e) {e.printStackTrace();
+         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+//      }
 }
-	
-	@GetMapping("/trip-reviews")
-	public ResponseEntity<List<TripReviewDto>> getTripReview(
-	        @RequestParam(required = false) Long tripReviewId,
-	        @RequestParam(required = false) String writer,
-	        @RequestParam(required = false) Long planId,
-	        @RequestParam(required = false) String title) {
-		try {
-	        if (tripReviewId != null) {
-	            TripReviewDto dto = tripReviewService.getTripReview(tripReviewId);
-	            return ResponseEntity.ok(List.of(dto));
-	        } else if (writer != null) {
-	            return ResponseEntity.ok(tripReviewService.getTripReviewsByWriter(writer));
-	        } else if (planId != null) {
-	            return ResponseEntity.ok(tripReviewService.getTripReviewsByPlanId(planId));
-	        } else if (title != null) {
-	            return ResponseEntity.ok(tripReviewService.getTripReviewsByTitleContaining(title));
-	        } else {
-	            return ResponseEntity.ok(tripReviewService.getAllTripReviews());
-	        }
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ArrayList<>());
-	    }
-	}
+   
+   @GetMapping("/trip-reviews")
+   public ResponseEntity<List<TripReviewDto>> getTripReview(
+           @RequestParam(required = false) Long tripReviewId,
+           @RequestParam(required = false) String writer,
+           @RequestParam(required = false) Long planId,
+           @RequestParam(required = false) String title) {
+      try {
+           if (tripReviewId != null) {
+               TripReviewDto dto = tripReviewService.getTripReview(tripReviewId);
+               return ResponseEntity.ok(List.of(dto));
+           } else if (writer != null) {
+               return ResponseEntity.ok(tripReviewService.getTripReviewsByWriter(writer));
+           } else if (planId != null) {
+               return ResponseEntity.ok(tripReviewService.getTripReviewsByPlanId(planId));
+           } else if (title != null) {
+               return ResponseEntity.ok(tripReviewService.getTripReviewsByTitleContaining(title));
+           } else {
+               return ResponseEntity.ok(tripReviewService.getAllTripReviews());
+           }
+       } catch (Exception e) {
+           e.printStackTrace();
+           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ArrayList<>());
+       }
+   }
 
-	
-	@GetMapping("/trip-reviews/photo")
-	public ResponseEntity<List<TripReviewPhotoDto>> getTripReviewPhoto(
-	        @RequestParam(required = false) Long tripReviewId,
-	        @RequestParam(required = false) Long imageId,
-	        @RequestParam(required = false) Long tripReviewPhotoId) {
-		try {
-	        if (tripReviewId != null && imageId != null) {
-	        	TripReviewPhotoDto dto = tripReviewPhotoService.getPhotoByTripReviewIdAndImageId(tripReviewId, imageId);
-	            return ResponseEntity.ok(List.of(dto));
-	        } else if (tripReviewPhotoId != null) {
-	            return ResponseEntity.ok(List.of(tripReviewPhotoService.getPhotoById(tripReviewPhotoId)));
-	        } else if (imageId != null) {
-	            return ResponseEntity.ok(tripReviewPhotoService.getPhotosByImageId(imageId));
-	        } else if (tripReviewId != null) {
-	            return ResponseEntity.ok(tripReviewPhotoService.getPhotosByTripReviewId(tripReviewId));
-	        } else {
-	            return ResponseEntity.ok(new ArrayList<>());
-	        }
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ArrayList<>());
-	    }
-	}
-	
-	
-	@PutMapping("/trip-reviews/{id}")
-	public ResponseEntity<TripReviewDto> updateTripReview(@PathVariable Long tripReviewId,
-	        @RequestBody TripReviewDto tripReviewDto) {
-	    try {
-	        TripReviewDto updatedDTO = tripReviewService.updateTripReview(tripReviewId, tripReviewDto);
-	        return ResponseEntity.ok(updatedDTO);
-	    }catch(Exception e) {e.printStackTrace();
-		
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);}
-	}
+   
+   @GetMapping("/trip-reviews/photo")
+   public ResponseEntity<List<TripReviewPhotoDto>> getTripReviewPhoto(
+           @RequestParam(required = false) Long tripReviewId,
+           @RequestParam(required = false) Long imageId,
+           @RequestParam(required = false) Long tripReviewPhotoId) {
+      try {
+           if (tripReviewId != null && imageId != null) {
+              TripReviewPhotoDto dto = tripReviewPhotoService.getPhotoByTripReviewIdAndImageId(tripReviewId, imageId);
+               return ResponseEntity.ok(List.of(dto));
+           } else if (tripReviewPhotoId != null) {
+               return ResponseEntity.ok(List.of(tripReviewPhotoService.getPhotoById(tripReviewPhotoId)));
+           } else if (imageId != null) {
+               return ResponseEntity.ok(tripReviewPhotoService.getPhotosByImageId(imageId));
+           } else if (tripReviewId != null) {
+               return ResponseEntity.ok(tripReviewPhotoService.getPhotosByTripReviewId(tripReviewId));
+           } else {
+               return ResponseEntity.ok(new ArrayList<>());
+           }
+       } catch (Exception e) {
+           e.printStackTrace();
+           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ArrayList<>());
+       }
+   }
+   
+   
+   @PutMapping("/trip-reviews/{id}")
+   public ResponseEntity<TripReviewDto> updateTripReview(@PathVariable Long tripReviewId,
+           @RequestBody TripReviewDto tripReviewDto) {
+       try {
+           TripReviewDto updatedDTO = tripReviewService.updateTripReview(tripReviewId, tripReviewDto);
+           return ResponseEntity.ok(updatedDTO);
+       }catch(Exception e) {e.printStackTrace();
+      
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);}
+   }
 
-	
-	@PutMapping("/trip-reviews/photo/{id}")
-	public ResponseEntity<TripReviewPhotoDto> updateTripReviewPhoto(@PathVariable Long tripReviewPhotoId,
-	        @RequestBody TripReviewPhotoDto tripReviewPhotoDto) {
-	    try {
-	        TripReviewPhotoDto updatedDTO = tripReviewPhotoService.updatePhoto(tripReviewPhotoId, tripReviewPhotoDto);
-	        return ResponseEntity.ok(updatedDTO);
-	    }catch(Exception e) {e.printStackTrace();
-		
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);}
+   
+   @PutMapping("/trip-reviews/photo/{id}")
+   public ResponseEntity<TripReviewPhotoDto> updateTripReviewPhoto(@PathVariable Long tripReviewPhotoId,
+           @RequestBody TripReviewPhotoDto tripReviewPhotoDto) {
+//       try {
+//           TripReviewPhotoDTO updatedDTO = tripReviewPhotoService.updatePhoto(tripReviewPhotoId, tripReviewPhotoDTO);
+//           return ResponseEntity.ok(updatedDTO);
+//       }catch(Exception e) {e.printStackTrace();
+      
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);//}
 
-	}
-	
-	
-	@DeleteMapping("/trip-reviews/{id}")
-	public ResponseEntity<String> deleteTripReview(@PathVariable Long tripReviewId) {
-	    try {
-	        tripReviewService.deleteTripReview(tripReviewId);
-	        return ResponseEntity.ok("여행 리뷰 삭제 성공");
-	    }catch(Exception e) {e.printStackTrace();
-		
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);}
+   }
+   
+   
+   @DeleteMapping("/trip-reviews/{id}")
+   public ResponseEntity<String> deleteTripReview(@PathVariable Long tripReviewId) {
+       try {
+           tripReviewService.deleteTripReview(tripReviewId);
+           return ResponseEntity.ok("여행 리뷰 삭제 성공");
+       }catch(Exception e) {e.printStackTrace();
+      
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);}
 
-	}
-	
-	@DeleteMapping("/trip-reviews/photo/{id}")
-	public ResponseEntity<String> deleteTripReviewAndPhoto(@PathVariable Long tripReviewPhotoId) {
-	    try {
-	        tripReviewPhotoService.deletePhoto(tripReviewPhotoId);
-	        return ResponseEntity.ok("여행 리뷰 사진 삭제 성공");
-	    }catch(Exception e) {e.printStackTrace();
-		
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);}
+   }
+   
+   @DeleteMapping("/trip-reviews/photo/{id}")
+   public ResponseEntity<String> deleteTripReviewAndPhoto(@PathVariable Long tripReviewPhotoId) {
+       try {
+           tripReviewPhotoService.deletePhoto(tripReviewPhotoId);
+           return ResponseEntity.ok("여행 리뷰 사진 삭제 성공");
+       }catch(Exception e) {e.printStackTrace();
+      
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);}
 
-	}
-	
+   }
+   
 
-	
-	@GetMapping("/setSchedule")
-	public String setSchedule() {
-		return "일정 저장 / 삭제 / 수정";
-	}
-	
-	@GetMapping("/getSchedule")
-	public String getSchedule() {
-		return "일정 불러오기";
-	}
-	
-	
-	
+   
+   @GetMapping("/setSchedule")
+   public String setSchedule() {
+      return "일정 저장 / 삭제 / 수정";
+   }
+   
+   @GetMapping("/getSchedule")
+   public String getSchedule() {
+      return "일정 불러오기";
+   }
+   
+   
+   
 
 }

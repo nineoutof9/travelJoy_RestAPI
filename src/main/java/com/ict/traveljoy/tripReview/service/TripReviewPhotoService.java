@@ -1,9 +1,9 @@
 package com.ict.traveljoy.tripReview.service;
 
-import com.ict.traveljoy.tripReview.repository.TripReviewPhoto;
-import com.ict.traveljoy.tripReview.repository.TripReviewPhotoRepository;
 import com.ict.traveljoy.image.repository.Image;
 import com.ict.traveljoy.image.repository.ImageRepository;
+import com.ict.traveljoy.tripReview.repository.TripReviewPhoto;
+import com.ict.traveljoy.tripReview.repository.TripReviewPhotoRepository;
 import com.ict.traveljoy.tripReview.repository.TripReview;
 import com.ict.traveljoy.tripReview.repository.TripReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,68 +27,46 @@ public class TripReviewPhotoService {
         this.tripReviewRepository = tripReviewRepository;
     }
 
-    // 특정 TripReview ID로 모든 TripReviewPhoto 찾기
-    public List<TripReviewPhotoDto> getPhotosByTripReviewId(Long tripReviewId) {
-        List<TripReviewPhoto> tripReviewPhotos = tripReviewPhotoRepository.findByTripReview_TripReviewId(tripReviewId);
+    public List<TripReviewPhotoDto> getPhotosByReviewId(Long tripReviewId) {
+        List<TripReviewPhoto> tripReviewPhotos = tripReviewPhotoRepository.findByTripReviewId(tripReviewId);
         return tripReviewPhotos.stream()
                 .map(TripReviewPhotoDto::toDto)
                 .collect(Collectors.toList());
     }
 
-    // 특정 Image ID로 모든 TripReviewPhoto 찾기
     public List<TripReviewPhotoDto> getPhotosByImageId(Long imageId) {
-        List<TripReviewPhoto> tripReviewPhotos = tripReviewPhotoRepository.findByImage_Id(imageId);
+        List<TripReviewPhoto> tripReviewPhotos = tripReviewPhotoRepository.findByImageId(imageId);
         return tripReviewPhotos.stream()
                 .map(TripReviewPhotoDto::toDto)
                 .collect(Collectors.toList());
     }
 
-    // 특정 TripReview와 Image로 TripReviewPhoto 찾기
     public TripReviewPhotoDto getPhotoByTripReviewIdAndImageId(Long tripReviewId, Long imageId) {
-        Optional<TripReviewPhoto> tripReviewPhotoOpt = tripReviewPhotoRepository.findByTripReview_TripReviewIdAndImage_Id(tripReviewId, imageId);
+        Optional<TripReviewPhoto> tripReviewPhotoOpt = tripReviewPhotoRepository.findByTripReviewIdAndImageId(tripReviewId, imageId);
         return tripReviewPhotoOpt.map(TripReviewPhotoDto::toDto).orElse(null);
     }
 
-    // TripReviewPhoto ID로 TripReviewPhoto 찾기
     public TripReviewPhotoDto getPhotoById(Long tripReviewPhotoId) {
-        Optional<TripReviewPhoto> tripReviewPhotoOpt = tripReviewPhotoRepository.findByTripReviewPhotoId(tripReviewPhotoId);
+        Optional<TripReviewPhoto> tripReviewPhotoOpt = tripReviewPhotoRepository.findById(tripReviewPhotoId);
         return tripReviewPhotoOpt.map(TripReviewPhotoDto::toDto).orElse(null);
     }
 
-    // 새로운 TripReviewPhoto 저장
-    public TripReviewPhotoDto savePhoto(TripReviewPhotoDto tripReviewPhotoDto) {
-        Optional<TripReview> tripReviewOpt = tripReviewRepository.findById(tripReviewPhotoDto.getTripReviewId());
-        Optional<Image> imageOpt = imageRepository.findById(tripReviewPhotoDto.getImageId());
+    public TripReviewPhotoDto addPhotoToReview(Long reviewId, TripReviewPhotoDto tripReviewPhotoDto) {
+        TripReviewPhoto tripReviewPhoto = tripReviewPhotoDto.toEntity();
 
-        if (tripReviewOpt.isPresent() && imageOpt.isPresent()) {
-            TripReviewPhoto tripReviewPhoto = TripReviewPhoto.builder()
-                    .tripReview(tripReviewOpt.get())
-                    .image(imageOpt.get())
-                    .build();
-            TripReviewPhoto savedPhoto = tripReviewPhotoRepository.save(tripReviewPhoto);
-            return TripReviewPhotoDto.toDto(savedPhoto);
-        }
+        TripReview tripReview = tripReviewRepository.findById(reviewId)
+                .orElseThrow(() -> new IllegalArgumentException("TripReview with ID " + reviewId + " does not exist."));
+        tripReviewPhoto.setTripReview(tripReview);
 
-        throw new IllegalArgumentException("TripReview or Image not found");
+        Image image = imageRepository.findById(tripReviewPhotoDto.getImage().getId())
+                .orElseThrow(() -> new IllegalArgumentException("Image with ID " + tripReviewPhotoDto.getImage().getId() + " does not exist."));
+        tripReviewPhoto.setImage(image);
+
+        TripReviewPhoto savedTripReviewPhoto = tripReviewPhotoRepository.save(tripReviewPhoto);
+        return TripReviewPhotoDto.toDto(savedTripReviewPhoto);
     }
 
-    // TripReviewPhoto 업데이트
-    public TripReviewPhotoDto updatePhoto(Long tripReviewPhotoId, TripReviewPhotoDto updatedDto) {
-        Optional<TripReviewPhoto> tripReviewPhotoOpt = tripReviewPhotoRepository.findByTripReviewPhotoId(tripReviewPhotoId);
-        Optional<Image> newImageOpt = imageRepository.findById(updatedDto.getImageId());
-
-        if (tripReviewPhotoOpt.isPresent() && newImageOpt.isPresent()) {
-            TripReviewPhoto tripReviewPhoto = tripReviewPhotoOpt.get();
-            tripReviewPhoto.setImage(newImageOpt.get());
-            TripReviewPhoto updatedPhoto = tripReviewPhotoRepository.save(tripReviewPhoto);
-            return TripReviewPhotoDto.toDto(updatedPhoto);
-        }
-
-        throw new IllegalArgumentException("TripReviewPhoto or Image not found");
-    }
-
-    // TripReviewPhoto 삭제
-    public void deletePhoto(Long tripReviewPhotoId) {
-        tripReviewPhotoRepository.deleteById(tripReviewPhotoId);
+    public void deletePhoto(Long photoId) {
+        tripReviewPhotoRepository.deleteById(photoId);
     }
 }
