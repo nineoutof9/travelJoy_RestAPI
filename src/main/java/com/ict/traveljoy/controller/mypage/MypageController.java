@@ -275,7 +275,7 @@ public class MypageController {
    @PostMapping("/trip-reviews")
    public ResponseEntity<TripReviewDto> saveTripReview(@RequestBody TripReviewDto tripReviewDto) {
       try {
-         TripReviewDto saveDTO = tripReviewService.saveTripReview(tripReviewDto);
+         TripReviewDto saveDTO = tripReviewService.createReview(tripReviewDto);
          return ResponseEntity.ok(saveDTO);
       }catch(Exception e) {e.printStackTrace();
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
@@ -301,16 +301,16 @@ public class MypageController {
            @RequestParam(required = false) String title) {
       try {
            if (tripReviewId != null) {
-               TripReviewDto dto = tripReviewService.getTripReview(tripReviewId);
+               TripReviewDto dto = tripReviewService.getReviewById(tripReviewId);
                return ResponseEntity.ok(List.of(dto));
            } else if (writer != null) {
-               return ResponseEntity.ok(tripReviewService.getTripReviewsByWriter(writer));
+               return ResponseEntity.ok(tripReviewService.getReviewsByWriter(writer));
            } else if (planId != null) {
-               return ResponseEntity.ok(tripReviewService.getTripReviewsByPlanId(planId));
+               return ResponseEntity.ok(tripReviewService.getReviewsByPlanId(planId));
            } else if (title != null) {
-               return ResponseEntity.ok(tripReviewService.getTripReviewsByTitleContaining(title));
+               return ResponseEntity.ok(tripReviewService.getReviewsByTitleContaining(title));
            } else {
-               return ResponseEntity.ok(tripReviewService.getAllTripReviews());
+               return ResponseEntity.ok(tripReviewService.getAllReviews());
            }
        } catch (Exception e) {
            e.printStackTrace();
@@ -333,7 +333,7 @@ public class MypageController {
            } else if (imageId != null) {
                return ResponseEntity.ok(tripReviewPhotoService.getPhotosByImageId(imageId));
            } else if (tripReviewId != null) {
-               return ResponseEntity.ok(tripReviewPhotoService.getPhotosByTripReviewId(tripReviewId));
+               return ResponseEntity.ok(tripReviewPhotoService.getPhotosByReviewId(tripReviewId));
            } else {
                return ResponseEntity.ok(new ArrayList<>());
            }
@@ -348,7 +348,7 @@ public class MypageController {
    public ResponseEntity<TripReviewDto> updateTripReview(@PathVariable Long tripReviewId,
            @RequestBody TripReviewDto tripReviewDto) {
        try {
-           TripReviewDto updatedDTO = tripReviewService.updateTripReview(tripReviewId, tripReviewDto);
+           TripReviewDto updatedDTO = tripReviewService.updateReview(tripReviewId, tripReviewDto);
            return ResponseEntity.ok(updatedDTO);
        }catch(Exception e) {e.printStackTrace();
       
@@ -372,7 +372,7 @@ public class MypageController {
    @DeleteMapping("/trip-reviews/{id}")
    public ResponseEntity<String> deleteTripReview(@PathVariable Long tripReviewId) {
        try {
-           tripReviewService.deleteTripReview(tripReviewId);
+           tripReviewService.deleteReview(tripReviewId);
            return ResponseEntity.ok("여행 리뷰 삭제 성공");
        }catch(Exception e) {e.printStackTrace();
       
@@ -402,8 +402,5 @@ public class MypageController {
    public String getSchedule() {
       return "일정 불러오기";
    }
-   
-   
-   
 
 }
