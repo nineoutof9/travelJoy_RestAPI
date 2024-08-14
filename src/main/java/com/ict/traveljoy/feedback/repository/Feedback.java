@@ -4,6 +4,7 @@ import com.ict.traveljoy.plan.repository.Plan;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,9 +31,9 @@ public class Feedback {
     @SequenceGenerator(name = "seq_feedback",sequenceName = "seq_feedback",allocationSize = 1,initialValue = 1)
 	@GeneratedValue(generator = "seq_feedback",strategy = GenerationType.SEQUENCE)
     @Column(name = "FEEDBACK_ID", nullable = false)
-    private Long feedbackId;
+    private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PLAN_ID")
     private Plan plan;
 

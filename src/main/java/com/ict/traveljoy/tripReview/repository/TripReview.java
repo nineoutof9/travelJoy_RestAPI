@@ -34,7 +34,7 @@ public class TripReview {
     @SequenceGenerator(name = "seq_trip_review",sequenceName = "seq_trip_review",allocationSize = 1,initialValue = 1)
     @GeneratedValue(generator = "seq_trip_review",strategy = GenerationType.SEQUENCE)
     @Column(name = "TRIP_REVIEW_ID", nullable = false)
-    private Long tripReviewId;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "PLAN_ID")
