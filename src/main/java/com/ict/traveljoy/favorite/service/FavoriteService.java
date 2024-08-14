@@ -18,6 +18,25 @@ public class FavoriteService {
 
 	private final FavoriteRepository favoriteRepository;
 	private final ObjectMapper objectMapper;
+
+	public FavoriteDTO addFavorite(FavoriteDTO dto,String target) {
+		Favorite newFav = dto.toEntity();
+		switch(target) {
+			case "event":
+				newFav.setIsEvent(1);
+				break;
+			case "food":
+				newFav.setIsFood(1);
+				break;
+			case "sight":
+				newFav.setIsSight(1);
+				break;
+			default:
+				newFav.setIsHotel(1);
+				break;
+		}
+		return FavoriteDTO.toDTO(favoriteRepository.save(newFav));
+	}
 	
 	@Transactional(readOnly = true)
 	public List<FavoriteDTO> favoriteAll() {
@@ -28,21 +47,21 @@ public class FavoriteService {
 	
 	//target에 따라 favorite내용 모두 가져오기
 	@Transactional(readOnly = true)
-	public List<FavoriteDTO> getFavoriteAllByTarget(String target){
+	public List<FavoriteDTO> getFavoriteAllByTarget(String target,long uid){
 		// target : event / food / sight / hotel
 		List<Favorite> favoriteEntityList;
 		switch(target) {
 			case "event":
-				favoriteEntityList = favoriteRepository.findAllByIsEvent(1);
+				favoriteEntityList = favoriteRepository.findAllByUser_IdAndIsEventAndIsActive(uid,1,1);
 				break;// findAllBy엔터티_필드명();
 			case "food":
-				favoriteEntityList = favoriteRepository.findAllByIsFood(1);
+				favoriteEntityList = favoriteRepository.findAllByUser_IdAndIsFoodAndIsActive(uid,1,1);
 				break;
 			case "sight":
-				favoriteEntityList = favoriteRepository.findAllByIsSight(1);
+				favoriteEntityList = favoriteRepository.findAllByUser_IdAndIsSightAndIsActive(uid,1,1);
 				break;
 			default:
-				favoriteEntityList = favoriteRepository.findAllByIsHotel(1);
+				favoriteEntityList = favoriteRepository.findAllByUser_IdAndIsHotelAndIsActive(uid,1,1);
 				break;
 		}
 		
@@ -69,7 +88,6 @@ public class FavoriteService {
 			break;
 	}
 		
-		
 		return null;
 	}
 
@@ -77,24 +95,26 @@ public class FavoriteService {
 	
 	//즐겨찾기 삭제
 	public FavoriteDTO removebyId(long id) {
-//		if(cRepository.existsById(id)) {
-//		//삭제전 삭제할 한줄댓글 조회(반환용)
-//		Comments comments = cRepository.findById(id).get();
-//		//삭제처리
-//		cRepository.deleteById(id);
-//		return CommentsDTO.toDTO(comments);
-//	}
-//	else throw new IllegalArgumentException("해당하는 댓글 아이디가 없어요: "+id);
 		if(favoriteRepository.existsById(id)) {
 			Favorite favorite = favoriteRepository.findById(id).get();
-			favoriteRepository.deleteById(id);
+//			favoriteRepository.deleteById(id);
+			favorite.setIsActive(0);
+			favorite.setIsDelete(1);
+			favoriteRepository.save(favorite);
 			return FavoriteDTO.toDTO(favorite);
 		}
 		else throw new IllegalArgumentException("오류");
 	}
 
 	public FavoriteDTO removeAll() {
-		favoriteRepository.deleteAll();
+//		favoriteRepository.deleteAll();
+		List<Favorite> favoriteEntityList =  favoriteRepository.findAll();
+		for(Favorite fav:favoriteEntityList) {
+			fav.setIsActive(0);
+			fav.setIsDelete(1);
+		}
+		favoriteRepository.saveAll(favoriteEntityList);
 		return null;
 	}
+
 }

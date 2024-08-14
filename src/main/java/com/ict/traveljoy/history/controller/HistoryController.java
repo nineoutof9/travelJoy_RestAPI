@@ -26,6 +26,7 @@ public class HistoryController {
 	private final ObjectMapper objectMapper;
 	
 	//모든 내역 보기 - 링크도 같이 보내주기
+	// user받아서 넘기기기기기기기ㅣ기기
 	@GetMapping
 	public ResponseEntity<List<SearchHistoryDTO>> getAllHistory() {
 		try {
@@ -40,6 +41,7 @@ public class HistoryController {
 	//특정 내역 삭제
 	@DeleteMapping("/{id}")
 	public ResponseEntity<SearchHistoryDTO> removeOneById(@PathVariable String id) {
+		// user별로 삭제하는걸로 로직 바꾸기
 		try {
 			SearchHistoryDTO searchHistory = searchHistoryService.removebyId(Long.parseLong(id));
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(searchHistory);
@@ -53,6 +55,7 @@ public class HistoryController {
 	@DeleteMapping("/clear")
 	public ResponseEntity removeAll() {
 		try {
+			// user별로 삭제하는걸로 로직 바꾸기
 			SearchHistoryDTO searchHistory = searchHistoryService.removeAll();
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(searchHistory);
 		}
