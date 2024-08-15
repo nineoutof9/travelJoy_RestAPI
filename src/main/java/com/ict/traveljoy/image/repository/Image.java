@@ -32,7 +32,8 @@ public class Image {
 	@GeneratedValue(generator = "seq_image",strategy = GenerationType.SEQUENCE)
 	@Column(name="image_id")
 	private Long id;
-	
+
+	//@Column(length = 200,name="image_url")
 	@Column(length = 200)
 	private String imageUrl;
 	

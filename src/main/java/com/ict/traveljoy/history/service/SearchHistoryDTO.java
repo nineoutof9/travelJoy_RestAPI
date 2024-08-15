@@ -3,6 +3,7 @@ package com.ict.traveljoy.history.service;
 import java.time.LocalDateTime;
 
 import com.ict.traveljoy.history.repository.SearchHistory;
+import com.ict.traveljoy.users.repository.Users;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,28 +20,28 @@ import lombok.Setter;
 public class SearchHistoryDTO {
 
 	private Long id;
-	private Long userId;
+	private Users user;
 	private String searchWord;
 	private LocalDateTime searchDate;
 	private Boolean isActive;
 	private Boolean isDelete;
 	private LocalDateTime deleteDate;
-	
+
 	public SearchHistory toEntity() {
 		return SearchHistory.builder()
 				.id(id)
-				.userId(userId)
+				.user(user)
 				.searchWord(searchWord)
 				.searchDate(searchDate)
 				.isActive(isActive == true ? 1 : 0)
 				.isDelete(isDelete == true ? 1 : 0)
 				.build();
 	}
-	
+
 	public static SearchHistoryDTO toDTO(SearchHistory searchHistory) {
 		return SearchHistoryDTO.builder()
 				.id(searchHistory.getId())
-				.userId(searchHistory.getUserId())
+				.user(searchHistory.getUser())
 				.searchWord(searchHistory.getSearchWord())
 				.searchDate(searchHistory.getSearchDate())
 				.isActive(searchHistory.getIsActive() == 1 ? true : false)

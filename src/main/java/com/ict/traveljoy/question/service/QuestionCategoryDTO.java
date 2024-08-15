@@ -17,7 +17,7 @@ public class QuestionCategoryDTO {
 
 	private Long questionCategoryId;
 	private String questionCategoryName;
-	
+
 	public QuestionCategory toEntity() {
 		return QuestionCategory.builder()
 				.id(questionCategoryId)
@@ -31,3 +31,4 @@ public class QuestionCategoryDTO {
 				.build();
 	}
 }
+
