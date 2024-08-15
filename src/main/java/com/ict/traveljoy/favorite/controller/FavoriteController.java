@@ -19,7 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ict.traveljoy.favorite.service.FavoriteDTO;
 import com.ict.traveljoy.favorite.service.FavoriteService;
+import com.ict.traveljoy.security.jwt.util.JwtUtility;
+import com.ict.traveljoy.users.repository.UserRepository;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -27,21 +30,37 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FavoriteController {
 	
+	private final JwtUtility jwtUtil;
 	private final FavoriteService favoriteService; //주입받음
+	private final UserRepository userRepository;
 	private final ObjectMapper objectMapper;
 	
 	//CRUD
 	//CREATE
 	@PostMapping("/{target}")
-	public ResponseEntity<FavoriteDTO> addFavorite(@RequestParam Map map, @PathVariable String target){ //target,targetId받아서 저장하기
+	public ResponseEntity<FavoriteDTO> addFavorite(HttpServletRequest request,@RequestBody FavoriteDTO favoriteDTO, @PathVariable String target){ //target,targetId받아서 저장하기
+		String authorization = request.getHeader("Authorization");
+		String token;
+		
 		try {
-			FavoriteDTO dto = objectMapper.convertValue(map, FavoriteDTO.class);
-			FavoriteDTO insertedDTO = favoriteService.addFavorite(dto,target);
-			return ResponseEntity.ok(insertedDTO);
+			if( authorization.startsWith("Bearer ")){
+				token = authorization.split(" ")[1];
+				String useremail = jwtUtil.getUserEmailFromToken(token);
+				
+				userRepository.findByEmail(useremail).ifPresent(u->{
+					favoriteDTO.setUser(u);
+				});
+			}
+			
+			FavoriteDTO createdFavorite = favoriteService.addFavorite(favoriteDTO,target);
+			if(createdFavorite ==null) {
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
+			 return new ResponseEntity<>(createdFavorite, HttpStatus.CREATED);
 		}
 		catch(Exception e) {
 			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
