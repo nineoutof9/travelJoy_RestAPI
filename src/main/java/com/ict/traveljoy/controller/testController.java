@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ict.traveljoy.users.service.UserDto;
+import com.ict.traveljoy.users.service.UserDTO;
 import com.ict.traveljoy.users.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -35,12 +35,12 @@ public class testController {
     }
     
     @PostMapping("/users")
-    public ResponseEntity<UserDto> signUp(@RequestParam Map<String, Object> map) {
+    public ResponseEntity<UserDTO> signUp(@RequestParam Map<String, Object> map) {
         try {
             System.out.println(map.get("kakao"));
             
-            UserDto dto = objectMapper.convertValue(map, UserDto.class);
-            UserDto insertedDto = usersService.signUp(dto);
+            UserDTO dto = objectMapper.convertValue(map, UserDTO.class);
+            UserDTO insertedDto = usersService.signUp(dto);
             
             return ResponseEntity.ok(insertedDto);
         } catch(Exception e) {

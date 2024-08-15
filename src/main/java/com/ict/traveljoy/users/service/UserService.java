@@ -19,17 +19,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserService {
 	private final UserRepository userRepository;
-	private final ObjectMapper objectMapper;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	@Transactional
-	public UserDto signUp(UserDto dto) {
+	public UserDTO signUp(UserDTO dto) {
 		userRepository.findByEmail(dto.getEmail()).ifPresent(u -> {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이메일이 이미 사용중입니다.");
         });
 		dto = dto.toBuilder()
 		.password(bCryptPasswordEncoder.encode(dto.getPassword())).build();
-		return UserDto.toDto(userRepository.save(dto.toEntity()));
+		return UserDTO.toDTO(userRepository.save(dto.toEntity()));
 	}
 	
 	@Transactional

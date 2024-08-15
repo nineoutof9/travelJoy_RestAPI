@@ -1,7 +1,7 @@
 package com.ict.traveljoy.info.userhandicap.repository;
 
 import com.ict.traveljoy.info.handicap.repository.Handicap;
-import com.ict.traveljoy.info.userhandicap.service.UserHandicapDto;
+import com.ict.traveljoy.info.userhandicap.service.UserHandicapDTO;
 import com.ict.traveljoy.users.repository.Users;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
