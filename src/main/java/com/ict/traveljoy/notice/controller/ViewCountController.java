@@ -27,10 +27,10 @@ public class ViewCountController {
 //	@PostMapping("/") //조회수 생성은 게시글에서 만들때 같이 만들기
 	
 	@GetMapping("/{notice_id}")
-	public ResponseEntity<ViewCountDTO> getViewCount(@PathVariable String noticeId){
+	public ResponseEntity getViewCount(@PathVariable String noticeId){
 		try {
-			ViewCountDTO viewCountDTO= viewCountService.findbyId(Long.parseLong(noticeId));
-			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(viewCountDTO);
+			long viewCount = viewCountService.findbyNoticeId(Long.parseLong(noticeId));
+			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(viewCount);
 		}
 		catch(Exception e) {
 			System.out.println("viewCount_get: ");

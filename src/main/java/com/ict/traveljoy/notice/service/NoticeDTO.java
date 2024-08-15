@@ -41,7 +41,7 @@ public class NoticeDTO {
     }
 
     // 엔티티를 DTO로 변환
-    public static NoticeDTO toDto(Notice notice) {
+    public static NoticeDTO toDTO(Notice notice) {
         return NoticeDTO.builder()
         		.id(notice.getId())
                 .title(notice.getTitle())

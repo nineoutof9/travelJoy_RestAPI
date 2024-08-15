@@ -1,6 +1,7 @@
 package com.ict.traveljoy.notice.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ict.traveljoy.notice.repository.Notice;
@@ -27,15 +28,20 @@ public class ViewCountService {
 			Notice noticeEntity = noticeRepository.findById(noticeId).get();
 			// user_id 받아오기
 //			Users user = noticeRepository.findById(notice_id).orElseThrow(() -> new RuntimeException("Notice not found"));
-			return ViewCountDTO.builder()
-				.notice(noticeEntity)
-//				.user()
-				.build();
+			ViewCount viewCountEntity = new ViewCount();
+			viewCountEntity.setNotice(noticeEntity);
+//			viewCountEntity.setUser(user);
+			return ViewCountDTO.toDTO(viewCountRepository.save(viewCountEntity));
 		}
 		else throw new IllegalArgumentException("오류");
 	}
 	
-	public ViewCountDTO findbyId(long noticeId) {
+	// 단순 횟수 받아오기
+	@Transactional(readOnly = true) //notice id별 sum(count), datetime에 따라 증가
+	public long findbyNoticeId(long noticeId) {
+		if(noticeRepository.existsById(noticeId)) {
+			
+		}
 //		if(noticeRepository.existsById(noticeId)) {
 //			ViewCount viewCountEntity = viewCountRepository.findbyNoticeId
 //		return ViewCountDTO.builder()
@@ -44,8 +50,20 @@ public class ViewCountService {
 //				.build();
 //		}
 //		else throw new IllegalArgumentException("오류");
-		return null;
+		
+		return 4;
 	}
+	
+	// 횟수 증가
+//	 //notice id별, user id별 방문횟수 증가
+//	public long findbyNoticeId(long noticeId,long userId) {
+//		if(noticeRepository.existsById(noticeId)) {
+//			
+//		}
+//
+//		return 4;
+//	}
+	
 	
 
 	public ViewCountDTO updateViewCount(long noticeId) {
