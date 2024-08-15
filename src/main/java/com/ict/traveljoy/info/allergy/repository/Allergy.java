@@ -1,13 +1,9 @@
 package com.ict.traveljoy.info.allergy.repository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
+import com.ict.traveljoy.info.allergymedicine.repository.AllergyMedicine;
 import com.ict.traveljoy.info.userallergy.repository.UserAllergy;
-import com.ict.traveljoy.info.userhandicap.repository.UserHandicap;
-import com.ict.traveljoy.info.userinterest.repository.UserInterest;
-import com.ict.traveljoy.users.repository.Users;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -49,4 +45,7 @@ public class Allergy {
 	
 	@OneToMany(mappedBy = "allergy", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserAllergy> userAllergy;
+	
+	@OneToMany(mappedBy = "allergy", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<AllergyMedicine> allergyMedicines;
 }

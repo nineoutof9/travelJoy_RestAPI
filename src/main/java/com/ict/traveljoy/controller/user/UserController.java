@@ -3,7 +3,7 @@ package com.ict.traveljoy.controller.user;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ict.traveljoy.users.service.UserDto;
+import com.ict.traveljoy.users.service.UserDTO;
 import com.ict.traveljoy.users.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -40,9 +40,9 @@ public class UserController {
 	}
 	*/
 	
-	public ResponseEntity<UserDto> signUp(@RequestBody UserDto dto){
+	public ResponseEntity<UserDTO> signUp(@RequestBody UserDTO dto){
 		try {
-			UserDto insertedDto=userService.signUp(dto);
+			UserDTO insertedDto=userService.signUp(dto);
 			return ResponseEntity.ok(insertedDto);
 		}
 		catch(Exception e) {

@@ -30,6 +30,7 @@ public class PushAlarm {
 	@Id
 	@SequenceGenerator(name = "seq_push_alarm",sequenceName = "seq_push_alarm",allocationSize = 1,initialValue = 1)
 	@GeneratedValue(generator = "seq_push_alarm",strategy = GenerationType.SEQUENCE)
+	@Column(name = "push_alarm_id")
 	private Long id;
 	
 	@Column(length=50)
