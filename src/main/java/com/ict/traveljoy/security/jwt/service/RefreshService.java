@@ -7,7 +7,6 @@ import com.ict.traveljoy.security.jwt.refreshtoken.RefreshRepository;
 import com.ict.traveljoy.security.jwt.refreshtoken.RefreshToken;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @Transactional
@@ -38,5 +37,8 @@ public class RefreshService {
 
     public Optional<RefreshToken> findByUserId(Long id) {
         return refreshRepository.findByUserId(id);
+    }
+    public Optional<RefreshToken> findByUserIdAndUserAgent(Long userId, String userAgent) {
+        return refreshRepository.findByUserIdAndUserAgent(userId, userAgent);
     }
 }
