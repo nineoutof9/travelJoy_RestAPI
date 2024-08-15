@@ -20,18 +20,19 @@ import lombok.Setter;
 public class QuestionDTO {
 
 	private Long id;
-	private Long userId;
-	private Long questionCategoryId;
+	private Users user;
+	private QuestionCategory questionCategory;
 	private LocalDateTime questionDate;
 	private String questionContent;
 	private Boolean isHasAnswer;
-	
+
 	public Question toEntity() {
-		Users user = new Users();
-		QuestionCategory questionCategory = new QuestionCategory();
-		
-		user.setId(userId);
-		questionCategory.setId(questionCategoryId);
+//		Users user = new Users();
+//		QuestionCategory questionCategory = new QuestionCategory();
+//
+//		user.setId(userId);
+//		questionCategory.setId(questionCategory);
+
 		return Question.builder()
 				.id(id)
 				.user(user)
@@ -41,12 +42,14 @@ public class QuestionDTO {
 				.isHasAnswer(isHasAnswer== true ? 1 : 0)
 				.build();
 	}
-	
+
 	public static QuestionDTO toDTO(Question question) {
 		return QuestionDTO.builder()
 				.id(question.getId())
-				.userId(question.getUser()!=null ? question.getUser().getId():null)
-				.questionCategoryId(question.getQuestionCategory()!=null ? question.getQuestionCategory().getId():null)
+//				.userId(question.getUser()!=null ? question.getUser().getId():null)
+//				.questionCategoryId(question.getQuestionCategory()!=null ? question.getQuestionCategory().getId():null)
+				.user(question.getUser())
+				.questionCategory(question.getQuestionCategory())
 				.questionDate(question.getQuestionDate())
 				.questionContent(question.getQuestionContent())
 				.isHasAnswer(question.getIsHasAnswer() == 1 ? true : false)

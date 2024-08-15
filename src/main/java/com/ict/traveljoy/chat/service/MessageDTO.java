@@ -20,23 +20,17 @@ import lombok.Setter;
 public class MessageDTO {
 
 	private Long id;
-	private Long chatRoomId;
-	private Long userId;
+	private ChatRoom chatRoom;
+	private Users user;
 	private String messageContent;
 	private LocalDateTime messageSendDate;
 	private LocalDateTime messageReceiveDate;
 	private Boolean isActive;
-	
+
 	public Message toEnity() {
-		ChatRoom chatroom = new ChatRoom();
-		Users user = new Users();
-		
-		chatroom.setId(chatRoomId);
-		user.setId(userId);
-		
 		return Message.builder()
 				.id(id)
-				.chatRoom(chatroom)
+				.chatRoom(chatRoom)
 				.user(user)
 				.messageContent(messageContent)
 				.messageSendDate(messageSendDate)
@@ -44,12 +38,12 @@ public class MessageDTO {
 				//.messageReceiveDate(messageReceiveDate)
 				.build();
 	}
-	
+
 	public static MessageDTO toDTO(Message message) {
 		return MessageDTO.builder()
 				.id(message.getId())
-				.chatRoomId(message.getChatRoom() != null ? message.getChatRoom().getId() : null)
-				.userId(message.getUser() != null ? message.getUser().getId() : null)
+				.chatRoom(message.getChatRoom())
+				.user(message.getUser())
 				.messageContent(message.getMessageContent())
 				.messageSendDate(message.getMessageSendDate())
 				.messageReceiveDate(message.getMessageSendDate())

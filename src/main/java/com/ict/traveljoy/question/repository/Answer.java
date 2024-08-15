@@ -9,6 +9,7 @@ import com.ict.traveljoy.users.repository.Users;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -36,23 +37,23 @@ public class Answer {
 	@GeneratedValue(generator = "seq_answer",strategy = GenerationType.SEQUENCE)
 	@Column(name="answer_id")
 	private Long id;
-	
-	@ManyToOne
-    @JoinColumn(name = "question_id")
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "question_id", nullable = false)
 	private Question question;
-	
-	@ManyToOne
-    @JoinColumn(name = "user_id")
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id", nullable = false)
 	private Users user; //답변자
-	
+
 	@Column(length = 50)
 	private String answerHandlerName;
-	
+
 	@Column(nullable = false)
 	@ColumnDefault("SYSDATE")
 	@CreationTimestamp
 	private LocalDateTime answerDate;
-	
+
 	@Column(length = 2000)
 	private String answerContent;
 }
