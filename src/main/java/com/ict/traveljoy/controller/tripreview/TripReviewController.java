@@ -28,6 +28,7 @@ public class TripReviewController {
     // 리뷰 생성
     @PostMapping("/createReview")
     public ResponseEntity<TripReviewDto> createReview(@RequestBody TripReviewDto tripReviewDTO) {
+        System.out.println("Creating review: " + tripReviewDTO);
         try {
             TripReviewDto createdReview = tripReviewService.createReview(tripReviewDTO);
             if(createdReview == null) {
@@ -51,7 +52,6 @@ public class TripReviewController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    /*
     // 특정 ID로 리뷰 조회
     @GetMapping("/{id}")
     public ResponseEntity<TripReviewDto> getReviewById(@PathVariable("id") Long id) {
@@ -65,7 +65,7 @@ public class TripReviewController {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }*/
+    }
 
     // 리뷰 수정
     @PutMapping("/editReview/{id}")

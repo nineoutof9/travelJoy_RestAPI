@@ -37,6 +37,26 @@ public class RegionService {
 								.map(region->RegionDTO.toDto(region))
 								.collect(Collectors.toList());
 	}
+
+	public RegionDTO updateRegion(Long id, RegionDTO regionDto) {
+		// Find the existing region by ID
+		Optional<Region> existingRegionOpt = regionRepository.findById(id);
+
+		if (existingRegionOpt.isPresent()) {
+			Region existingRegion = existingRegionOpt.get();
+
+			// Update fields with values from regionDto
+			existingRegion.setName(regionDto.getName());
+			existingRegion.setR_info(regionDto.getR_info());
+
+			// Save the updated region
+			Region updatedRegion = regionRepository.save(existingRegion);
+			return RegionDTO.toDto(updatedRegion);
+		} else {
+			throw new IllegalArgumentException("Region with ID " + id + " not found");
+		}
+	}
+
 	//주어진 id를 가진 Region 엔터티 삭제
 	public void deleteRegion(Long id) {
         regionRepository.deleteById(id);

@@ -45,6 +45,35 @@ public class TransportationService {
         return TransportationDTO.toDto(transportation);
     }
 
+    // 교통수단 정보 수정
+    @Transactional
+    public TransportationDTO updateTransportation(Long id, TransportationDTO transportationDTO) {
+        Optional<Transportation> transportationOpt = transportationRepository.findById(id);
+
+        if (transportationOpt.isPresent()) {
+            Transportation transportation = transportationOpt.get();
+            transportation.setStartAddress(transportationDTO.getStartAddress());
+            transportation.setEndAddress(transportationDTO.getEndAddress());
+            transportation.setStartDate(transportationDTO.getStartDate());
+            transportation.setEndDate(transportationDTO.getEndDate());
+            transportation.setStartLat(transportationDTO.getStartLat());
+            transportation.setStartLng(transportationDTO.getStartLng());
+            transportation.setEndLat(transportationDTO.getEndLat());
+            transportation.setEndLng(transportationDTO.getEndLng());
+            transportation.setIsAirplane(transportationDTO.getIsAirplane());
+            transportation.setIsBus(transportationDTO.getIsBus());
+            transportation.setIsDrive(transportationDTO.getIsDrive());
+            transportation.setIsTrain(transportationDTO.getIsTrain());
+            transportation.setIsWalk(transportationDTO.getIsWalk());
+            transportation.setPrice(transportationDTO.getPrice());
+
+            Transportation updatedTransportation = transportationRepository.save(transportation);
+            return TransportationDTO.toDto(updatedTransportation);
+        } else {
+            throw new IllegalArgumentException("주어진 번호의 교통수단 정보를 찾을 수 없어요");
+        }
+    }
+
     // ID로 교통수단 정보 삭제
     public void deleteTransportation(Long id) {
         if (transportationRepository.existsById(id)) {
