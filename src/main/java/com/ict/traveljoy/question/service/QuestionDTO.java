@@ -39,15 +39,13 @@ public class QuestionDTO {
 				.questionCategory(questionCategory)
 				.questionDate(questionDate)
 				.questionContent(questionContent)
-				.isHasAnswer(isHasAnswer== true ? 1 : 0)
+				.isHasAnswer(isHasAnswer == null||false?0:1)
 				.build();
 	}
 
 	public static QuestionDTO toDTO(Question question) {
 		return QuestionDTO.builder()
 				.id(question.getId())
-//				.userId(question.getUser()!=null ? question.getUser().getId():null)
-//				.questionCategoryId(question.getQuestionCategory()!=null ? question.getQuestionCategory().getId():null)
 				.user(question.getUser())
 				.questionCategory(question.getQuestionCategory())
 				.questionDate(question.getQuestionDate())

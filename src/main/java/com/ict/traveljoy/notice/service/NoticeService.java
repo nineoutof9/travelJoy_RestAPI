@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ict.traveljoy.notice.repository.Notice;
 import com.ict.traveljoy.notice.repository.NoticeRepository;
 
@@ -15,45 +17,73 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class NoticeService {
 	
-
+	private final ViewCountService viewCountService;
+	
 	private final NoticeRepository noticeRepository;
+	private final ObjectMapper objectMapper;
 	
 	@Transactional
-	public NoticeDto createNotice(NoticeDto noticeDto) {
+	public NoticeDTO createNotice(NoticeDTO noticeDto) {
 		Notice notice = noticeDto.toEntity();
-        Notice savedNotice = noticeRepository.save(notice);
-        return NoticeDto.toDto(savedNotice);
+		Notice afterSave = noticeRepository.save(notice);
+		viewCountService.createByNoticeId(afterSave.getId());
+        return NoticeDTO.toDTO(afterSave);
 	}
 	
-	@Transactional
-	public List<NoticeDto> findAll() {
-		List<Notice> notices = noticeRepository.findAll();
-        return notices.stream()
-                      .map(NoticeDto::toDto)
+	@Transactional(readOnly = true)
+//	public List<NoticeDTO> findByTitle(String title) {
+//		List<Notice> noticeList = noticeRepository.findByTitleContaining(title);
+//        return noticeList.stream()
+//                      .map(NoticeDTO::toDTO)
+//                      .collect(Collectors.toList());
+//	}
+
+	public NoticeDTO findById(String notice_id) {
+		if(noticeRepository.existsById(Long.parseLong(notice_id))) {
+			Notice notice = noticeRepository.findById(Long.parseLong(notice_id)).get();
+			return NoticeDTO.toDTO(notice);
+		}
+		else throw new IllegalArgumentException("오류");
+	}
+	
+	@Transactional(readOnly = true)
+	public List<NoticeDTO> findAll() {
+		List<Notice> noticeList = noticeRepository.findAll();
+        return noticeList.stream()
+                      .map(NoticeDTO::toDTO)
                       .collect(Collectors.toList());
 	}
 	
 	@Transactional
-	public NoticeDto noticeUpdate(NoticeDto noticeDto) {
-		Notice notice = noticeDto.toEntity();
-        Notice updatedNotice = noticeRepository.save(notice);
-        return NoticeDto.toDto(updatedNotice);
+	public NoticeDTO updateNotice(Long notice_id,NoticeDTO updateNoticeDTO) {
+		if(noticeRepository.existsById(notice_id)) {
+			Notice beforeNotice = noticeRepository.findById(notice_id).orElseThrow(() -> new RuntimeException("Notice not found"));
+			beforeNotice.setTitle(updateNoticeDTO.getTitle());
+			beforeNotice.setContent(updateNoticeDTO.getContent());
+			beforeNotice.setUser(updateNoticeDTO.getUser());
+			//제목, 내용만 변경
+//			Notice afterNotice = noticeDTO.toEntity();
+	        Notice updatedNotice = noticeRepository.save(beforeNotice);
+	        return NoticeDTO.toDTO(updatedNotice);
+		}
+		else throw new IllegalArgumentException("오류");
+		
+
+
 	}
 
 	@Transactional
-	public NoticeDto noticeDelete(Long id) {
-		Notice notice = noticeRepository.findById(id).orElseThrow(() -> new RuntimeException("Notice not found"));
-        noticeRepository.delete(notice);
-        return NoticeDto.toDto(notice);
+	public NoticeDTO deleteNotice(Long id,NoticeDTO deleteNoticeDTO) {
+		if(noticeRepository.existsById(id)) {
+			Notice notice = noticeRepository.findById(id).orElseThrow(() -> new RuntimeException("Notice not found"));
+			noticeRepository.delete(notice);
+			return NoticeDTO.toDTO(notice);
+		}
+		else throw new IllegalArgumentException("오류");
+		
 	}
 
-	@Transactional
-	public List<NoticeDto> findByTitle(String title) {
-		List<Notice> notices = noticeRepository.findByTitleContaining(title);
-        return notices.stream()
-                      .map(NoticeDto::toDto)
-                      .collect(Collectors.toList());
-	}
+
 
 	
 }

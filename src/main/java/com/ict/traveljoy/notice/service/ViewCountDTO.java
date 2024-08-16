@@ -3,7 +3,9 @@ package com.ict.traveljoy.notice.service;
 
 import java.time.LocalDateTime;
 
+import com.ict.traveljoy.notice.repository.Notice;
 import com.ict.traveljoy.notice.repository.ViewCount;
+import com.ict.traveljoy.users.repository.Users;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,25 +21,28 @@ import lombok.Setter;
 public class ViewCountDTO {
 
 	private Long id;
-	private Long noticeId;
-	private Long userId;
+	private Notice notice;
+	private Users user;
 	private LocalDateTime viewDate;
+	private Long count;
 	
 	public ViewCount toEntity() {
 		return ViewCount.builder()
 				.id(id)
-				.noticeId(noticeId)
-				.userId(userId)
+				.notice(notice)
+				.user(user)
 				.viewDate(viewDate)
+				.count(count)
 				.build();
 	}
 	
 	public static ViewCountDTO toDTO(ViewCount viewCount) {
 		return ViewCountDTO.builder()
 				.id(viewCount.getId())
-				.noticeId(viewCount.getNoticeId())
-				.userId(viewCount.getUserId())
+				.notice(viewCount.getNotice())
+				.user(viewCount.getUser())
 				.viewDate(viewCount.getViewDate())
+				.count(viewCount.getCount())
 				.build();
 	}
 }
