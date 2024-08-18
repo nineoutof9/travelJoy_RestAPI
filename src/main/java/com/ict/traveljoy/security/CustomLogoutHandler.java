@@ -71,7 +71,7 @@ public class CustomLogoutHandler implements LogoutHandler {
                     log.info("Kakao logout response = {}", kakaoResponse.getBody());
                 }
 				*/
-                String currentUserAgent = request.getHeader("User-Agent"); // <--- 변경된 부분
+                String currentUserAgent = request.getHeader("User-Agent");
 
                 // 특정 userAgent에 해당하는 RefreshToken 삭제
                 Optional<RefreshToken> refreshTokenOptional = refreshService.findByUserIdAndUserAgent(user.getId(), currentUserAgent); // <--- 변경된 부분
