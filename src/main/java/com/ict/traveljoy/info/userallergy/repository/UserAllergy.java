@@ -40,6 +40,6 @@ public class UserAllergy {
     @JoinColumn(name = "allergy_id", nullable = false)
     private Allergy allergy;
     
-    @Column
+    @Column(name="ALLERGY_LEVEL")
     private Long allergyLevel;
 }

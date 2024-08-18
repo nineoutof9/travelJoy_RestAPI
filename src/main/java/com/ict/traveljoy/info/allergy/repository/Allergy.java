@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name="allergy")
+@Table(name="ALLERGY")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -31,21 +31,22 @@ public class Allergy {
 	@Id
 	@SequenceGenerator(name = "seq_allergy",sequenceName = "seq_allergy",allocationSize = 1,initialValue = 1)
 	@GeneratedValue(generator = "seq_allergy",strategy = GenerationType.SEQUENCE)
-	@Column(name="allergy_id")
+	@Column(name="ALLERGY_ID")
 	private Long id;
 	
-	@Column(length = 50,nullable = false)
+	@Column(name="INTEREST_TOPICE",length = 50,nullable = false)
 	private String interestTopic;
 	
-	@Column(columnDefinition = "NUMBER(1, 0)")
+	@Column(name="ACTIVITY_PLACE",columnDefinition = "NUMBER(1, 0)")
 	private Integer activityPlace;
 	
-	@Column(length = 50)
+	@Column(name="CLASSIFICATION",length = 50)
 	private String classification;
 	
 	@OneToMany(mappedBy = "allergy", cascade = CascadeType.ALL, orphanRemoval = true)
+	@Column(name="USER_ALLERGY")
     private List<UserAllergy> userAllergy;
 	
 	@OneToMany(mappedBy = "allergy", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<AllergyMedicine> allergyMedicines;
+	private List<AllergyMedicine> allergyMedicine;
 }

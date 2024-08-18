@@ -48,7 +48,7 @@ public class Report {
     @JoinColumn(name = "REPORT_CATEGORY_ID")
 	private ReportCategory reportCategory;
     
-	@Column(nullable=false)
+	@Column(name="TARGET_ID",nullable=false)
     private Long targetId;
     
     //신고일자
@@ -62,10 +62,10 @@ public class Report {
     private String reportContent;
     
     
-	@Column(name="REPORT_HANDERLE_ID",nullable=false)
+	@Column(name="REPORT_HANDLER_ID",nullable=false)
     private Long reportHandlerId;
     
-	@Column(name="REPORT_HANDERLE_NAME",length=50, nullable=false)
+	@Column(name="REPORT_HANDLER_NAME",length=50, nullable=false)
     private String reportHandlerName;
     
 	//신고처리 결과

@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ict.traveljoy.controller.CheckContainsUseremail;
 import com.ict.traveljoy.notice.service.NoticeDTO;
 import com.ict.traveljoy.notice.service.NoticeService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PutMapping;
 
@@ -27,11 +29,15 @@ public class NoticeController {
 
 	private final NoticeService noticeService;
 	private final ObjectMapper objectMapper;
+	private final CheckContainsUseremail checkUser;
 	
 	@PostMapping("/createNotice")
-	public ResponseEntity<NoticeDTO> createFavorite(@RequestBody NoticeDTO noticeDTO){ //target,targetId받아서 저장하기
+	public ResponseEntity<NoticeDTO> createFavorite(@RequestBody NoticeDTO noticeDTO,HttpServletRequest request){ //target,targetId받아서 저장하기
+		
+		String useremail = checkUser.checkContainsUseremail(request);
+		
 		try {
-			NoticeDTO createdNotice = noticeService.createNotice(noticeDTO);
+			NoticeDTO createdNotice = noticeService.createNotice(useremail,noticeDTO);
 			if(createdNotice == null) {
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			}

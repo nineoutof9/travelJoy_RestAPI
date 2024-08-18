@@ -35,12 +35,12 @@ public class Medicine {
 	@Column(name="medicine_id")
 	private Long id;
 	
-	@Column(length = 2000)
+	@Column(length = 2000,name="DESCRIPTION")
 	private String description;
 	
-	@Column(length = 100)
+	@Column(length = 100,name="MEDICINE_NAME")
 	private String medicineName;
 	
 	@OneToMany(mappedBy = "medicine", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<AllergyMedicine> allergyMedicines;
+	private List<AllergyMedicine> allergyMedicine;
 }

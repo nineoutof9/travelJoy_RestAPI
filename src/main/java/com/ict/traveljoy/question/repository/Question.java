@@ -48,15 +48,15 @@ public class Question {
 	private QuestionCategory questionCategory;
 
 
-	@Column(nullable = false)
+	@Column(nullable = false,name="QUESTION_DATE")
 	@ColumnDefault("SYSDATE")
 	@CreationTimestamp
 	private LocalDateTime questionDate;
 
-	@Column(length = 2000)
+	@Column(length = 2000,name="QUESTION_CONTENT")
 	private String questionContent;
 
-	@Column(nullable = false,columnDefinition = "NUMBER(1, 0)")
+	@Column(nullable = false,columnDefinition = "NUMBER(1, 0)",name="IS_HAS_ANSWER")
 	@ColumnDefault("0")
 	private Integer isHasAnswer;
 }

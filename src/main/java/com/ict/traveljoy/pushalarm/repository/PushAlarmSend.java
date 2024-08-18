@@ -45,7 +45,7 @@ public class PushAlarmSend {
     @JoinColumn(name = "user_id", nullable = false)
 	private Users user;
 	
-	@Column(nullable = false)
+	@Column(nullable = false,name="PUSH_ALARM_SEND_DATE")
 	@ColumnDefault("SYSDATE")
 	@CreationTimestamp
 	private LocalDateTime pushAlarmSendDate;

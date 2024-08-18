@@ -33,21 +33,21 @@ public class PushAlarm {
 	@Column(name = "push_alarm_id")
 	private Long id;
 	
-	@Column(length=50)
+	@Column(length=50,name="TITLE")
 	private String title;
 	
-	@Column(length=2000)
+	@Column(length=2000,name="PUSH_ALARM_CONTENT")
 	private String pushAlarmContent;
 	
-	@Column(nullable = false,columnDefinition = "NUMBER(1, 0)")
+	@Column(nullable = false,columnDefinition = "NUMBER(1, 0)",name="IS_ACTIVE")
     @ColumnDefault("1")
     private Integer isActive;
 	
-	@Column(nullable = false,columnDefinition = "NUMBER(1, 0)")
+	@Column(nullable = false,columnDefinition = "NUMBER(1, 0)",name="IS_DELETE")
     @ColumnDefault("0")
     private Integer isDelete;
 	
-	@Column
+	@Column(name="DELETE_DATE")
 	@ColumnDefault("SYSDATE")
 	@CreationTimestamp
 	private LocalDateTime deleteDate;

@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ict.traveljoy.notice.repository.Notice;
 import com.ict.traveljoy.notice.repository.NoticeRepository;
+import com.ict.traveljoy.users.repository.UserRepository;
+import com.ict.traveljoy.users.repository.Users;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,13 +20,18 @@ import lombok.RequiredArgsConstructor;
 public class NoticeService {
 	
 	private final ViewCountService viewCountService;
-	
+	private final UserRepository userRepository;
 	private final NoticeRepository noticeRepository;
+	
 	private final ObjectMapper objectMapper;
 	
 	@Transactional
-	public NoticeDTO createNotice(NoticeDTO noticeDto) {
+	public NoticeDTO createNotice(String useremail, NoticeDTO noticeDto) {
+		
+		Users user = userRepository.findByEmail(useremail).get();
+		
 		Notice notice = noticeDto.toEntity();
+		notice.setUser(user);
 		Notice afterSave = noticeRepository.save(notice);
 		viewCountService.createByNoticeId(afterSave.getId());
         return NoticeDTO.toDTO(afterSave);

@@ -21,10 +21,10 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class UserDTO {
-    private String email;
-    private String password;
+    private String email; //not null
+    private String password; //not null
     private String name;
-    private String nickname;
+    private String nickname; //not null
     private Date birthDate;
     private LocalDateTime signInDate;
     private Boolean gender;
