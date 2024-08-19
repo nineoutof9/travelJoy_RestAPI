@@ -4,6 +4,7 @@ package com.ict.traveljoy.users.service;
 import java.sql.Date;
 import java.time.LocalDateTime;
 
+import com.ict.traveljoy.image.repository.Image;
 import com.ict.traveljoy.users.repository.Users;
 
 import lombok.AllArgsConstructor;
@@ -42,6 +43,8 @@ public class UserDTO {
     private LocalDateTime deleteIdDate;
     private Boolean isActive;
     private LocalDateTime updateDate;
+    private Image profileImage;
+    private String introduce;
 
     public Users toEntity() {
         return Users.builder()
@@ -66,6 +69,8 @@ public class UserDTO {
             .deleteIdDate(deleteIdDate)
             .isActive(isActive != null && isActive ? 1 : 0)
             .updateDate(updateDate)
+            .profileImage(profileImage)
+            .introduce(introduce)
             .build();
     }
 
@@ -92,6 +97,8 @@ public class UserDTO {
             .deleteIdDate(users.getDeleteIdDate())
             .isActive(users.getIsActive() != null && users.getIsActive() == 1 ? true : false)
             .updateDate(users.getUpdateDate())
+            .profileImage(users.getProfileImage())
+            .introduce(users.getIntroduce())
             .build();
     }
 }
