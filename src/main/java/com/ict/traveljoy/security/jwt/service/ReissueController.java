@@ -2,6 +2,7 @@ package com.ict.traveljoy.security.jwt.service;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.swagger.v3.oas.annotations.Hidden;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -30,35 +31,45 @@ public class ReissueController {
 
     @PostMapping("/reissue") // POST 요청을 '/reissue' 경로로 매핑합니다.
     public ResponseEntity<?> reissue(HttpServletRequest request, HttpServletResponse response) {
-        // HTTP 요청에서 'Authorization' 헤더를 통해 리프레시 토큰을 받아옵니다.
-        String refresh = request.getHeader("Authorization");
-        if (refresh == null || !refresh.startsWith("Bearer ")) { // 토큰이 없거나 Bearer 타입이 아니면 에러 반환
-            return new ResponseEntity<>("refresh token null", HttpStatus.BAD_REQUEST);
+        // HTTP 요청에서 쿠키를 통해 리프레시 토큰을 받아옵니다.
+        Cookie[] cookies = request.getCookies();
+        if (cookies == null) {
+            return new ResponseEntity<>("refresh token cookie not found", HttpStatus.BAD_REQUEST);
         }
 
-        String token = refresh.substring("Bearer ".length()); // 실제 토큰 값을 추출합니다.
+        String refreshTokenValue = null;
+        for (Cookie cookie : cookies) {
+            if ("refreshToken".equals(cookie.getName())) {
+                refreshTokenValue = cookie.getValue();
+                break;
+            }
+        }
+
+        if (refreshTokenValue == null) {
+            return new ResponseEntity<>("refresh token cookie not found", HttpStatus.BAD_REQUEST);
+        }
 
         // 토큰 만료 여부 검사
         try {
-            if (jwtUtility.isTokenExpired(token)) {
+            if (jwtUtility.isTokenExpired(refreshTokenValue)) {
                 // 리프레시 토큰이 만료되면 데이터베이스에서 삭제합니다.
-                refreshService.deleteByRefresh(token);
+                refreshService.deleteByRefresh(refreshTokenValue);
                 return new ResponseEntity<>("refresh token expired", HttpStatus.BAD_REQUEST);
             }
         } catch (ExpiredJwtException e) {
             // 리프레시 토큰이 만료되면 데이터베이스에서 삭제합니다.
-            refreshService.deleteByRefresh(token);
+            refreshService.deleteByRefresh(refreshTokenValue);
             return new ResponseEntity<>("refresh token expired", HttpStatus.BAD_REQUEST);
         }
 
         // 리프레시 토큰이 맞는지 카테고리로 확인합니다.
-        String category = jwtUtility.getCategoryFromToken(token);
+        String category = jwtUtility.getCategoryFromToken(refreshTokenValue);
         if (!category.equals("refresh")) {
             return new ResponseEntity<>("invalid refresh token", HttpStatus.BAD_REQUEST);
         }
 
         // 토큰에서 사용자 이메일을 추출합니다.
-        String username = jwtUtility.getUserEmailFromToken(token);
+        String username = jwtUtility.getUserEmailFromToken(refreshTokenValue);
 
         // 사용자 정보 조회
         Optional<Users> userOptional = userService.findByEmail(username);
@@ -67,7 +78,7 @@ public class ReissueController {
         }
 
         // 리프레시 토큰이 유효한지 확인합니다.
-        Optional<RefreshToken> refreshTokenOptional = refreshService.findByTokenValue(token);
+        Optional<RefreshToken> refreshTokenOptional = refreshService.findByTokenValue(refreshTokenValue);
         if (refreshTokenOptional.isEmpty() || !refreshTokenOptional.get().getUser().equals(userOptional.get())) {
             return new ResponseEntity<>("refresh token not found or does not match", HttpStatus.BAD_REQUEST);
         }
