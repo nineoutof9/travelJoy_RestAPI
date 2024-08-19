@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ict.traveljoy.security.jwt.refreshtoken.RefreshToken;
 import com.ict.traveljoy.security.jwt.util.JwtUtility;
 import com.ict.traveljoy.users.repository.Users;
+import com.ict.traveljoy.users.service.UserDTO;
 import com.ict.traveljoy.users.service.UserService;
 
 import java.util.Optional;
@@ -72,14 +73,14 @@ public class ReissueController {
         String username = jwtUtility.getUserEmailFromToken(refreshTokenValue);
 
         // 사용자 정보 조회
-        Optional<Users> userOptional = userService.findByEmail(username);
-        if (userOptional.isEmpty()) {
+        UserDTO userDTO = userService.findByEmail(username);
+        if (userDTO == null) {
             return new ResponseEntity<>("user not found", HttpStatus.NOT_FOUND);
         }
 
         // 리프레시 토큰이 유효한지 확인합니다.
         Optional<RefreshToken> refreshTokenOptional = refreshService.findByTokenValue(refreshTokenValue);
-        if (refreshTokenOptional.isEmpty() || !refreshTokenOptional.get().getUser().equals(userOptional.get())) {
+        if (refreshTokenOptional.isEmpty() || !refreshTokenOptional.get().getUser().getEmail().equals(userDTO.getEmail())) {
             return new ResponseEntity<>("refresh token not found or does not match", HttpStatus.BAD_REQUEST);
         }
 
