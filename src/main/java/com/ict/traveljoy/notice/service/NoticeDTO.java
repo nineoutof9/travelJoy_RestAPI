@@ -32,9 +32,11 @@ public class NoticeDTO {
     public Notice toEntity() {
         return Notice.builder()
         		.id(id)
+        		.noticeDate(noticeDate)
                 .title(title)
                 .content(content)
                 .writer(writer)
+                .user(user)
                 .isDelete(isDelete == null||false ? 0 : 1)
                 .isActive(isActive == null||false ? 0 : 1)
                 .build();
@@ -44,9 +46,11 @@ public class NoticeDTO {
     public static NoticeDTO toDTO(Notice notice) {
         return NoticeDTO.builder()
         		.id(notice.getId())
+        		.noticeDate(notice.getNoticeDate())
                 .title(notice.getTitle())
                 .content(notice.getContent())
                 .writer(notice.getWriter())
+                .user(notice.getUser())
                 .isDelete(notice.getIsDelete() == 1 ? true : false)
                 .isActive(notice.getIsActive() == 1 ? true : false)
                 .build();

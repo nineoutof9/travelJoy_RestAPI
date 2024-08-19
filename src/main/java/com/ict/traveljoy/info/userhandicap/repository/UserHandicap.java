@@ -41,6 +41,6 @@ public class UserHandicap {
     @JoinColumn(name = "handicap_id", nullable = false)
     private Handicap handicap;
     
-    @Column
+    @Column(name="HANDICAP_LEVEL")
     private Long handicapLevel;
 }

@@ -12,6 +12,7 @@ spring:
 #    username: STUDY
 #    password: STUDY
 
+
     
     hikari:
       auto-commit: true # default(false)
