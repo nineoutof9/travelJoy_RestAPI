@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,7 +21,6 @@ import com.ict.traveljoy.question.service.QuestionCategoryService;
 import com.ict.traveljoy.question.service.QuestionDTO;
 import com.ict.traveljoy.question.service.QuestionService;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
@@ -36,11 +36,11 @@ public class QuestionController {
 	
 
 	@PostMapping
-	public ResponseEntity<QuestionDTO> createQuestion(@RequestBody QuestionDTO questionDTO,HttpServletRequest request){
+	public ResponseEntity<QuestionDTO> createQuestion(@RequestBody QuestionDTO questionDTO, HttpServletRequest request){
 		//질문한사람 user 설정,questionCategory받기,questionContent
 		String useremail = checkUser.checkContainsUseremail(request);
 		String category = request.getParameter("category");
-		
+				
 		try {
 			QuestionDTO createdQuestion = questionService.createQuestion(useremail,category,questionDTO);
 			if(createdQuestion == null) {

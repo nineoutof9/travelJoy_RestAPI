@@ -27,7 +27,8 @@ public class QuestionCategoryService {
 		List<QuestionCategory> questionCategories = questionCategoryRepository.findAll();
 		for(QuestionCategory qcategory: questionCategories) {
 			if(qcategory.getQuestionCategoryName().equals(category)) {
-				return questionCategoryRepository.findById(qcategory.getId()).get();
+				System.out.println("equals!!~~~~~~~~~~");
+				return qcategory;
 			}
 		}
 		return null;

@@ -36,7 +36,7 @@ public class QuestionDTO {
 				.questionDate(questionDate)
 				.questionTitle(questionTitle)
 				.questionContent(questionContent)
-				.isHasAnswer(isHasAnswer == null||false?0:1)
+				.isHasAnswer(isHasAnswer!=null && isHasAnswer? 1:0)
 				.build();
 	}
 

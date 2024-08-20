@@ -26,13 +26,14 @@ public class QuestionService {
 	
 	
 	public QuestionDTO createQuestion(String useremail,String category, QuestionDTO questionDTO) {
-		System.out.println(questionDTO.getQuestionContent());
+		
 		Question question = questionDTO.toEntity();
 		
 		Users user = userRepository.findByEmail(useremail).get();
 		question.setUser(user);
-		
+		System.out.println("check-----"+useremail);
 		QuestionCategory questionCategory = questionCategoryService.findCategoryByCategoryName(category);
+		System.out.println("check-----"+questionCategory.getQuestionCategoryName());
 		if(questionCategory!=null) {
 			question.setQuestionCategory(questionCategory);
 			Question afterSave = questionRepostiory.save(question);
