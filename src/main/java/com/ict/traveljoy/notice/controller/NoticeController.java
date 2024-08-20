@@ -33,7 +33,7 @@ public class NoticeController {
 	
 	@PostMapping("/createNotice")
 	public ResponseEntity<NoticeDTO> createFavorite(@RequestBody NoticeDTO noticeDTO,HttpServletRequest request){ //target,targetId받아서 저장하기
-		
+		//title,content,writer 넘겨줘야함
 		String useremail = checkUser.checkContainsUseremail(request);
 		
 		try {
@@ -52,9 +52,11 @@ public class NoticeController {
 	
 	//하나만
 	@GetMapping("/{notice_id}")
-	public ResponseEntity<NoticeDTO> getNotice(@PathVariable String notice_id){
+	public ResponseEntity<NoticeDTO> getNotice(@PathVariable String notice_id,HttpServletRequest request){
+		String useremail = checkUser.checkContainsUseremail(request);
+		
 		try {
-			NoticeDTO noticeDTO = noticeService.findById(notice_id);
+			NoticeDTO noticeDTO = noticeService.findById(Long.parseLong(notice_id),useremail);
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(noticeDTO);
 		}
 		catch(Exception e) {
@@ -77,9 +79,11 @@ public class NoticeController {
 	}
 	
 	@DeleteMapping("/{notice_id}")
-	public ResponseEntity<NoticeDTO> deleteNotice(@PathVariable String notice_id, @RequestBody NoticeDTO noticeDTO){
+	public ResponseEntity<NoticeDTO> deleteNotice(@PathVariable String notice_id, @RequestBody NoticeDTO noticeDTO,HttpServletRequest request){
+		String useremail = checkUser.checkContainsUseremail(request);
+		
 		try {
-			NoticeDTO deletedNotice = noticeService.deleteNotice(Long.parseLong(notice_id),noticeDTO);
+			NoticeDTO deletedNotice = noticeService.deleteNotice(useremail,Long.parseLong(notice_id),noticeDTO);
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(deletedNotice);
 		}
 		catch(Exception e) {

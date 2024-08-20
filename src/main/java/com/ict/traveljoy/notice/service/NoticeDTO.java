@@ -38,7 +38,7 @@ public class NoticeDTO {
                 .writer(writer)
                 .user(user)
                 .isDelete(isDelete == null||false ? 0 : 1)
-                .isActive(isActive == null||false ? 0 : 1)
+                .isActive((isActive == null || isActive) ? 1 : 0)
                 .build();
     }
 

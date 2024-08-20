@@ -23,14 +23,13 @@ public class ViewCountService {
 	private final ObjectMapper objectMapper;
 	
 	
-	public ViewCountDTO createByNoticeId(long noticeId) {
-		if(noticeRepository.existsById(noticeId)) {
-			Notice noticeEntity = noticeRepository.findById(noticeId).get();
-			// user_id 받아오기
-//			Users user = noticeRepository.findById(notice_id).orElseThrow(() -> new RuntimeException("Notice not found"));
+	public ViewCountDTO createByNotice(Notice notice) {
+		if(noticeRepository.existsById(notice.getId())) {
+			
 			ViewCount viewCountEntity = new ViewCount();
-			viewCountEntity.setNotice(noticeEntity);
-//			viewCountEntity.setUser(user);
+			viewCountEntity.setNotice(notice);
+			viewCountEntity.setCount((long)0);
+			
 			return ViewCountDTO.toDTO(viewCountRepository.save(viewCountEntity));
 		}
 		else throw new IllegalArgumentException("오류");
@@ -67,8 +66,16 @@ public class ViewCountService {
 	
 
 	public ViewCountDTO updateViewCount(long noticeId) {
-		// TODO Auto-generated method stub
-		return null;
+		if(viewCountRepository.existsByNotice_Id(noticeId)) {
+			
+			// 추가적으로 check NoticeView
+			
+			ViewCount viewCount = viewCountRepository.findByNotice_Id(noticeId);
+			viewCount.setCount(viewCount.getCount()+1);
+			ViewCount updatedViewCount = viewCountRepository.save(viewCount);
+			return ViewCountDTO.toDTO(updatedViewCount);
+		}
+		else throw new NullPointerException("오류");
 	}
 	
 }

@@ -18,14 +18,21 @@ public class CheckContainsUseremail {
 	public String checkContainsUseremail(HttpServletRequest request) {
 		String authorization = request.getHeader("Authorization");
 		String token,useremail;
-		if( authorization.startsWith("Bearer ")){
-			token = authorization.split(" ")[1];
-			useremail = jwtUtil.getUserEmailFromToken(token);
+		try {
+			if( authorization.startsWith("Bearer ")){
+				token = authorization.split(" ")[1];
+				useremail = jwtUtil.getUserEmailFromToken(token);
+			}
+			else {
+//				return new ResponseEntity<>(HttpStatus.FORBIDDEN); //useremail없음, 403
+				useremail = "aaa@aaa.com";
+				//useremail = null;
+			}
 		}
-		else {
-//			return new ResponseEntity<>(HttpStatus.FORBIDDEN); //useremail없음, 403
-			useremail = "aaa@aaa.com";
+		catch(Exception e) {
+			useremail = "aab@aaa.com";
 		}
+
 		return useremail;
 	}
 }

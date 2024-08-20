@@ -60,7 +60,7 @@ public class Notice {
 	@Column(nullable = false,name="WRITER")
 	private String writer;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "USER_ID")
 	private Users user;
 

@@ -15,6 +15,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -24,27 +25,34 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name="view_count")
+@Table(name="notice_view")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ViewCount {
-	//각 공지글에 대한 방문수
-	
+public class NoticeView {
+
 	@Id
-	@Column(name="VIEW_COUNT_ID")
-	@SequenceGenerator(name = "seq_view_count",sequenceName = "seq_view_count",allocationSize = 1,initialValue = 1)
-	@GeneratedValue(generator = "seq_view_count",strategy = GenerationType.SEQUENCE)
+	@Column(name="NOTICE_VIEW_ID")
+	@SequenceGenerator(name = "seq_notice_view",sequenceName = "seq_notice_view",allocationSize = 1,initialValue = 1)
+	@GeneratedValue(generator = "seq_notice_view",strategy = GenerationType.SEQUENCE)
 	private Long id;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "NOTICE_ID", nullable = false)
 	private Notice notice;
 	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "USER_ID", nullable = false)
+	private Users user;
 	
-	@Column(name="COUNT")
-	@ColumnDefault("0")
-	private Long count;
+	@ManyToOne
+	@JoinColumn(name="VIEW_COUNT_ID")
+	private ViewCount viewcount;
+	
+	@Column(name="VIEW_DATE")
+	@ColumnDefault("SYSDATE")
+	@CreationTimestamp
+    private LocalDateTime viewDate; //가장 최근에 본 날짜에 따라 횟수 증가/증가X
 }
