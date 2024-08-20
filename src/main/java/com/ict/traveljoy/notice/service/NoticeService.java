@@ -52,15 +52,14 @@ public class NoticeService {
 //                      .collect(Collectors.toList());
 //	}
 
-	@Transactional(readOnly = true)
 	public NoticeDTO findById(long notice_id,String useremail) { // 특정 공지 조회
 		if(noticeRepository.existsById(notice_id)) {
 			Notice notice = noticeRepository.findById(notice_id).get();
-			
+			NoticeDTO noticeDTO = NoticeDTO.toDTO(notice);
 			//조회수 증가
-			viewCountService.updateViewCount(notice_id);
-			
-			return NoticeDTO.toDTO(notice);
+			ViewCountDTO viewcountDTO = viewCountService.updateViewCount(notice_id);
+			noticeDTO.setViewCount(viewcountDTO.getCount());
+			return noticeDTO;
 		}
 		else throw new IllegalArgumentException("오류");
 	}
@@ -92,13 +91,21 @@ public class NoticeService {
 	}
 
 	@Transactional
-	public NoticeDTO deleteNotice(String useremail,Long id,NoticeDTO deleteNoticeDTO) {
+	public NoticeDTO deleteNotice(String useremail,Long notice_id) {
 		Users user = userRepository.findByEmail(useremail).get();
 		if(user.getPermission()!="0") {//권한있으면 수정가능
-			if(noticeRepository.existsById(id)) {
-				Notice notice = noticeRepository.findById(id).orElseThrow(() -> new RuntimeException("Notice not found"));
-				noticeRepository.delete(notice);
-				return NoticeDTO.toDTO(notice);
+			if(noticeRepository.existsById(notice_id)) {
+				Notice notice = noticeRepository.findById(notice_id).orElseThrow(() -> new RuntimeException("Notice not found"));
+				NoticeDTO noticeDTO = NoticeDTO.toDTO(notice);
+				noticeDTO.setIsActive(false);
+				noticeDTO.setIsDelete(true);
+				// front에서는 setisActive만 보여주기, 관리자에서는 나눠서 볼 수 있게
+				
+				Notice deletedNotice = noticeDTO.toEntity();
+				deletedNotice = noticeRepository.save(deletedNotice);
+//				noticeRepository.delete(notice);
+				
+				return NoticeDTO.toDTO(deletedNotice);
 			}
 			else return NoticeDTO.builder().title("수정불가").content("권한없음").build();
 		}

@@ -79,11 +79,11 @@ public class NoticeController {
 	}
 	
 	@DeleteMapping("/{notice_id}")
-	public ResponseEntity<NoticeDTO> deleteNotice(@PathVariable String notice_id, @RequestBody NoticeDTO noticeDTO,HttpServletRequest request){
+	public ResponseEntity<NoticeDTO> deleteNotice(@PathVariable String notice_id,HttpServletRequest request){
 		String useremail = checkUser.checkContainsUseremail(request);
 		
 		try {
-			NoticeDTO deletedNotice = noticeService.deleteNotice(useremail,Long.parseLong(notice_id),noticeDTO);
+			NoticeDTO deletedNotice = noticeService.deleteNotice(useremail,Long.parseLong(notice_id));
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(deletedNotice);
 		}
 		catch(Exception e) {

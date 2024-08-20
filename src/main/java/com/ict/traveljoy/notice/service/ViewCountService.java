@@ -64,12 +64,11 @@ public class ViewCountService {
 //	}
 	
 	
-
+	
 	public ViewCountDTO updateViewCount(long noticeId) {
 		if(viewCountRepository.existsByNotice_Id(noticeId)) {
 			
 			// 추가적으로 check NoticeView
-			
 			ViewCount viewCount = viewCountRepository.findByNotice_Id(noticeId);
 			viewCount.setCount(viewCount.getCount()+1);
 			ViewCount updatedViewCount = viewCountRepository.save(viewCount);

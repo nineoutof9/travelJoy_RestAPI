@@ -27,6 +27,7 @@ public class NoticeDTO {
     private Boolean isActive;
     private String writer;
     private Users user;
+    private long viewCount;
  
     // DTO를 엔티티로 변환
     public Notice toEntity() {
