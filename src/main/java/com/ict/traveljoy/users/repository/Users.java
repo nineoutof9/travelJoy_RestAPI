@@ -55,7 +55,7 @@ public class Users {
 	@Column(length = 30)
 	private String name;
 	
-	@Column(length = 30,nullable = false)
+	@Column(length = 30)
 	private String nickname;
 	
 	@Column

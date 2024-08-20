@@ -43,5 +43,9 @@ public class UserService {
 	    return userRepository.findByEmail(email)
 	        .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
 	}
+
+	public boolean checkEmailExists(String email) {
+		return userRepository.existsByEmail(email);
+	}
     
 }
