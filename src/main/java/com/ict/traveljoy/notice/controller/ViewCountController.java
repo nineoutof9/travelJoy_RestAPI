@@ -29,7 +29,7 @@ public class ViewCountController {
 	@GetMapping("/{notice_id}")
 	public ResponseEntity getViewCount(@PathVariable String noticeId){
 		try {
-			long viewCount = viewCountService.findbyNoticeId(Long.parseLong(noticeId));
+			long viewCount = viewCountService.findbyNoticeId(Long.parseLong(noticeId)).getCount();
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(viewCount);
 		}
 		catch(Exception e) {

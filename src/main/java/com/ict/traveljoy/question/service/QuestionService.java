@@ -8,8 +8,9 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ict.traveljoy.question.repository.Question;
 import com.ict.traveljoy.question.repository.QuestionCategory;
-import com.ict.traveljoy.question.repository.QuestionCategoryRepository;
 import com.ict.traveljoy.question.repository.QuestionRepository;
+import com.ict.traveljoy.users.repository.UserRepository;
+import com.ict.traveljoy.users.repository.Users;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,27 +19,56 @@ import lombok.RequiredArgsConstructor;
 public class QuestionService {
 
 	private final QuestionRepository questionRepostiory;
-	private final QuestionCategoryRepository questionCategoryRepository;
+	private final QuestionCategoryService questionCategoryService;
+	private final AnswerService answerService;
+	private final UserRepository userRepository;
 	private final ObjectMapper objectMapper;
 	
 	
-	public QuestionDTO createQuestion(QuestionDTO questionDTO) {
+	public QuestionDTO createQuestion(String useremail,String category, QuestionDTO questionDTO) {
+		System.out.println(questionDTO.getQuestionContent());
 		Question question = questionDTO.toEntity();
-		Question afterSave = questionRepostiory.save(question);
-		return QuestionDTO.toDTO(afterSave);		
+		
+		Users user = userRepository.findByEmail(useremail).get();
+		question.setUser(user);
+		
+		QuestionCategory questionCategory = questionCategoryService.findCategoryByCategoryName(category);
+		if(questionCategory!=null) {
+			question.setQuestionCategory(questionCategory);
+			Question afterSave = questionRepostiory.save(question);
+			return QuestionDTO.toDTO(afterSave);
+		}
+		else return null;
+		
+		//question category도 설정해줘야함.
+		
+//		Question afterSave = questionRepostiory.save(question);
+//		return QuestionDTO.toDTO(afterSave);
 	}
 
 
-	public List<QuestionDTO> getAll() {
+	public List<QuestionDTO> findAll() {
 		List<Question> questionList = questionRepostiory.findAll();
 		return questionList.stream().map(question->QuestionDTO.toDTO(question)).collect(Collectors.toList());
 	}
 
-	public List<QuestionDTO> getAllByCategory(String questionCategory) {
-		QuestionCategory category = questionCategoryRepository.findByQuestionCategoryName(questionCategory);
-		List<Question> questionListByCategory = questionRepostiory.findAllByQuestionCategory_Id(category.getId());
-		return questionListByCategory.stream().map(QuestionDTO::toDTO).collect(Collectors.toList());
+	public List<QuestionDTO> findAllByCategory(String category) {
+		// category name으로 해당 category question 다 받아오기
+		// category 객체 받아와서 그걸로 찾기
+		QuestionCategory questionCategory = questionCategoryService.findCategoryByCategoryName(category);
+		if(questionCategory!=null) {
+			List<Question> questionList = questionRepostiory.findAllByQuestionCategory_Id(questionCategory.getId());
+			return questionList.stream().map(question->QuestionDTO.toDTO(question)).collect(Collectors.toList());
+		}
+		else throw new IllegalArgumentException("오류");
+		
+		
+//		QuestionCategory category = questionRepostiory.findByQuestionCategoryName(questionCategory);
+//		List<Question> questionListByCategory = questionRepostiory.findAllByQuestionCategory_Id(category.getId());
+//		return questionListByCategory.stream().map(QuestionDTO::toDTO).collect(Collectors.toList());
 	}
+	
+	
 	
 	//본인꺼외에는 안보이게 할지 말지
 	public QuestionDTO findById(long questionId) {
@@ -76,7 +106,7 @@ public class QuestionService {
 		}
 		else throw new IllegalArgumentException("오류");
 	}
-	
+
 	
 
 

@@ -22,4 +22,15 @@ public class QuestionCategoryService {
 		List<QuestionCategory> questionCategories = questionCategoryRepository.findAll();
 		return questionCategories.stream().map(qcategory->QuestionCategoryDTO.toDTO(qcategory)).collect(Collectors.toList());
 	}
+
+	public QuestionCategory findCategoryByCategoryName(String category) {
+		List<QuestionCategory> questionCategories = questionCategoryRepository.findAll();
+		for(QuestionCategory qcategory: questionCategories) {
+			if(qcategory.getQuestionCategoryName().equals(category)) {
+				return questionCategoryRepository.findById(qcategory.getId()).get();
+			}
+		}
+		return null;
+		
+	}
 }

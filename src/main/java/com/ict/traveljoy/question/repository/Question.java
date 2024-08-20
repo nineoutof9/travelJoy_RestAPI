@@ -39,11 +39,11 @@ public class Question {
 	private Long id;
 
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "user_id", nullable = false)
 	private Users user; //질문자
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "question_category_id", nullable = false)
 	private QuestionCategory questionCategory;
 
@@ -52,8 +52,11 @@ public class Question {
 	@ColumnDefault("SYSDATE")
 	@CreationTimestamp
 	private LocalDateTime questionDate;
+	
+	@Column(name="QUESTION_TITLE",nullable = false)
+	private String questionTitle;
 
-	@Column(length = 2000,name="QUESTION_CONTENT")
+	@Column(length = 2000,name="QUESTION_CONTENT",nullable = false)
 	private String questionContent;
 
 	@Column(nullable = false,columnDefinition = "NUMBER(1, 0)",name="IS_HAS_ANSWER")

@@ -37,20 +37,13 @@ public class ViewCountService {
 	
 	// 단순 횟수 받아오기
 	@Transactional(readOnly = true) //notice id별 sum(count), datetime에 따라 증가
-	public long findbyNoticeId(long noticeId) {
-		if(noticeRepository.existsById(noticeId)) {
-			
+	public ViewCountDTO findbyNoticeId(long noticeId) {
+		if(noticeRepository.existsById(noticeId) && viewCountRepository.existsByNotice_Id(noticeId)) {
+			ViewCount viewCountEntity = viewCountRepository.findByNotice_Id(noticeId);
+			return ViewCountDTO.toDTO(viewCountEntity);
+	
 		}
-//		if(noticeRepository.existsById(noticeId)) {
-//			ViewCount viewCountEntity = viewCountRepository.findbyNoticeId
-//		return ViewCountDTO.builder()
-//				.notice(viewCountEntity)
-////					.user()
-//				.build();
-//		}
-//		else throw new IllegalArgumentException("오류");
-		
-		return 4;
+		else throw new IllegalArgumentException("오류");
 	}
 	
 	// 횟수 증가

@@ -52,7 +52,7 @@ public class NoticeService {
 //                      .collect(Collectors.toList());
 //	}
 
-	public NoticeDTO findById(long notice_id,String useremail) { // 특정 공지 조회
+	public NoticeDTO findById(long notice_id) { // 특정 공지 조회
 		if(noticeRepository.existsById(notice_id)) {
 			Notice notice = noticeRepository.findById(notice_id).get();
 			NoticeDTO noticeDTO = NoticeDTO.toDTO(notice);
@@ -66,10 +66,17 @@ public class NoticeService {
 	
 	@Transactional(readOnly = true)
 	public List<NoticeDTO> findAll() { //모든 공지 조회
+		
 		List<Notice> noticeList = noticeRepository.findAll();
-        return noticeList.stream()
-                      .map(NoticeDTO::toDTO)
-                      .collect(Collectors.toList());
+		List<NoticeDTO> noticeDTOList = noticeList.stream().map(NoticeDTO::toDTO).collect(Collectors.toList());
+		long count = 0l;
+		for(int i=0;i<noticeList.size();i++) {
+			// viewcount받아오기
+			count = viewCountService.findbyNoticeId(noticeList.get(i).getId()).getCount();
+			//방문횟수 dto에 추가
+			noticeDTOList.get(i).setViewCount(count);
+		}
+        return noticeDTOList;
 	}
 	
 	@Transactional

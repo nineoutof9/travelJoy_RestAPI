@@ -30,7 +30,7 @@ public class CheckContainsUseremail {
 			}
 		}
 		catch(Exception e) {
-			useremail = "aab@aaa.com";
+			useremail = "aaa@aaa.com";
 		}
 
 		return useremail;

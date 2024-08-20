@@ -14,12 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ict.traveljoy.controller.CheckContainsUseremail;
 import com.ict.traveljoy.question.service.QuestionCategoryDTO;
 import com.ict.traveljoy.question.service.QuestionCategoryService;
 import com.ict.traveljoy.question.service.QuestionDTO;
 import com.ict.traveljoy.question.service.QuestionService;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -30,12 +32,17 @@ public class QuestionController {
 	private final QuestionService questionService;
 	private final QuestionCategoryService questionCategoryService;
 	private final ObjectMapper objectMapper;
+	private final CheckContainsUseremail checkUser;
 	
 
-	@PostMapping("/createAsk")
-	public ResponseEntity<QuestionDTO> createQuestion(@RequestBody QuestionDTO questionDTO){
+	@PostMapping
+	public ResponseEntity<QuestionDTO> createQuestion(@RequestBody QuestionDTO questionDTO,HttpServletRequest request){
+		//질문한사람 user 설정,questionCategory받기,questionContent
+		String useremail = checkUser.checkContainsUseremail(request);
+		String category = request.getParameter("category");
+		
 		try {
-			QuestionDTO createdQuestion = questionService.createQuestion(questionDTO);
+			QuestionDTO createdQuestion = questionService.createQuestion(useremail,category,questionDTO);
 			if(createdQuestion == null) {
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			}
@@ -49,9 +56,9 @@ public class QuestionController {
 	
 	//모두
 	@GetMapping("/all")
-	public ResponseEntity<List<QuestionDTO>> getQuestionAll(){
+	public ResponseEntity<List<QuestionDTO>> getAllQuestion(){
 		try {
-			List<QuestionDTO> questionList = questionService.getAll();
+			List<QuestionDTO> questionList = questionService.findAll();
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(questionList);
 		}
 		catch(Exception e) {
@@ -75,7 +82,7 @@ public class QuestionController {
 	@GetMapping("/{question_category}")
 	public ResponseEntity<List<QuestionDTO>> getQuestionByCategory(@PathVariable String question_category){
 		try {
-			List<QuestionDTO> questionList = questionService.getAllByCategory(question_category);
+			List<QuestionDTO> questionList = questionService.findAllByCategory(question_category);
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(questionList);
 		}
 		catch(Exception e) {
