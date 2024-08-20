@@ -69,6 +69,16 @@ public class UserController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	    }
 	}
-
+	
+	 @GetMapping("/checkemail")
+	 public ResponseEntity<Map<String, Boolean>> checkEmail(@RequestParam("email") String email) {
+	        try {
+	            boolean exists = userService.checkEmailExists(email);
+	            return ResponseEntity.ok(Map.of("exists", exists));
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("exists", false));
+	        }
+	  }
 	
 }

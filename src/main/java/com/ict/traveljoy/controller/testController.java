@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ict.traveljoy.users.service.UserDTO;
 import com.ict.traveljoy.users.service.UserService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @CrossOrigin
@@ -49,6 +51,18 @@ public class testController {
         }
     }
     
+    @GetMapping("/api/get1")
+    public String getTest1() {
+        return "success get";
+    }
+    @GetMapping("/api/get2/{id}")
+    public String getTest2(@PathVariable String id) {
+        return "success get"+id;
+    }
+    @GetMapping("/api/get3")
+    public String getTest3(@RequestParam String email) {
+        return "success get"+email;
+    }
     @GetMapping("/react")
     public String frontend() {
         return "react/index";
