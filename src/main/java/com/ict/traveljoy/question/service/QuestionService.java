@@ -31,9 +31,7 @@ public class QuestionService {
 		
 		Users user = userRepository.findByEmail(useremail).get();
 		question.setUser(user);
-		System.out.println("check-----"+useremail);
 		QuestionCategory questionCategory = questionCategoryService.findCategoryByCategoryName(category);
-		System.out.println("check-----"+questionCategory.getQuestionCategoryName());
 		if(questionCategory!=null) {
 			question.setQuestionCategory(questionCategory);
 			Question afterSave = questionRepostiory.save(question);
@@ -41,15 +39,16 @@ public class QuestionService {
 		}
 		else return null;
 		
-		//question category도 설정해줘야함.
-		
-//		Question afterSave = questionRepostiory.save(question);
-//		return QuestionDTO.toDTO(afterSave);
 	}
 
 
 	public List<QuestionDTO> findAll() {
 		List<Question> questionList = questionRepostiory.findAll();
+		for(Question question:questionList) {
+//			question.setQuestionCategory(null);
+			System.out.println(question);
+		}
+		
 		return questionList.stream().map(question->QuestionDTO.toDTO(question)).collect(Collectors.toList());
 	}
 
@@ -73,20 +72,23 @@ public class QuestionService {
 	
 	//본인꺼외에는 안보이게 할지 말지
 	public QuestionDTO findById(long questionId) {
-		// TODO Auto-generated method stub
+		if(questionRepostiory.existsById(questionId)) {
+			Question question = questionRepostiory.findById(questionId).get();
+			return QuestionDTO.toDTO(question);
+		}
 		return null;
 	}
 
 
 	public QuestionDTO updateById(long questionId,QuestionDTO questionDTO) {
 		if(questionRepostiory.existsById(questionId)) {
-			Question beforeQuestion = questionRepostiory.findById(questionId).orElseThrow(() -> new RuntimeException("Question not found"));
+			Question beforeQuestion = questionRepostiory.findById(questionId).get();
 			beforeQuestion.setQuestionCategory(questionDTO.getQuestionCategory());
 			beforeQuestion.setQuestionContent(questionDTO.getQuestionContent());
 			Question updatedQuestion = questionRepostiory.save(beforeQuestion);
 			return QuestionDTO.toDTO(updatedQuestion);
 		}
-		else throw new IllegalArgumentException("오류");
+		else throw new IllegalArgumentException("해당 id와 일치하는 question 없음");
 	}
 	
 	public int answerCompleted(long questionId) {
@@ -102,10 +104,17 @@ public class QuestionService {
 	public QuestionDTO deleteById(long questionId) {
 		if(questionRepostiory.existsById(questionId)) {
 			Question question = questionRepostiory.findById(questionId).orElseThrow(() -> new RuntimeException("Question not found"));
-			questionRepostiory.delete(question);
-			return QuestionDTO.toDTO(question);
+			boolean answerDeleted = false;
+			if(question.getIsHasAnswer()==1) {
+				answerDeleted = answerService.deleteByQuestionId(questionId);
+				if(answerDeleted) {
+					questionRepostiory.delete(question);
+					return QuestionDTO.toDTO(question);
+				}
+			}
 		}
-		else throw new IllegalArgumentException("오류");
+		else throw new IllegalArgumentException("삭제 실패");
+		return null;
 	}
 
 	

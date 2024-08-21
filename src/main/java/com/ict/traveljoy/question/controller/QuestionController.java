@@ -79,8 +79,9 @@ public class QuestionController {
 	}
 	
 	// 특정 카테고리
-	@GetMapping("/{question_category}")
+	@GetMapping("/category/{question_category}")
 	public ResponseEntity<List<QuestionDTO>> getQuestionByCategory(@PathVariable String question_category){
+		System.out.println(question_category);
 		try {
 			List<QuestionDTO> questionList = questionService.findAllByCategory(question_category);
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(questionList);
@@ -93,7 +94,7 @@ public class QuestionController {
 	
 	//특정 문의글
 	@GetMapping("/{question_id}")
-	public ResponseEntity<QuestionDTO> getQuestionById(@PathVariable String question_id){
+	public ResponseEntity<QuestionDTO> getQuestionById(@PathVariable("question_id") String question_id){
 		try {
 			QuestionDTO questionDTO = questionService.findById(Long.parseLong(question_id));
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(questionDTO);
@@ -124,7 +125,9 @@ public class QuestionController {
 	public ResponseEntity<QuestionDTO> deleteQuestion(@PathVariable String question_id){
 		try {
 			QuestionDTO deletedQuestionDTO = questionService.deleteById(Long.parseLong(question_id));
-			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(deletedQuestionDTO);
+			if(deletedQuestionDTO!=null) 
+				return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(deletedQuestionDTO);
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		catch(Exception e) {
 			System.out.print("question_delete: ");
