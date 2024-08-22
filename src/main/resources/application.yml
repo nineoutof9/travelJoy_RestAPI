@@ -45,7 +45,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: "sjd4154@gmail.com"  #이메일
-    password: "jzmm guru omrs kpf"  #발급받은 비밀번호
+    password: "nofesspwahugqmfx"  #발급받은 비밀번호
     properties:
       mail:
         smtp:
