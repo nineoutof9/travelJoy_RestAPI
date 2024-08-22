@@ -33,11 +33,11 @@ public class UserHandicap {
 	@Column(name="user_handicap_id")
 	private Long id;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private Users user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "handicap_id", nullable = false)
     private Handicap handicap;
     
