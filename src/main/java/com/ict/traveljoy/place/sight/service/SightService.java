@@ -55,8 +55,13 @@ public class SightService {
         if (sightOpt.isPresent()) {
             Sight sight = sightOpt.get();
         	sight.setSightName(sightDto.getSightName());
+        	sight.setEntranceFee(sightDto.getEntranceFee());
+            sight.setDescriptions(sightDto.getDescriptions());
             sight.setRegion(sightDto.getRegion());
+            sight.setAddress( sightDto.getAddress());
+            sight.setTotalReviewCount(sightDto.getTotalReviewCount());
             sight.setAverageReviewRate(sightDto.getAverageReviewRate());
+            
             Sight updatedSight = sightRepository.save(sight);
             return SightDTO.toDto(updatedSight);
         } else {
