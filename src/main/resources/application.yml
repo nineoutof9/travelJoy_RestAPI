@@ -11,6 +11,7 @@ spring:
 
 
 
+
     hikari:
       auto-commit: true # default(false)
       connection-timeout: 30000 # default(30000)

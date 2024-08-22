@@ -8,6 +8,7 @@ import com.ict.traveljoy.security.jwt.refreshtoken.RefreshToken;
 import com.ict.traveljoy.security.jwt.service.RefreshService;
 import com.ict.traveljoy.security.jwt.util.JwtUtility;
 import com.ict.traveljoy.users.repository.Users;
+import com.ict.traveljoy.users.service.UserDTO;
 import com.ict.traveljoy.users.service.UserService;
 
 import jakarta.servlet.FilterChain;
@@ -84,11 +85,10 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String refresh = jwtUtility.generateToken(username, "refresh", refreshExpiredMs);
 
         // RefreshToken 저장 로직
-        Optional<Users> userOptional = userService.findByEmail(username);
-        if (userOptional.isPresent()) {
-            Users user = userOptional.get();
-            LocalDateTime now = LocalDateTime.now();
-            RefreshToken refreshToken = RefreshToken.builder()
+        
+        Users user = userService.findEntityByEmail(username);
+        LocalDateTime now = LocalDateTime.now();
+        RefreshToken refreshToken = RefreshToken.builder()
                     .status("activated")
                     .userAgent(request.getHeader("User-Agent"))
                     .user(user)
@@ -97,7 +97,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                     .expirationDate(now.plusSeconds(refreshExpiredMs / 1000))
                     .build();
             refreshService.save(refreshToken);
-        }
 
         // 리프레쉬 토큰을 httpOnly 쿠키로 설정
         Cookie refreshCookie = new Cookie("refreshToken", refresh);
