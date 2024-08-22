@@ -23,14 +23,13 @@ public class ViewCountService {
 	private final ObjectMapper objectMapper;
 	
 	
-	public ViewCountDTO createByNoticeId(long noticeId) {
-		if(noticeRepository.existsById(noticeId)) {
-			Notice noticeEntity = noticeRepository.findById(noticeId).get();
-			// user_id 받아오기
-//			Users user = noticeRepository.findById(notice_id).orElseThrow(() -> new RuntimeException("Notice not found"));
+	public ViewCountDTO createByNotice(Notice notice) {
+		if(noticeRepository.existsById(notice.getId())) {
+			
 			ViewCount viewCountEntity = new ViewCount();
-			viewCountEntity.setNotice(noticeEntity);
-//			viewCountEntity.setUser(user);
+			viewCountEntity.setNotice(notice);
+			viewCountEntity.setCount((long)0);
+			
 			return ViewCountDTO.toDTO(viewCountRepository.save(viewCountEntity));
 		}
 		else throw new IllegalArgumentException("오류");
@@ -38,20 +37,13 @@ public class ViewCountService {
 	
 	// 단순 횟수 받아오기
 	@Transactional(readOnly = true) //notice id별 sum(count), datetime에 따라 증가
-	public long findbyNoticeId(long noticeId) {
-		if(noticeRepository.existsById(noticeId)) {
-			
+	public ViewCountDTO findbyNoticeId(long noticeId) {
+		if(noticeRepository.existsById(noticeId) && viewCountRepository.existsByNotice_Id(noticeId)) {
+			ViewCount viewCountEntity = viewCountRepository.findByNotice_Id(noticeId);
+			return ViewCountDTO.toDTO(viewCountEntity);
+	
 		}
-//		if(noticeRepository.existsById(noticeId)) {
-//			ViewCount viewCountEntity = viewCountRepository.findbyNoticeId
-//		return ViewCountDTO.builder()
-//				.notice(viewCountEntity)
-////					.user()
-//				.build();
-//		}
-//		else throw new IllegalArgumentException("오류");
-		
-		return 4;
+		else throw new IllegalArgumentException("오류");
 	}
 	
 	// 횟수 증가
@@ -65,10 +57,17 @@ public class ViewCountService {
 //	}
 	
 	
-
+	
 	public ViewCountDTO updateViewCount(long noticeId) {
-		// TODO Auto-generated method stub
-		return null;
+		if(viewCountRepository.existsByNotice_Id(noticeId)) {
+			
+			// 추가적으로 check NoticeView
+			ViewCount viewCount = viewCountRepository.findByNotice_Id(noticeId);
+			viewCount.setCount(viewCount.getCount()+1);
+			ViewCount updatedViewCount = viewCountRepository.save(viewCount);
+			return ViewCountDTO.toDTO(updatedViewCount);
+		}
+		else throw new NullPointerException("오류");
 	}
 	
 }

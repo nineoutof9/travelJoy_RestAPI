@@ -27,6 +27,7 @@ public class NoticeDTO {
     private Boolean isActive;
     private String writer;
     private Users user;
+    private long viewCount;
  
     // DTO를 엔티티로 변환
     public Notice toEntity() {
@@ -38,7 +39,7 @@ public class NoticeDTO {
                 .writer(writer)
                 .user(user)
                 .isDelete(isDelete == null||false ? 0 : 1)
-                .isActive(isActive == null||false ? 0 : 1)
+                .isActive((isActive == null || isActive) ? 1 : 0)
                 .build();
     }
 

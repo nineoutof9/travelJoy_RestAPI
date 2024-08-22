@@ -28,7 +28,7 @@ public class AnswerController {
 	private final AnswerService answerService;
 	private final ObjectMapper objectMapper;
 	
-	@PostMapping("/replyAnswer")
+	@PostMapping
 	public ResponseEntity<AnswerDTO> createAnswer(@RequestBody AnswerDTO answerDTO){
 		try {
 			AnswerDTO createdAnswer = answerService.createAnswer(answerDTO);
@@ -44,10 +44,10 @@ public class AnswerController {
 	}
 	
 	@GetMapping("/{question_id}")
-	public ResponseEntity<List<AnswerDTO>> getAnswerByQuestionId(@PathVariable String question_id){
+	public ResponseEntity<AnswerDTO> getAnswerByQuestionId(@PathVariable String question_id){
 		try {
-			List<AnswerDTO> answerList = answerService.findByQuestionId(Long.parseLong(question_id));
-			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(answerList);
+			AnswerDTO answer = answerService.findByQuestionId(Long.parseLong(question_id));
+			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(answer);
 		}
 		catch(Exception e) {
 			System.out.print("answer_get: ");

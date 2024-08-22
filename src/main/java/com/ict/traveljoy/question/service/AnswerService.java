@@ -29,11 +29,11 @@ public class AnswerService {
 	}
 	
 	//질문으로 답변찾기
-	public List<AnswerDTO> findByQuestionId(long questionId) {
+	public AnswerDTO findByQuestionId(long questionId) {
 		if(questionRepository.existsById(questionId)) {
 			Question question = questionRepository.findById(questionId).get();
-			List<Answer> answerList = answerRepository.findAllByQuestion_Id(question.getId());
-			return answerList.stream().map(AnswerDTO::toDTO).collect(Collectors.toList());	
+			Answer answer = answerRepository.findByQuestion_Id(question.getId());
+			return AnswerDTO.toDTO(answer);	
 		}
 		else throw new IllegalArgumentException("오류");
 	}
@@ -59,6 +59,13 @@ public class AnswerService {
 			return AnswerDTO.toDTO(answer);
 		}
 		else throw new IllegalArgumentException("오류");
+	}
+
+	public boolean deleteByQuestionId(long questionId) {
+		if(answerRepository.existsByQuestion_Id(questionId)) {
+			Answer answer = answerRepository.findByQuestion_Id(questionId);
+		}
+		return false;
 	}
 
 

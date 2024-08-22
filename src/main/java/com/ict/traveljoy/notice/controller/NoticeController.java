@@ -1,5 +1,7 @@
 package com.ict.traveljoy.notice.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,9 +33,9 @@ public class NoticeController {
 	private final ObjectMapper objectMapper;
 	private final CheckContainsUseremail checkUser;
 	
-	@PostMapping("/createNotice")
+	@PostMapping
 	public ResponseEntity<NoticeDTO> createFavorite(@RequestBody NoticeDTO noticeDTO,HttpServletRequest request){ //target,targetId받아서 저장하기
-		
+		//title,content,writer 넘겨줘야함
 		String useremail = checkUser.checkContainsUseremail(request);
 		
 		try {
@@ -49,12 +51,26 @@ public class NoticeController {
 		}
 	}
 	//여러개
+	@GetMapping("/all")
+	public ResponseEntity<List<NoticeDTO>> getAllNotice(HttpServletRequest request){
+		
+		try {
+			List<NoticeDTO> noticeList = noticeService.findAll();
+			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(noticeList);
+		}
+		catch(Exception e) {
+			System.out.print("notice_get: ");
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 	
 	//하나만
 	@GetMapping("/{notice_id}")
 	public ResponseEntity<NoticeDTO> getNotice(@PathVariable String notice_id){
+		
 		try {
-			NoticeDTO noticeDTO = noticeService.findById(notice_id);
+			NoticeDTO noticeDTO = noticeService.findById(Long.parseLong(notice_id));
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(noticeDTO);
 		}
 		catch(Exception e) {
@@ -77,9 +93,11 @@ public class NoticeController {
 	}
 	
 	@DeleteMapping("/{notice_id}")
-	public ResponseEntity<NoticeDTO> deleteNotice(@PathVariable String notice_id, @RequestBody NoticeDTO noticeDTO){
+	public ResponseEntity<NoticeDTO> deleteNotice(@PathVariable String notice_id,HttpServletRequest request){
+		String useremail = checkUser.checkContainsUseremail(request);
+		
 		try {
-			NoticeDTO deletedNotice = noticeService.deleteNotice(Long.parseLong(notice_id),noticeDTO);
+			NoticeDTO deletedNotice = noticeService.deleteNotice(useremail,Long.parseLong(notice_id));
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(deletedNotice);
 		}
 		catch(Exception e) {

@@ -23,23 +23,20 @@ public class QuestionDTO {
 	private Users user;
 	private QuestionCategory questionCategory;
 	private LocalDateTime questionDate;
+	private String questionTitle;
 	private String questionContent;
 	private Boolean isHasAnswer;
 
 	public Question toEntity() {
-//		Users user = new Users();
-//		QuestionCategory questionCategory = new QuestionCategory();
-//
-//		user.setId(userId);
-//		questionCategory.setId(questionCategory);
 
 		return Question.builder()
 				.id(id)
 				.user(user)
 				.questionCategory(questionCategory)
 				.questionDate(questionDate)
+				.questionTitle(questionTitle)
 				.questionContent(questionContent)
-				.isHasAnswer(isHasAnswer == null||false?0:1)
+				.isHasAnswer(isHasAnswer!=null && isHasAnswer? 1:0)
 				.build();
 	}
 
@@ -49,6 +46,7 @@ public class QuestionDTO {
 				.user(question.getUser())
 				.questionCategory(question.getQuestionCategory())
 				.questionDate(question.getQuestionDate())
+				.questionTitle(question.getQuestionTitle())
 				.questionContent(question.getQuestionContent())
 				.isHasAnswer(question.getIsHasAnswer() == 1 ? true : false)
 				.build();

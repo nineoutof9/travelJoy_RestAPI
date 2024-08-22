@@ -22,16 +22,12 @@ public class ViewCountDTO {
 
 	private Long id;
 	private Notice notice;
-	private Users user;
-	private LocalDateTime viewDate;
 	private Long count;
 	
 	public ViewCount toEntity() {
 		return ViewCount.builder()
 				.id(id)
 				.notice(notice)
-				.user(user)
-				.viewDate(viewDate)
 				.count(count)
 				.build();
 	}
@@ -40,8 +36,6 @@ public class ViewCountDTO {
 		return ViewCountDTO.builder()
 				.id(viewCount.getId())
 				.notice(viewCount.getNotice())
-				.user(viewCount.getUser())
-				.viewDate(viewCount.getViewDate())
 				.count(viewCount.getCount())
 				.build();
 	}
