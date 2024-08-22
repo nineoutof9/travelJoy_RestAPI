@@ -34,11 +34,11 @@ public class UserInterest {
 	@Column(name="user_interest_id")
 	private Long id;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private Users user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "interest_id", nullable = false)
     private Interest interest;
 }

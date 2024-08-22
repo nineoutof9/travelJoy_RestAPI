@@ -37,11 +37,11 @@ public class PushAlarmSend {
 	@GeneratedValue(generator = "seq_push_alarm_send",strategy = GenerationType.SEQUENCE)
 	private Long id;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
     @JoinColumn(name = "push_alarm_id", nullable = false)
 	private PushAlarm pushAlarm;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
 	private Users user;
 	

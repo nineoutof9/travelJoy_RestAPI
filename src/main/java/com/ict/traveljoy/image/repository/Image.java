@@ -5,11 +5,14 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.ict.traveljoy.users.repository.Users;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -53,4 +56,7 @@ public class Image {
 	@Column(name="DELETE_DATE")
 	@CreationTimestamp
     private LocalDateTime deleteDate;
+	
+	@OneToOne(mappedBy = "profileImage")
+	private Users user;
 }

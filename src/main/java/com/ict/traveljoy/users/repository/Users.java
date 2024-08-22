@@ -127,7 +127,7 @@ public class Users {
 	private LocalDateTime updateDate;
 	
 	@Column
-	@ColumnDefault("안녕하세요.")
+	@ColumnDefault("'안녕하세요.'")
 	private String introduce;
 	
 	@OneToOne(cascade = CascadeType.ALL)
