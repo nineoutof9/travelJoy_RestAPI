@@ -20,6 +20,7 @@ public class MailController {
     @PostMapping("/checkemail")
     public String emailCheck(@RequestBody MailDTO mailDTO) throws MessagingException, UnsupportedEncodingException {
         MailDTO mail = mailService.findByEmail(mailDTO.getEmail());
+
         if (mail == null) {
             mail = new MailDTO();
             mail.setEmail(mailDTO.getEmail());
@@ -28,6 +29,7 @@ public class MailController {
             return "already";
         }
         else if (mail.getTodayTryCount() >= 5) {
+
             return "5times";
         }
         
@@ -36,6 +38,7 @@ public class MailController {
         mail = mailService.saveMailAuth(mail);
         
         return mail.getTodayTryCount()+"회 시도하셨습니다";
+
     }
     
     @ResponseBody

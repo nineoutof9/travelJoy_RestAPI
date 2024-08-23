@@ -20,6 +20,7 @@ public class MailDTO {
     private Integer todayTryCount;
     private LocalDateTime createDate;
     private LocalDateTime lastTryDate;
+
     private Boolean isAuth;
     
     public Mail toEntity() {

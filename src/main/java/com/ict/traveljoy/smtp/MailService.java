@@ -78,8 +78,7 @@ public class MailService {
             .map(MailDTO::toDTO) 
             .orElse(null); 
     }
-    
-    
+
     
     public MailDTO saveMailAuth(MailDTO mailDTO) {
         Mail mail = mailDTO.toEntity();
