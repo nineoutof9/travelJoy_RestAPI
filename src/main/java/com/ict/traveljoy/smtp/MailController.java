@@ -27,17 +27,13 @@ public class MailController {
         else if (mail.getIsAuth()) {
             return "already";
         }
-        
-        // todayTryCount 로직을 서비스에서 처리
-        mail = mailService.saveMailAuth(mail);
-
-        if (mail.getTodayTryCount() >= 5) {
+        else if (mail.getTodayTryCount() >= 5) {
             return "5times";
         }
         
         String authCode = mailService.sendSimpleMessage(mail.getEmail());
         mail.setAuthCode(authCode);
-        mailService.saveMailAuth(mail);
+        mail = mailService.saveMailAuth(mail);
         
         return mail.getTodayTryCount()+"회 시도하셨습니다";
     }
