@@ -87,7 +87,7 @@ public class MailService {
         
         // 날짜 비교 로직
         if (mail.getLastTryDate() != null && mail.getLastTryDate().toLocalDate().isEqual(today)) {
-            mail.setTodayTryCount(mail.getTodayTryCount() + 1);
+        	mail.setTodayTryCount(mail.getTodayTryCount() + 1);
         } else {
             mail.setTodayTryCount(1); // 새로운 날이면 1로 초기화
         }

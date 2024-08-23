@@ -19,6 +19,8 @@ public class MailDTO {
     private String authCode;
     private Integer todayTryCount;
     private LocalDateTime createDate;
+    private LocalDateTime lastTryDate;
+
     private Boolean isAuth;
     
     public Mail toEntity() {
@@ -28,6 +30,7 @@ public class MailDTO {
     			.authCode(authCode)
     			.todayTryCount(todayTryCount)
     			.createDate(createDate)
+    			.lastTryDate(lastTryDate)
     			.isAuth(isAuth != null && isAuth ? 1 : 0)
     			.build();
     }
@@ -40,6 +43,7 @@ public class MailDTO {
     			.authCode(mail.getAuthCode())
     			.todayTryCount(mail.getTodayTryCount())
     			.createDate(mail.getCreateDate())
+    			.lastTryDate(mail.getLastTryDate())
     			.isAuth(mail.getIsAuth() != null && mail.getIsAuth() == 1 ? true : false)
     			.build();
     	
