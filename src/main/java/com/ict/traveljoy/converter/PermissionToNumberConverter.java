@@ -8,16 +8,30 @@ public class PermissionToNumberConverter implements AttributeConverter<String, I
 
 	@Override
 	public Integer convertToDatabaseColumn(String attribute) {
-		if (attribute != null && attribute.equals("Admin"))
-            return 1;
-		return 0;
+		if (attribute == null) return null;
+
+        switch (attribute) {
+            case "ROLE_USER":
+                return 1;
+            case "ROLE_ADMIN":
+                return 2;
+            default:
+                return 0; // 기본 권한
+        }
 	}
 
 	@Override
 	public String convertToEntityAttribute(Integer dbData) {
-        if (dbData == 1)
-                return "Admin";
-        return "User";
+		if (dbData == null) return null;
+
+        switch (dbData) {
+            case 1:
+                return "ROLE_USER";
+            case 2:
+                return "ROLE_ADMIN";
+            default:
+                return "ROLE_GUEST"; // 기본 권한
+        }
 	}
 	
 }
