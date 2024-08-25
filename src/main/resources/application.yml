@@ -9,8 +9,8 @@ spring:
 #    username: ICTUSER
 #    password: ICT1234
     url: jdbc:oracle:thin:@localhost:1521/XEPDB1
-    username: skstudy
-    password: sk1234
+    username: STUDY
+    password: STUDY
 
 
     hikari:
@@ -21,7 +21,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create # create = ddl 자동생성, create-drop은 재시작
+      ddl-auto: update # create = ddl 자동생성, create-drop은 재시작
       #create이후에는 update, 테이블만들어놓고하면 none, 비교만 하려면 valid
 
       naming:

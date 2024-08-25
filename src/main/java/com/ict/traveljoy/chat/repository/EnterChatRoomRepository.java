@@ -7,7 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface EnterChatRoomRepository extends JpaRepository<EnterChatRoom, Long>{
 
-	EnterChatRoom existsByUser_Id(Long id);
+	Boolean existsByUser_Id(Long userid);
+
+	EnterChatRoom findByUser_Id(Long userid);
 
 	
 }

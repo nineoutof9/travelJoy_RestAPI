@@ -25,7 +25,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/ask")
+@RequestMapping("/api/ask")
 @RequiredArgsConstructor
 public class QuestionController {
 
@@ -80,7 +80,7 @@ public class QuestionController {
 	
 	// 특정 카테고리
 	@GetMapping("/category/{question_category}")
-	public ResponseEntity<List<QuestionDTO>> getQuestionByCategory(@PathVariable String question_category){
+	public ResponseEntity<List<QuestionDTO>> getQuestionByCategory(@PathVariable("question_category") String question_category){
 		System.out.println(question_category);
 		try {
 			List<QuestionDTO> questionList = questionService.findAllByCategory(question_category);
@@ -108,7 +108,7 @@ public class QuestionController {
 	
 	//문의글 수정
 	@PutMapping("/{question_id}")
-	public ResponseEntity<QuestionDTO> updateQuestion(@PathVariable String question_id,@RequestBody QuestionDTO questionDTO){
+	public ResponseEntity<QuestionDTO> updateQuestion(@PathVariable("question_id") String question_id,@RequestBody QuestionDTO questionDTO){
 		try {
 			QuestionDTO updatedQuestionDTO = questionService.updateById(Long.parseLong(question_id),questionDTO);
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(updatedQuestionDTO);
@@ -122,7 +122,7 @@ public class QuestionController {
 	
 	//문의글 삭제
 	@DeleteMapping("/{question_id}")
-	public ResponseEntity<QuestionDTO> deleteQuestion(@PathVariable String question_id){
+	public ResponseEntity<QuestionDTO> deleteQuestion(@PathVariable("question_id") String question_id){
 		try {
 			QuestionDTO deletedQuestionDTO = questionService.deleteById(Long.parseLong(question_id));
 			if(deletedQuestionDTO!=null) 

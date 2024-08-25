@@ -21,7 +21,7 @@ import com.ict.traveljoy.question.service.AnswerService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/answer")
+@RequestMapping("/api/answer")
 @RequiredArgsConstructor
 public class AnswerController {
 
@@ -44,7 +44,7 @@ public class AnswerController {
 	}
 	
 	@GetMapping("/{question_id}")
-	public ResponseEntity<AnswerDTO> getAnswerByQuestionId(@PathVariable String question_id){
+	public ResponseEntity<AnswerDTO> getAnswerByQuestionId(@PathVariable("question_id") String question_id){
 		try {
 			AnswerDTO answer = answerService.findByQuestionId(Long.parseLong(question_id));
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(answer);
@@ -57,7 +57,7 @@ public class AnswerController {
 	}
 	
 	@PutMapping("/{answer_id}")
-	public ResponseEntity<AnswerDTO> updateAnswer(@PathVariable String answer_id,@RequestBody AnswerDTO answerDTO){
+	public ResponseEntity<AnswerDTO> updateAnswer(@PathVariable("answer_id") String answer_id,@RequestBody AnswerDTO answerDTO){
 		try {
 			AnswerDTO updatedAnswerDTO = answerService.updateById(Long.parseLong(answer_id),answerDTO);
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(answerDTO);
@@ -70,7 +70,7 @@ public class AnswerController {
 	} 
 	
 	@DeleteMapping("/{answer_id}")
-	public ResponseEntity<AnswerDTO> deleteAnswer(@PathVariable String answer_id){
+	public ResponseEntity<AnswerDTO> deleteAnswer(@PathVariable("answer_id") String answer_id){
 		try {
 			AnswerDTO answerDTO = answerService.deleteById(Long.parseLong(answer_id));
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(answerDTO);

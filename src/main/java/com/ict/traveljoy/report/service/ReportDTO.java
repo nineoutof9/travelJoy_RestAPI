@@ -24,6 +24,12 @@ public class ReportDTO {
 	private Users user;
 	private ReportCategory reportCategory;
 	private Long targetId;
+	private Boolean isUser;
+	private Boolean isNotice;
+	private Boolean isBoard;
+	private Boolean isComment;
+	private Boolean isReview;
+	
 	private LocalDateTime reportDate;
 	private String reportContent;
 	private Long reportHandlerId;
@@ -37,6 +43,11 @@ public class ReportDTO {
 				.user(user)
 				.reportCategory(reportCategory)
 				.targetId(targetId)
+				.isUser(isUser!=null&&true?1:0)
+				.isNotice(isNotice!=null&&true?1:0)
+				.isBoard(isBoard!=null&&true?1:0)
+				.isComment(isComment!=null&&true?1:0)
+				.isReview(isReview!=null&&true?1:0)
 				.reportDate(reportDate)
 				.reportContent(reportContent)
 				.reportHandlerId(reportHandlerId)
@@ -52,6 +63,11 @@ public class ReportDTO {
 				.user(report.getUser())
 				.reportCategory(report.getReportCategory())
 				.targetId(report.getTargetId())
+				.isUser(report.getIsUser()==1?true:false)
+				.isNotice(report.getIsNotice()==1?true:false)
+				.isBoard(report.getIsBoard()==1?true:false)
+				.isComment(report.getIsComment()==1?true:false)
+				.isReview(report.getIsReview()==1?true:false)
 				.reportDate(report.getReportDate())
 				.reportContent(report.getReportContent())
 				.reportHandlerId(report.getReportHandlerId())
