@@ -54,7 +54,7 @@ public class QuestionController {
 		}
 	}
 	
-	//모두
+	//모두, FAQ제외
 	@GetMapping("/all")
 	public ResponseEntity<List<QuestionDTO>> getAllQuestion(){
 		try {
@@ -78,7 +78,7 @@ public class QuestionController {
 		}
 	}
 	
-	// 특정 카테고리
+	// 특정 카테고리 게시글만, FAQ는 여기를 통해
 	@GetMapping("/category/{question_category}")
 	public ResponseEntity<List<QuestionDTO>> getQuestionByCategory(@PathVariable("question_category") String question_category){
 		System.out.println(question_category);

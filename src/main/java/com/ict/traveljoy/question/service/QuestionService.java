@@ -1,5 +1,6 @@
 package com.ict.traveljoy.question.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,12 +45,14 @@ public class QuestionService {
 
 	public List<QuestionDTO> findAll() {
 		List<Question> questionList = questionRepostiory.findAll();
+		List<QuestionDTO> questionDTOList = new ArrayList<QuestionDTO>();
 		for(Question question:questionList) {
-//			question.setQuestionCategory(null);
-			System.out.println(question);
+			if(question.getQuestionCategory().getQuestionCategoryName()!="FAQ") {
+				questionDTOList.add(QuestionDTO.toDTO(question));
+			}
 		}
 		
-		return questionList.stream().map(question->QuestionDTO.toDTO(question)).collect(Collectors.toList());
+		return questionDTOList;
 	}
 
 	public List<QuestionDTO> findAllByCategory(String category) {
