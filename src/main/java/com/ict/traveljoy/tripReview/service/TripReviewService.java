@@ -97,10 +97,10 @@ public class TripReviewService {
         return tripReviews.stream().map(TripReviewDTO::toDto).toList();
     }
 
-    public TripReviewDTO getReviewById(Long tripReviewId) {
-        Optional<TripReview> tripReviewOptional = tripReviewRepository.findById(tripReviewId);
+    public TripReviewDTO getReviewById(Long id) {
+        Optional<TripReview> tripReviewOptional = tripReviewRepository.findById(id);
         if (tripReviewOptional.isEmpty()) {
-            throw new IllegalArgumentException("TripReview with ID " + tripReviewId + " does not exist.");
+            throw new IllegalArgumentException("TripReview with ID " + id + " does not exist.");
         }
         return TripReviewDTO.toDto(tripReviewOptional.get());
     }
