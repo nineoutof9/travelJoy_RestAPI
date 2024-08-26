@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ict.traveljoy.place.region.repository.Region;
+import com.ict.traveljoy.place.region.repository.RegionRepository;
 import com.ict.traveljoy.place.sight.repository.Sight;
 import com.ict.traveljoy.place.sight.repository.SightRepository;
 
@@ -15,7 +17,10 @@ import jakarta.transaction.Transactional;
 @Service
 @Transactional
 public class SightService {
-
+    
+    @Autowired
+    private RegionRepository regionRepository;
+    
     @Autowired
     private SightRepository sightRepository;
 
@@ -35,30 +40,46 @@ public class SightService {
     // 명소 저장
     @Transactional
     public SightDTO saveSight(SightDTO sightDto) {
-        // 데이터 유효성 검증
+
         if (sightDto.getSightName() == null || sightDto.getSightName().isEmpty()) {
             throw new IllegalArgumentException("관광지 이름이 비어있으면 안돼요");
         }
-        // 다른 필수 필드 검증 추가 가능
+        if (sightDto.getRegionId() == null) {
+            throw new IllegalArgumentException("Region must not be null");
+        }
 
-        Sight sight = sightDto.toEntity();
+        Region region = regionRepository.findById(sightDto.getRegionId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid RegionId"));
+
+        Sight sight = sightDto.toEntity(regionRepository);
+        sight.setRegion(region);
         sight = sightRepository.save(sight);
         return SightDTO.toDto(sight);
     }
     
     // 명소 수정
-    
     @Transactional
     public SightDTO updateSight(Long id, SightDTO sightDto) {
         Optional<Sight> sightOpt = sightRepository.findById(id);
 
         if (sightOpt.isPresent()) {
             Sight sight = sightOpt.get();
-        	sight.setSightName(sightDto.getSightName());
-        	sight.setEntranceFee(sightDto.getEntranceFee());
+
+            if (sightDto.getSightName() == null || sightDto.getSightName().isEmpty()) {
+                throw new IllegalArgumentException("관광지 이름이 비어있으면 안돼요");
+            }
+            if (sightDto.getRegionId() == null) {
+                throw new IllegalArgumentException("Region must not be null");
+            }
+
+            Region region = regionRepository.findById(sightDto.getRegionId())
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid RegionId"));
+
+            sight.setSightName(sightDto.getSightName());
+            sight.setEntranceFee(sightDto.getEntranceFee());
             sight.setDescriptions(sightDto.getDescriptions());
-            sight.setRegion(sightDto.getRegion());
-            sight.setAddress( sightDto.getAddress());
+            sight.setRegion(region);
+            sight.setAddress(sightDto.getAddress());
             sight.setTotalReviewCount(sightDto.getTotalReviewCount());
             sight.setAverageReviewRate(sightDto.getAverageReviewRate());
             

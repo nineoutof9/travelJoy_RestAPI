@@ -8,6 +8,8 @@ import java.util.List;
 @Repository
 public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
 
+   List<Feedback> getFeedbackById(Long id);
+   
     List<Feedback> findByPlanId(Long planId);
 
     List<Feedback> findByOwner(String owner);

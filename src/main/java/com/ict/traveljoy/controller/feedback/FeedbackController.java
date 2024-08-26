@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @Tag(name="피드백 관리", description = "추천 AI에 대한 피드백 CRUD.")
-@RequestMapping("/feedbacks")
+@RequestMapping("/api/feedbacks")
 public class FeedbackController {
 
     private final FeedbackService feedbackService;
@@ -28,7 +28,7 @@ public class FeedbackController {
     @GetMapping("/all")
     public ResponseEntity<List<FeedbackDTO>> getAllFeedbacks() {
        try {
-            List<FeedbackDTO> feedbacks = feedbackService.getAllFeedbacks(); // 이 메소드가 FeedbackService에 있어야 합니다.
+            List<FeedbackDTO> feedbacks = feedbackService.getAllFeedbacks(); 
             return new ResponseEntity<>(feedbacks, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
@@ -85,9 +85,9 @@ public class FeedbackController {
     }
 
     // 피드백 수정
-    @PutMapping("feedbackId")
+    @PutMapping("/{feedbackId}")
     public ResponseEntity<FeedbackDTO> updateFeedback(@PathVariable("feedbackId") Long feedbackId, @RequestBody FeedbackDTO feedbackDto) {
-       try {
+        try {
             feedbackDto.setId(feedbackId);
             FeedbackDTO updatedFeedback = feedbackService.updateFeedback(feedbackDto);
             if (updatedFeedback != null) {
@@ -107,6 +107,22 @@ public class FeedbackController {
        try {
             feedbackService.deleteFeedback(feedbackId);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    // feedbackId로 특정 Feedback 조회
+    @GetMapping("/{feedbackId}")
+    public ResponseEntity<FeedbackDTO> getFeedbackById(@PathVariable("feedbackId") Long feedbackId) {
+       try {
+            FeedbackDTO feedback = feedbackService.getFeedbackById(feedbackId);
+            if (feedback != null) {
+                return new ResponseEntity<>(feedback, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

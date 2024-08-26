@@ -26,10 +26,10 @@ public class PlaceInterestDTO {
         return PlaceInterest.builder()
                             .id(id)
                             .interestId(interestId)
-                            .isEvent(isEvent == true ? 1 : 0)
-                            .isFood(isFood == true ? 1 : 0)
-                            .isSight(isSight == true ? 1 : 0)
-                            .isHotel(isHotel == true ? 1 : 0)
+                            .isEvent(isEvent != null && isEvent ? 1 : 0)
+                            .isFood(isFood != null && isFood ? 1 : 0)
+                            .isSight(isSight != null && isSight ? 1 : 0)
+                            .isHotel(isHotel != null && isHotel ? 1 : 0)
                             .build();
     }
     
