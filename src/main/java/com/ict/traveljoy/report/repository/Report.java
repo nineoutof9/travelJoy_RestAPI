@@ -50,6 +50,26 @@ public class Report {
     
 	@Column(name="TARGET_ID",nullable=false)
     private Long targetId;
+	
+	@Column(name="IS_USER", columnDefinition = "NUMBER(1, 0)")
+	@ColumnDefault("0")
+	private Integer isUser;
+
+	@Column(name="IS_NOTICE", columnDefinition = "NUMBER(1, 0)")
+	@ColumnDefault("0")
+	private Integer isNotice;
+
+	@Column(name="IS_BOARD", columnDefinition = "NUMBER(1, 0)")
+	@ColumnDefault("0")
+	private Integer isBoard;
+
+	@Column(name="IS_COMMENT", columnDefinition = "NUMBER(1, 0)")
+	@ColumnDefault("0")
+	private Integer isComment;
+	
+	@Column(name="IS_REVIEW", columnDefinition = "NUMBER(1, 0)")
+	@ColumnDefault("0")
+	private Integer isReview;
     
     //신고일자
 	@Column(name="REPORT_DATE", nullable = false)
@@ -77,7 +97,5 @@ public class Report {
 	@ColumnDefault("SYSDATE")
 	@CreationTimestamp
     private LocalDateTime reportResultDate;
-    
-    
     
 }

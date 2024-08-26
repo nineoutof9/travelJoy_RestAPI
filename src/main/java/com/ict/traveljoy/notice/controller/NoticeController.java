@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 
 @RestController
-@RequestMapping("/notice")
+@RequestMapping("/api/notice")
 @RequiredArgsConstructor
 public class NoticeController {
 
@@ -67,7 +67,7 @@ public class NoticeController {
 	
 	//하나만
 	@GetMapping("/{notice_id}")
-	public ResponseEntity<NoticeDTO> getNotice(@PathVariable String notice_id){
+	public ResponseEntity<NoticeDTO> getNotice(@PathVariable("notice_id") String notice_id){
 		
 		try {
 			NoticeDTO noticeDTO = noticeService.findById(Long.parseLong(notice_id));
@@ -81,7 +81,7 @@ public class NoticeController {
 	}
 	
 	@PutMapping("/{notice_id}")
-	public ResponseEntity<NoticeDTO> updateNotice(@PathVariable String notice_id, @RequestBody NoticeDTO noticeDTO) {
+	public ResponseEntity<NoticeDTO> updateNotice(@PathVariable("notice_id") String notice_id, @RequestBody NoticeDTO noticeDTO) {
 		try {
 			NoticeDTO updatedNoticeDTO = noticeService.updateNotice(Long.parseLong(notice_id),noticeDTO);
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(updatedNoticeDTO);
@@ -93,7 +93,7 @@ public class NoticeController {
 	}
 	
 	@DeleteMapping("/{notice_id}")
-	public ResponseEntity<NoticeDTO> deleteNotice(@PathVariable String notice_id,HttpServletRequest request){
+	public ResponseEntity<NoticeDTO> deleteNotice(@PathVariable("notice_id") String notice_id,HttpServletRequest request){
 		String useremail = checkUser.checkContainsUseremail(request);
 		
 		try {
