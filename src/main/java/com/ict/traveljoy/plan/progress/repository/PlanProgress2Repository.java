@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 public interface PlanProgress2Repository extends JpaRepository<PlanProgress2, Long> {
 
     // 특정 계획 ID에 해당하는 PlanProgress2 엔티티를 조회하는 메서드
-    List<PlanProgress2> findByPlan_id(Long planId);
+    List<PlanProgress2> findByPlanId(Long plan_Id);
 
     // 특정 이벤트 여부에 해당하는 PlanProgress2 엔티티를 조회하는 메서드
     List<PlanProgress2> findByIsEvent(Integer isEvent);
@@ -25,6 +25,6 @@ public interface PlanProgress2Repository extends JpaRepository<PlanProgress2, Lo
     List<PlanProgress2> findByIsHotel(Integer isHotel);
 
     // 특정 계획 ID와 상세 계획 시작일, 종료일에 해당하는 PlanProgress2 엔티티를 조회하는 메서드
-    List<PlanProgress2> findByPlan_idAndDetailPlanStartDateBetween(Long planId, Timestamp startDate, Timestamp endDate);
+    List<PlanProgress2> findByPlanIdAndDetailPlanStartDateBetween(Long plan_Id, Timestamp startDate, Timestamp endDate);
 
 }

@@ -51,12 +51,9 @@ public class HotelService {
 
         if (hotelOpt.isPresent()) {
         	Hotel hotel = hotelOpt.get();
-        	hotel.setHotelName(hotelDTO.getHotelname());
-            hotel.setDescriptions(hotelDTO.getDescriptions());
-            hotel.setAddress(hotelDTO.getAddress());
+            hotel.setHotelName(hotelDTO.getHotelname());
             hotel.setRegion(hotelDTO.getRegion());
             hotel.setAveragePrice(hotelDTO.getAveragePrice());
-            hotel.setTotalReviewCount(hotelDTO.getTotalReviewCount());
             hotel.setAverageReviewRate(hotelDTO.getAverageReviewRate());
             
             Hotel updatedHotel = hotelRepository.save(hotel);
@@ -77,8 +74,8 @@ public class HotelService {
     }
     
     //특정 지역의 숙소 검색
-    public List<HotelDTO> findHotelsByRegionId(Long regionId) {
-        return hotelRepository.findByRegion_Id(regionId).stream()
+    public List<HotelDTO> findHotelsByRegionId(Long region_Id) {
+        return hotelRepository.findByRegionId(region_Id).stream()
                 .map(HotelDTO::toDto)
                 .collect(Collectors.toList());
     }

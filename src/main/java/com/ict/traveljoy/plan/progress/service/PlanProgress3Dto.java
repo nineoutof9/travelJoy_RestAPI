@@ -10,10 +10,10 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PlanProgress3Dto {
+public class PlanProgress3DTO {
 
-    private Long planProgress3Id;
-    private Long planId;
+    private Long id;
+    private Plan plan;
     private Boolean isTransportation;
     private Boolean isDistance;
     private Boolean isPrice;
@@ -24,11 +24,9 @@ public class PlanProgress3Dto {
     private Integer maximumRate;
 
     public PlanProgress3 toEntity() {
-        Plan plan = new Plan();
-        plan.setId(planId);
 
         return PlanProgress3.builder()
-                .planProgress3Id(planProgress3Id)
+                .id(id)
                 .plan(plan)
                 .isTransportation(isTransportation == true ? 1 : 0)
                 .isDistance(isDistance == true ? 1 : 0)
@@ -41,10 +39,10 @@ public class PlanProgress3Dto {
                 .build();
     }
 
-    public static PlanProgress3Dto toDto(PlanProgress3 planProgress3) {
-        return PlanProgress3Dto.builder()
-                .planProgress3Id(planProgress3.getPlanProgress3Id())
-                .planId(planProgress3.getPlan() != null ? planProgress3.getPlan().getId() : null)
+    public static PlanProgress3DTO toDto(PlanProgress3 planProgress3) {
+        return PlanProgress3DTO.builder()
+                .id(planProgress3.getId())
+                .plan(planProgress3.getPlan())
                 .isTransportation(planProgress3.getIsTransportation() == 1 ? true : false)
                 .isDistance(planProgress3.getIsDistance() == 1 ? true : false)
                 .isPrice(planProgress3.getIsPrice() == 1 ? true : false)

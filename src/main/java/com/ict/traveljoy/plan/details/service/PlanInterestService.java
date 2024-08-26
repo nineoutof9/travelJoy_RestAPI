@@ -22,63 +22,63 @@ public class PlanInterestService {
     }
 
     // planId로 PlanInterest 조회
-    public List<PlanInterestDto> getPlanInterestsByPlanId(Long planId) {
-        List<PlanInterest> planInterests = planInterestRepository.findByPlan_id(planId);
+    public List<PlanInterestDTO> getPlanInterestsByPlanId(Long plan_Id) {
+        List<PlanInterest> planInterests = planInterestRepository.findByPlanId(plan_Id);
         return planInterests.stream()
-                .map(PlanInterestDto::toDto)
+                .map(PlanInterestDTO::toDto)
                 .collect(Collectors.toList());
     }
 
     // interestId로 PlanInterest 조회
-    public List<PlanInterestDto> getPlanInterestsByInterestId(Long interestId) {
-        List<PlanInterest> planInterests = planInterestRepository.findByInterestId(interestId);
+    public List<PlanInterestDTO> getPlanInterestsByInterestId(Long interest_Id) {
+        List<PlanInterest> planInterests = planInterestRepository.findByInterestId(interest_Id);
         return planInterests.stream()
-                .map(PlanInterestDto::toDto)
+                .map(PlanInterestDTO::toDto)
                 .collect(Collectors.toList());
     }
 
     // planId와 interestId로 PlanInterest 조회
-    public PlanInterestDto getPlanInterestByPlanIdAndInterestId(Long planId, Long interestId) {
-        PlanInterest planInterest = planInterestRepository.findByPlan_idAndInterestId(planId, interestId);
+    public PlanInterestDTO getPlanInterestByPlanIdAndInterestId(Long plan_Id, Long interest_Id) {
+        PlanInterest planInterest = planInterestRepository.findByPlanIdAndInterestId(plan_Id, interest_Id);
         if (planInterest != null) {
-            return PlanInterestDto.toDto(planInterest);
+            return PlanInterestDTO.toDto(planInterest);
         }
         return null;
     }
 
     // 특정 관심사에 해당하는 PlanInterest 조회
-    public List<PlanInterestDto> getPlanInterestsByInterestIds(List<Long> interestIds) {
-        List<PlanInterest> planInterests = planInterestRepository.findByInterestIdIn(interestIds);
+    public List<PlanInterestDTO> getPlanInterestsByInterestIds(List<Long> interest_Ids) {
+        List<PlanInterest> planInterests = planInterestRepository.findByInterestIdIn(interest_Ids);
         return planInterests.stream()
-                .map(PlanInterestDto::toDto)
+                .map(PlanInterestDTO::toDto)
                 .collect(Collectors.toList());
     }
 
     // PlanInterest 저장
-    public PlanInterestDto savePlanInterest(PlanInterestDto planInterestDto) {
-        PlanInterest planInterest = planInterestDto.toEntity();
+    public PlanInterestDTO savePlanInterest(PlanInterestDTO planInterestDTO) {
+        PlanInterest planInterest = planInterestDTO.toEntity();
         PlanInterest savedPlanInterest = planInterestRepository.save(planInterest);
-        return PlanInterestDto.toDto(savedPlanInterest);
+        return PlanInterestDTO.toDto(savedPlanInterest);
     }
 
     // PlanInterest 수정
-    public PlanInterestDto updatePlanInterest(PlanInterestDto planInterestDto) {
-        PlanInterest existingPlanInterest = planInterestRepository.findByPlan_idAndInterestId(planInterestDto.getPlanId(), planInterestDto.getInterestId());
+    public PlanInterestDTO updatePlanInterest(PlanInterestDTO planInterestDTO) {
+        PlanInterest existingPlanInterest = planInterestRepository.findByPlanIdAndInterestId(planInterestDTO.getPlan().getId(), planInterestDTO.getInterest().getId());
         if (existingPlanInterest != null) {
             Plan plan = new Plan();
-            plan.setId(planInterestDto.getPlanId());
+            plan.setId(planInterestDTO.getPlan().getId());
             
             existingPlanInterest.setPlan(plan);
             // 필요한 경우 다른 필드도 업데이트할 수 있습니다.
             
             PlanInterest updatedPlanInterest = planInterestRepository.save(existingPlanInterest);
-            return PlanInterestDto.toDto(updatedPlanInterest);
+            return PlanInterestDTO.toDto(updatedPlanInterest);
         }
         return null; // 수정할 PlanInterest가 없는 경우
     }
 
     // planId로 PlanInterest 삭제
-    public void deletePlanInterestByPlanId(Long planId) {
-        planInterestRepository.deleteByPlan_id(planId);
+    public void deletePlanInterestByPlanId(Long plan_Id) {
+        planInterestRepository.deleteByPlanId(plan_Id);
     }
 }

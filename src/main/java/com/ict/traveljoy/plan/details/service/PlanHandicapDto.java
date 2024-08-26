@@ -11,31 +11,26 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PlanHandicapDto {
+public class PlanHandicapDTO {
 
-    private Long planHandicapId;
-    private Long planId;
-    private Long handicapId;
+    private Long id;
+    private Plan plan;
+    private Handicap handicap;
 
     public PlanHandicap toEntity() {
-        Plan plan = new Plan();
-        Handicap handicap = new Handicap();
-        
-        plan.setId(planId);
-        handicap.setId(handicapId);
-
+    	
         return PlanHandicap.builder()
-                .planHandicapId(planHandicapId)
+                .id(id)
                 .plan(plan)
                 .handicap(handicap)
                 .build();
     }
 
-    public static PlanHandicapDto toDto(PlanHandicap planHandicap) {
-        return PlanHandicapDto.builder()
-                .planHandicapId(planHandicap.getPlanHandicapId())
-                .planId(planHandicap.getPlan()!= null ? planHandicap.getPlan().getId() : null) 
-                .handicapId(planHandicap.getHandicap()!= null ? planHandicap.getHandicap().getId() : null)
+    public static PlanHandicapDTO toDto(PlanHandicap planHandicap) {
+        return PlanHandicapDTO.builder()
+                .id(planHandicap.getId())
+                .plan(planHandicap.getPlan()) 
+                .handicap(planHandicap.getHandicap())
                 .build();
     }
 }

@@ -11,31 +11,26 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PlanInterestDto {
+public class PlanInterestDTO {
 
-    private Long planInterestId;
-    private Long planId; 
-    private Long interestId;
+    private Long id;
+    private Plan plan; 
+    private Interest interest;
 
     public PlanInterest toEntity() {
-        Plan plan = new Plan();
-        Interest interest = new Interest();
-        
-        plan.setId(planId);
-        interest.setId(interestId);
         
         return PlanInterest.builder()
-                .id(planInterestId)
+                .id(id)
                 .plan(plan)
                 .interest(interest)
                 .build();
     }
 
-    public static PlanInterestDto toDto(PlanInterest planInterest) {
-        return PlanInterestDto.builder()
-                .planInterestId(planInterest.getId())
-                .planId(planInterest.getPlan()!=null ?planInterest.getPlan().getId():null)
-                .interestId(planInterest.getInterest()!=null?planInterest.getInterest().getId():null)
+    public static PlanInterestDTO toDto(PlanInterest planInterest) {
+        return PlanInterestDTO.builder()
+                .id(planInterest.getId())
+                .plan(planInterest.getPlan())
+                .interest(planInterest.getInterest())
                 .build();
     }
 }

@@ -15,8 +15,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PlanDto {
-	private Long planId;
+public class PlanDTO {
+	private Long id;
 	private String planName;
 	private String planDescriptions;
 	private LocalDateTime createDate;
@@ -27,7 +27,7 @@ public class PlanDto {
 	
 	public Plan toEntity() {
 		return Plan.builder()
-				.id(planId)
+				.id(id)
 				.planName(planName)
 				.planDescriptions(planDescriptions)
 				.createDate(createDate)
@@ -37,9 +37,9 @@ public class PlanDto {
 				.progress(progress)
 				.build();
 	}
-	public static PlanDto toDto(Plan plans) {
-		return PlanDto.builder()
-				.planId(plans.getId())
+	public static PlanDTO toDto(Plan plans) {
+		return PlanDTO.builder()
+				.id(plans.getId())
 				.planName(plans.getPlanName())
 				.planDescriptions(plans.getPlanDescriptions())
 				.createDate(plans.getCreateDate())

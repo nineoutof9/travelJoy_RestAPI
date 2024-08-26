@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
-import com.ict.traveljoy.plan.details.service.PlanHandicapDto;
+import com.ict.traveljoy.plan.details.service.PlanHandicapDTO;
 import com.ict.traveljoy.plan.details.service.PlanHandicapService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 
 @Tag(name = "PlanHandicap", description = "핸디캡")
 @RestController
-@RequestMapping("/plan")
+@RequestMapping("/api/plan")
 @CrossOrigin
 @RequiredArgsConstructor
 public class PlanHandicapController {
@@ -34,10 +34,10 @@ public class PlanHandicapController {
 
 	@PostMapping("/handicap")
 	@Operation(summary = "핸디캡 저장", description = "핸디캡 저장 컨트롤러")
-	public ResponseEntity<PlanHandicapDto> savePlanHandicap(@RequestBody PlanHandicapDto planHandicapDto){
+	public ResponseEntity<PlanHandicapDTO> savePlanHandicap(@RequestBody PlanHandicapDTO planHandicapDTO){
 		
 		try {
-		PlanHandicapDto savePlanHandicap = planHandicapService.savePlanHandicap(planHandicapDto);
+		PlanHandicapDTO savePlanHandicap = planHandicapService.savePlanHandicap(planHandicapDTO);
 		if(savePlanHandicap == null) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -52,10 +52,10 @@ public class PlanHandicapController {
 
 	@PutMapping("/handicap")
 	@Operation(summary = "핸디캡 수정", description = "핸디캡 수정 컨트롤러")
-	public ResponseEntity<PlanHandicapDto> updatePlanHandicap(@RequestBody PlanHandicapDto planHandicapDto){
+	public ResponseEntity<PlanHandicapDTO> updatePlanHandicap(@RequestBody PlanHandicapDTO planHandicapDto, Long plan_Id, Long handicap_Id){
 		
 		try {
-		PlanHandicapDto updatePlanHandicap = planHandicapService.updatePlanHandicap(planHandicapDto);
+		PlanHandicapDTO updatePlanHandicap = planHandicapService.updatePlanHandicap(plan_Id,handicap_Id,planHandicapDto);
 		if(updatePlanHandicap == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -85,10 +85,10 @@ public class PlanHandicapController {
 
 	@GetMapping("/handicap/{id}")
 	@Operation(summary = "핸디캡 조회(id)", description = "id로 핸디캡 조회 컨트롤러")
-	public ResponseEntity<PlanHandicapDto> getPlanHandicapById(@PathVariable Long id){
+	public ResponseEntity<PlanHandicapDTO> getPlanHandicapById(@PathVariable Long id){
 		
 		try {
-		PlanHandicapDto planHandicapById = planHandicapService.getPlanHandicapById(id);
+		PlanHandicapDTO planHandicapById = planHandicapService.getPlanHandicapById(id);
 		if(planHandicapById == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -103,10 +103,10 @@ public class PlanHandicapController {
 
 	@GetMapping("/handicap/{handicapId}")
 	@Operation(summary = "핸디캡 조회(hadicapId)", description = "HandicapId로 핸디캡 조회 컨트롤러")
-	public ResponseEntity<PlanHandicapDto> getPlanHandicapsByHandicapId(@PathVariable Long handicapId){
+	public ResponseEntity<PlanHandicapDTO> getPlanHandicapsByHandicapId(@PathVariable Long handicap_Id){
 		
 		try {
-		PlanHandicapDto planHandicapByHandicapId = (PlanHandicapDto) planHandicapService.getPlanHandicapsByHandicapId(handicapId);
+		PlanHandicapDTO planHandicapByHandicapId = (PlanHandicapDTO) planHandicapService.getPlanHandicapsByHandicapId(handicap_Id);
 		if(planHandicapByHandicapId == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND); 	
 		}
@@ -121,10 +121,10 @@ public class PlanHandicapController {
 
 	@GetMapping("/handicap/{planId}")
 	@Operation(summary = "핸디캡 조회(planId)", description = "Planid로 핸디캡 조회 컨트롤러")
-	public ResponseEntity<PlanHandicapDto> getPlanHandicapsByplanId(@PathVariable Long planId){
+	public ResponseEntity<PlanHandicapDTO> getPlanHandicapsByplanId(@PathVariable Long plan_Id){
 		
 		try {
-		PlanHandicapDto planHandicapByPlanId = (PlanHandicapDto) planHandicapService.getPlanHandicapsByPlanId(planId);
+		PlanHandicapDTO planHandicapByPlanId = (PlanHandicapDTO) planHandicapService.getPlanHandicapsByPlanId(plan_Id);
 		if(planHandicapByPlanId == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}

@@ -22,54 +22,54 @@ public class PlanRegionService {
         this.planRegionRepository = planRegionRepository;
     }
 
-    public List<PlanRegionDto> getPlanRegionsByPlanId(Long planId) {
-        return planRegionRepository.findByPlan_id(planId).stream()
-                .map(PlanRegionDto::toDto)
+    public List<PlanRegionDTO> getPlanRegionsByPlanId(Long plan_Id) {
+        return planRegionRepository.findByPlanId(plan_Id).stream()
+                .map(PlanRegionDTO::toDto)
                 .collect(Collectors.toList());
     }
 
-    public List<PlanRegionDto> getPlanRegionsByRegionId(Long regionId) {
-        return planRegionRepository.findByRegion_Id(regionId).stream()
-                .map(PlanRegionDto::toDto)
+    public List<PlanRegionDTO> getPlanRegionsByRegionId(Long region_Id) {
+        return planRegionRepository.findByRegionId(region_Id).stream()
+                .map(PlanRegionDTO::toDto)
                 .collect(Collectors.toList());
     }
 
-    public PlanRegionDto getPlanRegionByPlanIdAndRegionId(Long planId, Long regionId) {
-        return planRegionRepository.findByPlan_idAndRegion_Id(planId, regionId)
-                .map(PlanRegionDto::toDto)
+    public PlanRegionDTO getPlanRegionByPlanIdAndRegionId(Long plan_Id, Long region_Id) {
+        return planRegionRepository.findByPlanIdAndRegionId(plan_Id, region_Id)
+                .map(PlanRegionDTO::toDto)
                 .orElse(null);
     }
 
-    public PlanRegionDto savePlanRegion(PlanRegionDto planRegionDto) {
-        PlanRegion planRegion = planRegionDto.toEntity();
+    public PlanRegionDTO savePlanRegion(PlanRegionDTO planRegionDTO) {
+        PlanRegion planRegion = planRegionDTO.toEntity();
         PlanRegion savedPlanRegion = planRegionRepository.save(planRegion);
-        return PlanRegionDto.toDto(savedPlanRegion);
+        return PlanRegionDTO.toDto(savedPlanRegion);
     }
 
-    public PlanRegionDto updatePlanRegion(PlanRegionDto planRegionDto) {
-        return planRegionRepository.findById(planRegionDto.getPlanRegionId())
+    public PlanRegionDTO updatePlanRegion(PlanRegionDTO planRegionDTO) {
+        return planRegionRepository.findById(planRegionDTO.getId())
                 .map(existingPlanRegion -> {
 
                     Plan plan = new Plan();
-                    plan.setId(planRegionDto.getPlanId());
+                    plan.setId(planRegionDTO.getPlan().getId());
                     existingPlanRegion.setPlan(plan);
 
                     Region region = new Region();
-                    region.setId(planRegionDto.getRegionId());
+                    region.setId(planRegionDTO.getRegion().getId());
                     existingPlanRegion.setRegion(region);
 
                     PlanRegion updatedPlanRegion = planRegionRepository.save(existingPlanRegion);
-                    return PlanRegionDto.toDto(updatedPlanRegion);
+                    return PlanRegionDTO.toDto(updatedPlanRegion);
                 })
                 .orElse(null); 
     }
     
-    public void deletePlanRegionByPlanId(Long planId) {
-        planRegionRepository.deleteByPlan_id(planId);
+    public void deletePlanRegionByPlanId(Long plan_Id) {
+        planRegionRepository.deleteByPlanId(plan_Id);
     }
 
-    public void deletePlanRegionByRegionId(Long regionId) {
-        planRegionRepository.deleteByRegion_Id(regionId);
+    public void deletePlanRegionByRegionId(Long region_Id) {
+        planRegionRepository.deleteByRegionId(region_Id);
     }
 
 }

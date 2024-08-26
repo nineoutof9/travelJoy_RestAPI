@@ -30,7 +30,7 @@ public class Move {
     @SequenceGenerator(name = "seq_move",sequenceName = "seq_move",allocationSize = 1,initialValue = 1)
     @GeneratedValue(generator = "seq_move",strategy = GenerationType.SEQUENCE)
     @Column(name = "MOVE_ID", nullable = false)
-    private Long moveId;
+    private Long id;
 	
 	@ManyToOne
     @JoinColumn(name = "START_DETAIL_PLAN_ID")

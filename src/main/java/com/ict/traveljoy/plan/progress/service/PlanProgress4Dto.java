@@ -12,19 +12,14 @@ import lombok.*;
 @Builder
 public class PlanProgress4Dto {
 
-    private Long planProgress4Id;
-    private Long planId;
-    private Long aiMadePlanId;
+    private Long id;
+    private Plan plan;
+    private Plan aiMadePlan;
 
     public PlanProgress4 toEntity() {
-        Plan plan = new Plan();
-        plan.setId(planId);
-
-        Plan aiMadePlan = new Plan();
-        aiMadePlan.setId(aiMadePlanId);
 
         return PlanProgress4.builder()
-                .planProgress4Id(planProgress4Id)
+                .id(id)
                 .plan(plan)
                 .aiMadePlan(aiMadePlan)
                 .build();
@@ -32,9 +27,9 @@ public class PlanProgress4Dto {
 
     public static PlanProgress4Dto toDto(PlanProgress4 planProgress4) {
         return PlanProgress4Dto.builder()
-                .planProgress4Id(planProgress4.getPlanProgress4Id())
-                .planId(planProgress4.getPlan() != null ? planProgress4.getPlan().getId() : null)
-                .aiMadePlanId(planProgress4.getAiMadePlan() != null ? planProgress4.getAiMadePlan().getId() : null)
+                .id(planProgress4.getId())
+                .plan(planProgress4.getPlan())
+                .aiMadePlan(planProgress4.getAiMadePlan())
                 .build();
     }
 }
