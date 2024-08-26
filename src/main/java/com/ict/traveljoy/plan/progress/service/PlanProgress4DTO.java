@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PlanProgress4Dto {
+public class PlanProgress4DTO {
 
     private Long id;
     private Plan plan;
@@ -25,8 +25,8 @@ public class PlanProgress4Dto {
                 .build();
     }
 
-    public static PlanProgress4Dto toDto(PlanProgress4 planProgress4) {
-        return PlanProgress4Dto.builder()
+    public static PlanProgress4DTO toDto(PlanProgress4 planProgress4) {
+        return PlanProgress4DTO.builder()
                 .id(planProgress4.getId())
                 .plan(planProgress4.getPlan())
                 .aiMadePlan(planProgress4.getAiMadePlan())

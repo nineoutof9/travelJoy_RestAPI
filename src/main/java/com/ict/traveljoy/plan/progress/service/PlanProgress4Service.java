@@ -25,35 +25,35 @@ public class PlanProgress4Service {
     }
 
     // 특정 계획 ID에 해당하는 PlanProgress4 엔티티를 조회하는 메서드
-    public List<PlanProgress4Dto> getPlanProgressesByPlanId(Long plan_Id) {
+    public List<PlanProgress4DTO> getPlanProgressesByPlanId(Long plan_Id) {
         List<PlanProgress4> planProgresses = planProgress4Repository.findByAiMadePlanId(plan_Id);
         return planProgresses.stream()
-                .map(PlanProgress4Dto::toDto)
+                .map(PlanProgress4DTO::toDto)
                 .collect(Collectors.toList());
     }
 
     // 특정 AI 생성 계획 ID에 해당하는 PlanProgress4 엔티티를 조회하는 메서드
-    public List<PlanProgress4Dto> getPlanProgressesByAiMadePlanId(Long aiMadePlan_Id) {
+    public List<PlanProgress4DTO> getPlanProgressesByAiMadePlanId(Long aiMadePlan_Id) {
         List<PlanProgress4> planProgresses = planProgress4Repository.findByAiMadePlanId(aiMadePlan_Id);
         return planProgresses.stream()
-                .map(PlanProgress4Dto::toDto)
+                .map(PlanProgress4DTO::toDto)
                 .collect(Collectors.toList());
     }
 
     // 특정 계획 ID와 AI 생성 계획 ID에 해당하는 PlanProgress4 엔티티를 조회하는 메서드
-    public List<PlanProgress4Dto> getPlanProgressesByPlanIdAndAiMadePlanId(Long plan_Id, Long aiMadePlan_Id) {
+    public List<PlanProgress4DTO> getPlanProgressesByPlanIdAndAiMadePlanId(Long plan_Id, Long aiMadePlan_Id) {
         List<PlanProgress4> planProgresses = planProgress4Repository.findByPlanIdAndAiMadePlanId(plan_Id, aiMadePlan_Id);
         return planProgresses.stream()
-                .map(PlanProgress4Dto::toDto)
+                .map(PlanProgress4DTO::toDto)
                 .collect(Collectors.toList());
     }
 
     // PlanProgress4 저장
-    public PlanProgress4Dto savePlanProgress4(PlanProgress4Dto planProgress4DTO) {
-        Plan plan = planRepository.findById(planProgress4DTO.getPlan().getId())
-                .orElseThrow(() -> new IllegalArgumentException("ID가 " + planProgress4DTO.getPlan() + "인 Plan을 찾을 수 없습니다."));
-        Plan aiMadePlan = planRepository.findById(planProgress4DTO.getAiMadePlan().getId())
-                .orElseThrow(() -> new IllegalArgumentException("ID가 " + planProgress4DTO.getAiMadePlan() + "인 AI 생성 Plan을 찾을 수 없습니다."));
+    public PlanProgress4DTO savePlanProgress4(PlanProgress4DTO PlanProgress4DTO) {
+        Plan plan = planRepository.findById(PlanProgress4DTO.getPlan().getId())
+                .orElseThrow(() -> new IllegalArgumentException("ID가 " + PlanProgress4DTO.getPlan() + "인 Plan을 찾을 수 없습니다."));
+        Plan aiMadePlan = planRepository.findById(PlanProgress4DTO.getAiMadePlan().getId())
+                .orElseThrow(() -> new IllegalArgumentException("ID가 " + PlanProgress4DTO.getAiMadePlan() + "인 AI 생성 Plan을 찾을 수 없습니다."));
 
         PlanProgress4 planProgress4 = PlanProgress4.builder()
                 .plan(plan)
@@ -61,24 +61,24 @@ public class PlanProgress4Service {
                 .build();
 
         PlanProgress4 savedPlanProgress4 = planProgress4Repository.save(planProgress4);
-        return PlanProgress4Dto.toDto(savedPlanProgress4);
+        return PlanProgress4DTO.toDto(savedPlanProgress4);
     }
 
     // PlanProgress4 수정
-    public PlanProgress4Dto updatePlanProgress4(PlanProgress4Dto planProgress4DTO) {
-        PlanProgress4 existingPlanProgress4 = planProgress4Repository.findById(planProgress4DTO.getId())
-                .orElseThrow(() -> new IllegalArgumentException("ID가 " + planProgress4DTO.getId() + "인 PlanProgress4를 찾을 수 없습니다."));
+    public PlanProgress4DTO updatePlanProgress4(PlanProgress4DTO PlanProgress4DTO) {
+        PlanProgress4 existingPlanProgress4 = planProgress4Repository.findById(PlanProgress4DTO.getId())
+                .orElseThrow(() -> new IllegalArgumentException("ID가 " + PlanProgress4DTO.getId() + "인 PlanProgress4를 찾을 수 없습니다."));
 
-        Plan plan = planRepository.findById(planProgress4DTO.getPlan().getId())
-                .orElseThrow(() -> new IllegalArgumentException("ID가 " + planProgress4DTO.getPlan() + "인 Plan을 찾을 수 없습니다."));
-        Plan aiMadePlan = planRepository.findById(planProgress4DTO.getAiMadePlan().getId())
-                .orElseThrow(() -> new IllegalArgumentException("ID가 " + planProgress4DTO.getAiMadePlan() + "인 AI 생성 Plan을 찾을 수 없습니다."));
+        Plan plan = planRepository.findById(PlanProgress4DTO.getPlan().getId())
+                .orElseThrow(() -> new IllegalArgumentException("ID가 " + PlanProgress4DTO.getPlan() + "인 Plan을 찾을 수 없습니다."));
+        Plan aiMadePlan = planRepository.findById(PlanProgress4DTO.getAiMadePlan().getId())
+                .orElseThrow(() -> new IllegalArgumentException("ID가 " + PlanProgress4DTO.getAiMadePlan() + "인 AI 생성 Plan을 찾을 수 없습니다."));
 
         existingPlanProgress4.setPlan(plan);
         existingPlanProgress4.setAiMadePlan(aiMadePlan);
 
         PlanProgress4 updatedPlanProgress4 = planProgress4Repository.save(existingPlanProgress4);
-        return PlanProgress4Dto.toDto(updatedPlanProgress4);
+        return PlanProgress4DTO.toDto(updatedPlanProgress4);
     }
 
     // PlanProgress4 삭제

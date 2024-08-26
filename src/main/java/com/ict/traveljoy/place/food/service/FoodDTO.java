@@ -33,7 +33,7 @@ public class FoodDTO {
                 .id(id)
                 .region(region)
                 .foodType(foodType)
-                .isHasImage(isHasImage == true ? 1 : 0)
+                .isHasImage(isHasImage != null && isHasImage ? 1 : 0)
                 .averagePrice(averagePrice)
                 .foodName(foodName)
                 .descriptions(descriptions)

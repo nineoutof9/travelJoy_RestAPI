@@ -21,7 +21,7 @@ import com.ict.traveljoy.place.transportation.service.TransportationDTO;
 import com.ict.traveljoy.place.transportation.service.TransportationService;
 import com.ict.traveljoy.tripReview.repository.TripReview;
 import com.ict.traveljoy.tripReview.service.TripReviewDto;
-import com.ict.traveljoy.tripReview.service.TripReviewPhotoDto;
+import com.ict.traveljoy.tripReview.service.TripReviewPhotoDTO;
 import com.ict.traveljoy.tripReview.service.TripReviewPhotoService;
 import com.ict.traveljoy.tripReview.service.TripReviewService;
 import com.ict.traveljoy.weather.service.WeatherDTO;
