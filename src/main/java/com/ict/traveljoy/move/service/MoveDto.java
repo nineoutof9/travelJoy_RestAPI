@@ -11,43 +11,27 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MoveDto {
-    private Long moveId;
-    private Long startDetailPlanId;
-    private Long endDetailPlanId;
-    private Long transportationId;
+public class MoveDTO {
+    private Long id;
+    private PlanProgress2 startDetailPlan;
+    private PlanProgress2 endDetailPlan;
+    private Transportation transportation;
 
     public Move toEntity() {
-        Move move = new Move();
-        move.setMoveId(moveId);
-
-        if (startDetailPlanId != null) {
-            PlanProgress2 startDetailPlan = new PlanProgress2();
-            startDetailPlan.setPlanProgress2Id(startDetailPlanId);
-            move.setStartDetailPlan(startDetailPlan);
-        }
-
-        if (endDetailPlanId != null) {
-            PlanProgress2 endDetailPlan = new PlanProgress2();
-            endDetailPlan.setPlanProgress2Id(endDetailPlanId);
-            move.setEndDetailPlan(endDetailPlan);
-        }
-
-        if (transportationId != null) {
-            Transportation transportation = new Transportation();
-            transportation.setId(transportationId);
-            move.setTransportation(transportation);
-        }
-
-        return move;
+       return  Move.builder()
+        .id(id)
+        .startDetailPlan(startDetailPlan)
+        .endDetailPlan(endDetailPlan)
+        .transportation(transportation)
+        .build();
     }
 
-    public static MoveDto toDto(Move move) {
-        return MoveDto.builder()
-                .moveId(move.getMoveId())
-                .startDetailPlanId(move.getStartDetailPlan() != null ? move.getStartDetailPlan().getPlanProgress2Id() : null)
-                .endDetailPlanId(move.getEndDetailPlan() != null ? move.getEndDetailPlan().getPlanProgress2Id() : null)
-                .transportationId(move.getTransportation() != null ? move.getTransportation().getId() : null)
+    public static MoveDTO toDto(Move move) {
+        return MoveDTO.builder()
+                .id(move.getId())
+                .startDetailPlan(move.getStartDetailPlan())
+                .endDetailPlan(move.getEndDetailPlan())
+                .transportation(move.getTransportation())
                 .build();
     }
 }

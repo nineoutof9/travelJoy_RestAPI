@@ -9,12 +9,12 @@ import org.springframework.stereotype.Repository;
 public interface MoveRepository extends JpaRepository<Move, Long> {
 	
 	// startDetailPlan의 planProgress2Id를 기준으로 Move 엔티티를 조회하는 메서드
-	List<Move> findByStartDetailPlan_PlanProgress2Id(Long startDetailPlanId);
+	List<Move> findByStartDetailPlan_Id(Long startDetailPlan);
 	
 	// endDetailPlan의 planProgress2Id를 기준으로 Move 엔티티를 조회하는 메서드
-	List<Move> findByEndDetailPlan_PlanProgress2Id(Long endDetailPlanId);
+	List<Move> findByEndDetailPlan_Id(Long endDetailPlan);
 	
 	// transportationId를 기준으로 Move 엔티티를 조회하는 메서드
-	List<Move> findByTransportationId(Long transportationId);
+	List<Move> findByTransportationId(Long transportation_Id);
 
 }

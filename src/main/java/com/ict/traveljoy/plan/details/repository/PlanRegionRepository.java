@@ -9,13 +9,13 @@ import java.util.Optional;
 @Repository
 public interface PlanRegionRepository extends JpaRepository<PlanRegion, Long> {
 
-    List<PlanRegion> findByPlan_id(Long planId);
+    List<PlanRegion> findByPlanId(Long plan_Id);
 
-    List<PlanRegion> findByRegion_Id(Long regionId);
+    List<PlanRegion> findByRegionId(Long region_Id);
 
-    Optional<PlanRegion> findByPlan_idAndRegion_Id(Long planId, Long regionId);
+    Optional<PlanRegion> findByPlanIdAndRegionId(Long plan_Id, Long region_Id);
 
-    void deleteByPlan_id(Long planId);
+    void deleteByPlanId(Long plan_Id);
 
-    void deleteByRegion_Id(Long regionId);
+    void deleteByRegionId(Long region_Id);
 }

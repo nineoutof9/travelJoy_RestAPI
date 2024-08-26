@@ -11,30 +11,25 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PlanRegionDto {
-    private Long planRegionId;
-    private Long planId;
-    private Long regionId;
+public class PlanRegionDTO {
+    private Long id;
+    private Plan plan;
+    private Region region;
 
     public PlanRegion toEntity() {
-        Plan plan = new Plan();
-        plan.setId(planId);
-
-        Region region = new Region();
-        region.setId(regionId);
 
         return PlanRegion.builder()
-                .planRegionId(planRegionId)
+                .id(id)
                 .plan(plan)
                 .region(region)
                 .build();
     }
 
-    public static PlanRegionDto toDto(PlanRegion planRegion) {
-        return PlanRegionDto.builder()
-                .planRegionId(planRegion.getPlanRegionId())
-                .planId(planRegion.getPlan()!=null?planRegion.getPlan().getId():null)
-                .regionId(planRegion.getRegion()!=null?planRegion.getRegion().getId():null)
+    public static PlanRegionDTO toDto(PlanRegion planRegion) {
+        return PlanRegionDTO.builder()
+                .id(planRegion.getId())
+                .plan(planRegion.getPlan())
+                .region(planRegion.getRegion())
                 .build();
     }
 }

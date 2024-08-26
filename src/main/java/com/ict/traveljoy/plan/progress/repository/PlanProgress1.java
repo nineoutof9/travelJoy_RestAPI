@@ -37,7 +37,7 @@ public class PlanProgress1 {
     @SequenceGenerator(name = "seq_plan_progress_1",sequenceName = "seq_plan_progress_1",allocationSize = 1,initialValue = 1)
     @GeneratedValue(generator = "seq_plan_progress_1", strategy = GenerationType.SEQUENCE)
     @Column(name = "PLAN_PROGRESS_1_ID")
-    private Long planProgress1Id;
+    private Long id;
 
     @Column(name = "PLAN_START_DATE", nullable = false)
     @Temporal(TemporalType.DATE)

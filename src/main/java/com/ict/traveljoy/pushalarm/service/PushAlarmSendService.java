@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,15 +23,19 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PushAlarmSendService {
 
+	@Autowired
 	private final PushAlarmSendRepository pushAlarmSendRepository;
-    private final PushAlarmRepository pushAlarmRepository;
-    private final UserRepository userRepository;
+	@Autowired
+	private final PushAlarmRepository pushAlarmRepository;
+	@Autowired
+	private final UserRepository userRepository;
 
     // 새로운 PushAlarmSend를 저장하는 메서드
     public PushAlarmSendDTO savePushAlarmSend(PushAlarmSendDTO dto) {
+    	
         PushAlarm pushAlarm = pushAlarmRepository.findById(dto.getPushAlarm().getId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 푸시 알림을 찾을 수 없습니다: " + dto.getPushAlarm().getId()));
-        Users user = userRepository.findById(dto.getUser().getId())
+        Users user = userRepository.findByEmail(dto.getUser().getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다: " + dto.getUser().getId()));
 
         PushAlarmSend pushAlarmSend = dto.toEntity();

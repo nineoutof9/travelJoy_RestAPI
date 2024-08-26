@@ -28,77 +28,77 @@ public class PlanProgress1Service {
     }
 
     // 특정 계획 기간 내의 PlanProgress1 엔티티를 조회하는 메서드
-    public List<PlanProgress1Dto> getPlanProgressesByPlanStartDateBetween(Date startDate, Date endDate) {
-        List<PlanProgress1> planProgresses = planProgress1Repository.findByPlanStartDateBetween(startDate, endDate);
+    public List<PlanProgress1DTO> getPlanProgressesByPlanStartDateBetween(Date start_Date, Date end_Date) {
+        List<PlanProgress1> planProgresses = planProgress1Repository.findByPlanStartDateBetween(start_Date, end_Date);
         return planProgresses.stream()
-                .map(PlanProgress1Dto::toDto)
+                .map(PlanProgress1DTO::toDto)
                 .collect(Collectors.toList());
     }
 
     // 특정 여행자 수 이상인 PlanProgress1 엔티티를 조회하는 메서드
-    public List<PlanProgress1Dto> getPlanProgressesByTravelersGreaterThanEqual(Integer minTravelers) {
-        List<PlanProgress1> planProgresses = planProgress1Repository.findByTravelersGreaterThanEqual(minTravelers);
+    public List<PlanProgress1DTO> getPlanProgressesByTravelersGreaterThanEqual(Integer min_Travelers) {
+        List<PlanProgress1> planProgresses = planProgress1Repository.findByTravelersGreaterThanEqual(min_Travelers);
         return planProgresses.stream()
-                .map(PlanProgress1Dto::toDto)
+                .map(PlanProgress1DTO::toDto)
                 .collect(Collectors.toList());
     }
 
     // 특정 비용 이하의 PlanProgress1 엔티티를 조회하는 메서드
-    public List<PlanProgress1Dto> getPlanProgressesByTravelCostLessThanEqual(BigDecimal maxTravelCost) {
-        List<PlanProgress1> planProgresses = planProgress1Repository.findByTravelCostLessThanEqual(maxTravelCost);
+    public List<PlanProgress1DTO> getPlanProgressesByTravelCostLessThanEqual(BigDecimal max_TravelCost) {
+        List<PlanProgress1> planProgresses = planProgress1Repository.findByTravelCostLessThanEqual(max_TravelCost);
         return planProgresses.stream()
-                .map(PlanProgress1Dto::toDto)
+                .map(PlanProgress1DTO::toDto)
                 .collect(Collectors.toList());
     }
 
     // 특정 계획 ID에 해당하는 PlanProgress1 엔티티를 조회하는 메서드
-    public List<PlanProgress1Dto> getPlanProgressesByPlanId(Long planId) {
-        List<PlanProgress1> planProgresses = planProgress1Repository.findByPlan_id(planId);
+    public List<PlanProgress1DTO> getPlanProgressesByPlanId(Long plan_Id) {
+        List<PlanProgress1> planProgresses = planProgress1Repository.findByPlanId(plan_Id);
         return planProgresses.stream()
-                .map(PlanProgress1Dto::toDto)
+                .map(PlanProgress1DTO::toDto)
                 .collect(Collectors.toList());
     }
 
     // PlanProgress1 저장
-    public PlanProgress1Dto savePlanProgress1(PlanProgress1Dto planProgress1Dto) {
-        PlanProgress1 planProgress1 = planProgress1Dto.toEntity();
+    public PlanProgress1DTO savePlanProgress1(PlanProgress1DTO planProgress1DTO) {
+        PlanProgress1 planProgress1 = planProgress1DTO.toEntity();
         
         // Plan 엔티티 설정
-        if (planProgress1Dto.getPlanId() != null) {
-            Plan plan = planRepository.findById(planProgress1Dto.getPlanId()).orElse(null);
+        if (planProgress1DTO.getPlan() != null) {
+            Plan plan = planRepository.findById(planProgress1DTO.getPlan().getId()).orElse(null);
             planProgress1.setPlan(plan);
         }
 
         PlanProgress1 savedPlanProgress1 = planProgress1Repository.save(planProgress1);
-        return PlanProgress1Dto.toDto(savedPlanProgress1);
+        return PlanProgress1DTO.toDto(savedPlanProgress1);
     }
 
     // PlanProgress1 수정
-    public PlanProgress1Dto updatePlanProgress1(PlanProgress1Dto planProgress1Dto) {
-        Optional<PlanProgress1> existingPlanProgress1Opt = planProgress1Repository.findById(planProgress1Dto.getPlanProgress1Id());
+    public PlanProgress1DTO updatePlanProgress1(PlanProgress1DTO planProgress1DTO) {
+        Optional<PlanProgress1> existingPlanProgress1Opt = planProgress1Repository.findById(planProgress1DTO.getId());
 
         if (existingPlanProgress1Opt.isPresent()) {
             PlanProgress1 existingPlanProgress1 = existingPlanProgress1Opt.get();
 
-            existingPlanProgress1.setPlanStartDate(planProgress1Dto.getPlanStartDate());
-            existingPlanProgress1.setPlanEndDate(planProgress1Dto.getPlanEndDate());
-            existingPlanProgress1.setTravelers(planProgress1Dto.getTravelers());
-            existingPlanProgress1.setTravelCost(planProgress1Dto.getTravelCost());
+            existingPlanProgress1.setPlanStartDate(planProgress1DTO.getPlanStartDate());
+            existingPlanProgress1.setPlanEndDate(planProgress1DTO.getPlanEndDate());
+            existingPlanProgress1.setTravelers(planProgress1DTO.getTravelers());
+            existingPlanProgress1.setTravelCost(planProgress1DTO.getTravelCost());
 
             // Plan 엔티티를 조회하여 설정
-            if (planProgress1Dto.getPlanId() != null) {
-                Plan plan = planRepository.findById(planProgress1Dto.getPlanId()).orElse(null);
+            if (planProgress1DTO.getPlan() != null) {
+                Plan plan = planRepository.findById(planProgress1DTO.getPlan().getId()).orElse(null);
                 existingPlanProgress1.setPlan(plan);
             }
 
             PlanProgress1 updatedPlanProgress1 = planProgress1Repository.save(existingPlanProgress1);
-            return PlanProgress1Dto.toDto(updatedPlanProgress1);
+            return PlanProgress1DTO.toDto(updatedPlanProgress1);
         }
         return null; // 수정할 PlanProgress1이 없는 경우
     }
 
     // PlanProgress1 삭제
-    public void deletePlanProgress1(Long planProgress1Id) {
-        planProgress1Repository.deleteById(planProgress1Id);
+    public void deletePlanProgress1(Long id) {
+        planProgress1Repository.deleteById(id);
     }
 }

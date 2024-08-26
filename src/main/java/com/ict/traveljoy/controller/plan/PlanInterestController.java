@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ict.traveljoy.plan.details.service.PlanInterestDto;
+import com.ict.traveljoy.plan.details.service.PlanInterestDTO;
 import com.ict.traveljoy.plan.details.service.PlanInterestService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 
 @Tag(name = "PlanInterest", description = "관심사항")
 @RestController
-@RequestMapping("/plan")
+@RequestMapping("/api/plan")
 @CrossOrigin
 @RequiredArgsConstructor
 public class PlanInterestController {
@@ -35,11 +35,11 @@ public class PlanInterestController {
 	@CrossOrigin
 	@PostMapping("/interest")
 	@Operation(summary = "관심사항 저장", description = "관심사항 저장 컨트롤러")
-	public ResponseEntity<PlanInterestDto> savePlanInterest(@RequestBody PlanInterestDto planInterestDto){
+	public ResponseEntity<PlanInterestDTO> savePlanInterest(@RequestBody PlanInterestDTO planInterestDTO){
 		
 		
 		try {
-		PlanInterestDto savePlanInterest = planInterestService.savePlanInterest(planInterestDto);
+			PlanInterestDTO savePlanInterest = planInterestService.savePlanInterest(planInterestDTO);
 		if(savePlanInterest == null) {
 			
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -56,11 +56,11 @@ public class PlanInterestController {
 	@CrossOrigin
 	@PutMapping("/interest")
 	@Operation(summary = "관심사항 수정", description = "관심사항 수정 컨트롤러")
-	public ResponseEntity<PlanInterestDto> updatePlanInterest(@RequestBody PlanInterestDto planInterestDto){
+	public ResponseEntity<PlanInterestDTO> updatePlanInterest(@RequestBody PlanInterestDTO planInterestDTO){
 		
 		
 		try {
-		PlanInterestDto updatePlanInterest = planInterestService.updatePlanInterest(planInterestDto);
+			PlanInterestDTO updatePlanInterest = planInterestService.updatePlanInterest(planInterestDTO);
 		
 		if(updatePlanInterest == null) {
 			
@@ -78,11 +78,11 @@ public class PlanInterestController {
 	@CrossOrigin
 	@DeleteMapping("/interest/{planId}")
 	@Operation(summary = "관심사항 삭제", description = "관심사항 삭제 컨트롤러")
-	public ResponseEntity<Void> deletePlanInterest(@PathVariable Long planId){
+	public ResponseEntity<Void> deletePlanInterest(@PathVariable Long plan_Id){
 		
 		
 		try {
-		planInterestService.deletePlanInterestByPlanId(planId);
+		planInterestService.deletePlanInterestByPlanId(plan_Id);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -96,11 +96,11 @@ public class PlanInterestController {
 	@CrossOrigin
 	@GetMapping("/interest/{planId}")
 	@Operation(summary = "관심사항 조회", description = "planId로 관심사항 조회 컨트롤러")
-	public ResponseEntity<PlanInterestDto> getPlanInterest(@PathVariable Long planId){
+	public ResponseEntity<PlanInterestDTO> getPlanInterest(@PathVariable Long plan_Id){
 		
 		
 		try {
-			PlanInterestDto planInterestByPlanId = (PlanInterestDto) planInterestService.getPlanInterestsByPlanId(planId);
+			PlanInterestDTO planInterestByPlanId = (PlanInterestDTO) planInterestService.getPlanInterestsByPlanId(plan_Id);
 			if(planInterestByPlanId == null) {
 				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			}
@@ -115,11 +115,11 @@ public class PlanInterestController {
 	@CrossOrigin
 	@GetMapping("/interest/{interestId}")
 	@Operation(summary = "관심사항 조회", description = "interestId로 관심사항 조회 컨트롤러")
-	public ResponseEntity<PlanInterestDto> getPlanInterestsByInterestId(@PathVariable Long interestId){
+	public ResponseEntity<PlanInterestDTO> getPlanInterestsByInterestId(@PathVariable Long interest_Id){
 		
 		
 		try {
-		PlanInterestDto planInterestByInterestId = (PlanInterestDto) planInterestService.getPlanInterestsByInterestId(interestId);
+			PlanInterestDTO planInterestByInterestId = (PlanInterestDTO) planInterestService.getPlanInterestsByInterestId(interest_Id);
 		if(planInterestByInterestId == null) {
 			 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -134,11 +134,11 @@ public class PlanInterestController {
 	@CrossOrigin
 	@GetMapping("/interest/{planId}/{intersetId}")
 	@Operation(summary = "관심사항 조회", description = "planID,interestId로 관심사항 조회 컨트롤러")
-	public ResponseEntity<PlanInterestDto> getPlanInterestByPlanIdAndInterestId(@PathVariable Long planId, @PathVariable Long interestId){
+	public ResponseEntity<PlanInterestDTO> getPlanInterestByPlanIdAndInterestId(@PathVariable Long plan_Id, @PathVariable Long interest_Id){
 		
 		
 		try {
-			PlanInterestDto planInterest = (PlanInterestDto)planInterestService.getPlanInterestByPlanIdAndInterestId(planId,interestId);
+			PlanInterestDTO planInterest = (PlanInterestDTO)planInterestService.getPlanInterestByPlanIdAndInterestId(plan_Id,interest_Id);
 			if(planInterest == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			}
@@ -153,11 +153,11 @@ public class PlanInterestController {
 	@CrossOrigin
 	@GetMapping("/interest/{intersetIds}")
 	@Operation(summary = "관심사항 조회", description = "특정 관심사에 해당하는 PlanInterest로 관심사항 조회 컨트롤러")
-	public ResponseEntity<PlanInterestDto> getPlanInterestsByInterestIds(@PathVariable List<Long> interestIds){
+	public ResponseEntity<PlanInterestDTO> getPlanInterestsByInterestIds(@PathVariable List<Long> interest_Ids){
 		
 		
 		try {
-			PlanInterestDto planInterest = (PlanInterestDto)planInterestService.getPlanInterestsByInterestIds(interestIds);
+			PlanInterestDTO planInterest = (PlanInterestDTO)planInterestService.getPlanInterestsByInterestIds(interest_Ids);
 		return new ResponseEntity<>(planInterest,HttpStatus.OK);
 		} catch(Exception e) {
 			e.printStackTrace();

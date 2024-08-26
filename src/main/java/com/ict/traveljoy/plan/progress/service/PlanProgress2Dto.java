@@ -16,10 +16,10 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PlanProgress2Dto {
+public class PlanProgress2DTO {
 
-    private Long planProgress2Id;
-    private Long planId;
+    private Long id;
+    private Plan plan;
     private String detailPlanName;
     private Timestamp detailPlanStartDate;
     private Timestamp detailPlanEndDate;
@@ -33,11 +33,9 @@ public class PlanProgress2Dto {
     private Hotel hotel;
 
     public PlanProgress2 toEntity() {
-        Plan plan = new Plan();
-        plan.setId(planId);
-
+      
         return PlanProgress2.builder()
-                .planProgress2Id(planProgress2Id)
+                .id(id)
                 .plan(plan)
                 .detailPlanName(detailPlanName)
                 .detailPlanStartDate(detailPlanStartDate)
@@ -53,10 +51,10 @@ public class PlanProgress2Dto {
                 .build();
     }
 
-    public static PlanProgress2Dto toDto(PlanProgress2 planProgress2) {
-        return PlanProgress2Dto.builder()
-                .planProgress2Id(planProgress2.getPlanProgress2Id())
-                .planId(planProgress2.getPlan() != null ? planProgress2.getPlan().getId() : null)
+    public static PlanProgress2DTO toDto(PlanProgress2 planProgress2) {
+        return PlanProgress2DTO.builder()
+                .id(planProgress2.getId())
+                .plan(planProgress2.getPlan())
                 .detailPlanName(planProgress2.getDetailPlanName())
                 .detailPlanStartDate(planProgress2.getDetailPlanStartDate())
                 .detailPlanEndDate(planProgress2.getDetailPlanEndDate())

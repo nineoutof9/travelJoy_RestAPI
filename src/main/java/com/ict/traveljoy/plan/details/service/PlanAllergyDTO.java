@@ -16,13 +16,13 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class PlanAllergyDTO {
-    private Long planAllergyId;
+    private Long id;
     private Plan plan;
     private Allergy allergy;
 
     public PlanAllergy toEntity(){
         return PlanAllergy.builder()
-                .id(planAllergyId)
+                .id(id)
                 .plan(plan)
                 .allergy(allergy)
                 .build();
@@ -30,7 +30,7 @@ public class PlanAllergyDTO {
 
     public static PlanAllergyDTO toDto(PlanAllergy pa){
         return PlanAllergyDTO.builder()
-                .planAllergyId(pa.getId())
+                .id(pa.getId())
                 .plan(pa.getPlan())
                 .allergy(pa.getAllergy())
                 .build();

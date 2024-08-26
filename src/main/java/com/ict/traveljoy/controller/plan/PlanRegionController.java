@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ict.traveljoy.plan.details.service.PlanRegionDto;
+import com.ict.traveljoy.plan.details.service.PlanRegionDTO;
 import com.ict.traveljoy.plan.details.service.PlanRegionService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 
 @Tag(name = "PlanRegion", description = "관심지역")
 @RestController
-@RequestMapping("/plan")
+@RequestMapping("/api/plan")
 @CrossOrigin
 @RequiredArgsConstructor
 public class PlanRegionController {
@@ -34,10 +34,10 @@ public class PlanRegionController {
 	
 	@PostMapping("/region")
 	@Operation(summary = "관심지역 저장", description = "관심지역 저장 컨트롤러")
-	public ResponseEntity<PlanRegionDto> savePlanRegion(@RequestBody PlanRegionDto planRegionDto){
+	public ResponseEntity<PlanRegionDTO> savePlanRegion(@RequestBody PlanRegionDTO planRegionDTO){
 		
 		try {
-		PlanRegionDto savePlanRegion = planRegionService.savePlanRegion(planRegionDto);
+		PlanRegionDTO savePlanRegion = planRegionService.savePlanRegion(planRegionDTO);
 		if(savePlanRegion ==  null) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			
@@ -51,10 +51,10 @@ public class PlanRegionController {
 		
 	@PutMapping("/region")
 	@Operation(summary = "관심지역 수정", description = "관심지역 수정 컨트롤러")
-	public ResponseEntity<PlanRegionDto> updatePlanRegion(@RequestBody PlanRegionDto planRegionDto){
+	public ResponseEntity<PlanRegionDTO> updatePlanRegion(@RequestBody PlanRegionDTO planRegionDTO){
 		
 		try {
-		PlanRegionDto updatePlanRegion = planRegionService.updatePlanRegion(planRegionDto);
+		PlanRegionDTO updatePlanRegion = planRegionService.updatePlanRegion(planRegionDTO);
         
 		if (updatePlanRegion == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -69,10 +69,10 @@ public class PlanRegionController {
 
 	@DeleteMapping("/region/{planId}")
 	@Operation(summary = "관심지역 삭제(planId)", description = "planId로 관심지역 삭제 컨트롤러")
-	public ResponseEntity<Void> deletePlanRegionByPlanId(@PathVariable Long planId){
+	public ResponseEntity<Void> deletePlanRegionByPlanId(@PathVariable Long plan_Id){
 		
 		try {
-		planRegionService.deletePlanRegionByPlanId(planId);
+		planRegionService.deletePlanRegionByPlanId(plan_Id);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -82,10 +82,10 @@ public class PlanRegionController {
 	
 	@DeleteMapping("/region/{regionId}")
 	@Operation(summary = "관심지역 삭제(regionId)", description = "regionId로 관심지역 삭제 컨트롤러")
-	public ResponseEntity<Void> deletePlanRegionByRegionId(@PathVariable Long regionId){
+	public ResponseEntity<Void> deletePlanRegionByRegionId(@PathVariable Long region_Id){
 		
 		try {
-		planRegionService.deletePlanRegionByRegionId(regionId);
+		planRegionService.deletePlanRegionByRegionId(region_Id);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -95,10 +95,10 @@ public class PlanRegionController {
 	
 	@GetMapping("/region/{planId}")
 	@Operation(summary = "관심지역 조회(planId)", description = "planId로 관심지역 조회 컨트롤러")
-	public ResponseEntity<List<PlanRegionDto>> getPlanRegionsByPlanId(@PathVariable Long planId){
+	public ResponseEntity<List<PlanRegionDTO>> getPlanRegionsByPlanId(@PathVariable Long plan_Id){
 		
 		try {
-	 	List<PlanRegionDto> planRegionByPlanId = planRegionService.getPlanRegionsByPlanId(planId);
+	 	List<PlanRegionDTO> planRegionByPlanId = planRegionService.getPlanRegionsByPlanId(plan_Id);
 		
         if (planRegionByPlanId.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -113,10 +113,10 @@ public class PlanRegionController {
 	
 	@GetMapping("/region/{regionId}")
 	@Operation(summary = "관심지역 조회(regionId)", description = "regionId로 관심지역 조회 컨트롤러")
-	public ResponseEntity<List<PlanRegionDto>> getPlanRegionsByRegionId(@PathVariable Long regionId){
+	public ResponseEntity<List<PlanRegionDTO>> getPlanRegionsByRegionId(@PathVariable Long region_Id){
 		
 		try {
-	 	List<PlanRegionDto> planRegionByRegionId = planRegionService.getPlanRegionsByRegionId(regionId);
+	 	List<PlanRegionDTO> planRegionByRegionId = planRegionService.getPlanRegionsByRegionId(region_Id);
         if (planRegionByRegionId.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -130,10 +130,10 @@ public class PlanRegionController {
 	
 	@GetMapping("/region/{planId}/{regionId}")
 	@Operation(summary = "관심지역 조회(planId,regionId)", description = "planId,regionId로 관심지역 조회 컨트롤러")
-	public ResponseEntity<PlanRegionDto> getPlanRegionByPlanIdAndRegionId(@PathVariable Long planId ,@PathVariable Long regionId){
+	public ResponseEntity<PlanRegionDTO> getPlanRegionByPlanIdAndRegionId(@PathVariable Long plan_Id ,@PathVariable Long region_Id){
 		
 		try {
-			PlanRegionDto planRegion = planRegionService.getPlanRegionByPlanIdAndRegionId(planId,regionId);
+			PlanRegionDTO planRegion = planRegionService.getPlanRegionByPlanIdAndRegionId(plan_Id,region_Id);
 	        if (planRegion == null) {
 	            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	        }

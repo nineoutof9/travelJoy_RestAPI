@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ict.traveljoy.plan.progress.service.PlanProgress1Dto;
+import com.ict.traveljoy.plan.progress.service.PlanProgress1DTO;
 import com.ict.traveljoy.plan.progress.service.PlanProgress1Service;
-import com.ict.traveljoy.plan.progress.service.PlanProgress3Dto;
+import com.ict.traveljoy.plan.progress.service.PlanProgress3DTO;
 import com.ict.traveljoy.plan.progress.service.PlanProgress3Service;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 
 @Tag(name = "PlanProgress3", description = "3단계")
 @RestController
-@RequestMapping("/plan")
+@RequestMapping("/api/plan")
 @CrossOrigin
 @RequiredArgsConstructor
 public class PlanProgressController3 {
@@ -36,10 +36,10 @@ public class PlanProgressController3 {
 	
 	@PostMapping("/progress3")
 	@Operation(summary = "3단계 저장", description = "3단계 저장 컨트롤러")
-	public ResponseEntity<PlanProgress3Dto> savePlanProgress3(@RequestBody PlanProgress3Dto planProgress3Dto){
+	public ResponseEntity<PlanProgress3DTO> savePlanProgress3(@RequestBody PlanProgress3DTO planProgress3DTO){
 		
 		try {
-		PlanProgress3Dto savePlanProgress3 = planProgress3Service.savePlanProgress3(planProgress3Dto);
+		PlanProgress3DTO savePlanProgress3 = planProgress3Service.savePlanProgress3(planProgress3DTO);
 		if(savePlanProgress3 == null) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -52,10 +52,10 @@ public class PlanProgressController3 {
 	
 	@PutMapping("/progress3")
 	@Operation(summary = "3단계 수정", description = "3단계 수정 컨트롤러")
-	public ResponseEntity<PlanProgress3Dto> updatePlanProgress3(@RequestBody PlanProgress3Dto planProgress3Dto){
+	public ResponseEntity<PlanProgress3DTO> updatePlanProgress3(@RequestBody PlanProgress3DTO planProgress3DTO){
 		
 		try {
-		PlanProgress3Dto updatePlanProgress3 = planProgress3Service.updatePlanProgress3(planProgress3Dto);
+		PlanProgress3DTO updatePlanProgress3 = planProgress3Service.updatePlanProgress3(planProgress3DTO);
 		if(updatePlanProgress3 == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -68,10 +68,10 @@ public class PlanProgressController3 {
 	
 	@DeleteMapping("/progress3/{planProgress3Id}")
 	@Operation(summary = "3단계 삭제", description = "3단계 삭제 컨트롤러")
-	public ResponseEntity<Void> deletePlanProgress3(@PathVariable Long planProgress3Id){
+	public ResponseEntity<Void> deletePlanProgress3(@PathVariable Long id){
 		
 		try {
-		planProgress3Service.deletePlanProgress3(planProgress3Id);
+		planProgress3Service.deletePlanProgress3(id);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		
 		}catch(Exception e) {
@@ -84,10 +84,10 @@ public class PlanProgressController3 {
 	
 	@GetMapping("/progress3/{planProgressByPlanId}")
 	@Operation(summary = "3단계 조회(계획ID)", description = "특정 계획ID로 조회")
-	public ResponseEntity<PlanProgress3Dto> getPlanProgressesByPlanId(Long planId){
+	public ResponseEntity<PlanProgress3DTO> getPlanProgressesByPlanId(Long plan_Id){
 		
 		try {
-		List<PlanProgress3Dto> planProgressByPlanId = planProgress3Service.getPlanProgressesByPlanId(planId);
+		List<PlanProgress3DTO> planProgressByPlanId = planProgress3Service.getPlanProgressesByPlanId(plan_Id);
 		if(planProgressByPlanId.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -101,10 +101,10 @@ public class PlanProgressController3 {
 	
 	@GetMapping("/progress3/{planProgressByTransportation}")
 	@Operation(summary = "3단계 조회(교통)", description = "특정 교통 여부로 조회")
-	public ResponseEntity<PlanProgress3Dto> getPlanProgressesByIsTransportation(boolean isTransportation){
+	public ResponseEntity<PlanProgress3DTO> getPlanProgressesByIsTransportation(boolean isTransportation){
 		
 		try {
-		List<PlanProgress3Dto> getPlanProgressesByIsTransportation = planProgress3Service.getPlanProgressesByIsTransportation(isTransportation);
+		List<PlanProgress3DTO> getPlanProgressesByIsTransportation = planProgress3Service.getPlanProgressesByIsTransportation(isTransportation);
 	
 		if(getPlanProgressesByIsTransportation.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -119,10 +119,10 @@ public class PlanProgressController3 {
 	
 	@GetMapping("/progress3/{planProgressByDistance}")
 	@Operation(summary = "3단계 조회(거리)", description = "특정 교통 여부로 조회")
-	public ResponseEntity<PlanProgress3Dto> getPlanProgressesByIsDistance(boolean isDistance){
+	public ResponseEntity<PlanProgress3DTO> getPlanProgressesByIsDistance(boolean isDistance){
 		
 		try {
-		List<PlanProgress3Dto> getPlanProgressesByIsDistance = planProgress3Service.getPlanProgressesByIsDistance(isDistance);
+		List<PlanProgress3DTO> getPlanProgressesByIsDistance = planProgress3Service.getPlanProgressesByIsDistance(isDistance);
 	
 		if(getPlanProgressesByIsDistance.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -137,10 +137,10 @@ public class PlanProgressController3 {
 	
 	@GetMapping("/progress3/{planProgressByPrice}")
 	@Operation(summary = "3단계 조회(비용)", description = "특정 비용 여부로 조회")
-	public ResponseEntity<PlanProgress3Dto> getPlanProgressesByIsPrice(boolean isPrice){
+	public ResponseEntity<PlanProgress3DTO> getPlanProgressesByIsPrice(boolean isPrice){
 		
 		try {
-		List<PlanProgress3Dto> getPlanProgressesByIsPrice = planProgress3Service.getPlanProgressesByIsPrice(isPrice);
+		List<PlanProgress3DTO> getPlanProgressesByIsPrice = planProgress3Service.getPlanProgressesByIsPrice(isPrice);
 	
 		if(getPlanProgressesByIsPrice.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -155,10 +155,10 @@ public class PlanProgressController3 {
 	
 	@GetMapping("/progress3/{planProgressByMinCost}")
 	@Operation(summary = "3단계 조회(최소비용)", description = "최소 비용 여부로 조회")
-	public ResponseEntity<PlanProgress3Dto> getPlanProgressesByMinimumCost(Long minimumCost){
+	public ResponseEntity<PlanProgress3DTO> getPlanProgressesByMinimumCost(Long minimum_Cost){
 		
 		try {
-		List<PlanProgress3Dto> getPlanProgressesByMinimumCost = planProgress3Service.getPlanProgressesByMinimumCost(minimumCost);
+		List<PlanProgress3DTO> getPlanProgressesByMinimumCost = planProgress3Service.getPlanProgressesByMinimumCost(minimum_Cost);
 	
 		if(getPlanProgressesByMinimumCost.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -173,10 +173,10 @@ public class PlanProgressController3 {
 	
 	@GetMapping("/progress3/{planProgressByMaxCost}")
 	@Operation(summary = "3단계 조회(최대비용)", description = "최대 비용 여부로 조회")
-	public ResponseEntity<PlanProgress3Dto> getPlanProgressesByMaximumCost(Long maximumCost){
+	public ResponseEntity<PlanProgress3DTO> getPlanProgressesByMaximumCost(Long maximum_Cost){
 		
 		try {
-		List<PlanProgress3Dto> getPlanProgressesByMaximumCost = planProgress3Service.getPlanProgressesByMaximumCost(maximumCost);
+		List<PlanProgress3DTO> getPlanProgressesByMaximumCost = planProgress3Service.getPlanProgressesByMaximumCost(maximum_Cost);
 	
 		if(getPlanProgressesByMaximumCost.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -192,10 +192,10 @@ public class PlanProgressController3 {
 	
 	@GetMapping("/progress3/{planProgressByRate}")
 	@Operation(summary = "3단계 조회(평가)", description = "특정 평가 여부로 조회")
-	public ResponseEntity<PlanProgress3Dto> getPlanProgressesByIsRate(boolean isRate){
+	public ResponseEntity<PlanProgress3DTO> getPlanProgressesByIsRate(boolean isRate){
 		
 		try {
-		List<PlanProgress3Dto> getPlanProgressesByIsRate = planProgress3Service.getPlanProgressesByIsRate(isRate);
+		List<PlanProgress3DTO> getPlanProgressesByIsRate = planProgress3Service.getPlanProgressesByIsRate(isRate);
 	
 		if(getPlanProgressesByIsRate.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -210,10 +210,10 @@ public class PlanProgressController3 {
 	
 	@GetMapping("/progress3/{planProgressByMinRate}")
 	@Operation(summary = "3단계 조회(최소평가)", description = "최소 평가 여부로 조회")
-	public ResponseEntity<PlanProgress3Dto> getPlanProgressesByMinimumRate(Integer minimumRate){
+	public ResponseEntity<PlanProgress3DTO> getPlanProgressesByMinimumRate(Integer minimum_Rate){
 		
 		try {
-		List<PlanProgress3Dto> getPlanProgressesByMinimumRate = planProgress3Service.getPlanProgressesByMinimumRate(minimumRate);
+		List<PlanProgress3DTO> getPlanProgressesByMinimumRate = planProgress3Service.getPlanProgressesByMinimumRate(minimum_Rate);
 	
 		if(getPlanProgressesByMinimumRate.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -228,10 +228,10 @@ public class PlanProgressController3 {
 	
 	@GetMapping("/progress3/{planProgressByMaxRate}")
 	@Operation(summary = "3단계 조회(최대평가)", description = "최대 평가 여부로 조회")
-	public ResponseEntity<PlanProgress3Dto> getPlanProgressesByMaximumRate(Integer maximumRate){
+	public ResponseEntity<PlanProgress3DTO> getPlanProgressesByMaximumRate(Integer maximum_Rate){
 		
 		try {
-		List<PlanProgress3Dto> getPlanProgressesByMaximumRate = planProgress3Service.getPlanProgressesByMaximumRate(maximumRate);
+		List<PlanProgress3DTO> getPlanProgressesByMaximumRate = planProgress3Service.getPlanProgressesByMaximumRate(maximum_Rate);
 	
 		if(getPlanProgressesByMaximumRate.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);

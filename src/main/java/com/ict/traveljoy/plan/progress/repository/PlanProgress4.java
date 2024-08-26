@@ -30,7 +30,7 @@ public class PlanProgress4 {
     @SequenceGenerator(name = "seq_plan_progress_4",sequenceName = "seq_plan_progress_4",allocationSize = 1,initialValue = 1)
     @GeneratedValue(generator = "seq_plan_progress_4",strategy = GenerationType.SEQUENCE)
     @Column(name = "PLAN_PROGRESS_4_ID", nullable = false)
-    private Long planProgress4Id;
+    private Long id;
 	
 	@ManyToOne
     @JoinColumn(name = "PLAN_ID")

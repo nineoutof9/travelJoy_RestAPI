@@ -31,7 +31,7 @@ public class PlanRegion {
     @SequenceGenerator(name = "seq_plan_region",sequenceName = "seq_plan_region",allocationSize = 1,initialValue = 1)
     @GeneratedValue(generator = "seq_plan_region",strategy = GenerationType.SEQUENCE)
     @Column(name = "PLAN_REGION_ID")
-    private Long planRegionId;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "PLAN_ID", nullable = false)

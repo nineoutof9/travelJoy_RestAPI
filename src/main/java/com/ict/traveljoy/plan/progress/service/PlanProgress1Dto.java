@@ -13,21 +13,19 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PlanProgress1Dto {
+public class PlanProgress1DTO {
 
-    private Long planProgress1Id;
+    private Long id;
     private Date planStartDate;
     private Date planEndDate;
     private Integer travelers;
     private Long travelCost;
-    private Long planId;
+    private Plan plan;
 
     public PlanProgress1 toEntity() {
-        Plan plan = new Plan();
-        plan.setId(planId);
-
+       
         return PlanProgress1.builder()
-                .planProgress1Id(planProgress1Id)
+                .id(id)
                 .planStartDate(planStartDate)
                 .planEndDate(planEndDate)
                 .travelers(travelers)
@@ -36,14 +34,14 @@ public class PlanProgress1Dto {
                 .build();
     }
 
-    public static PlanProgress1Dto toDto(PlanProgress1 planProgress1) {
-        return PlanProgress1Dto.builder()
-                .planProgress1Id(planProgress1.getPlanProgress1Id())
+    public static PlanProgress1DTO toDto(PlanProgress1 planProgress1) {
+        return PlanProgress1DTO.builder()
+                .id(planProgress1.getId())
                 .planStartDate(planProgress1.getPlanStartDate())
                 .planEndDate(planProgress1.getPlanEndDate())
                 .travelers(planProgress1.getTravelers())
                 .travelCost(planProgress1.getTravelCost())
-                .planId(planProgress1.getPlan() != null ? planProgress1.getPlan().getId() : null)
+                .plan(planProgress1.getPlan())
                 .build();
     }
 }

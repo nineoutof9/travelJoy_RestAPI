@@ -20,48 +20,48 @@ public class PlanHandicapService {
     private PlanHandicapRepository planHandicapRepository;
 
     
-    public List<PlanHandicapDto> getAllPlanHandicaps() {
+    public List<PlanHandicapDTO> getAllPlanHandicaps() {
         return planHandicapRepository.findAll().stream()
-                .map(PlanHandicapDto::toDto)
+                .map(PlanHandicapDTO::toDto)
                 .collect(Collectors.toList());
     }
 
-    public PlanHandicapDto getPlanHandicapById(Long id) {
+    public PlanHandicapDTO getPlanHandicapById(Long id) {
         return planHandicapRepository.findById(id)
-                .map(PlanHandicapDto::toDto)
+                .map(PlanHandicapDTO::toDto)
                 .orElse(null); // 해당 ID가 없을 경우 null 처리
     }
 
-    public List<PlanHandicapDto> getPlanHandicapsByPlanId(Long planId) {
-        return planHandicapRepository.findByPlan_id(planId).stream()
-                .map(PlanHandicapDto::toDto)
+    public List<PlanHandicapDTO> getPlanHandicapsByPlanId(Long plan_Id) {
+        return planHandicapRepository.findByPlan_Id(plan_Id).stream()
+                .map(PlanHandicapDTO::toDto)
                 .collect(Collectors.toList());
     }
 
-    public List<PlanHandicapDto> getPlanHandicapsByHandicapId(Long handicapId) {
-        return planHandicapRepository.findByHandicapId(handicapId).stream()
-                .map(PlanHandicapDto::toDto)
+    public List<PlanHandicapDTO> getPlanHandicapsByHandicapId(Long handicap_Id) {
+        return planHandicapRepository.findByHandicap_Id(handicap_Id).stream()
+                .map(PlanHandicapDTO::toDto)
                 .collect(Collectors.toList());
     }
     @Transactional
-    public PlanHandicapDto savePlanHandicap(PlanHandicapDto planHandicapDto) {
-        PlanHandicap planHandicap = planHandicapDto.toEntity();
+    public PlanHandicapDTO savePlanHandicap(PlanHandicapDTO planHandicapDTO) {
+        PlanHandicap planHandicap = planHandicapDTO.toEntity();
         PlanHandicap saveplanHandicap = planHandicapRepository.save(planHandicap);
-        return PlanHandicapDto.toDto(saveplanHandicap);
+        return PlanHandicapDTO.toDto(saveplanHandicap);
         
     }
     
     @Transactional
-    public PlanHandicapDto updatePlanHandicap(PlanHandicapDto planHandicapDto) {
-    	PlanHandicap existingPlanHandicap = planHandicapRepository.findByPlan_idAndHandicapId(planHandicapDto.getPlanId(), planHandicapDto.getPlanHandicapId());
+    public PlanHandicapDTO updatePlanHandicap(Long plan_Id, Long handicap_Id,PlanHandicapDTO planHandicapDTO) {
+    	PlanHandicap existingPlanHandicap = planHandicapRepository.findByPlanIdAndHandicapId(plan_Id, handicap_Id);
     	if (existingPlanHandicap != null) {
     		Plan plan = new Plan();
-    		plan.setId(planHandicapDto.getPlanId());;
+    		plan.setId(planHandicapDTO.getPlan().getId());
     		
     		existingPlanHandicap.setPlan(plan);
     		
     		PlanHandicap updatePlanHandicap = planHandicapRepository.save(existingPlanHandicap);
-    		return PlanHandicapDto.toDto(updatePlanHandicap);
+    		return PlanHandicapDTO.toDto(updatePlanHandicap);
 
 
     	}
