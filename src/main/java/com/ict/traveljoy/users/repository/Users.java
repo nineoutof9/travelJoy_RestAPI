@@ -69,21 +69,19 @@ public class Users {
 	@Column(columnDefinition = "NUMBER(1, 0)")
     private Integer gender;
 	
-	@Column(nullable = false,columnDefinition = "NUMBER(1, 0)")
-    @ColumnDefault("0")
-    private Integer isKakao;
+	@Column(length = 30)
+	@ColumnDefault("'local'")
+	private String loginType;
 	
-	@Column(nullable = false,columnDefinition = "NUMBER(1, 0)")
-    @ColumnDefault("0")
-    private Integer isGoogle;
+	@Column
+	private String snsAccessToken;
 	
-	@Column(nullable = false,columnDefinition = "NUMBER(1, 0)")
-    @ColumnDefault("0")
-    private Integer isNaver;
+	@Column
+	private LocalDateTime lastLogin;
 	
 	@Convert(converter = PermissionToNumberConverter.class)
 	@Column
-	@ColumnDefault("0")
+	@ColumnDefault("1")
 	private String permission;
 	
 	@Column(columnDefinition = "NUMBER(1, 0)")

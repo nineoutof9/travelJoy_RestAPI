@@ -1,19 +1,36 @@
 package com.ict.traveljoy.controller.user;
 
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ict.traveljoy.security.CustomUserDetails;
+import com.ict.traveljoy.security.jwt.refreshtoken.RefreshToken;
+import com.ict.traveljoy.security.jwt.service.RefreshService;
+import com.ict.traveljoy.security.jwt.util.JwtUtility;
+import com.ict.traveljoy.users.repository.UserRepository;
+import com.ict.traveljoy.users.repository.Users;
 import com.ict.traveljoy.users.service.UserDTO;
 import com.ict.traveljoy.users.service.UserService;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,10 +44,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class UserController {
 	
-	@Autowired
 	private final UserService userService;
-	@Autowired
 	private final ObjectMapper objectMapper;
+	private final UserRepository userRepository;
+	private final JwtUtility jwtUtility;
+	private final RefreshService refreshService;
+	
+	@Value("${kakao.clientId}")
+    private String kakaoClientId;
+    @Value("${kakao.redirectUri}")
+    private String kakaoRedirectUri;
 	
 	@PostMapping("/register")
 	public ResponseEntity<UserDTO> signUp(@RequestBody UserDTO dto){
@@ -82,6 +105,94 @@ public class UserController {
 	            e.printStackTrace();
 	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("exists", false));
 	        }
-	  }
+	 }
+	 
+	 @GetMapping("/kakao")
+	 public void kakaoLogin(@RequestParam(name = "code") String code,HttpServletRequest request, HttpServletResponse response) throws IOException {
+	     // 액세스 토큰을 요청하기 위한 URL 및 헤더 설정
+	     String tokenUrl = "https://kauth.kakao.com/oauth/token";
+	     HttpHeaders tokenHeaders = new HttpHeaders();
+	     tokenHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+	     String tokenRequestBody = "grant_type=authorization_code"
+	             + "&client_id=" + kakaoClientId
+	             + "&redirect_uri=" + kakaoRedirectUri
+	             + "&code=" + code;
+
+	     // 토큰 요청
+	     HttpEntity<String> tokenRequestEntity = new HttpEntity<>(tokenRequestBody, tokenHeaders);
+	     RestTemplate restTemplate = new RestTemplate();
+	     ResponseEntity<String> tokenResponse = restTemplate.exchange(tokenUrl, HttpMethod.POST, tokenRequestEntity, String.class);
+
+	     // JSON 응답을 Map으로 변환하여 access_token 추출
+	     Map<String, Object> tokenMap = objectMapper.readValue(tokenResponse.getBody(), Map.class);
+	     String accessToken = (String) tokenMap.get("access_token");
+
+	     // 사용자 정보를 요청하기 위한 URL 및 헤더 설정
+	     String userInfoUrl = "https://kapi.kakao.com/v2/user/me";
+	     HttpHeaders userInfoHeaders = new HttpHeaders();
+	     userInfoHeaders.set("Authorization", "Bearer " + accessToken);
+
+	     // 사용자 정보 요청
+	     HttpEntity<String> userInfoRequestEntity = new HttpEntity<>(userInfoHeaders);
+	     ResponseEntity<String> userInfoResponse = restTemplate.exchange(userInfoUrl, HttpMethod.GET, userInfoRequestEntity, String.class);
+
+	     // JSON 응답을 Map으로 변환하여 사용자 이메일 추출
+	     Map<String, Object> userInfoMap = objectMapper.readValue(userInfoResponse.getBody(), Map.class);
+	     Map<String, Object> kakaoAccount = (Map<String, Object>) userInfoMap.get("kakao_account");
+	     String email = kakaoAccount != null && kakaoAccount.containsKey("email") ? (String) kakaoAccount.get("email") : "이메일 정보가 없습니다.";
+
+	     Optional<Users> optionalUser = userRepository.findByEmailAndLoginType(email, "kakao");
+
+	     if (optionalUser.isPresent()) {
+	         Users user = optionalUser.get();
+	         user.setLastLogin(LocalDateTime.now());
+	         user.setSnsAccessToken(accessToken);
+	         userRepository.save(user);
+
+	         // JWT 토큰 발급
+	         Long accessExpiredMs = 600000L;
+	         String accessTokenJwt = jwtUtility.generateToken(email, "access", accessExpiredMs);
+	         Long refreshExpiredMs = 86400000L;
+	         String refreshTokenJwt = jwtUtility.generateToken(email, "refresh", refreshExpiredMs);
+
+	         RefreshToken refreshToken = RefreshToken.builder()
+							.status("activated")
+							.userAgent(request.getHeader("User-Agent"))
+							.user(user)
+							.tokenValue(refreshTokenJwt)
+							.issuedAt(LocalDateTime.now())
+							.expirationDate(LocalDateTime.now().plusSeconds(refreshExpiredMs / 1000))
+							.build();
+
+	         refreshService.save(refreshToken);
+	         
+	         Cookie refreshCookie = new Cookie("refreshToken", refreshTokenJwt);
+	         refreshCookie.setHttpOnly(true);
+	         refreshCookie.setPath("/"); // 모든 경로에서 쿠키 접근 가능
+	         refreshCookie.setMaxAge(refreshExpiredMs.intValue() / 1000); // 쿠키 유효기간 설정
+	         response.addCookie(refreshCookie);
+	         
+	         // 로그인 성공 후 URL에 토큰 정보 포함
+	         String redirectUrl = String.format("http://localhost:3000/user/signin?access=%s&isAdmin=%s&email=%s",
+	                 accessTokenJwt, user.getPermission().equalsIgnoreCase("ROLE_ADMIN"), email);
+
+	         response.sendRedirect(redirectUrl);
+	     } else {
+	    	 UserDTO dto = new UserDTO();
+	    	 dto = dto.builder().email(email).loginType("kakao").password("").build();
+	    	 userService.signUp(dto);
+	         
+	    	 
+	         // 카카오 로그아웃 처리
+	         String logoutUrl = "https://kapi.kakao.com/v1/user/logout";
+	         HttpHeaders logoutHeaders = new HttpHeaders();
+	         logoutHeaders.set("Authorization", "Bearer " + accessToken);
+
+	         HttpEntity<String> logoutRequestEntity = new HttpEntity<>(logoutHeaders);
+	         ResponseEntity<String> logoutResponse = restTemplate.exchange(logoutUrl, HttpMethod.POST, logoutRequestEntity, String.class);
+
+	         response.sendRedirect("http://localhost:3000/user/signin");
+	     }
+	 }
 	
 }

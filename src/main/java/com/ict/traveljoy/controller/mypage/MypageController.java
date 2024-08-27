@@ -20,7 +20,6 @@ import com.ict.traveljoy.place.sight.service.SightService;
 import com.ict.traveljoy.place.transportation.service.TransportationDTO;
 import com.ict.traveljoy.place.transportation.service.TransportationService;
 import com.ict.traveljoy.tripReview.repository.TripReview;
-import com.ict.traveljoy.tripReview.service.TripReviewDto;
 import com.ict.traveljoy.tripReview.service.TripReviewPhotoDTO;
 import com.ict.traveljoy.tripReview.service.TripReviewPhotoService;
 import com.ict.traveljoy.tripReview.service.TripReviewService;
