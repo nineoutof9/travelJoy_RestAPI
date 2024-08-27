@@ -40,15 +40,17 @@ public class FavoriteController {
 	private final ObjectMapper objectMapper;
 	private final CheckContainsUseremail checkUser;
 	
-	//CRUD
+
 	//CREATE
-	@PostMapping("/{target}")
+	@PostMapping
 	@Operation(summary="회원별로, 주제(행사/음식/장소/호텔)별로 JSON형식의 데이터를 받아서 새로운 북마크 추가")
 	@Parameter(name="user",description="로그인 상태인경우는 필요없음",required=false)
+	@Parameter(name="target",description="타겟 대상(event/food/sight/hotel 중 하나",required=true)
 //	@Parameter(name="targetId",description="주제(event/food/sight/hotel)")
-	public ResponseEntity<FavoriteDTO> addFavorite(@RequestBody FavoriteDTO favoriteDTO, @PathVariable("target") String target,HttpServletRequest request){ //target,targetId받아서 저장하기
+	public ResponseEntity<FavoriteDTO> addFavorite(@RequestBody FavoriteDTO favoriteDTO,HttpServletRequest request){ //target,targetId받아서 저장하기
 		
 		String useremail = checkUser.checkContainsUseremail(request);
+		String target = request.getParameter("target");
 		
 		try {		
 			FavoriteDTO createdFavorite = favoriteService.addFavorite(useremail,favoriteDTO,target);
@@ -80,14 +82,16 @@ public class FavoriteController {
 		
 	}
 	
-	//event
-	@GetMapping("/event")
-	public ResponseEntity<List<FavoriteDTO>> getAllFavEvents(HttpServletRequest request){
+	//get 특정 타겟 즐겨찾기들만
+	@Parameter(name="target",description="타겟 대상(event/food/sight/hotel 중 하나",required=true)
+	@GetMapping("/target")
+	public ResponseEntity<List<FavoriteDTO>> getAllFavTargets(HttpServletRequest request){
 		
 		String useremail = checkUser.checkContainsUseremail(request);
+		String target = request.getParameter("target");
 		
 		try {
-			List<FavoriteDTO> favorietEventList = favoriteService.getFavoriteAllByTarget("event",useremail); //userid=1인경우
+			List<FavoriteDTO> favorietEventList = favoriteService.getFavoriteAllByTarget(target,useremail); //userid=1인경우
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(favorietEventList);
 		}
 		catch(Exception e) {
@@ -96,13 +100,16 @@ public class FavoriteController {
 		
 	}
 	
-	@GetMapping("/event/{targetId}")
-	public ResponseEntity<FavoriteDTO> getFavEvent(@PathVariable("targetId") String targetId,HttpServletRequest request) {
+	
+	@Parameter(name="target",description="타겟 대상(event/food/sight/hotel 중 하나",required=true)
+	@GetMapping("/{targetId}")
+	public ResponseEntity<FavoriteDTO> getFavTarget(@PathVariable("targetId") String targetId,HttpServletRequest request) {
 		
 		String useremail = checkUser.checkContainsUseremail(request);
+		String target = request.getParameter("target");
 		
 		try {
-			FavoriteDTO favorite = favoriteService.getFavoriteByTargetId("event",Long.parseLong(targetId));
+			FavoriteDTO favorite = favoriteService.getFavoriteByTargetId(target,Long.parseLong(targetId));
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(favorite);
 		}
 		catch(Exception e) {
@@ -110,93 +117,7 @@ public class FavoriteController {
 		}
 	}
 	
-	//food
-	@GetMapping("/food")
-	public ResponseEntity<List<FavoriteDTO>> getAllFavFoods(HttpServletRequest request){
-		
-		String useremail = checkUser.checkContainsUseremail(request);
-		
-		try {
-			List<FavoriteDTO> favorietEventList = favoriteService.getFavoriteAllByTarget("food",useremail);
-			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(favorietEventList);
-		}
-		catch(Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-		}
-		
-	}
-	
-	@GetMapping("/food/{targetId}")
-	public ResponseEntity<FavoriteDTO> getFavFood(@PathVariable("targetId") String targetId,HttpServletRequest request) {
-		
-		String useremail = checkUser.checkContainsUseremail(request);
-		
-		try {
-			FavoriteDTO favorite = favoriteService.getFavoriteByTargetId("food",Long.parseLong(targetId));
-			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(favorite);
-		}
-		catch(Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-		}
-	}
-	//sight
-	@GetMapping("/sight")
-	public ResponseEntity<List<FavoriteDTO>> getAllFavSights(HttpServletRequest request){
-		
-		String useremail = checkUser.checkContainsUseremail(request);
-		
-		try {
-			List<FavoriteDTO> favorietEventList = favoriteService.getFavoriteAllByTarget("sight",useremail);
-			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(favorietEventList);
-		}
-		catch(Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-		}
-		
-	}
-	
-	@GetMapping("/sight/{targetId}")
-	public ResponseEntity<FavoriteDTO> getFavSight(@PathVariable("targetId") String targetId,HttpServletRequest request) {
-		
-		String useremail = checkUser.checkContainsUseremail(request);
-		
-		try {
-			FavoriteDTO favorite = favoriteService.getFavoriteByTargetId("sight",Long.parseLong(targetId));
-			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(favorite);
-		}
-		catch(Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-		}
-	}
-	//hotel
-	@GetMapping("/hotel")
-	public ResponseEntity<List<FavoriteDTO>> getAllFavHotels(HttpServletRequest request){
-		
-		String useremail = checkUser.checkContainsUseremail(request);
-		
-		try {
-			List<FavoriteDTO> favorietEventList = favoriteService.getFavoriteAllByTarget("hotel",useremail);
-			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(favorietEventList);
-		}
-		catch(Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-		}
-		
-	}
-	
-	@GetMapping("/hotel/{targetId}")
-	public ResponseEntity<FavoriteDTO> getFavHotel(@PathVariable("targetId") String targetId,HttpServletRequest request) {
-		
-		String useremail = checkUser.checkContainsUseremail(request);
-		
-		try {
-			FavoriteDTO favorite = favoriteService.getFavoriteByTargetId("hotel",Long.parseLong(targetId));
-			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(favorite);
-		}
-		catch(Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-		}
-	}
+
 	
 	//DELETE
 	//즐겨찾기삭제 favorite_id로(target_id아님) 

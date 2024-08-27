@@ -82,18 +82,18 @@ public class Report {
     private String reportContent;
     
     
-	@Column(name="REPORT_HANDLER_ID",nullable=false)
+	@Column(name="REPORT_HANDLER_ID")
     private Long reportHandlerId;
     
-	@Column(name="REPORT_HANDLER_NAME",length=50, nullable=false)
+	@Column(name="REPORT_HANDLER_NAME",length=50)
     private String reportHandlerName;
     
 	//신고처리 결과
-	@Column(name="REPORT_RESULT",length=2000,nullable=false)
+	@Column(name="REPORT_RESULT",length=2000)
     private String reportResult;
     
     //신고처리 일자
-    @Column(name="REPORT_RESULT_DATE",nullable = false)
+    @Column(name="REPORT_RESULT_DATE")
 	@ColumnDefault("SYSDATE")
 	@CreationTimestamp
     private LocalDateTime reportResultDate;
