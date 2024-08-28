@@ -43,7 +43,7 @@ public class ReportController {
 		String useremail = checkUser.checkContainsUseremail(request);
 		String category = request.getParameter("category");
 		try {
-			ReportDTO createReport = reportService.createReport(useremail,reportDTO);
+			ReportDTO createReport = reportService.createReport(useremail,category,reportDTO);
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(createReport);
 		}
 		catch(Exception e) {
@@ -54,9 +54,10 @@ public class ReportController {
 	
 	//모든 신고
 	@GetMapping("/all")
-	public ResponseEntity<List<ReportDTO>> getReportAll(){
+	public ResponseEntity<List<ReportDTO>> getReportAll(HttpServletRequest request){
+		String useremail = checkUser.checkContainsUseremail(request);
 		try {
-			List<ReportDTO> reportList = reportService.getAll();
+			List<ReportDTO> reportList = reportService.getAll(useremail);
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(reportList);
 		}
 		catch(Exception e) {
@@ -78,9 +79,10 @@ public class ReportController {
 	
 	//특정 신고가져오기
 	@GetMapping("/{reportId}")
-	public ResponseEntity<ReportDTO> getReportById(@PathVariable("reportId") String reportId){
+	public ResponseEntity<ReportDTO> getReportById(@PathVariable("reportId") String reportId,HttpServletRequest request){
+		String useremail = checkUser.checkContainsUseremail(request);
 		try {
-			ReportDTO report = reportService.getReportById(Long.parseLong(reportId));
+			ReportDTO report = reportService.getReportById(Long.parseLong(reportId),useremail);
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(report);
 		}
 		catch(Exception e) {
@@ -103,9 +105,10 @@ public class ReportController {
 	
 	//한신고
 	@GetMapping("/report/{userId}")
-	public ResponseEntity<List<ReportDTO>> getReportHistory(@PathVariable String userId){
+	public ResponseEntity<List<ReportDTO>> getReportHistory(@PathVariable String userId,HttpServletRequest request){
+		String useremail = checkUser.checkContainsUseremail(request);
 		try {
-			List<ReportDTO> reportList = reportService.getReportAllByUserId(Long.parseLong(userId));
+			List<ReportDTO> reportList = reportService.getReportAllByUserId(Long.parseLong(userId),useremail);
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(reportList);
 		}
 		catch(Exception e) {
@@ -116,9 +119,10 @@ public class ReportController {
 	//신고를 처리
 	// reportHandlerId, reportHandlerName,reportResult
 	@PutMapping("/{reportId}")
-	public ResponseEntity<ReportDTO> handleReport(@PathVariable("reportId") String reportId){
+	public ResponseEntity<ReportDTO> handleReport(@PathVariable("reportId") String reportId,HttpServletRequest request){
+		String useremail = checkUser.checkContainsUseremail(request);
 		try {
-			ReportDTO updatedReport = reportService.updateReport(Long.parseLong(reportId));
+			ReportDTO updatedReport = reportService.updateReport(Long.parseLong(reportId),useremail);
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(updatedReport);
 		}
 		catch(Exception e) {
@@ -130,9 +134,10 @@ public class ReportController {
 	
 	//신고 삭제
 	@DeleteMapping("/{reportId}")
-	public ResponseEntity<ReportDTO> deleteReport(@PathVariable("reportId") String reportId){
+	public ResponseEntity<ReportDTO> deleteReport(@PathVariable("reportId") String reportId,HttpServletRequest request){
+		String useremail = checkUser.checkContainsUseremail(request);
 		try {
-			ReportDTO deletereportDTO = reportService.deleteById(Long.parseLong(reportId));
+			ReportDTO deletereportDTO = reportService.deleteById(Long.parseLong(reportId),useremail);
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(deletereportDTO);
 		}
 		catch(Exception e) {
