@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +31,7 @@ public class ChatController {
 	private final MessageService messageService;
 	private final CheckContainsUseremail checkUser;
 	
+
 	// topic 받기 요청
 	// 방문자의 경우 temp반환하여, python에서 temp인 경우 db저장 X
 	@GetMapping("/topic")
@@ -44,7 +46,7 @@ public class ChatController {
 		}
 		
 	}
-	
+
 	// 채팅 종료 시
 	// chatroom.isActive(0)으로 바꾸기
 	@PutMapping("/topic")
@@ -65,6 +67,7 @@ public class ChatController {
 	public ResponseEntity<List<ChatRoomDTO>> getAllChatRoom(HttpServletRequest request) {
 		String useremail = checkUser.checkContainsUseremail(request);
 		// 권한 확인하기
+
 		try {
 			List<ChatRoomDTO> chatrooms = chatroomService.getAllChatRoom();
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(chatrooms);

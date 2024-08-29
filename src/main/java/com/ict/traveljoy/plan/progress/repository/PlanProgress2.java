@@ -38,7 +38,7 @@ public class PlanProgress2 {
     @SequenceGenerator(name = "seq_plan_progress_2",sequenceName = "seq_plan_progress_2",allocationSize = 1,initialValue = 1)
     @GeneratedValue(generator = "seq_plan_progress_2",strategy = GenerationType.SEQUENCE)
     @Column(name = "PLAN_PROGRESS_2_ID", nullable = false)
-    private Long planProgress2Id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "PLAN_ID")
@@ -70,19 +70,19 @@ public class PlanProgress2 {
     private Integer isHotel;
 
     @ManyToOne
-	@JoinColumn(name = "EVENT_ID")
+    @JoinColumn(name = "EVENT_ID")
     private Event event;
 
     @ManyToOne
-	@JoinColumn(name = "FOOD_ID")
+    @JoinColumn(name = "FOOD_ID")
     private Food food;
 
     @ManyToOne
-   	@JoinColumn(name = "SIGHT_ID")
+    @JoinColumn(name = "SIGHT_ID")
     private Sight sight;
 
     @ManyToOne
-   	@JoinColumn(name = "HOTEL_ID")
+    @JoinColumn(name = "HOTEL_ID")
     private Hotel hotel;
 
 }

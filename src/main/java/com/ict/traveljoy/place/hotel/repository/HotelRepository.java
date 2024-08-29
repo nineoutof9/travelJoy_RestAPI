@@ -6,13 +6,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface HotelRepository extends JpaRepository<Hotel, Long> {
 
-    List<Hotel> findByRegion_Id(Long regionId);
+    List<Hotel> findByRegionId(Long region_Id);
 
     List<Hotel> findByHotelName(String hotelName);
 
-    List<Hotel> findByAveragePriceBetween(float minPrice, float maxPrice);
+    List<Hotel> findByAveragePriceBetween(Float minPrice, Float maxPrice);
 
     List<Hotel> findByTotalReviewCountGreaterThanEqual(Long reviewCount);
 
-    List<Hotel> findByAverageReviewRateGreaterThanEqual(float reviewRate);
+    List<Hotel> findByAverageReviewRateGreaterThanEqual(Float reviewRate);
 }

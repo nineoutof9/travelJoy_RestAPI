@@ -27,31 +27,31 @@ public class TripReviewPhotoService {
         this.tripReviewRepository = tripReviewRepository;
     }
 
-    public List<TripReviewPhotoDto> getPhotosByReviewId(Long tripReviewId) {
+    public List<TripReviewPhotoDTO> getPhotosByReviewId(Long tripReviewId) {
         List<TripReviewPhoto> tripReviewPhotos = tripReviewPhotoRepository.findByTripReviewId(tripReviewId);
         return tripReviewPhotos.stream()
-                .map(TripReviewPhotoDto::toDto)
+                .map(TripReviewPhotoDTO::toDto)
                 .collect(Collectors.toList());
     }
 
-    public List<TripReviewPhotoDto> getPhotosByImageId(Long imageId) {
+    public List<TripReviewPhotoDTO> getPhotosByImageId(Long imageId) {
         List<TripReviewPhoto> tripReviewPhotos = tripReviewPhotoRepository.findByImageId(imageId);
         return tripReviewPhotos.stream()
-                .map(TripReviewPhotoDto::toDto)
+                .map(TripReviewPhotoDTO::toDto)
                 .collect(Collectors.toList());
     }
 
-    public TripReviewPhotoDto getPhotoByTripReviewIdAndImageId(Long tripReviewId, Long imageId) {
+    public TripReviewPhotoDTO getPhotoByTripReviewIdAndImageId(Long tripReviewId, Long imageId) {
         Optional<TripReviewPhoto> tripReviewPhotoOpt = tripReviewPhotoRepository.findByTripReviewIdAndImageId(tripReviewId, imageId);
-        return tripReviewPhotoOpt.map(TripReviewPhotoDto::toDto).orElse(null);
+        return tripReviewPhotoOpt.map(TripReviewPhotoDTO::toDto).orElse(null);
     }
 
-    public TripReviewPhotoDto getPhotoById(Long tripReviewPhotoId) {
+    public TripReviewPhotoDTO getPhotoById(Long tripReviewPhotoId) {
         Optional<TripReviewPhoto> tripReviewPhotoOpt = tripReviewPhotoRepository.findById(tripReviewPhotoId);
-        return tripReviewPhotoOpt.map(TripReviewPhotoDto::toDto).orElse(null);
+        return tripReviewPhotoOpt.map(TripReviewPhotoDTO::toDto).orElse(null);
     }
 
-    public TripReviewPhotoDto addPhotoToReview(Long reviewId, TripReviewPhotoDto tripReviewPhotoDto) {
+    public TripReviewPhotoDTO addPhotoToReview(Long reviewId, TripReviewPhotoDTO tripReviewPhotoDto) {
         TripReviewPhoto tripReviewPhoto = tripReviewPhotoDto.toEntity();
 
         TripReview tripReview = tripReviewRepository.findById(reviewId)
@@ -63,7 +63,7 @@ public class TripReviewPhotoService {
         tripReviewPhoto.setImage(image);
 
         TripReviewPhoto savedTripReviewPhoto = tripReviewPhotoRepository.save(tripReviewPhoto);
-        return TripReviewPhotoDto.toDto(savedTripReviewPhoto);
+        return TripReviewPhotoDTO.toDto(savedTripReviewPhoto);
     }
 
     public void deletePhoto(Long photoId) {

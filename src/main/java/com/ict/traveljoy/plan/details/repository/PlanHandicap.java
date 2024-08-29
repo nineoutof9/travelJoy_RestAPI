@@ -31,7 +31,7 @@ public class PlanHandicap {
     @SequenceGenerator(name = "seq_plan_handicap",sequenceName = "seq_plan_handicap",allocationSize = 1,initialValue = 1)
     @GeneratedValue(generator = "seq_plan_handicap",strategy = GenerationType.SEQUENCE)
     @Column(name = "PLAN_HANDICAP_ID")
-    private Long planHandicapId;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "PLAN_ID")

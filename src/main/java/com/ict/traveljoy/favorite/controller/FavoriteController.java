@@ -47,8 +47,9 @@ public class FavoriteController {
 	@Parameter(name="user",description="로그인 상태인경우는 필요없음",required=false)
 	@Parameter(name="target",description="타겟 대상(event/food/sight/hotel 중 하나",required=true)
 //	@Parameter(name="targetId",description="주제(event/food/sight/hotel)")
+
+  
 	public ResponseEntity<FavoriteDTO> addFavorite(@RequestBody FavoriteDTO favoriteDTO,HttpServletRequest request){ //target,targetId받아서 저장하기
-		
 		String useremail = checkUser.checkContainsUseremail(request);
 		String target = request.getParameter("target");
 		
@@ -100,11 +101,10 @@ public class FavoriteController {
 		
 	}
 	
-	
+  // 특정 타겟들만
 	@Parameter(name="target",description="타겟 대상(event/food/sight/hotel 중 하나",required=true)
 	@GetMapping("/{targetId}")
-	public ResponseEntity<FavoriteDTO> getFavTarget(@PathVariable("targetId") String targetId,HttpServletRequest request) {
-		
+	public ResponseEntity<FavoriteDTO> getFavTarget(@PathVariable("targetId") String targetId,HttpServletRequest request) {	
 		String useremail = checkUser.checkContainsUseremail(request);
 		String target = request.getParameter("target");
 		
@@ -116,7 +116,6 @@ public class FavoriteController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 	}
-	
 
 	
 	//DELETE

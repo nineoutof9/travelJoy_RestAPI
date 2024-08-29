@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ict.traveljoy.plan.progress.service.PlanProgress3Dto;
+import com.ict.traveljoy.plan.progress.service.PlanProgress3DTO;
 import com.ict.traveljoy.plan.progress.service.PlanProgress3Service;
-import com.ict.traveljoy.plan.progress.service.PlanProgress4Dto;
+import com.ict.traveljoy.plan.progress.service.PlanProgress4DTO;
 import com.ict.traveljoy.plan.progress.service.PlanProgress4Service;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 
 @Tag(name = "PlanProgress4", description = "4단계")
 @RestController
-@RequestMapping("/plan")
+@RequestMapping("/api/plan")
 @CrossOrigin
 @RequiredArgsConstructor
 public class PlanProgressController4 {
@@ -36,10 +36,10 @@ public class PlanProgressController4 {
 	
 	@PostMapping("/progress4")
 	@Operation(summary = "4단계 저장", description = "4단계 저장 컨트롤러")
-	public ResponseEntity<PlanProgress4Dto> savePlanProgress4(@RequestBody PlanProgress4Dto planProgress4Dto){
+	public ResponseEntity<PlanProgress4DTO> savePlanProgress4(@RequestBody PlanProgress4DTO PlanProgress4DTO){
 		
 		try {
-		PlanProgress4Dto savePlanProgress4 = planProgress4Service.savePlanProgress4(planProgress4Dto);
+		PlanProgress4DTO savePlanProgress4 = planProgress4Service.savePlanProgress4(PlanProgress4DTO);
 		if(savePlanProgress4 == null) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -52,10 +52,10 @@ public class PlanProgressController4 {
 	
 	@PutMapping("/progress4")
 	@Operation(summary = "4단계 수정", description = "4단계 수정 컨트롤러")
-	public ResponseEntity<PlanProgress4Dto> updatePlanProgress4(@RequestBody PlanProgress4Dto planProgress4Dto){
+	public ResponseEntity<PlanProgress4DTO> updatePlanProgress4(@RequestBody PlanProgress4DTO PlanProgress4DTO){
 		
 		try {
-		PlanProgress4Dto updatePlanProgress4 = planProgress4Service.updatePlanProgress4(planProgress4Dto);
+		PlanProgress4DTO updatePlanProgress4 = planProgress4Service.updatePlanProgress4(PlanProgress4DTO);
 		if(updatePlanProgress4 == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -68,10 +68,10 @@ public class PlanProgressController4 {
 	
 	@DeleteMapping("/progress4/{planProgress4Id}")
 	@Operation(summary = "4단계 삭제", description = "4단계 삭제 컨트롤러")
-	public ResponseEntity<Void> deletePlanProgress4(@PathVariable Long planProgress4Id){
+	public ResponseEntity<Void> deletePlanProgress4(@PathVariable Long id){
 		
 		try {
-		planProgress4Service.deletePlanProgress4(planProgress4Id);
+		planProgress4Service.deletePlanProgress4(id);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		
 		}catch(Exception e) {
@@ -84,10 +84,10 @@ public class PlanProgressController4 {
 	
 	@GetMapping("/progress4/{planProgressByPlanId}")
 	@Operation(summary = "4단계 조회(계획ID)", description = "특정 계획ID로 조회")
-	public ResponseEntity<PlanProgress4Dto> getPlanProgressesByPlanId(Long planId){
+	public ResponseEntity<PlanProgress4DTO> getPlanProgressesByPlanId(Long plan_Id){
 		
 		try {
-		List<PlanProgress4Dto> planProgressByPlanId = planProgress4Service.getPlanProgressesByPlanId(planId);
+		List<PlanProgress4DTO> planProgressByPlanId = planProgress4Service.getPlanProgressesByPlanId(plan_Id);
 		if(planProgressByPlanId.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -101,10 +101,10 @@ public class PlanProgressController4 {
 	
 	@GetMapping("/progress4/{planProgressByAiMade}")
 	@Operation(summary = "4단계 조회(AI계획)", description = "AI 생성계획ID로 조회")
-	public ResponseEntity<PlanProgress4Dto> getPlanProgressesByAiMadePlanId(Long aiMadePlanId){
+	public ResponseEntity<PlanProgress4DTO> getPlanProgressesByAiMadePlanId(Long aiMadePlan_Id){
 		
 		try {
-		List<PlanProgress4Dto> getPlanProgressesByAiMadePlanId = planProgress4Service.getPlanProgressesByAiMadePlanId(aiMadePlanId);
+		List<PlanProgress4DTO> getPlanProgressesByAiMadePlanId = planProgress4Service.getPlanProgressesByAiMadePlanId(aiMadePlan_Id);
 		if(getPlanProgressesByAiMadePlanId.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -118,10 +118,10 @@ public class PlanProgressController4 {
 	
 	@GetMapping("/progress4/{planProgressByPlanIdAiMade}")
 	@Operation(summary = "4단계 조회(PlanId, AI계획)", description = "PlanId와 AI 생성계획ID로 조회")
-	public ResponseEntity<PlanProgress4Dto> getPlanProgressesByPlanIdAndAiMadePlanId(Long planId, Long aiMadePlanId){
+	public ResponseEntity<PlanProgress4DTO> getPlanProgressesByPlanIdAndAiMadePlanId(Long plan_Id, Long aiMadePlan_Id){
 		
 		try {
-		List<PlanProgress4Dto> getPlanProgressesByPlanIdAndAiMadePlanId = planProgress4Service.getPlanProgressesByPlanIdAndAiMadePlanId(planId,aiMadePlanId);
+		List<PlanProgress4DTO> getPlanProgressesByPlanIdAndAiMadePlanId = planProgress4Service.getPlanProgressesByPlanIdAndAiMadePlanId(plan_Id,aiMadePlan_Id);
 		if(getPlanProgressesByPlanIdAndAiMadePlanId.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}

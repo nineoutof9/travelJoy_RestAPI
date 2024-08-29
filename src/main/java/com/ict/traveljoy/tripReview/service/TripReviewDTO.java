@@ -11,8 +11,9 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TripReviewDto {
+public class TripReviewDTO {
     private Long id;
+    private Long planId; 
     private Plan plan;
     private String writer;
     private String title;
@@ -24,25 +25,25 @@ public class TripReviewDto {
     private Timestamp deleteDate;
 
     public TripReview toEntity() {
-
         return TripReview.builder()
-        		.id(id)
-                .plan(plan)
+                .id(id)
+                .plan(plan)  
                 .writer(writer)
                 .title(title)
                 .reviewContent(reviewContent)
                 .url(url)
                 .postDate(postDate)
-                .isActive(isActive == true ? 1 : 0)
-                .isDelete(isDelete == true ? 1 : 0)
+                .isActive(isActive != null && isActive ? 1 : 0)
+                .isDelete(isDelete != null && isDelete ? 1 : 0)
                 .deleteDate(deleteDate)
                 .build();
     }
 
-    public static TripReviewDto toDto(TripReview tripReview) {
-        return TripReviewDto.builder()
-        		.id(tripReview.getId())
+    public static TripReviewDTO toDto(TripReview tripReview) {
+        return TripReviewDTO.builder()
+                .id(tripReview.getId())
                 .plan(tripReview.getPlan())
+                .planId(tripReview.getPlan() != null ? tripReview.getPlan().getId() : null) 
                 .writer(tripReview.getWriter())
                 .title(tripReview.getTitle())
                 .reviewContent(tripReview.getReviewContent())

@@ -4,27 +4,33 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.ict.traveljoy.pushalarm.repository.PushAlarm;
 import com.ict.traveljoy.pushalarm.repository.PushAlarmRepository;
 
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class PushAlarmService {
 
-	 private final PushAlarmRepository pushAlarmRepository;
+
+	@Autowired
+	private PushAlarmRepository pushAlarmRepository;
 
 	    // 새로운 PushAlarm을 저장하는 메서드
 	    public PushAlarmDTO savePushAlarm(PushAlarmDTO dto) {
+	    	
+	        if(dto.getTitle() == null && dto.getPushAlarmContent() == null) {
+	        	throw new IllegalArgumentException("알림의 제목과 내용을 넣어주세요");
+	    	
+	        	 }
 	        PushAlarm pushAlarm = dto.toEntity();
-	        PushAlarm savedPushAlarm = pushAlarmRepository.save(pushAlarm);
-	        return PushAlarmDTO.toDTO(savedPushAlarm);
+	        pushAlarm = pushAlarmRepository.save(pushAlarm);
+	        return PushAlarmDTO.toDTO(pushAlarm);
 	    }
 
 	    // ID로 특정 PushAlarm을 조회하는 메서드
@@ -43,11 +49,14 @@ public class PushAlarmService {
 	    }
 
 	    // 특정 PushAlarm을 삭제하는 메서드
-	    public void deleteById(Long id) {
-	        if (!pushAlarmRepository.existsById(id)) {
-	            throw new IllegalArgumentException("해당 ID로 푸시 알림을 찾을 수 없습니다: " + id);
+	    public void deleteAlarm(Long id) {
+	    	
+	        if (pushAlarmRepository.existsById(id)) {
+	        	pushAlarmRepository.deleteById(id);
+	            
+	        }else {
+	        throw new IllegalArgumentException("푸시 알림을 찾을 수 없습니다 ");
 	        }
-	        pushAlarmRepository.deleteById(id);
 	    }
 
 	    // 특정 PushAlarm을 업데이트하는 메서드

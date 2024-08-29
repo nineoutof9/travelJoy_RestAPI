@@ -15,7 +15,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ict.traveljoy.users.service.UserDTO;
 import com.ict.traveljoy.users.service.UserService;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @CrossOrigin

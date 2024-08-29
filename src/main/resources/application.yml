@@ -5,12 +5,11 @@ jwt:
 spring:
   datasource:
     driver-class-name: oracle.jdbc.OracleDriver
-#    url: jdbc:oracle:thin:@211.109.103.98:51521/XEPDB1
-#    username: ICTUSER
-#    password: ICT1234
-    url: jdbc:oracle:thin:@localhost:1521/XEPDB1
-    username: STUDY
-    password: STUDY
+    url: jdbc:oracle:thin:@211.109.103.98:51521/XEPDB1
+    #url: jdbc:oracle:thin:@localhost:1521/XEPDB1
+    username: ICTUSER
+    password: ICT1234
+
 
 
     hikari:
@@ -40,6 +39,7 @@ spring:
     api-docs:
       path: /api-docs
      
+
   #SMTP 설정(이메일 인증)
   mail:
     host: smtp.gmail.com
@@ -59,9 +59,18 @@ spring:
       auth-code-expiration-millis: 1800000 
 
 
+
 logging:
   level:
     org:
       springframework:
         security: DEBUG
         
+kakao:
+  clientId: 9560d5a7af8ffc6f882d0b10ae12f25e
+  redirectUri: http://localhost:8080/kakao
+google:
+  clientId: 264315121794-fi1bj4b64gofmbd2mbcdth8vuun34ov3.apps.googleusercontent.com
+  clientSecret: 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
+  redirectUri: http://localhost:8080/google
+  

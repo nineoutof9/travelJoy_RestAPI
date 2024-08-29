@@ -29,9 +29,10 @@ public class UserDTO {
     private Date birthDate;
     private LocalDateTime signInDate;
     private Boolean gender;
-    private Boolean isKakao;
-    private Boolean isGoogle;
-    private Boolean isNaver;
+    private String loginType;
+    private String snsAccessToken;
+    private LocalDateTime lastLogin;
+    private String permission;
     private Boolean handicap;
     private Boolean handicapAllow;
     private Boolean allergy;
@@ -45,6 +46,7 @@ public class UserDTO {
     private LocalDateTime updateDate;
     private Image profileImage;
     private String introduce;
+    
 
     public Users toEntity() {
         return Users.builder()
@@ -55,9 +57,10 @@ public class UserDTO {
             .birthDate(birthDate)
             .signInDate(signInDate)
             .gender(gender != null && gender ? 1 : 0)
-            .isKakao(isKakao != null && isKakao ? 1 : 0)
-            .isGoogle(isGoogle != null && isGoogle ? 1 : 0)
-            .isNaver(isNaver != null && isNaver ? 1 : 0)
+            .loginType(loginType)
+            .snsAccessToken(snsAccessToken)
+            .lastLogin(lastLogin)
+            .permission(permission)
             .handicap(handicap != null && handicap ? 1 : 0)
             .handicapAllow(handicapAllow != null && handicapAllow ? 1 : 0)
             .allergy(allergy != null && allergy ? 1 : 0)
@@ -83,9 +86,10 @@ public class UserDTO {
             .birthDate(users.getBirthDate())
             .signInDate(users.getSignInDate())
             .gender(users.getGender() != null && users.getGender() == 1 ? true : false)
-            .isKakao(users.getIsKakao() != null && users.getIsKakao() == 1 ? true : false)
-            .isGoogle(users.getIsGoogle() != null && users.getIsGoogle() == 1 ? true : false)
-            .isNaver(users.getIsNaver() != null && users.getIsNaver() == 1 ? true : false)
+            .loginType(users.getLoginType())
+            .snsAccessToken(users.getSnsAccessToken())
+            .lastLogin(users.getLastLogin())
+            .permission(users.getPermission())
             .handicap(users.getHandicap() != null && users.getHandicap() == 1 ? true : false)
             .handicapAllow(users.getHandicapAllow() != null && users.getHandicapAllow() == 1 ? true : false)
             .allergy(users.getAllergy() != null && users.getAllergy() == 1 ? true : false)

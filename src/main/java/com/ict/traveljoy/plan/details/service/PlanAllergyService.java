@@ -17,7 +17,7 @@ public class PlanAllergyService {
     private PlanAllergyRepository planAllergyRepository;
 
     // PlanAllergy 생성
-    public PlanAllergyDTO createPlanAllergy(PlanAllergyDTO planAllergyDTO) {
+    public PlanAllergyDTO savePlanAllergy(PlanAllergyDTO planAllergyDTO) {
         PlanAllergy planAllergy = planAllergyDTO.toEntity();
         PlanAllergy savedPlanAllergy = planAllergyRepository.save(planAllergy);
         return PlanAllergyDTO.toDto(savedPlanAllergy);
@@ -55,4 +55,6 @@ public class PlanAllergyService {
     public void deletePlanAllergy(Long id) {
         planAllergyRepository.deleteById(id);
     }
+
+
 }

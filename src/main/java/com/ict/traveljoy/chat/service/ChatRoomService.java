@@ -31,15 +31,18 @@ public class ChatRoomService {
 		
 		// if 있으면 돌려주기
 		if(enterChatRoomRepository.countByUser_Id(user.getId())==1) {
+
 			EnterChatRoom isEntered = enterChatRoomRepository.findByUser_Id(user.getId());
 			ChatRoom chatroom = isEntered.getChatRoom();
 			chatroom.setIsActive(1);
 			chatroom = chatRoomRepository.save(chatroom);
 			return chatroom.getId().toString();
 		}
+
 		else if(enterChatRoomRepository.countByUser_Id(user.getId())>=1) { //권한확인하기
 			return "";
 		}
+
 		else { // 없으면 생성해서 돌려주기
 			ChatRoom chatroom = new ChatRoom();
 			chatroom.setIsActive(1);
@@ -68,7 +71,7 @@ public class ChatRoomService {
 		return chatroomDTOs;
 	}
 
-
+  
 	// chatroom.isActive(0)으로 바꾸기
 	public boolean closeChatRoom(String useremail) {
 		// TODO Auto-generated method stub

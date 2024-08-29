@@ -8,8 +8,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PlanAllergyRepository extends JpaRepository<PlanAllergy, Long> {
 	// 특정 Plan에 대한 PlanAllergy 목록 조회
-    List<PlanAllergy> findByPlanId(Long planId);
+    List<PlanAllergy> findByPlan_Id(Long plan_Id);
 
     // 특정 Allergy에 대한 PlanAllergy 목록 조회
-    List<PlanAllergy> findByAllergyId(Long allergyId);
+    List<PlanAllergy> findByAllergy_Id(Long allergy_Id);
 }

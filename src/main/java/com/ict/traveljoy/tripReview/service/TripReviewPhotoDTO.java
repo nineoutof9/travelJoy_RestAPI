@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TripReviewPhotoDto {
+public class TripReviewPhotoDTO {
     private Long id;
     private TripReview tripReview;
     private Image image;
@@ -24,9 +24,9 @@ public class TripReviewPhotoDto {
                 .build();
     }
 
-    public static TripReviewPhotoDto toDto(TripReviewPhoto tripReviewPhoto) {
+    public static TripReviewPhotoDTO toDto(TripReviewPhoto tripReviewPhoto) {
 
-        return TripReviewPhotoDto.builder()
+        return TripReviewPhotoDTO.builder()
         		.id(tripReviewPhoto.getId())
         		.tripReview(tripReviewPhoto.getTripReview())
         		.image(tripReviewPhoto.getImage())

@@ -29,7 +29,9 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이메일이 이미 사용중입니다.");
         });
 		dto = dto.toBuilder()
-		.password(bCryptPasswordEncoder.encode(dto.getPassword())).build();
+		.password(bCryptPasswordEncoder.encode(dto.getPassword()))
+		.permission("ROLE_USER")
+		.build();
 		return UserDTO.toDTO(userRepository.save(dto.toEntity()));
 	}
 	

@@ -21,6 +21,7 @@ import lombok.Setter;
 public class ReportDTO {
 
 	private Long id;
+
 	private Users user; //신고자
 	private ReportCategory reportCategory; //신고대상 유형
 	private Long targetId; //신고대상 id

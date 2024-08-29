@@ -116,7 +116,7 @@ public class TransportationService {
     }
 
     // 가격 범위 내의 교통수단 검색
-    public List<TransportationDTO> findTransportationsByPrice(float minPrice, float maxPrice) {
+    public List<TransportationDTO> findTransportationsByPrice(Float minPrice, Float maxPrice) {
         return transportationRepository.findByPriceBetween(minPrice, maxPrice).stream()
                 .map(TransportationDTO::toDto)
                 .collect(Collectors.toList());
