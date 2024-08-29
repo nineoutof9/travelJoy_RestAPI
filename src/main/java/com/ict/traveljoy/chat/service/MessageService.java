@@ -6,6 +6,8 @@ import com.ict.traveljoy.chat.repository.EnterChatRoom;
 import com.ict.traveljoy.chat.repository.EnterChatRoomRepository;
 import com.ict.traveljoy.chat.repository.Message;
 import com.ict.traveljoy.chat.repository.MessageRepository;
+import com.ict.traveljoy.report.repository.Report;
+import com.ict.traveljoy.report.service.ReportDTO;
 import com.ict.traveljoy.users.repository.UserRepository;
 import com.ict.traveljoy.users.repository.Users;
 
@@ -35,11 +37,12 @@ public class MessageService {
 		ChatRoom chatroom = chatRoomRepository.findById(Long.parseLong(topic)).get();	//요청 topic, 채팅방
 		List<Message> messages = new ArrayList<Message>();
 		
-		
-		if(enterChatRoomRepository.existsByUser_Id(user.getId())) { //참가한 user인 경우
+		if(enterChatRoomRepository.existsByUser_Id(user.getId())) {
 			EnterChatRoom isEntered = enterChatRoomRepository.findByUser_Id(user.getId());
-//			ChatRoom chatroom = isEntered.getChatRoom();
-			if(chatroom.getIsActive()==1) {
+			
+			//채팅방의 유저와 요청한 유저가 같은지확인
+			// topic과 enterchatroom의 유저의 chatroom.id가 같은지 확인
+			if(chatroom.equals(isEntered.getChatRoom()) && chatroom.getIsActive()==1) {
 				messages = messageRepository.findAllByChatRoom_Id(chatroom.getId());
 				return messages.stream().map(msg->MessageDTO.toDTO(msg)).collect(Collectors.toList());
 			}
@@ -50,12 +53,21 @@ public class MessageService {
 		
 		return null;
 	}
-	public List<MessageDTO> getAllMessagesByChatRoom(long chatroomId) {
+	public List<MessageDTO> getAllMessagesByChatRoom(long chatroomId, String useremail) {
 		// 채팅방아이디로 구분, 채팅방 있으면 돌려주기
-		if(chatRoomRepository.existsById(chatroomId)) {
-			List<Message> messages = messageRepository.findAllByChatRoom_Id(chatroomId);
-			return messages.stream().map(msg->MessageDTO.toDTO(msg)).collect(Collectors.toList());
+		
+		Users user = userRepository.findByEmail(useremail).get();
+		if(user.getPermission().equalsIgnoreCase("ROLE_ADMIN")) {
+			if(chatRoomRepository.existsById(chatroomId)) {
+				List<Message> messages = messageRepository.findAllByChatRoom_Id(chatroomId);
+				return messages.stream().map(msg->MessageDTO.toDTO(msg)).collect(Collectors.toList());
+			}
+			return null;
 		}
-		return null;
+		else
+			throw new IllegalArgumentException("권한이 없습니다.");
+		
+		
+		
 	}
 }

@@ -97,9 +97,10 @@ public class ChatController {
 	// 채팅 내역 불러오기 - 관리자 뷰, 채팅방 아이디로 불러오기
 	@GetMapping("/{chatroom_id}")
 	public ResponseEntity<List<MessageDTO>> getMessagesByChatRoomId(@PathVariable("chatroom_id") String chatroom_id, HttpServletRequest request){
+		String useremail = checkUser.checkContainsUseremail(request);
 		
 		try {
-			List<MessageDTO> messages = messageService.getAllMessagesByChatRoom(Long.parseLong(chatroom_id));
+			List<MessageDTO> messages = messageService.getAllMessagesByChatRoom(Long.parseLong(chatroom_id),useremail);
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(messages);
 		}catch(Exception e) {
 			e.printStackTrace();

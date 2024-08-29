@@ -27,6 +27,11 @@ public class ChatRoomService {
 	
 	
 	public String getChatRoomTopic(String useremail) {
+		
+		if(useremail==null || !userRepository.existsByEmail(useremail)) {
+			return "temp";
+		}
+		
 		Users user = userRepository.findByEmail(useremail).get();
 		
 		// if 있으면 돌려주기
