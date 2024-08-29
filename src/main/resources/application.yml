@@ -72,4 +72,7 @@ google:
   clientId: 264315121794-fi1bj4b64gofmbd2mbcdth8vuun34ov3.apps.googleusercontent.com
   clientSecret: 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
   redirectUri: http://localhost:8080/google
-  
+naver:
+  clientId: NUQJgNUjlNqcpMb4x5sH
+  clientSecret: dkQb2r8RQT
+  redirectUri: http://localhost:8080/naver
