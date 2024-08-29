@@ -22,13 +22,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity; 
 import org.springframework.web.bind.annotation.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 @Tag(name="Place 관리", description = "이벤트, 식당, 숙박, 명소, 교통수단, 지역에 대한 CRUD.")
 @RestController
 @RequestMapping("/api/places")
 public class PlaceController {
-
+	
+	 private static final Logger logger = LoggerFactory.getLogger(PlaceController.class);
+	
     @Autowired
     private EventService eventService;
 
@@ -253,7 +259,49 @@ public class PlaceController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
+ // 주소와 날짜를 기반으로 호텔 검색
+    @GetMapping("/hotels/search")
+    public ResponseEntity<List<HotelDTO>> getHotelsByAddressAndDates(
+            @RequestParam("address") String address,
+            @RequestParam("checkInDate") String checkInDate,
+            @RequestParam("checkOutDate") String checkOutDate) {
 
+        try {
+            // Step 1: Print 입력 값
+            System.out.println("Received parameters:");
+            System.out.println("Address: " + address);
+            System.out.println("Check-in Date: " + checkInDate);
+            System.out.println("Check-out Date: " + checkOutDate);
+
+            // Step 2: LocalDate 변환 시도
+            LocalDate checkIn;
+            LocalDate checkOut;
+            try {
+                checkIn = LocalDate.parse(checkInDate);
+                checkOut = LocalDate.parse(checkOutDate);
+                System.out.println("Parsed dates successfully.");
+            } catch (Exception e) {
+                System.out.println("Failed to parse dates: " + e.getMessage());
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            // Step 3: HotelService 호출
+            System.out.println("Calling HotelService to find hotels...");
+            List<HotelDTO> hotels = hotelService.findHotelsByAddressAndDates(address, checkIn, checkOut);
+            System.out.println("HotelService returned " + hotels.size() + " hotels.");
+
+            return new ResponseEntity<>(hotels, HttpStatus.OK);
+        } catch (Exception e) {
+            // Step 4: 예외 처리
+            System.out.println("Exception occurred: " + e.getMessage());
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    
     @GetMapping("/hotels/all")
     public ResponseEntity<List<HotelDTO>> getAllHotels() {
         try {
@@ -277,47 +325,11 @@ public class PlaceController {
         }
     }
 
-    // 특정 지역의 숙소 검색
-    @GetMapping("/hotels/region/{regionId}")
-    public ResponseEntity<List<HotelDTO>> getHotelsByRegionId(@PathVariable("regionId") Long regionId) {
-        try {
-            List<HotelDTO> hotels = hotelService.findHotelsByRegionId(regionId);
-            return new ResponseEntity<>(hotels, HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
     // 숙소 이름으로 검색
     @GetMapping("/hotels/name/{hotelName}")
     public ResponseEntity<List<HotelDTO>> getHotelsByName(@PathVariable("hotelName") String hotelName) {
         try {
             List<HotelDTO> hotels = hotelService.findHotelsByName(hotelName);
-            return new ResponseEntity<>(hotels, HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    // 리뷰 많은순으로 검색
-    @GetMapping("/hotels/reviewCount/{reviewCount}")
-    public ResponseEntity<List<HotelDTO>> getHotelsByReviewCount(@PathVariable("reviewCount") Long reviewCount) {
-        try {
-            List<HotelDTO> hotels = hotelService.findHotelsByReviewCount(reviewCount);
-            return new ResponseEntity<>(hotels, HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    // 리뷰 평점 이상의 숙소 검색
-    @GetMapping("/hotels/reviewRate/{reviewRate}")
-    public ResponseEntity<List<HotelDTO>> getHotelsByReviewRate(@PathVariable("reviewRate") float reviewRate) {
-        try {
-            List<HotelDTO> hotels = hotelService.findHotelsByReviewRate(reviewRate);
             return new ResponseEntity<>(hotels, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();

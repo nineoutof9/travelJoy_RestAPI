@@ -108,17 +108,9 @@ public class MypageController {
             if (id != null) {
                 Optional<HotelDTO> dto = hotelService.findHotelById(id);
                 dto.ifPresent(dtos::add);
-            } else if (region_Id != null) {
-                dtos = hotelService.findHotelsByRegionId(region_Id);
-            } else if (name != null) {
+            }  else if (name != null) {
                 dtos = hotelService.findHotelsByName(name);
-            } else if (minPrice != null && maxPrice != null) {
-                dtos = hotelService.findHotelsByPriceRange(minPrice, maxPrice);
-            } else if (reviewCount != null) {
-                dtos = hotelService.findHotelsByReviewCount(reviewCount);
-            } else if (reviewRate != null) {
-                dtos = hotelService.findHotelsByReviewRate(reviewRate);
-            }
+            }  
 
             if (dtos.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ArrayList<>());
