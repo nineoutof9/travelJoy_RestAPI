@@ -60,6 +60,12 @@ public class UserController {
     private String googleClientSecret;
     @Value("${google.redirectUri}")
     private String googleRedirectUri;
+    @Value("${naver.clientId}")
+    private String naverClientId;
+    @Value("${naver.clientSecret}")
+    private String naverClientSecret;
+    @Value("${naver.redirectUri}")
+    private String naverRedirectUri;
 	
 	@PostMapping("/register")
 	public ResponseEntity<UserDTO> signUp(@RequestBody UserDTO dto){
@@ -285,4 +291,87 @@ public class UserController {
 	         response.sendRedirect("http://localhost:3000/user/signin");
 	     }
 	 }
+	 
+	 @GetMapping("/naver")
+	 public void naverLogin(@RequestParam(name = "code") String code, @RequestParam(name = "state") String state, HttpServletRequest request, HttpServletResponse response) throws IOException {
+	     // 액세스 토큰을 요청하기 위한 URL 및 헤더 설정
+	     String tokenUrl = "https://nid.naver.com/oauth2.0/token";
+	     HttpHeaders tokenHeaders = new HttpHeaders();
+	     tokenHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+	     String tokenRequestBody = "grant_type=authorization_code"
+	             + "&client_id=" + naverClientId
+	             + "&client_secret=" + naverClientSecret
+	             + "&redirect_uri=" + naverRedirectUri
+	             + "&code=" + code
+	             + "&state=" + state;
+
+	     // 토큰 요청
+	     HttpEntity<String> tokenRequestEntity = new HttpEntity<>(tokenRequestBody, tokenHeaders);
+	     RestTemplate restTemplate = new RestTemplate();
+	     ResponseEntity<String> tokenResponse = restTemplate.exchange(tokenUrl, HttpMethod.POST, tokenRequestEntity, String.class);
+
+	     // JSON 응답을 Map으로 변환하여 access_token 추출
+	     ObjectMapper objectMapper = new ObjectMapper();
+	     Map<String, Object> tokenMap = objectMapper.readValue(tokenResponse.getBody(), Map.class);
+	     String accessToken = (String) tokenMap.get("access_token");
+
+	     // 사용자 정보를 요청하기 위한 URL 및 헤더 설정
+	     String userInfoUrl = "https://openapi.naver.com/v1/nid/me";
+	     HttpHeaders userInfoHeaders = new HttpHeaders();
+	     userInfoHeaders.set("Authorization", "Bearer " + accessToken);
+
+	     // 사용자 정보 요청
+	     HttpEntity<String> userInfoRequestEntity = new HttpEntity<>(userInfoHeaders);
+	     ResponseEntity<String> userInfoResponse = restTemplate.exchange(userInfoUrl, HttpMethod.GET, userInfoRequestEntity, String.class);
+
+	     // JSON 응답을 Map으로 변환하여 사용자 이메일 추출
+	     Map<String, Object> userInfoMap = objectMapper.readValue(userInfoResponse.getBody(), Map.class);
+	     Map<String, Object> responseMap = (Map<String, Object>) userInfoMap.get("response");
+	     String email = responseMap.containsKey("email") ? (String) responseMap.get("email") : "이메일 정보가 없습니다.";
+
+	     Optional<Users> optionalUser = userRepository.findByEmailAndLoginType(email, "naver");
+
+	     if (optionalUser.isPresent()) {
+	         Users user = optionalUser.get();
+	         user.setLastLogin(LocalDateTime.now());
+	         user.setSnsAccessToken(accessToken);
+	         userRepository.save(user);
+
+	         // JWT 토큰 발급
+	         Long accessExpiredMs = 600000L;
+	         String accessTokenJwt = jwtUtility.generateToken(email, "access", accessExpiredMs);
+	         Long refreshExpiredMs = 86400000L;
+	         String refreshTokenJwt = jwtUtility.generateToken(email, "refresh", refreshExpiredMs);
+
+	         RefreshToken refreshToken = RefreshToken.builder()
+	                 .status("activated")
+	                 .userAgent(request.getHeader("User-Agent"))
+	                 .user(user)
+	                 .tokenValue(refreshTokenJwt)
+	                 .issuedAt(LocalDateTime.now())
+	                 .expirationDate(LocalDateTime.now().plusSeconds(refreshExpiredMs / 1000))
+	                 .build();
+
+	         refreshService.save(refreshToken);
+
+	         Cookie refreshCookie = new Cookie("refreshToken", refreshTokenJwt);
+	         refreshCookie.setHttpOnly(true);
+	         refreshCookie.setPath("/");
+	         refreshCookie.setMaxAge(refreshExpiredMs.intValue() / 1000);
+	         response.addCookie(refreshCookie);
+
+	         // 로그인 성공 후 URL에 토큰 정보 포함
+	         String redirectUrl = String.format("http://localhost:3000/user/signin?access=%s&isAdmin=%s&email=%s",
+	                 accessTokenJwt, user.getPermission().equalsIgnoreCase("ROLE_ADMIN"), email);
+
+	         response.sendRedirect(redirectUrl);
+	     } else {
+	         UserDTO dto = new UserDTO();
+	         dto = dto.builder().email(email).loginType("naver").password("").build();
+	         userService.signUp(dto);
+
+	         response.sendRedirect("http://localhost:3000/user/signin");
+	     }
+	 }
+
 }
