@@ -49,5 +49,36 @@ public class UserService {
 	public boolean checkEmailExists(String email) {
 		return userRepository.existsByEmail(email);
 	}
+
+	public void updateProfile(UserDTO userDTO) {
+	    // 사용자의 이메일을 기준으로 데이터베이스에서 기존 사용자 정보를 가져옵니다.
+	    Optional<Users> optionalUser = userRepository.findByEmail(userDTO.getEmail());
+	    
+	    if (optionalUser.isPresent()) {
+	        Users user = optionalUser.get();
+	        
+	        if (userDTO.getName() != null) {
+	            user.setName(userDTO.getName());
+	        }
+	        if (userDTO.getNickname() != null) {
+	            user.setNickname(userDTO.getNickname());
+	        }
+	        if (userDTO.getIntroduce() != null) {
+	            user.setIntroduce(userDTO.getIntroduce());
+	        }
+	        if (userDTO.getBirthDate() != null) {
+	            user.setBirthDate(userDTO.getBirthDate());
+	        }
+	        if (userDTO.getGender() != null) {
+	            user.setGender(userDTO.getGender() ? 1 : 0);
+	        }
+	        // 필요한 경우 다른 필드도 추가 가능
+
+	        // 데이터베이스에 업데이트된 사용자 정보 저장
+	        userRepository.save(user);
+	    } else {
+	        throw new UsernameNotFoundException("존재하지 않는 유저입니다: " + userDTO.getEmail());
+	    }
+	}
     
 }

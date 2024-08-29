@@ -19,6 +19,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +37,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -78,7 +80,52 @@ public class UserController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}	
 	}
-	
+	@PutMapping("/updateprofile")
+	public ResponseEntity<Map<String, Object>> updateProfile(@RequestBody Map<String, Object> updatedProfile) {
+	    try {
+	        // 현재 인증된 사용자를 가져오기
+	        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal(); // CustomUserDetails로 캐스팅
+	        String email = userDetails.getUsername(); // 또는 getEmail() 메서드가 있으면 사용
+
+	        // 사용자 프로필 가져오기
+	        UserDTO user = userService.findByEmail(email);
+
+	        if (user == null) {
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+	        }
+
+	        // 업데이트할 수 있는 필드만 수정
+	        if (updatedProfile.containsKey("name")) {
+	            user.setName((String) updatedProfile.get("name"));
+	        }
+	        if (updatedProfile.containsKey("nickname")) {
+	            user.setNickname((String) updatedProfile.get("nickname"));
+	        }
+	        if (updatedProfile.containsKey("introduce")) {
+	            user.setIntroduce((String) updatedProfile.get("introduce"));
+	        }
+	        if (updatedProfile.containsKey("birthDate")) {
+	            user.setBirthDate(Date.valueOf((String) updatedProfile.get("birthDate"))); // Date로 변환
+	        }
+	        if (updatedProfile.containsKey("gender")) {
+	            user.setGender((Boolean) updatedProfile.get("gender"));
+	        }
+	        // 프로필 이미지 URL을 업데이트하는 로직이 필요하다면 여기에 추가하십시오
+
+	        // 업데이트된 사용자 정보 저장
+	        userService.updateProfile(user);
+
+	        // 업데이트된 사용자 프로필 정보를 Map으로 변환하여 응답
+	        Map<String, Object> responseData = objectMapper.convertValue(user, Map.class);
+	        responseData.keySet().retainAll(List.of("birthDate", "gender", "name", "nickname", "introduce", "profileImageUrl", "email"));
+
+	        return ResponseEntity.ok(responseData);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	    }
+	}
 	@GetMapping("/getprofile")
 	public ResponseEntity<Map<String, Object>> getProfile() {
 	    try {
