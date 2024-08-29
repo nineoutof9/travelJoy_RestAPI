@@ -20,6 +20,7 @@ public class QuestionCategoryService {
 	
 	public List<QuestionCategoryDTO> getAllCategory() {
 		List<QuestionCategory> questionCategories = questionCategoryRepository.findAll();
+		
 		return questionCategories.stream().map(qcategory->QuestionCategoryDTO.toDTO(qcategory)).collect(Collectors.toList());
 	}
 
