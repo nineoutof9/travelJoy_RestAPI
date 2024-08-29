@@ -39,7 +39,7 @@ public class ChatRoomService {
 			return chatroom.getId().toString();
 		}
 
-		else if(enterChatRoomRepository.countByUser_Id(user.getId())>=1) { //권한확인하기
+		else if(enterChatRoomRepository.countByUser_Id(user.getId())>=1 && user.getPermission().equalsIgnoreCase("ROLE_ADMIN")) { //권한확인하기
 			return "";
 		}
 
@@ -56,28 +56,33 @@ public class ChatRoomService {
 		}
 		
 	}
-
-
-	public List<ChatRoomDTO> getAllChatRoom() {
-		
-		List<ChatRoom> chatrooms = chatRoomRepository.findAll();
-		List<ChatRoomDTO> chatroomDTOs = new ArrayList<ChatRoomDTO>();
-		for(ChatRoom room : chatrooms) {
-			if(room.getIsDelete()==0) {
-				chatroomDTOs.add(ChatRoomDTO.toDTO(room));
-			}
-		}
-		
-		return chatroomDTOs;
-	}
-
-  
+	  
 	// chatroom.isActive(0)으로 바꾸기
 	public boolean closeChatRoom(String useremail) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
+
+	public List<ChatRoomDTO> getAllChatRoom(String useremail) {
+		Users user = userRepository.findByEmail(useremail).get();
+		
+		if(user.getPermission().equalsIgnoreCase("ROLE_ADMIN")) {
+			List<ChatRoom> chatrooms = chatRoomRepository.findAll();
+			List<ChatRoomDTO> chatroomDTOs = new ArrayList<ChatRoomDTO>();
+			for(ChatRoom room : chatrooms) {
+				if(room.getIsDelete()==0) {
+					chatroomDTOs.add(ChatRoomDTO.toDTO(room));
+				}
+			}
+			return chatroomDTOs;
+		}
+		else
+			throw new IllegalArgumentException("권한이 없습니다.");
+		
+	}
+
+	
 
 	
 	

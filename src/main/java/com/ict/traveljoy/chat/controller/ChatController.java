@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ict.traveljoy.chat.service.ChatRoomDTO;
@@ -50,7 +51,7 @@ public class ChatController {
 	// 채팅 종료 시
 	// chatroom.isActive(0)으로 바꾸기
 	@PutMapping("/topic")
-	public ResponseEntity saveNewChats(HttpServletRequest request) {
+	public ResponseEntity closeChatRoom(HttpServletRequest request) {
 		String useremail = checkUser.checkContainsUseremail(request);
 		try {
 			boolean success = chatroomService.closeChatRoom(useremail);
@@ -69,7 +70,7 @@ public class ChatController {
 		// 권한 확인하기
 
 		try {
-			List<ChatRoomDTO> chatrooms = chatroomService.getAllChatRoom();
+			List<ChatRoomDTO> chatrooms = chatroomService.getAllChatRoom(useremail);
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(chatrooms);
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -79,11 +80,13 @@ public class ChatController {
 	}
 	
 	// 채팅 내역 불러오기 - 회원별 채팅 내용
-	@GetMapping("/history")
+	// paramerter로 chatroomid받음
+	@GetMapping("/user")
 	public ResponseEntity<List<MessageDTO>> getMessagesByUser(HttpServletRequest request){
 		String useremail = checkUser.checkContainsUseremail(request);
+		String topic = request.getParameter("topic");
 		try {
-			List<MessageDTO> messages = messageService.getAllMessagesByUser(useremail);
+			List<MessageDTO> messages = messageService.getAllMessagesByUser(useremail,topic);
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(messages);
 		}catch(Exception e) {
 			e.printStackTrace();

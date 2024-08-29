@@ -31,6 +31,8 @@ public class ReportDTO {
 	private Boolean isComment;
 	private Boolean isReview;
 	
+	private Boolean isAnswered;
+	
 	private LocalDateTime reportDate;
 	private String reportContent;
 	private Long reportHandlerId;
@@ -49,6 +51,7 @@ public class ReportDTO {
 				.isBoard(isBoard!=null&&true?1:0)
 				.isComment(isComment!=null&&true?1:0)
 				.isReview(isReview!=null&&true?1:0)
+				.isAnswered(isAnswered!=null&&true?1:0)
 				.reportDate(reportDate)
 				.reportContent(reportContent)
 				.reportHandlerId(reportHandlerId)
@@ -69,6 +72,7 @@ public class ReportDTO {
 				.isBoard(report.getIsBoard()==1?true:false)
 				.isComment(report.getIsComment()==1?true:false)
 				.isReview(report.getIsReview()==1?true:false)
+				.isAnswered(report.getIsAnswered()==1?true:false)
 				.reportDate(report.getReportDate())
 				.reportContent(report.getReportContent())
 				.reportHandlerId(report.getReportHandlerId())

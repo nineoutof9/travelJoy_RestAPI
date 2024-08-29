@@ -26,7 +26,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/report")
+@RequestMapping("/api/report")
 @RequiredArgsConstructor
 public class ReportController {
 
@@ -38,7 +38,7 @@ public class ReportController {
 	
 	//신고 넣기
 	//신고한 사람(useremail로 받음), reportCategory(is...로 구분), content,
-	@PostMapping("/newreport")
+	@PostMapping
 	public ResponseEntity<ReportDTO> createReport(HttpServletRequest request,@RequestBody ReportDTO reportDTO){
 		String useremail = checkUser.checkContainsUseremail(request);
 		String category = request.getParameter("category");
@@ -104,11 +104,11 @@ public class ReportController {
 //	}
 	
 	//한신고
-	@GetMapping("/report/{userId}")
-	public ResponseEntity<List<ReportDTO>> getReportHistory(@PathVariable String userId,HttpServletRequest request){
+	@GetMapping("/myreport")
+	public ResponseEntity<List<ReportDTO>> getReportHistory(HttpServletRequest request){
 		String useremail = checkUser.checkContainsUseremail(request);
 		try {
-			List<ReportDTO> reportList = reportService.getReportAllByUserId(Long.parseLong(userId),useremail);
+			List<ReportDTO> reportList = reportService.getReportAllByUserId(useremail);
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(reportList);
 		}
 		catch(Exception e) {
@@ -119,10 +119,10 @@ public class ReportController {
 	//신고를 처리
 	// reportHandlerId, reportHandlerName,reportResult
 	@PutMapping("/{reportId}")
-	public ResponseEntity<ReportDTO> handleReport(@PathVariable("reportId") String reportId,HttpServletRequest request){
+	public ResponseEntity<ReportDTO> handleReport(@PathVariable("reportId") String reportId,HttpServletRequest request,@RequestBody ReportDTO reportDTO){
 		String useremail = checkUser.checkContainsUseremail(request);
 		try {
-			ReportDTO updatedReport = reportService.updateReport(Long.parseLong(reportId),useremail);
+			ReportDTO updatedReport = reportService.updateReport(Long.parseLong(reportId),useremail,reportDTO);
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(updatedReport);
 		}
 		catch(Exception e) {

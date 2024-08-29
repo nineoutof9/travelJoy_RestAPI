@@ -70,6 +70,10 @@ public class Report {
 	@Column(name="IS_REVIEW", columnDefinition = "NUMBER(1, 0)")
 	@ColumnDefault("0")
 	private Integer isReview;
+	
+	@Column(name="IS_Answered", columnDefinition = "NUMBER(1, 0)")
+	@ColumnDefault("0")
+	private Integer isAnswered;
     
     //신고일자
 	@Column(name="REPORT_DATE", nullable = false)

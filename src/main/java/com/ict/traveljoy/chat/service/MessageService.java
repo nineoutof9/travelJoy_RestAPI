@@ -29,14 +29,16 @@ public class MessageService {
 	private final UserRepository userRepository;
 	
 	private final ObjectMapper objectMapper;
-	public List<MessageDTO> getAllMessagesByUser(String useremail) {
+	public List<MessageDTO> getAllMessagesByUser(String useremail,String topic) { //topic = 채팅방 id
 		// 유저 아이디로 유저 구분, 유저의 채팅방 참여 여부 확인, 채팅방 활성화 여부 확인, 채팅방아이디에 따라 메세지 가져오기 
-		Users user = userRepository.findByEmail(useremail).get();
+		Users user = userRepository.findByEmail(useremail).get(); //요청 user
+		ChatRoom chatroom = chatRoomRepository.findById(Long.parseLong(topic)).get();	//요청 topic, 채팅방
 		List<Message> messages = new ArrayList<Message>();
 		
-		if(enterChatRoomRepository.existsByUser_Id(user.getId())) {
+		
+		if(enterChatRoomRepository.existsByUser_Id(user.getId())) { //참가한 user인 경우
 			EnterChatRoom isEntered = enterChatRoomRepository.findByUser_Id(user.getId());
-			ChatRoom chatroom = isEntered.getChatRoom();
+//			ChatRoom chatroom = isEntered.getChatRoom();
 			if(chatroom.getIsActive()==1) {
 				messages = messageRepository.findAllByChatRoom_Id(chatroom.getId());
 				return messages.stream().map(msg->MessageDTO.toDTO(msg)).collect(Collectors.toList());
