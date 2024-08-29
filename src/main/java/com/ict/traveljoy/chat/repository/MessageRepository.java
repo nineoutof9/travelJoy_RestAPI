@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface MessageRepository extends JpaRepository<Message, Long> {
 	
 	List<Message> findByUserId(Long userId);
-	
-	List<Message> findByChatRoomId(Long chatRoomId);
+
+	List<Message> findAllByChatRoom_Id(Long chatRoomid);
 	
 	
 }

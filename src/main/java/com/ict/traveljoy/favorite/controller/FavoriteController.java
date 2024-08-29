@@ -30,7 +30,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/bookmark")
+@RequestMapping("/api/bookmark")
 @RequiredArgsConstructor
 @Tag(name="북마크 API", description = "bookmarked(liked) items Controller")
 public class FavoriteController {
@@ -46,7 +46,7 @@ public class FavoriteController {
 	@Operation(summary="회원별로, 주제(행사/음식/장소/호텔)별로 JSON형식의 데이터를 받아서 새로운 북마크 추가")
 	@Parameter(name="user",description="로그인 상태인경우는 필요없음",required=false)
 //	@Parameter(name="targetId",description="주제(event/food/sight/hotel)")
-	public ResponseEntity<FavoriteDTO> addFavorite(@RequestBody FavoriteDTO favoriteDTO, @PathVariable String target,HttpServletRequest request){ //target,targetId받아서 저장하기
+	public ResponseEntity<FavoriteDTO> addFavorite(@RequestBody FavoriteDTO favoriteDTO, @PathVariable("target") String target,HttpServletRequest request){ //target,targetId받아서 저장하기
 		
 		String useremail = checkUser.checkContainsUseremail(request);
 		
@@ -97,7 +97,7 @@ public class FavoriteController {
 	}
 	
 	@GetMapping("/event/{targetId}")
-	public ResponseEntity<FavoriteDTO> getFavEvent(@PathVariable String targetId,HttpServletRequest request) {
+	public ResponseEntity<FavoriteDTO> getFavEvent(@PathVariable("targetId") String targetId,HttpServletRequest request) {
 		
 		String useremail = checkUser.checkContainsUseremail(request);
 		
@@ -127,7 +127,7 @@ public class FavoriteController {
 	}
 	
 	@GetMapping("/food/{targetId}")
-	public ResponseEntity<FavoriteDTO> getFavFood(@PathVariable String targetId,HttpServletRequest request) {
+	public ResponseEntity<FavoriteDTO> getFavFood(@PathVariable("targetId") String targetId,HttpServletRequest request) {
 		
 		String useremail = checkUser.checkContainsUseremail(request);
 		
@@ -156,7 +156,7 @@ public class FavoriteController {
 	}
 	
 	@GetMapping("/sight/{targetId}")
-	public ResponseEntity<FavoriteDTO> getFavSight(@PathVariable String targetId,HttpServletRequest request) {
+	public ResponseEntity<FavoriteDTO> getFavSight(@PathVariable("targetId") String targetId,HttpServletRequest request) {
 		
 		String useremail = checkUser.checkContainsUseremail(request);
 		
@@ -185,7 +185,7 @@ public class FavoriteController {
 	}
 	
 	@GetMapping("/hotel/{targetId}")
-	public ResponseEntity<FavoriteDTO> getFavHotel(@PathVariable String targetId,HttpServletRequest request) {
+	public ResponseEntity<FavoriteDTO> getFavHotel(@PathVariable("targetId") String targetId,HttpServletRequest request) {
 		
 		String useremail = checkUser.checkContainsUseremail(request);
 		
@@ -201,7 +201,7 @@ public class FavoriteController {
 	//DELETE
 	//즐겨찾기삭제 favorite_id로(target_id아님) 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<FavoriteDTO> removeOneById(@PathVariable String id,HttpServletRequest request) {
+	public ResponseEntity<FavoriteDTO> removeOneById(@PathVariable("id") String id,HttpServletRequest request) {
 		
 		String useremail = checkUser.checkContainsUseremail(request);
 		

@@ -20,11 +20,19 @@ public class PlanService {
 	@Autowired
     private PlanRepository planRepository;
 
+	//모든 plan정보 검색
+	public List<PlanDTO> findAllPlans(){
+		return planRepository.findAll().stream()
+				.map(plan -> PlanDTO.toDto(plan))
+				.collect(Collectors.toList());
+		
+	}
 
     // planId로 Plans 조회
 	public Optional<PlanDTO> getPlanById(Long id) {
 	    return planRepository.findById(id).map(PlanDTO::toDto);
 	}
+	
 
     // isActive 여부로 Plan 목록 조회
     public List<PlanDTO> getPlansByIsActive(Integer isActive) {

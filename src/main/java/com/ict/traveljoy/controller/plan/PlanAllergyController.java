@@ -33,22 +33,21 @@ public class PlanAllergyController {
 	
 	@PostMapping("/Allergey")
 	@Operation(summary = "알러지 저장", description = "알러지 저장 컨트롤러")
-	public ResponseEntity<PlanAllergyDTO> savePlanAllergy(@RequestBody PlanAllergyDTO planAllergyDTO){
-		
-		try {
-			PlanAllergyDTO savePlanAllergy = planAllergyService.savePlanAllergy(planAllergyDTO);
-		if(savePlanAllergy == null) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		return new ResponseEntity<>(savePlanAllergy,HttpStatus.CREATED);
-		
-		} catch(Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-			
-		}
-		
-		
+	public ResponseEntity<PlanAllergyDTO> savePlanAllergy(@RequestBody PlanAllergyDTO planAllergyDTO) {
+	    try {
+	        // Allergy 값이 null인 경우 처리
+	        if (planAllergyDTO.getAllergy() == null || planAllergyDTO.getAllergy().getId() == null) {
+	            // Allergy가 null이면 그대로 PlanAllergy를 저장
+	            planAllergyDTO.setAllergy(null);
+	        }
+
+	        PlanAllergyDTO savedPlanAllergy = planAllergyService.savePlanAllergy(planAllergyDTO);
+	        return new ResponseEntity<>(savedPlanAllergy, HttpStatus.CREATED);
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	    }
 	}
 	
 	@PutMapping("/Allergey")
@@ -58,24 +57,24 @@ public class PlanAllergyController {
 		try {
 			PlanAllergyDTO updatePlanAllergy = planAllergyService.updatePlanAllergy(id,planAllergyDTO);
 		if(updatePlanAllergy == null) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		return new ResponseEntity<>(updatePlanAllergy,HttpStatus.OK);
 		
 		} catch(Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(HttpStatus.OK);
 			
 		}
 	}
 	
 	@DeleteMapping("/Allergey/{id}")
 	@Operation(summary = "알러지 삭제", description = "알러지 삭제 컨트롤러")
-	public ResponseEntity<Void> deletePlanAllergey(@PathVariable Long id){
+	public ResponseEntity<String> deletePlanAllergey(@PathVariable("id") Long id){
 		
 		try {
 			planAllergyService.deletePlanAllergy(id);
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		return new ResponseEntity<>("삭제되었습니다",HttpStatus.OK);
 		
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -86,18 +85,18 @@ public class PlanAllergyController {
 	
 	@GetMapping("/Allergey/{id}")
 	@Operation(summary = "알러지 조회(id)", description = "id로 알러지 조회 컨트롤러")
-	public ResponseEntity<PlanAllergyDTO> getAllergyById(@PathVariable Long id){
+	public ResponseEntity<PlanAllergyDTO> getAllergyById(@PathVariable("id") Long id){
 		
 		try {
 			PlanAllergyDTO getAllergyById = planAllergyService.getPlanAllergyById(id);
 		if(getAllergyById == null) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		return new ResponseEntity<>(getAllergyById,HttpStatus.OK);
 		
 		} catch(Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.OK);
 			
 		}
 	}
