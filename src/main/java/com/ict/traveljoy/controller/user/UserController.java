@@ -109,7 +109,8 @@ public class UserController {
 	            user.setBirthDate(Date.valueOf((String) updatedProfile.get("birthDate"))); // Date로 변환
 	        }
 	        if (updatedProfile.containsKey("gender")) {
-	            user.setGender((Boolean) updatedProfile.get("gender"));
+	        	Boolean gender =(Boolean) updatedProfile.get("gender");
+	            user.setGender(gender);
 	        }
 	        // 프로필 이미지 URL을 업데이트하는 로직이 필요하다면 여기에 추가하십시오
 

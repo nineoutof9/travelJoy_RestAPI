@@ -69,9 +69,10 @@ public class UserService {
 	        if (userDTO.getBirthDate() != null) {
 	            user.setBirthDate(userDTO.getBirthDate());
 	        }
-	        if (userDTO.getGender() != null) {
-	            user.setGender(userDTO.getGender() ? 1 : 0);
-	        }
+	        if (userDTO.getGender() != null)
+	        	user.setGender(userDTO.getGender() ? 1 : 0);
+	        if (userDTO.getGender() == null)
+	        	user.setGender(null);
 	        // 필요한 경우 다른 필드도 추가 가능
 
 	        // 데이터베이스에 업데이트된 사용자 정보 저장
