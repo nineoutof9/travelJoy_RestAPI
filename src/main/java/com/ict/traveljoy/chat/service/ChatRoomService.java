@@ -69,18 +69,23 @@ public class ChatRoomService {
 	}
 
 
-	public List<ChatRoomDTO> getAllChatRoom(String useremail) {
+	public List<EnterChatRoomDTO> getAllChatRoom(String useremail) {
 		Users user = userRepository.findByEmail(useremail).get();
 		
 		if(user.getPermission().equalsIgnoreCase("ROLE_ADMIN")) {
-			List<ChatRoom> chatrooms = chatRoomRepository.findAll();
-			List<ChatRoomDTO> chatroomDTOs = new ArrayList<ChatRoomDTO>();
-			for(ChatRoom room : chatrooms) {
-				if(room.getIsDelete()==0) {
-					chatroomDTOs.add(ChatRoomDTO.toDTO(room));
+			
+			List<EnterChatRoom> enteredRooms = enterChatRoomRepository.findAll();
+			List<EnterChatRoomDTO> enteredRoomDTOs = new ArrayList<EnterChatRoomDTO>();
+			
+			for(int i=0;i<enteredRooms.size();i++) {
+				if(enteredRooms.get(i).getChatRoom().getIsDelete()==0
+						&& enteredRooms.get(i).getUser().getId()!=user.getId()) {
+					// delete 상태가 아니고, user(admin 입장)와 같지 않은 채팅방만 가져오기(중복방지)
+					enteredRoomDTOs.add(EnterChatRoomDTO.toDTO(enteredRooms.get(i)));
 				}
 			}
-			return chatroomDTOs;
+
+			return enteredRoomDTOs;
 		}
 		else
 			throw new IllegalArgumentException("권한이 없습니다.");

@@ -22,11 +22,13 @@ public class CheckContainsUseremail {
 			if( authorization.startsWith("Bearer ")){
 				token = authorization.split(" ")[1];
 				useremail = jwtUtil.getUserEmailFromToken(token);
+				System.out.println(useremail);
 			}
 			else {
 //				return new ResponseEntity<>(HttpStatus.FORBIDDEN); //useremail없음, 403
 				useremail = "aaa@aaa.com";
 				//useremail = null;
+				System.out.println("else");
 			}
 		}
 		catch(Exception e) {

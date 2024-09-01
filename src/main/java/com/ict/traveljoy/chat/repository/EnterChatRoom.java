@@ -40,11 +40,11 @@ public class EnterChatRoom {
 	private Long id;
 	
 	
-	@ManyToOne(optional=false,fetch = FetchType.LAZY)
+	@ManyToOne(optional=false)
 	@JoinColumn(name="CHATROOM_ID", nullable = false)
 	private ChatRoom chatRoom;
 
-	@ManyToOne(optional=false,fetch = FetchType.LAZY)
+	@ManyToOne(optional=false)
 	@JoinColumn(name="USER_ID", nullable = false)
 	private Users user;
 
