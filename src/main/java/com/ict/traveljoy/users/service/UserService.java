@@ -8,9 +8,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ict.traveljoy.image.repository.Image;
+import com.ict.traveljoy.image.repository.ImageRepository;
+import com.ict.traveljoy.image.service.S3Uploader;
 import com.ict.traveljoy.users.repository.UserRepository;
 import com.ict.traveljoy.users.repository.Users;
 
@@ -23,6 +26,9 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
 	private final UserRepository userRepository;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
+	
+	private final ImageRepository imageRepository;
+	private final S3Uploader s3Uploader;
 	
 	public UserDTO signUp(UserDTO dto) {
 		userRepository.findByEmail(dto.getEmail()).ifPresent(u -> {
@@ -82,4 +88,36 @@ public class UserService {
 	    }
 	}
     
+	public Users updateProfileImage(String email, MultipartFile file) throws Exception {
+        Optional<Users> userOptional = userRepository.findByEmail(email);
+        if (userOptional.isEmpty()) {
+            throw new Exception("User not found");
+        }
+
+        Users user = userOptional.get();
+        
+        // 기존 프로필 이미지 삭제
+        if (user.getProfileImage() != null) {
+            Image oldImage = user.getProfileImage();
+            s3Uploader.deleteFile(oldImage.getImageUrl());
+            imageRepository.delete(oldImage);
+        }
+
+        // 새 이미지 업로드 및 저장
+        String imageUrl = s3Uploader.upload(file, "profile-images");
+        Image image = new Image();
+        image.setImageUrl(imageUrl);
+        image.setIsActive(1);
+        image.setIsDelete(0);
+        image.setImageType("profile");
+        imageRepository.save(image);
+
+        user.setProfileImage(image);
+        return userRepository.save(user);
+    }
+
+    public Image getProfileImage(String email) {
+        Optional<Users> userOptional = userRepository.findByEmail(email);
+        return userOptional.map(Users::getProfileImage).orElse(null);
+    }
 }
