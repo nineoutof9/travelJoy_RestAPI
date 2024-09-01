@@ -78,3 +78,15 @@ naver:
   clientId: NUQJgNUjlNqcpMb4x5sH
   clientSecret: dkQb2r8RQT
   redirectUri: http://localhost:8080/naver
+  
+cloud:
+  aws:
+    credentials:
+      access-key: AKIAVA5YKSUEV247HC2S
+      secret-key: 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
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    s3:
+      bucket: traveljoy-bucket-1

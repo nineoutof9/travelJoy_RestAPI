@@ -24,6 +24,7 @@ public class ImageDTO {
 	private Boolean isActive;
 	private Boolean isDelete;
 	private LocalDateTime deleteDate;
+	private String imageType;
 	
 	public Image toImage() {
 		return Image.builder()
@@ -33,6 +34,7 @@ public class ImageDTO {
 				.isActive(isActive == true ? 1 : 0)
 				.isDelete(isDelete == true ? 1 : 0)
 				.deleteDate(deleteDate)
+				.imageType(imageType)
 				.build();
 	}
 	
@@ -44,6 +46,7 @@ public class ImageDTO {
 				.isActive(image.getIsActive()== 1 ? true : false)
 				.isDelete(image.getIsDelete()== 1 ? true : false)
 				.deleteDate(image.getDeleteDate())
+				.imageType(image.getImageType())
 				.build();
 	}
 
