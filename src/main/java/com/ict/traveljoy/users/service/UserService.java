@@ -1,5 +1,6 @@
 package com.ict.traveljoy.users.service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -119,5 +120,9 @@ public class UserService {
     public Image getProfileImage(String email) {
         Optional<Users> userOptional = userRepository.findByEmail(email);
         return userOptional.map(Users::getProfileImage).orElse(null);
+    }
+    
+    public List<Users> getAllUser(){
+    	return userRepository.findAll();
     }
 }
