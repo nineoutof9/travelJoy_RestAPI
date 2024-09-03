@@ -37,7 +37,7 @@ public class QuestionController {
 
 	@PostMapping
 	public ResponseEntity<QuestionDTO> createQuestion(@RequestBody QuestionDTO questionDTO, HttpServletRequest request){
-		//질문한사람 user 설정,questionCategory받기,questionContent
+		//질문한사람 user 설정,questionCategory받기,questionContent,questionTitle
 		String useremail = checkUser.checkContainsUseremail(request);
 		String category = request.getParameter("category");
 				
