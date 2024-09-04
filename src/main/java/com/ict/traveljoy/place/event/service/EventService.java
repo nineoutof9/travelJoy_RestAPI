@@ -36,11 +36,10 @@ public class EventService {
     // 이벤트 저장
     @Transactional
     public EventDTO saveEvent(EventDTO eventDto) {
-        // 데이터 유효성 검증
-        if (eventDto.getEventName() == null || eventDto.getEventName().isEmpty()) {
-            throw new IllegalArgumentException("이벤트 이름이 비어있으면 안돼요");
+
+        if (eventDto.getEventName().isEmpty() && eventDto.getRegion() == null) {
+            throw new IllegalArgumentException("값이 비어있으면 안돼요");
         }
-        // 다른 필수 필드 검증 추가 가능
 
         Event event = eventDto.toEntity();
         event = eventRepository.save(event);
@@ -53,12 +52,18 @@ public class EventService {
         Optional<Event> eventOpt = eventRepository.findById(id);
 
         if (eventOpt.isPresent()) {
-        	Event event = eventOpt.get();
-        	event.setEventName(eventDto.getEventName());
-        	event.setRegion(eventDto.getRegion());
-        	event.setAverageReviewRate(eventDto.getAverageReviewRate());
-        	event.setEventStartDate(eventDto.getEventStartDate());
-        	event.setEventEndDate(eventDto.getEventEndDate());
+
+           Event event = eventOpt.get();
+           event.setEventName(eventDto.getEventName());
+           event.setEntranceFee(eventDto.getEntranceFee());
+            event.setDescriptions(eventDto.getDescriptions());
+            event.setAddress(eventDto.getAddress());
+            event.setTotalReviewCount(eventDto.getTotalReviewCount());
+           event.setRegion(eventDto.getRegion());
+           event.setAverageReviewRate(eventDto.getAverageReviewRate());
+           event.setEventStartDate(eventDto.getEventStartDate());
+           event.setEventEndDate(eventDto.getEventEndDate());
+
             
             Event updatedEvent = eventRepository.save(event);
             return EventDTO.toDto(updatedEvent);
@@ -78,8 +83,9 @@ public class EventService {
     }
 
     // 특정 지역의 이벤트 검색
-    public List<EventDTO> findEventsByRegionId(Long region_Id) {
-        return eventRepository.findAllByRegionId(region_Id).stream()
+
+    public List<EventDTO> findEventsByRegionId(Long regionId) {
+        return eventRepository.findAllByRegionId(regionId).stream()
                 .map(EventDTO::toDto)
                 .collect(Collectors.toList());
     }

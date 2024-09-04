@@ -76,7 +76,7 @@ public class PlanController {
 	
 	@DeleteMapping("/plan/{id}")
 	@Operation(summary = "plan 삭제", description = "plan 삭제 컨트롤러")
-	public ResponseEntity<String> deletePlan(@PathVariable Long id){
+	public ResponseEntity<String> deletePlan(@PathVariable("id") Long id){
 		
 		try {
 			planService.deletePlan(id);
@@ -158,6 +158,7 @@ public class PlanController {
 
 	}
 	
+
 	@GetMapping("/plan/all")
 	@Operation(summary = "모든 plan 조회", description = "모든 plan 조회 컨트롤러")
 	public ResponseEntity<List<PlanDTO>> getAllPlans(){

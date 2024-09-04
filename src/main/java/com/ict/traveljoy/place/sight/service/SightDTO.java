@@ -1,9 +1,8 @@
 package com.ict.traveljoy.place.sight.service;
 
-
 import com.ict.traveljoy.place.region.repository.Region;
+import com.ict.traveljoy.place.region.repository.RegionRepository;
 import com.ict.traveljoy.place.sight.repository.Sight;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,48 +15,50 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder
 public class SightDTO {
-	private Long id;
-	private Region region;
-	private Boolean isHasImage;
-	private Float entranceFee;
-	private String sightName;
-	private String descriptions;
-	private String address;
-	private Float lat;
-	private Float lng;
-	private Long totalReviewCount;
-	private Float averageReviewRate;
-	
-	public Sight toEntity() {
-		return Sight.builder()
-					 .id(id)
-					 .region(region)
-					 .isHasImage(isHasImage == true ? 1 : 0)
-					 .entranceFee(entranceFee)
-					 .sightName(sightName)
-					 .descriptions(descriptions)
-					 .address(address)
-					 .lat(lat)
-					 .lng(lng)
-					 .totalReviewCount(totalReviewCount)
-					 .averageReviewRate(averageReviewRate)
-					 .build();
-	}
-	
-	public static SightDTO toDto(Sight sights) {
-		return SightDTO.builder()
-						.id(sights.getId())
-						.region(sights.getRegion())
-						.isHasImage(sights.getIsHasImage() == 1 ? true : false)
-						.entranceFee(sights.getEntranceFee())
-						.sightName(sights.getSightName())
-						.descriptions(sights.getDescriptions())
-						.address(sights.getAddress())
-						.lat(sights.getLat())
-						.lng(sights.getLng())
-						.totalReviewCount(sights.getTotalReviewCount())
-						.averageReviewRate(sights.getAverageReviewRate())
-						.build();
-	}
+    private Long id;
+    private Long regionId; 
+    private Boolean isHasImage;
+    private Float entranceFee;
+    private String sightName;
+    private String descriptions;
+    private String address;
+    private Float lat;
+    private Float lng;
+    private Long totalReviewCount;
+    private Float averageReviewRate;
 
+    public Sight toEntity(RegionRepository regionRepository) {
+        Region region = regionRepository.findById(regionId)
+                                        .orElseThrow(() -> new IllegalArgumentException("Invalid RegionId"));
+
+        return Sight.builder()
+                .id(id)
+                .region(region)
+                .isHasImage(isHasImage != null && isHasImage ? 1 : 0)
+                .entranceFee(entranceFee)
+                .sightName(sightName)
+                .descriptions(descriptions)
+                .address(address)
+                .lat(lat)
+                .lng(lng)
+                .totalReviewCount(totalReviewCount)
+                .averageReviewRate(averageReviewRate)
+                .build();
+    }
+
+    public static SightDTO toDto(Sight sight) {
+        return SightDTO.builder()
+                .id(sight.getId())
+                .regionId(sight.getRegion() != null ? sight.getRegion().getId() : null) 
+                .isHasImage(sight.getIsHasImage() == 1)
+                .entranceFee(sight.getEntranceFee())
+                .sightName(sight.getSightName())
+                .descriptions(sight.getDescriptions())
+                .address(sight.getAddress())
+                .lat(sight.getLat())
+                .lng(sight.getLng())
+                .totalReviewCount(sight.getTotalReviewCount())
+                .averageReviewRate(sight.getAverageReviewRate())
+                .build();
+    }
 }

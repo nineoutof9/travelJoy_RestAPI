@@ -31,40 +31,43 @@ public class TripReviewService {
     }
 
     @Transactional
-    public TripReviewDto createReview(TripReviewDto tripReviewDto) {
-        TripReview tripReview = tripReviewDto.toEntity();
-        if (tripReview.getPlan() != null) {
-            Optional<Plan> planOptional = planRepository.findById(tripReview.getPlan().getId());
-            if (planOptional.isEmpty()) {
-                throw new IllegalArgumentException("Plan with ID " + tripReview.getPlan().getId() + " does not exist.");
+    public TripReviewDTO createReview(TripReviewDTO TripReviewDTO) {
+        // planId를 기반으로 Plan 객체를 설정
+        if (TripReviewDTO.getPlanId() != null) {
+            Optional<Plan> planOptional = planRepository.findById(TripReviewDTO.getPlanId());
+            if (planOptional.isPresent()) {
+                TripReviewDTO.setPlan(planOptional.get());
+            } else {
+                throw new IllegalArgumentException("Plan with ID " + TripReviewDTO.getPlanId() + " does not exist.");
             }
-            tripReview.setPlan(planOptional.get());
         }
+
+        TripReview tripReview = TripReviewDTO.toEntity();
         TripReview savedTripReview = tripReviewRepository.save(tripReview);
-        return TripReviewDto.toDto(savedTripReview);
+        return TripReviewDTO.toDto(savedTripReview);
     }
 
     @Transactional
-    public TripReviewDto updateReview(Long tripReviewId, TripReviewDto tripReviewDto) {
+    public TripReviewDTO updateReview(Long tripReviewId, TripReviewDTO TripReviewDTO) {
         Optional<TripReview> tripReviewOptional = tripReviewRepository.findById(tripReviewId);
         if (tripReviewOptional.isEmpty()) {
             throw new IllegalArgumentException("TripReview with ID " + tripReviewId + " does not exist.");
         }
 
         TripReview tripReview = tripReviewOptional.get();
-        tripReview.setWriter(tripReviewDto.getWriter());
-        tripReview.setTitle(tripReviewDto.getTitle());
-        tripReview.setReviewContent(tripReviewDto.getReviewContent());
-        tripReview.setUrl(tripReviewDto.getUrl());
-        tripReview.setPostDate(tripReviewDto.getPostDate());
-        tripReview.setIsActive(tripReviewDto.getIsActive() ? 1 : 0);
-        tripReview.setIsDelete(tripReviewDto.getIsDelete() ? 1 : 0);
-        tripReview.setDeleteDate(tripReviewDto.getDeleteDate());
+        tripReview.setWriter(TripReviewDTO.getWriter());
+        tripReview.setTitle(TripReviewDTO.getTitle());
+        tripReview.setReviewContent(TripReviewDTO.getReviewContent());
+        tripReview.setUrl(TripReviewDTO.getUrl());
+        tripReview.setPostDate(TripReviewDTO.getPostDate());
+        tripReview.setIsActive(TripReviewDTO.getIsActive() ? 1 : 0);
+        tripReview.setIsDelete(TripReviewDTO.getIsDelete() ? 1 : 0);
+        tripReview.setDeleteDate(TripReviewDTO.getDeleteDate());
 
-        if (tripReviewDto.getPlan() != null) {
-            Optional<Plan> planOptional = planRepository.findById(tripReviewDto.getPlan().getId());
+        if (TripReviewDTO.getPlan() != null) {
+            Optional<Plan> planOptional = planRepository.findById(TripReviewDTO.getPlan().getId());
             if (planOptional.isEmpty()) {
-                throw new IllegalArgumentException("Plan with ID " + tripReviewDto.getPlan().getId() + " does not exist.");
+                throw new IllegalArgumentException("Plan with ID " + TripReviewDTO.getPlan().getId() + " does not exist.");
             }
             tripReview.setPlan(planOptional.get());
         } else {
@@ -72,7 +75,7 @@ public class TripReviewService {
         }
 
         TripReview updatedTripReview = tripReviewRepository.save(tripReview);
-        return TripReviewDto.toDto(updatedTripReview);
+        return TripReviewDTO.toDto(updatedTripReview);
     }
 
     @Transactional
@@ -89,33 +92,33 @@ public class TripReviewService {
         
     }
     
-    public List<TripReviewDto> getAllReviews() {
+    public List<TripReviewDTO> getAllReviews() {
         List<TripReview> tripReviews = tripReviewRepository.findAllActiveReviews();
-        return tripReviews.stream().map(TripReviewDto::toDto).toList();
+        return tripReviews.stream().map(TripReviewDTO::toDto).toList();
     }
 
-    public TripReviewDto getReviewById(Long tripReviewId) {
-        Optional<TripReview> tripReviewOptional = tripReviewRepository.findById(tripReviewId);
+    public TripReviewDTO getReviewById(Long id) {
+        Optional<TripReview> tripReviewOptional = tripReviewRepository.findById(id);
         if (tripReviewOptional.isEmpty()) {
-            throw new IllegalArgumentException("TripReview with ID " + tripReviewId + " does not exist.");
+            throw new IllegalArgumentException("TripReview with ID " + id + " does not exist.");
         }
-        return TripReviewDto.toDto(tripReviewOptional.get());
+        return TripReviewDTO.toDto(tripReviewOptional.get());
     }
 
-    public List<TripReviewDto> getReviewsByWriter(String writer) {
+    public List<TripReviewDTO> getReviewsByWriter(String writer) {
         List<TripReview> tripReviews = tripReviewRepository.findByWriter(writer);
-        return tripReviews.stream().map(TripReviewDto::toDto).toList();
+        return tripReviews.stream().map(TripReviewDTO::toDto).toList();
     }
 
-    public List<TripReviewDto> getReviewsByPlanId(Long planId) {
+    public List<TripReviewDTO> getReviewsByPlanId(Long planId) {
         Plan plan = new Plan();
         plan.setId(planId);
         List<TripReview> tripReviews = tripReviewRepository.findByPlan(plan);
-        return tripReviews.stream().map(TripReviewDto::toDto).toList();
+        return tripReviews.stream().map(TripReviewDTO::toDto).toList();
     }
 
-    public List<TripReviewDto> getReviewsByTitleContaining(String title) {
+    public List<TripReviewDTO> getReviewsByTitleContaining(String title) {
         List<TripReview> tripReviews = tripReviewRepository.findByTitleContaining(title);
-        return tripReviews.stream().map(TripReviewDto::toDto).toList();
+        return tripReviews.stream().map(TripReviewDTO::toDto).toList();
     }
 }

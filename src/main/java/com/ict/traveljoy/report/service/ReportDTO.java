@@ -21,14 +21,19 @@ import lombok.Setter;
 public class ReportDTO {
 
 	private Long id;
-	private Users user;
-	private ReportCategory reportCategory;
-	private Long targetId;
+
+	private Users user; //신고자
+	private ReportCategory reportCategory; //신고대상 유형
+	private Long targetId; //신고대상 id
+
 	private Boolean isUser;
 	private Boolean isNotice;
 	private Boolean isBoard;
 	private Boolean isComment;
 	private Boolean isReview;
+	
+
+	private Boolean isAnswered;
 	
 	private LocalDateTime reportDate;
 	private String reportContent;
@@ -48,6 +53,9 @@ public class ReportDTO {
 				.isBoard(isBoard!=null&&true?1:0)
 				.isComment(isComment!=null&&true?1:0)
 				.isReview(isReview!=null&&true?1:0)
+
+				.isAnswered(isAnswered!=null&&true?1:0)
+
 				.reportDate(reportDate)
 				.reportContent(reportContent)
 				.reportHandlerId(reportHandlerId)
@@ -68,6 +76,9 @@ public class ReportDTO {
 				.isBoard(report.getIsBoard()==1?true:false)
 				.isComment(report.getIsComment()==1?true:false)
 				.isReview(report.getIsReview()==1?true:false)
+
+				.isAnswered(report.getIsAnswered()==1?true:false)
+
 				.reportDate(report.getReportDate())
 				.reportContent(report.getReportContent())
 				.reportHandlerId(report.getReportHandlerId())

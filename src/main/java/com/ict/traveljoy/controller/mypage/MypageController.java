@@ -20,8 +20,7 @@ import com.ict.traveljoy.place.sight.service.SightService;
 import com.ict.traveljoy.place.transportation.service.TransportationDTO;
 import com.ict.traveljoy.place.transportation.service.TransportationService;
 import com.ict.traveljoy.tripReview.repository.TripReview;
-import com.ict.traveljoy.tripReview.service.TripReviewDto;
-import com.ict.traveljoy.tripReview.service.TripReviewPhotoDto;
+import com.ict.traveljoy.tripReview.service.TripReviewPhotoDTO;
 import com.ict.traveljoy.tripReview.service.TripReviewPhotoService;
 import com.ict.traveljoy.tripReview.service.TripReviewService;
 import com.ict.traveljoy.weather.service.WeatherDTO;
@@ -109,17 +108,10 @@ public class MypageController {
             if (id != null) {
                 Optional<HotelDTO> dto = hotelService.findHotelById(id);
                 dto.ifPresent(dtos::add);
-            } else if (region_Id != null) {
-                dtos = hotelService.findHotelsByRegionId(region_Id);
-            } else if (name != null) {
-                dtos = hotelService.findHotelsByName(name);
-            } else if (minPrice != null && maxPrice != null) {
-                dtos = hotelService.findHotelsByPriceRange(minPrice, maxPrice);
-            } else if (reviewCount != null) {
-                dtos = hotelService.findHotelsByReviewCount(reviewCount);
-            } else if (reviewRate != null) {
-                dtos = hotelService.findHotelsByReviewRate(reviewRate);
-            }
+            }  else if (name != null) {
+
+                //dtos = hotelService.findHotelsByName(name);
+            }  
 
             if (dtos.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ArrayList<>());
@@ -135,7 +127,7 @@ public class MypageController {
    //숙소 수정
 
    @PutMapping("/hotel/{id}")
-   public ResponseEntity<HotelDTO> updateHotel(@PathVariable Long id, @RequestBody HotelDTO hotelDTO) {
+   public ResponseEntity<HotelDTO> updateHotel(@PathVariable("id") Long id, @RequestBody HotelDTO hotelDTO) {
        try {
     	   HotelDTO updatedHotel = hotelService.updateHotel(id, hotelDTO);
            return new ResponseEntity<>(updatedHotel, HttpStatus.OK);
@@ -149,7 +141,7 @@ public class MypageController {
    
    //숙소 삭제
    @DeleteMapping("/hotel/{id}")
-   public String deleteHotel(@PathVariable Long id) {
+   public String deleteHotel(@PathVariable("id") Long id) {
       hotelService.deleteHotel(id);
       return "숙소 삭제 성공";
    }

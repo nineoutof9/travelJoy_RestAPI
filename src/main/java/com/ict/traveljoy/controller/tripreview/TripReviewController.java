@@ -1,12 +1,10 @@
 package com.ict.traveljoy.controller.tripreview;
 
 import com.ict.traveljoy.tripReview.service.TripReviewService;
-
-import io.swagger.v3.oas.annotations.tags.Tag;
-
-import com.ict.traveljoy.tripReview.service.TripReviewDto;
-import com.ict.traveljoy.tripReview.service.TripReviewPhotoDto;
+import com.ict.traveljoy.tripReview.service.TripReviewDTO;
+import com.ict.traveljoy.tripReview.service.TripReviewPhotoDTO;
 import com.ict.traveljoy.tripReview.service.TripReviewPhotoService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,52 +14,52 @@ import java.util.List;
 
 @Tag(name="TripReviewPage", description = "여행 리뷰 페이지")
 @RestController
-@RequestMapping("/reviewList")
+@RequestMapping("/api/reviewList")
 public class TripReviewController {
 
-    @Autowired
-    private TripReviewService tripReviewService;
+    private final TripReviewService tripReviewService;
+    private final TripReviewPhotoService tripReviewPhotoService;
 
     @Autowired
-    private TripReviewPhotoService tripReviewPhotoService;
+    public TripReviewController(TripReviewService tripReviewService, TripReviewPhotoService tripReviewPhotoService) {
+        this.tripReviewService = tripReviewService;
+        this.tripReviewPhotoService = tripReviewPhotoService;
+    }
 
     // 리뷰 생성
     @PostMapping("/createReview")
-    public ResponseEntity<TripReviewDto> createReview(@RequestBody TripReviewDto tripReviewDTO) {
-        System.out.println("Creating review: " + tripReviewDTO);
+    public ResponseEntity<TripReviewDTO> createReview(@RequestBody TripReviewDTO TripReviewDTO) {
         try {
-            TripReviewDto createdReview = tripReviewService.createReview(tripReviewDTO);
-            if(createdReview == null) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
+            TripReviewDTO createdReview = tripReviewService.createReview(TripReviewDTO);
             return new ResponseEntity<>(createdReview, HttpStatus.CREATED);
-        } catch(Exception e) {
+        } catch (IllegalArgumentException e) {
+            System.err.println("Invalid data provided: " + e.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     // 모든 리뷰 조회
-    @GetMapping
-    public ResponseEntity<List<TripReviewDto>> getAllReviews() {
+    @GetMapping("/all")
+    public ResponseEntity<List<TripReviewDTO>> getAllReviews() {
         try {
-            List<TripReviewDto> reviews = tripReviewService.getAllReviews();
+            List<TripReviewDTO> reviews = tripReviewService.getAllReviews();
             return new ResponseEntity<>(reviews, HttpStatus.OK);
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     // 특정 ID로 리뷰 조회
     @GetMapping("/{id}")
-    public ResponseEntity<TripReviewDto> getReviewById(@PathVariable("id") Long id) {
+    public ResponseEntity<TripReviewDTO> getReviewById(@PathVariable("id") Long id) {
         try {
-            TripReviewDto review = tripReviewService.getReviewById(id);
-            if (review == null) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-            return new ResponseEntity<>(review, HttpStatus.OK);
-        } catch(Exception e) {
+            TripReviewDTO review = tripReviewService.getReviewById(id);
+            return review != null ? new ResponseEntity<>(review, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -69,14 +67,11 @@ public class TripReviewController {
 
     // 리뷰 수정
     @PutMapping("/editReview/{id}")
-    public ResponseEntity<TripReviewDto> updateReview(@PathVariable("id") Long id, @RequestBody TripReviewDto tripReviewDTO) {
+    public ResponseEntity<TripReviewDTO> updateReview(@PathVariable("id") Long id, @RequestBody TripReviewDTO TripReviewDTO) {
         try {
-            TripReviewDto updatedReview = tripReviewService.updateReview(id, tripReviewDTO);
-            if (updatedReview == null) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-            return new ResponseEntity<>(updatedReview, HttpStatus.OK);
-        } catch(Exception e) {
+            TripReviewDTO updatedReview = tripReviewService.updateReview(id, TripReviewDTO);
+            return updatedReview != null ? new ResponseEntity<>(updatedReview, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -89,23 +84,47 @@ public class TripReviewController {
             tripReviewService.deleteReview(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (IllegalArgumentException e) {
-            System.out.println("Error deleting review: " + e.getMessage()); // 로그 추가
+            System.err.println("Error deleting review: " + e.getMessage()); 
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    /*
-    // 특정 리뷰의 모든 사진 조회
-    @GetMapping("/{id}/photos")
-    public ResponseEntity<List<TripReviewPhotoDto>> getPhotosByReviewId(@PathVariable("id") Long reviewId) {
+
+    // 작성자 이름으로 리뷰 조회
+    @GetMapping("/byWriter/{writer}")
+    public ResponseEntity<List<TripReviewDTO>> getReviewsByWriter(@PathVariable("writer") String writer) {
         try {
-            List<TripReviewPhotoDto> photos = tripReviewPhotoService.getPhotosByReviewId(reviewId);
-            return new ResponseEntity<>(photos, HttpStatus.OK);
-        } catch(Exception e) {
+            List<TripReviewDTO> reviews = tripReviewService.getReviewsByWriter(writer);
+            return new ResponseEntity<>(reviews, HttpStatus.OK);
+        } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }*/
+    }
+
+    // 계획 ID로 리뷰 조회
+    @GetMapping("/byPlanId/{planId}")
+    public ResponseEntity<List<TripReviewDTO>> getReviewsByPlanId(@PathVariable("planId") Long planId) {
+        try {
+            List<TripReviewDTO> reviews = tripReviewService.getReviewsByPlanId(planId);
+            return new ResponseEntity<>(reviews, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // 제목에 특정 문자열이 포함된 리뷰 조회
+    @GetMapping("/byTitle/{title}")
+    public ResponseEntity<List<TripReviewDTO>> getReviewsByTitleContaining(@PathVariable("title") String title) {
+        try {
+            List<TripReviewDTO> reviews = tripReviewService.getReviewsByTitleContaining(title);
+            return new ResponseEntity<>(reviews, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

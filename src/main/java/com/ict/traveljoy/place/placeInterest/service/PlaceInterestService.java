@@ -25,6 +25,21 @@ public class PlaceInterestService {
         placeInterest = placeInterestRepository.save(placeInterest);
         return PlaceInterestDTO.toDto(placeInterest);
     }
+    
+    public PlaceInterestDTO updatePlaceInterest(Long id, PlaceInterestDTO placeInterestDTO) {
+        PlaceInterest existingPlaceInterest = placeInterestRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 ID로 PlaceInterest를 찾을 수 없습니다: " + id));
+
+        existingPlaceInterest.setInterestId(placeInterestDTO.getInterestId());
+        existingPlaceInterest.setIsEvent(placeInterestDTO.getIsEvent() != null && placeInterestDTO.getIsEvent() ? 1 : 0);
+        existingPlaceInterest.setIsFood(placeInterestDTO.getIsFood() != null && placeInterestDTO.getIsFood() ? 1 : 0);
+        existingPlaceInterest.setIsSight(placeInterestDTO.getIsSight() != null && placeInterestDTO.getIsSight() ? 1 : 0);
+        existingPlaceInterest.setIsHotel(placeInterestDTO.getIsHotel() != null && placeInterestDTO.getIsHotel() ? 1 : 0);
+
+        placeInterestRepository.save(existingPlaceInterest);
+
+        return PlaceInterestDTO.toDto(existingPlaceInterest);
+    }
 
     // ID로 PlaceInterest 조회
     public Optional<PlaceInterestDTO> getPlaceInterestById(Long id) {

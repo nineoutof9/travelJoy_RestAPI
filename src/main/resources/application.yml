@@ -9,6 +9,10 @@ spring:
     url: jdbc:oracle:thin:@localhost:1521/XEPDB1
     username: ICTUSER
     password: ICT1234
+#    url: jdbc:oracle:thin:@localhost:1521/XEPDB1
+
+
+
 
 
     hikari:
@@ -57,8 +61,24 @@ spring:
       auth-code-expiration-millis: 1800000 
 
 
+
 logging:
   level:
     org:
       springframework:
+
         security: DEBUG
+
+        
+kakao:
+  clientId: 9560d5a7af8ffc6f882d0b10ae12f25e
+  redirectUri: http://localhost:8080/kakao
+google:
+  clientId: 264315121794-fi1bj4b64gofmbd2mbcdth8vuun34ov3.apps.googleusercontent.com
+  clientSecret: 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
+  redirectUri: http://localhost:8080/google
+naver:
+  clientId: NUQJgNUjlNqcpMb4x5sH
+  clientSecret: dkQb2r8RQT
+  redirectUri: http://localhost:8080/naver
+

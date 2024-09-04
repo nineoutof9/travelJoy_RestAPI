@@ -35,7 +35,7 @@ public class EventDTO {
         return Event.builder()
                 .id(id)
                 .region(region)
-                .isHasImage(isHasImage != null && isHasImage == true ? 1 : 0)
+                .isHasImage(isHasImage != null && isHasImage ? 1 : 0)
                 .eventStartDate(eventStartDate)
                 .eventEndDate(eventEndDate)
                 .entranceFee(entranceFee)

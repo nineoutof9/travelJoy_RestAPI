@@ -22,13 +22,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity; 
 import org.springframework.web.bind.annotation.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 @Tag(name="Place 관리", description = "이벤트, 식당, 숙박, 명소, 교통수단, 지역에 대한 CRUD.")
 @RestController
-@RequestMapping("/places")
+@RequestMapping("/api/places")
 public class PlaceController {
-
+	
+	 private static final Logger logger = LoggerFactory.getLogger(PlaceController.class);
+	
     @Autowired
     private EventService eventService;
 
@@ -82,6 +88,30 @@ public class PlaceController {
             return eventService.findEventById(id)
                     .map(event -> new ResponseEntity<>(event, HttpStatus.OK))
                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // 특정 지역의 이벤트 검색
+    @GetMapping("/events/region/{regionId}")
+    public ResponseEntity<List<EventDTO>> getEventsByRegionId(@PathVariable("regionId") Long regionId) {
+        try {
+            List<EventDTO> events = eventService.findEventsByRegionId(regionId);
+            return new ResponseEntity<>(events, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // 특정 리뷰 평점 이상의 이벤트 검색
+    @GetMapping("/events/reviewRate/{rate}")
+    public ResponseEntity<List<EventDTO>> getEventsByReviewRate(@PathVariable("rate") float reviewRate) {
+        try {
+            List<EventDTO> events = eventService.findEventsByReviewRate(reviewRate);
+            return new ResponseEntity<>(events, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -149,6 +179,49 @@ public class PlaceController {
         }
     }
 
+    // 특정 지역의 음식 검색
+    @GetMapping("/foods/region/{regionId}")
+    public ResponseEntity<List<FoodDTO>> getFoodsByRegionId(@PathVariable("regionId") Long regionId) {
+        List<FoodDTO> foods = foodService.findFoodsByRegionId(regionId);
+        return ResponseEntity.ok(foods);
+    }
+
+    // 음식 이름으로 검색
+    @GetMapping("/foods/name/{foodName}")
+    public ResponseEntity<List<FoodDTO>> getFoodsByName(@PathVariable("foodName") String foodName) {
+        try {
+            List<FoodDTO> foods = foodService.findFoodsByName(foodName);
+            return new ResponseEntity<>(foods, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // 특정 가격 이하의 음식 검색
+    @GetMapping("/foods/price/{maxPrice}")
+    public ResponseEntity<List<FoodDTO>> getFoodsByPrice(@PathVariable("maxPrice") float maxPrice) {
+        try {
+            List<FoodDTO> foods = foodService.findFoodsByPrice(maxPrice);
+            return new ResponseEntity<>(foods, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // 특정 리뷰 평점 이상의 음식 검색
+    @GetMapping("/foods/reviewRate/{rate}")
+    public ResponseEntity<List<FoodDTO>> getFoodsByReviewRate(@PathVariable("rate") float reviewRate) {
+        try {
+            List<FoodDTO> foods = foodService.findFoodsByReviewRate(reviewRate);
+            return new ResponseEntity<>(foods, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PutMapping("/foods/{id}")
     public ResponseEntity<FoodDTO> updateFood(@PathVariable("id") Long id, @RequestBody FoodDTO foodDto) {
         try {
@@ -186,7 +259,49 @@ public class PlaceController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
+ // 주소와 날짜를 기반으로 호텔 검색
+    @GetMapping("/hotels/search")
+    public ResponseEntity<List<HotelDTO>> getHotelsByAddressAndDates(
+            @RequestParam("address") String address,
+            @RequestParam("checkInDate") String checkInDate,
+            @RequestParam("checkOutDate") String checkOutDate) {
 
+        try {
+            // Step 1: Print 입력 값
+            System.out.println("Received parameters:");
+            System.out.println("Address: " + address);
+            System.out.println("Check-in Date: " + checkInDate);
+            System.out.println("Check-out Date: " + checkOutDate);
+
+            // Step 2: LocalDate 변환 시도
+            LocalDate checkIn;
+            LocalDate checkOut;
+            try {
+                checkIn = LocalDate.parse(checkInDate);
+                checkOut = LocalDate.parse(checkOutDate);
+                System.out.println("Parsed dates successfully.");
+            } catch (Exception e) {
+                System.out.println("Failed to parse dates: " + e.getMessage());
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            // Step 3: HotelService 호출
+            System.out.println("Calling HotelService to find hotels...");
+            List<HotelDTO> hotels = hotelService.findHotelsByAddressAndDates(address, checkIn, checkOut);
+            System.out.println("HotelService returned " + hotels.size() + " hotels.");
+
+            return new ResponseEntity<>(hotels, HttpStatus.OK);
+        } catch (Exception e) {
+            // Step 4: 예외 처리
+            System.out.println("Exception occurred: " + e.getMessage());
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    
     @GetMapping("/hotels/all")
     public ResponseEntity<List<HotelDTO>> getAllHotels() {
         try {
@@ -209,6 +324,18 @@ public class PlaceController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    // 숙소 이름으로 검색
+//    @GetMapping("/hotels/name/{hotelName}")
+//    public ResponseEntity<List<HotelDTO>> getHotelsByName(@PathVariable("hotelName") String hotelName) {
+//        try {
+//            List<HotelDTO> hotels = hotelService.findHotelsByName(hotelName);
+//            return new ResponseEntity<>(hotels, HttpStatus.OK);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
 
     @PutMapping("/hotels/{id}")
     public ResponseEntity<HotelDTO> updateHotel(@PathVariable("id") Long id, @RequestBody HotelDTO hotelDto) {
@@ -265,6 +392,42 @@ public class PlaceController {
             return sightService.findSightById(id)
                     .map(sight -> new ResponseEntity<>(sight, HttpStatus.OK))
                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // 특정 지역의 명소 검색
+    @GetMapping("/sights/region/{regionId}")
+    public ResponseEntity<List<SightDTO>> getSightsByRegionId(@PathVariable("regionId") Long regionId) {
+        try {
+            List<SightDTO> sights = sightService.findSightsByRegionId(regionId);
+            return new ResponseEntity<>(sights, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // 명소 이름으로 검색
+    @GetMapping("/sights/name/{sightName}")
+    public ResponseEntity<List<SightDTO>> getSightsByName(@PathVariable("sightName") String sightName) {
+        try {
+            List<SightDTO> sights = sightService.findSightsByName(sightName);
+            return new ResponseEntity<>(sights, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // 특정 리뷰 평점 이상의 명소 검색
+    @GetMapping("/sights/reviewRate/{rate}")
+    public ResponseEntity<List<SightDTO>> getSightsByReviewRate(@PathVariable("rate") float reviewRate) {
+        try {
+            List<SightDTO> sights = sightService.findSightsByReviewRate(reviewRate);
+            return new ResponseEntity<>(sights, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -332,6 +495,82 @@ public class PlaceController {
         }
     }
 
+    // 교통수단 검색 - 버스
+    @GetMapping("/transportations/bus/{isBus}")
+    public ResponseEntity<List<TransportationDTO>> getTransportationsByIsBus(@PathVariable("isBus") boolean isBus) {
+        try {
+            List<TransportationDTO> transportations = transportationService.findTransportationsByIsBus(isBus);
+            return new ResponseEntity<>(transportations, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // 교통수단 검색 - 기차
+    @GetMapping("/transportations/train/{isTrain}")
+    public ResponseEntity<List<TransportationDTO>> getTransportationsByIsTrain(@PathVariable("isTrain") boolean isTrain) {
+        try {
+            List<TransportationDTO> transportations = transportationService.findTransportationsByIsTrain(isTrain);
+            return new ResponseEntity<>(transportations, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // 교통수단 검색 - 비행기
+    @GetMapping("/transportations/airplane/{isAirplane}")
+    public ResponseEntity<List<TransportationDTO>> getTransportationsByIsAirplane(@PathVariable("isAirplane") boolean isAirplane) {
+        try {
+            List<TransportationDTO> transportations = transportationService.findTransportationsByIsAirplane(isAirplane);
+            return new ResponseEntity<>(transportations, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // 교통수단 검색 - 운전
+    @GetMapping("/transportations/drive/{isDrive}")
+    public ResponseEntity<List<TransportationDTO>> getTransportationsByIsDrive(@PathVariable("isDrive") boolean isDrive) {
+        try {
+            List<TransportationDTO> transportations = transportationService.findTransportationsByIsDrive(isDrive);
+            return new ResponseEntity<>(transportations, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+//    // 특정 기간 내의 교통수단 검색
+//    @GetMapping("/transportations/dateRange")
+//    public ResponseEntity<List<TransportationDTO>> getTransportationsByDateRange(
+//            @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+//            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
+//        try {
+//            List<TransportationDTO> transportations = transportationService.findTransportationsByDateRange(startDate, endDate);
+//            return new ResponseEntity<>(transportations, HttpStatus.OK);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
+
+//    // 가격 범위 내의 교통수단 검색
+//    @GetMapping("/transportations/priceRange")
+//    public ResponseEntity<List<TransportationDTO>> getTransportationsByPriceRange(
+//            @RequestParam("minPrice") float minPrice,
+//            @RequestParam("maxPrice") float maxPrice) {
+//        try {
+//            List<TransportationDTO> transportations = transportationService.findTransportationsByPrice(minPrice, maxPrice);
+//            return new ResponseEntity<>(transportations, HttpStatus.OK);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
+
     @PutMapping("/transportations/{id}")
     public ResponseEntity<TransportationDTO> updateTransportation(@PathVariable("id") Long id, @RequestBody TransportationDTO transportationDto) {
         try {
@@ -395,7 +634,7 @@ public class PlaceController {
     @PutMapping("/placeInterests/{id}")
     public ResponseEntity<PlaceInterestDTO> updatePlaceInterest(@PathVariable("id") Long id, @RequestBody PlaceInterestDTO placeInterestDto) {
         try {
-            PlaceInterestDTO updatedPlaceInterest = placeInterestService.savePlaceInterest(placeInterestDto);
+            PlaceInterestDTO updatedPlaceInterest = placeInterestService.updatePlaceInterest(id, placeInterestDto);
             return new ResponseEntity<>(updatedPlaceInterest, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

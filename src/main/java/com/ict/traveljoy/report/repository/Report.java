@@ -70,6 +70,11 @@ public class Report {
 	@Column(name="IS_REVIEW", columnDefinition = "NUMBER(1, 0)")
 	@ColumnDefault("0")
 	private Integer isReview;
+
+	@Column(name="IS_Answered", columnDefinition = "NUMBER(1, 0)")
+	@ColumnDefault("0")
+	private Integer isAnswered;
+
     
     //신고일자
 	@Column(name="REPORT_DATE", nullable = false)
@@ -82,18 +87,18 @@ public class Report {
     private String reportContent;
     
     
-	@Column(name="REPORT_HANDLER_ID",nullable=false)
+	@Column(name="REPORT_HANDLER_ID")
     private Long reportHandlerId;
     
-	@Column(name="REPORT_HANDLER_NAME",length=50, nullable=false)
+	@Column(name="REPORT_HANDLER_NAME",length=50)
     private String reportHandlerName;
     
 	//신고처리 결과
-	@Column(name="REPORT_RESULT",length=2000,nullable=false)
+	@Column(name="REPORT_RESULT",length=2000)
     private String reportResult;
     
     //신고처리 일자
-    @Column(name="REPORT_RESULT_DATE",nullable = false)
+    @Column(name="REPORT_RESULT_DATE")
 	@ColumnDefault("SYSDATE")
 	@CreationTimestamp
     private LocalDateTime reportResultDate;
