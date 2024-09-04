@@ -30,38 +30,43 @@ import lombok.Setter;
 @Setter
 @Builder
 public class Hotel {
-	@Id
-	@SequenceGenerator(name = "seq_hotels",sequenceName = "seq_hotels",allocationSize = 1,initialValue = 1)
-	@GeneratedValue(generator = "seq_hotels",strategy = GenerationType.SEQUENCE)
-	@Column(name="hotel_id")
-	private Long id;
-	
-	@Column(name="is_has_image",nullable = false,columnDefinition = "NUMBER(1, 0)")
+    @Id
+    @SequenceGenerator(name = "seq_hotels", sequenceName = "seq_hotels", allocationSize = 1, initialValue = 1)
+    @GeneratedValue(generator = "seq_hotels", strategy = GenerationType.SEQUENCE)
+    @Column(name = "hotel_id")
+    private Long id;
+    
+    @Column(name = "is_has_image", nullable = false, columnDefinition = "NUMBER(1, 0)")
     @ColumnDefault("0")
     private Integer isHasImage;
-	
-	@Column(name="average_price", nullable = false)
-	private String averagePrice;
-	
-	@Column(name="hotel_name", length = 50, nullable = false)
-	private String hotelName;
-	
-	
-	@Column(name="address", length=200, nullable = false)
-	private String address;
-	
-	
-	@Column(name = "AVERAGE_REVIEW_RATE")
-	private Float averageReviewRate;
-	
-	@ElementCollection
+    
+    @Column(name = "average_price", nullable = false)
+    private String averagePrice;
+    
+    @Column(name = "hotel_name", length = 50, nullable = false)
+    private String hotelName;
+    
+    @ManyToOne
+    @JoinColumn(name = "region_id", nullable = false)
+    private Region region;
+    
+    @Column(name = "AVERAGE_REVIEW_RATE")
+    private Float averageReviewRate;
+    
+    @ElementCollection
     @CollectionTable(name = "hotel_images", joinColumns = @JoinColumn(name = "hotel_id"))
     @Column(name = "image_url")
     private List<String> imageUrls;
-	
-	@Column(name = "check_in_date")
-	private LocalDate checkInDate;
+    
+    @Column(name = "check_in_date")
+    private LocalDate checkInDate;
 
-	@Column(name = "check_out_date")
-	private LocalDate checkOutDate;
+    @Column(name = "check_out_date")
+    private LocalDate checkOutDate;
+    
+    @Column
+	private Float lat;
+	
+	@Column
+	private Float lng;
 }
