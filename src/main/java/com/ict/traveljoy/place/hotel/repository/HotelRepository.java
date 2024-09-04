@@ -9,7 +9,7 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
 
     List<Hotel> findByHotelName(String hotelName);
 
-    // 주소와 날짜를 기준으로 호텔 검색
-    List<Hotel> findByAddressContainingAndCheckInDateLessThanEqualAndCheckOutDateGreaterThanEqual(
-            String address, LocalDate checkInDate, LocalDate checkOutDate);
+    // 지역 이름과 날짜를 기준으로 호텔 검색
+    List<Hotel> findByRegionNameContainingAndCheckInDateLessThanEqualAndCheckOutDateGreaterThanEqual(
+            String regionName, LocalDate checkInDate, LocalDate checkOutDate);
 }
