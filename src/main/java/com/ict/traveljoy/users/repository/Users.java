@@ -70,7 +70,7 @@ public class Users {
     private Integer gender;
 	
 	@Column(length = 30)
-	@ColumnDefault("'local'")
+	@ColumnDefault("'email'")
 	private String loginType;
 	
 	@Column
