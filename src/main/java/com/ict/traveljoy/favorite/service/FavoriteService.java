@@ -6,9 +6,10 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ict.traveljoy.favorite.repository.Favorite;
 import com.ict.traveljoy.favorite.repository.FavoriteRepository;
+import com.ict.traveljoy.place.hotel.repository.Hotel;
+import com.ict.traveljoy.place.hotel.repository.HotelRepository;
 import com.ict.traveljoy.users.repository.UserRepository;
 import com.ict.traveljoy.users.repository.Users;
 
@@ -18,115 +19,127 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FavoriteService {
 
-	private final FavoriteRepository favoriteRepository;
-	private final UserRepository userRepository;
-	private final ObjectMapper objectMapper;
+    private final FavoriteRepository favoriteRepository;
+    private final UserRepository userRepository;
+    private final HotelRepository hotelRepository;
 
-	public FavoriteDTO addFavorite(String useremail, FavoriteDTO dto,String target) {
+    public FavoriteDTO addFavorite(String useremail, FavoriteDTO dto, String target) {
+        Users user = userRepository.findByEmail(useremail)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-		Users user = userRepository.findByEmail(useremail).get();
-		
-		Favorite newFav = dto.toEntity();
-		newFav.setUser(user);
-		
-		switch(target) {
-			case "event":
-				newFav.setIsEvent(1);
-				break;
-			case "food":
-				newFav.setIsFood(1);
-				break;
-			case "sight":
-				newFav.setIsSight(1);
-				break;
-			default:
-				newFav.setIsHotel(1);
-				break;
-		}
-		return FavoriteDTO.toDTO(favoriteRepository.save(newFav));
-	}
+        Favorite newFav = dto.toEntity();
+        newFav.setUser(user);
 
-	@Transactional(readOnly = true)
-	public List<FavoriteDTO> getFavoriteAll(String useremail) {
-		Users user = userRepository.findByEmail(useremail).get();
-		
-		List<Favorite> favoriteEntityList =  favoriteRepository.findAllByUser_Id(user.getId());
+        if ("hotel".equalsIgnoreCase(target)) {
+            Hotel hotel = hotelRepository.findById(dto.getTargetId())
+                    .orElseThrow(() -> new IllegalArgumentException("Hotel not found"));
+            newFav.setHotel(hotel);
+            newFav.setIsHotel(1);
+        } else {
+            switch (target) {
+                case "event":
+                    newFav.setIsEvent(1);
+                    break;
+                case "food":
+                    newFav.setIsFood(1);
+                    break;
+                case "sight":
+                    newFav.setIsSight(1);
+                    break;
+                default:
+                    throw new IllegalArgumentException("Invalid target type: " + target);
+            }
+        }
+        return FavoriteDTO.toDTO(favoriteRepository.save(newFav));
+    }
 
-		return objectMapper.convertValue(favoriteEntityList, objectMapper.getTypeFactory().defaultInstance().constructCollectionType(List.class,FavoriteDTO.class));
-	}
+    @Transactional(readOnly = true)
+    public List<FavoriteDTO> getFavoriteAll(String useremail) {
+        Users user = userRepository.findByEmail(useremail)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-	//target에 따라 favorite내용 모두 가져오기
-	@Transactional(readOnly = true)
-	public List<FavoriteDTO> getFavoriteAllByTarget(String target,String useremail){
-		// target : event / food / sight / hotel
-		
-		Users user = userRepository.findByEmail(useremail).get();
-				
-		List<Favorite> favoriteEntityList;
-		switch(target) {
-			case "event":
-				favoriteEntityList = favoriteRepository.findAllByUser_IdAndIsEventAndIsActive(user.getId(),1,1);
-				break;// findAllBy엔터티_필드명();
-			case "food":
-				favoriteEntityList = favoriteRepository.findAllByUser_IdAndIsFoodAndIsActive(user.getId(),1,1);
-				break;
-			case "sight":
-				favoriteEntityList = favoriteRepository.findAllByUser_IdAndIsSightAndIsActive(user.getId(),1,1);
-				break;
-			default:
-				favoriteEntityList = favoriteRepository.findAllByUser_IdAndIsHotelAndIsActive(user.getId(),1,1);
-				break;
-		}
+        List<Favorite> favoriteEntityList = favoriteRepository.findAllByUser_IdAndIsDelete(user.getId(), 0);
 
-		return objectMapper.convertValue(favoriteEntityList, objectMapper.getTypeFactory().defaultInstance().constructCollectionType(List.class,FavoriteDTO.class));
-	}
+        return favoriteEntityList.stream()
+                .map(FavoriteDTO::toDTO)
+                .collect(Collectors.toList());
+    }
 
-	// targetId에 따라 내용 가져오기(url)
-	@Transactional(readOnly = true)
-	public FavoriteDTO getFavoriteByTargetId(String target,long targetId) {
-		Favorite favorite;
-		switch(target) {
-			case "event":
-//			favorite = favoriteRepository.findByEventId(targetId);
-				break;// findAllBy엔터티_필드명();
-			case "food":
-//			favorite = favoriteRepository.findByFoodId(targetId);
-				break;
-			case "sight":
-//			favorite = favoriteRepository.findBySightId(targetId);
-				break;
-			default:
-				//favorite = favoriteRepository.findByHotelId(targetId);
-				break;
-		}
+    @Transactional(readOnly = true)
+    public List<FavoriteDTO> getFavoriteAllByTarget(String target, String useremail) {
+        Users user = userRepository.findByEmail(useremail)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-		return null;
-	}
+        List<Favorite> favoriteEntityList;
+        switch (target) {
+            case "event":
+                favoriteEntityList = favoriteRepository.findAllByUser_IdAndIsEventAndIsActiveAndIsDelete(user.getId(), 1, 1, 0);
+                break;
+            case "food":
+                favoriteEntityList = favoriteRepository.findAllByUser_IdAndIsFoodAndIsActiveAndIsDelete(user.getId(), 1, 1, 0);
+                break;
+            case "sight":
+                favoriteEntityList = favoriteRepository.findAllByUser_IdAndIsSightAndIsActiveAndIsDelete(user.getId(), 1, 1, 0);
+                break;
+            case "hotel":
+                favoriteEntityList = favoriteRepository.findAllByUser_IdAndIsHotelAndIsActiveAndIsDelete(user.getId(), 1, 1, 0);
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid target type: " + target);
+        }
 
+        return favoriteEntityList.stream()
+                .map(FavoriteDTO::toDTO)
+                .collect(Collectors.toList());
+    }
 
+    @Transactional(readOnly = true)
+    public FavoriteDTO getFavoriteByTargetId(String target, long targetId) {
+        Favorite favorite = favoriteRepository.findById(targetId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid targetId"));
 
-	//즐겨찾기 삭제
-	public FavoriteDTO removebyId(long id) {
-		if(favoriteRepository.existsById(id)) {
-			Favorite favorite = favoriteRepository.findById(id).get();
-//			favoriteRepository.deleteById(id);
-			favorite.setIsActive(0);
-			favorite.setIsDelete(1);
-			favoriteRepository.save(favorite);
-			return FavoriteDTO.toDTO(favorite);
-		}
-		else throw new IllegalArgumentException("오류");
-	}
+        if ("hotel".equalsIgnoreCase(target) && favorite.getIsHotel() == 1) {
+            Hotel hotel = hotelRepository.findById(favorite.getTargetId())
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid hotelId"));
+            favorite.setHotel(hotel);
+        }
 
-	public FavoriteDTO removeAll() {
-//		favoriteRepository.deleteAll();
-		List<Favorite> favoriteEntityList =  favoriteRepository.findAll();
-		for(Favorite fav:favoriteEntityList) {
-			fav.setIsActive(0);
-			fav.setIsDelete(1);
-		}
-		favoriteRepository.saveAll(favoriteEntityList);
-		return null;
-	}
+        return FavoriteDTO.toDTO(favorite);
+    }
 
+    public FavoriteDTO removebyId(long id) {
+        if (favoriteRepository.existsById(id)) {
+            Favorite favorite = favoriteRepository.findById(id).get();
+            favorite.setIsActive(0);
+            favorite.setIsDelete(1);
+            favoriteRepository.save(favorite);
+            return FavoriteDTO.toDTO(favorite);
+        } else {
+            throw new IllegalArgumentException("오류");
+        }
+    }
+
+    public FavoriteDTO removeAll() {
+        List<Favorite> favoriteEntityList = favoriteRepository.findAll();
+        for (Favorite fav : favoriteEntityList) {
+            fav.setIsActive(0);
+            fav.setIsDelete(1);
+        }
+        favoriteRepository.saveAll(favoriteEntityList);
+        return null;
+    }
+    
+    public FavoriteDTO updateMemo(Long id, String memo, String useremail) {
+        Favorite favorite = favoriteRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Favorite not found"));
+        favorite.setMemo(memo);
+        return FavoriteDTO.toDTO(favoriteRepository.save(favorite));
+    }
+    
+    @Transactional(readOnly = true)
+    public String getMemo(Long id, String useremail) {
+    	Favorite favorite = favoriteRepository.findById(id)
+    			.orElseThrow(()->new IllegalArgumentException("Favorite not found"));
+    	return favorite.getMemo();
+    }
 }
