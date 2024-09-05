@@ -15,7 +15,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Builder(toBuilder = true)
 public class ImageDTO {
 	
 	private Long id;
@@ -26,7 +26,7 @@ public class ImageDTO {
 	private LocalDateTime deleteDate;
 	private String imageType;
 	
-	public Image toImage() {
+	public Image toEntity() {
 		return Image.builder()
 				.id(id)
 				.imageUrl(imageUrl)
