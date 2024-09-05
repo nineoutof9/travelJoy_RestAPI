@@ -30,7 +30,7 @@ import java.util.List;
 
 @Tag(name="Place 관리", description = "이벤트, 식당, 숙박, 명소, 교통수단, 지역에 대한 CRUD.")
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin
 @RequestMapping("/api/places")
 public class PlaceController {
 	
