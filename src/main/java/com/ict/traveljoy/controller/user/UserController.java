@@ -125,12 +125,16 @@ public class UserController {
 	            user.setBirthDate(Date.valueOf((String) updatedProfile.get("birthDate"))); // Date로 변환
 	        }
 	        if (updatedProfile.containsKey("gender")) {
-	            // 문자열을 Boolean으로 변환 후 Integer로 설정
 	            String genderStr = (String) updatedProfile.get("gender");
-	            Boolean gender = Boolean.valueOf(genderStr);
-	            user.setGender(gender);
+	            if(genderStr.equals("null")) {
+	            	user.setGender(null);
+	            }
+	            else {
+		            Boolean gender = Boolean.valueOf(genderStr);
+		            user.setGender(gender);
+	            }
 	        }
-
+	        
 	        // 프로필 정보 업데이트
 	        userService.updateProfile(user);
 
@@ -355,7 +359,7 @@ public class UserController {
 	         HttpHeaders logoutHeaders = new HttpHeaders();
 	         HttpEntity<String> logoutRequestEntity = new HttpEntity<>(logoutHeaders);
 	         ResponseEntity<String> logoutResponse = restTemplate.exchange(logoutUrl, HttpMethod.GET, logoutRequestEntity, String.class);
-        
+
 	         response.sendRedirect("http://localhost:3000/user/signin?status=success&message="+URLEncoder.encode("회원가입이 성공하였습니다", StandardCharsets.UTF_8.toString()));
 	    	 }
 	    	 else {
