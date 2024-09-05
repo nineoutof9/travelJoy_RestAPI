@@ -51,7 +51,9 @@ public class RegionService {
     }
 
     // 이름으로 Region 엔터티 검색
-    public Optional<RegionDTO> getRegionByName(String name) {
-        return regionRepository.findByName(name).map(RegionDTO::toDto);
+    public List<RegionDTO> getRegionByName(String name) {
+        return regionRepository.findByName(name).stream()
+                .map(RegionDTO::toDto)
+                .collect(Collectors.toList());
     }
 }
