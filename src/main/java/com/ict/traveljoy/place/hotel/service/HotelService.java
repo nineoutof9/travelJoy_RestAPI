@@ -1,16 +1,17 @@
 package com.ict.traveljoy.place.hotel.service;
 
+import com.ict.traveljoy.place.hotel.repository.Hotel;
+import com.ict.traveljoy.place.hotel.repository.HotelRepository;
+import com.ict.traveljoy.place.region.repository.Region;
+import com.ict.traveljoy.place.region.repository.RegionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import jakarta.transaction.Transactional;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import com.ict.traveljoy.place.hotel.repository.Hotel;
-import com.ict.traveljoy.place.hotel.repository.HotelRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
@@ -18,6 +19,9 @@ public class HotelService {
 
     @Autowired
     private HotelRepository hotelRepository;
+
+    @Autowired
+    private RegionRepository regionRepository; 
 
     // 모든 숙소 검색
     public List<HotelDTO> findAllHotels() {
@@ -38,7 +42,15 @@ public class HotelService {
         if (hotelDTO.getHotelName() == null || hotelDTO.getHotelName().isEmpty()) {
             throw new IllegalArgumentException("숙소 이름이 비어있어요");
         }
-        Hotel hotel = hotelDTO.toEntity();
+
+        // 동일한 이름을 가진 첫 번째 Region 사용
+        List<Region> regions = regionRepository.findByName(hotelDTO.getRegionName());
+        if (regions.isEmpty()) {
+            throw new IllegalArgumentException("주어진 지역이 존재하지 않아요");
+        }
+        Region region = regions.get(0);  // 첫 번째 Region을 사용
+
+        Hotel hotel = hotelDTO.toEntity(region);
         hotel = hotelRepository.save(hotel);
         return HotelDTO.toDto(hotel);
     }
@@ -50,9 +62,23 @@ public class HotelService {
 
         if (hotelOpt.isPresent()) {
             Hotel hotel = hotelOpt.get();
+
+            if (hotelDTO.getRegionName() != null) {
+                // 동일한 이름을 가진 첫 번째 Region 사용
+                List<Region> regions = regionRepository.findByName(hotelDTO.getRegionName());
+                if (regions.isEmpty()) {
+                    throw new IllegalArgumentException("주어진 지역이 존재하지 않아요");
+                }
+                Region region = regions.get(0);  // 첫 번째 Region을 사용
+                hotel.setRegion(region);
+            }
+
             hotel.setHotelName(hotelDTO.getHotelName());
-            hotel.setAddress(hotelDTO.getAddress());
             hotel.setAveragePrice(hotelDTO.getAveragePrice());
+            hotel.setImageUrls(hotelDTO.getImageUrls());
+            hotel.setAverageReviewRate(hotelDTO.getAverageReviewRate());
+            hotel.setCheckInDate(hotelDTO.getCheckInDate());
+            hotel.setCheckOutDate(hotelDTO.getCheckOutDate());
 
             Hotel updatedHotel = hotelRepository.save(hotel);
             return HotelDTO.toDto(updatedHotel);
@@ -78,12 +104,11 @@ public class HotelService {
                 .collect(Collectors.toList());
     }
 
-    // 주소와 날짜를 기반으로 숙소 검색
-    public List<HotelDTO> findHotelsByAddressAndDates(String address, LocalDate checkInDate, LocalDate checkOutDate) {
-        return hotelRepository.findByAddressContainingAndCheckInDateLessThanEqualAndCheckOutDateGreaterThanEqual(
-                address, checkInDate, checkOutDate).stream()
+    // 지역 이름과 날짜를 기반으로 숙소 검색
+    public List<HotelDTO> findHotelsByRegionNameAndDates(String regionName, LocalDate checkInDate, LocalDate checkOutDate) {
+        return hotelRepository.findByRegionNameContainingAndCheckInDateLessThanEqualAndCheckOutDateGreaterThanEqual(
+                regionName, checkInDate, checkOutDate).stream()
                 .map(HotelDTO::toDto)
                 .collect(Collectors.toList());
     }
-
 }

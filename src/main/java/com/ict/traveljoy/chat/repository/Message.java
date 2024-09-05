@@ -38,11 +38,11 @@ public class Message {
 	@Column(name = "MESSAGE_ID")
 	private Long id;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
     @JoinColumn(name = "CHATROOM_ID", nullable = false)
 	private ChatRoom chatRoom;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
     @JoinColumn(name = "USER_ID", nullable = false)
 	private Users user;
 	

@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.ict.traveljoy.place.food.repository.Food;
 import com.ict.traveljoy.place.food.repository.FoodRepository;
+import com.ict.traveljoy.place.region.repository.Region;
+import com.ict.traveljoy.place.region.repository.RegionRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -18,6 +20,9 @@ public class FoodService {
 
     @Autowired
     private FoodRepository foodRepository;
+    
+    @Autowired
+    private RegionRepository regionRepository;
 
     // 모든 음식 검색
     public List<FoodDTO> findAllFoods() {
@@ -35,31 +40,79 @@ public class FoodService {
     // 음식 저장
     @Transactional
     public FoodDTO saveFood(FoodDTO foodDto) {
-    	if (foodDto.getFoodName().isEmpty()) {
-    		throw new IllegalArgumentException("음식 이름이 비어있어요");
-    	}
+        if (foodDto.getFoodName() == null || foodDto.getFoodName().isEmpty()) {
+            throw new IllegalArgumentException("음식 이름이 비어있어요");
+        }
+
+        // Region 정보 확인 및 처리
+        Region region = foodDto.getRegion();
+        if (region == null || region.getName() == null || region.getName().isEmpty()) {
+            throw new IllegalArgumentException("Region 정보가 없거나 올바르지 않습니다.");
+        }
+
+        // 동일한 이름을 가진 Region 중 첫 번째 Region 사용
+        List<Region> regions = regionRepository.findByName(region.getName());
+        if (regions.isEmpty()) {
+            System.out.println("새로운 Region 저장: " + region.getName());
+            region = regionRepository.save(region);  // 새로운 Region 저장
+        } else {
+            region = regions.get(0);  // 첫 번째 Region 사용
+        }
+
+        // Food Entity 생성 및 저장
         Food food = foodDto.toEntity();
+        food.setRegion(region);  // 저장된 Region 설정
+
+        // Print 디버깅: 저장할 Food 정보
+        System.out.println("Saving food: " + food.getFoodName());
+        System.out.println("Food region: " + food.getRegion().getName());
+
         food = foodRepository.save(food);
+
+        // Print 디버깅: 저장된 음식 정보 출력
+        System.out.println("Saved food with ID: " + food.getId());
+
         return FoodDTO.toDto(food);
     }
     
- // 음식 수정
+    // 음식 수정
     @Transactional
     public FoodDTO updateFood(Long id, FoodDTO foodDto) {
         Optional<Food> foodOpt = foodRepository.findById(id);
 
         if (foodOpt.isPresent()) {
             Food food = foodOpt.get();
-            food.setFoodType(foodDto.getFoodType());
-            food.setDescriptions(foodDto.getDescriptions());
+
+            // Region의 name 필드에 country 값을 업데이트하는 로직 추가
+            Region region = foodDto.getRegion();
+            if (region == null || region.getName() == null || region.getName().isEmpty()) {
+                throw new IllegalArgumentException("Region 정보가 없거나 올바르지 않습니다.");
+            }
+
+            // 동일한 이름을 가진 Region 중 첫 번째 Region 사용
+            List<Region> regions = regionRepository.findByName(region.getName());
+            if (regions.isEmpty()) {
+                System.out.println("새로운 Region 저장: " + region.getName());
+                region = regionRepository.save(region);  // 새로운 Region 저장
+            } else {
+                region = regions.get(0);  // 첫 번째 Region 사용
+            }
+
+            // 음식 정보 업데이트
             food.setFoodName(foodDto.getFoodName());
-            food.setRegion(foodDto.getRegion());
+            food.setRegion(region);  // Region 업데이트
             food.setAddress(foodDto.getAddress());
-            food.setTotalReviewCount(foodDto.getTotalReviewCount());
             food.setAveragePrice(foodDto.getAveragePrice());
             food.setAverageReviewRate(foodDto.getAverageReviewRate());
-            
+            food.setLat(foodDto.getLat());
+            food.setLng(foodDto.getLng());
+            food.setIsHasImage(foodDto.getIsHasImage() != null && foodDto.getIsHasImage() ? 1 : 0); // Convert Boolean to Integer
+
             Food updatedFood = foodRepository.save(food);
+
+            // Print 디버깅: 업데이트된 음식 정보 출력
+            System.out.println("Updated food with ID: " + updatedFood.getId());
+
             return FoodDTO.toDto(updatedFood);
         } else {
             throw new IllegalArgumentException("주어진 번호의 음식을 찾을 수 없어요");
@@ -70,6 +123,7 @@ public class FoodService {
     @Transactional
     public void deleteFood(Long id) {
         if (foodRepository.existsById(id)) {
+            System.out.println("Deleting food with ID: " + id);
             foodRepository.deleteById(id);
         } else {
             throw new IllegalArgumentException("주어진 번호의 음식을 찾을 수 없어요");

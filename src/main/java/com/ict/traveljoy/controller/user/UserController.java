@@ -359,11 +359,12 @@ public class UserController {
 	         HttpHeaders logoutHeaders = new HttpHeaders();
 	         HttpEntity<String> logoutRequestEntity = new HttpEntity<>(logoutHeaders);
 	         ResponseEntity<String> logoutResponse = restTemplate.exchange(logoutUrl, HttpMethod.GET, logoutRequestEntity, String.class);
-	         
+
 	         response.sendRedirect("http://localhost:3000/user/signin?status=success&message="+URLEncoder.encode("회원가입이 성공하였습니다", StandardCharsets.UTF_8.toString()));
 	    	 }
 	    	 else {
 	    		 response.sendRedirect("http://localhost:3000/user/signin?status=error&message="+URLEncoder.encode("이미 사용중인 이메일입니다", StandardCharsets.UTF_8.toString()));
+
 	    	 }
 	     }
 	 }
@@ -452,6 +453,7 @@ public class UserController {
 	    	 }
 	    	 else {
 	    		 response.sendRedirect("http://localhost:3000/user/signin?status=error&message="+URLEncoder.encode("이미 사용중인 이메일입니다", StandardCharsets.UTF_8.toString()));
+
 	    	 }
 	     }
 	 }

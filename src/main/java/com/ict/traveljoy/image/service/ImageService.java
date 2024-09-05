@@ -3,6 +3,7 @@ package com.ict.traveljoy.image.service;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ict.traveljoy.image.repository.Image;
 import com.ict.traveljoy.image.repository.ImageRepository;
+import com.ict.traveljoy.users.repository.Users;
 
 import lombok.RequiredArgsConstructor;
 
