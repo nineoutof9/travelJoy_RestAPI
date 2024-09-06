@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ict.traveljoy.favorite.repository.Favorite;
 import com.ict.traveljoy.favorite.repository.FavoriteRepository;
+import com.ict.traveljoy.place.food.repository.Food;
+import com.ict.traveljoy.place.food.repository.FoodRepository;  // FoodRepository 추가
 import com.ict.traveljoy.place.hotel.repository.Hotel;
 import com.ict.traveljoy.place.hotel.repository.HotelRepository;
 import com.ict.traveljoy.users.repository.UserRepository;
@@ -22,6 +24,7 @@ public class FavoriteService {
     private final FavoriteRepository favoriteRepository;
     private final UserRepository userRepository;
     private final HotelRepository hotelRepository;
+    private final FoodRepository foodRepository;  
 
     public FavoriteDTO addFavorite(String useremail, FavoriteDTO dto, String target) {
         Users user = userRepository.findByEmail(useremail)
@@ -35,13 +38,15 @@ public class FavoriteService {
                     .orElseThrow(() -> new IllegalArgumentException("Hotel not found"));
             newFav.setHotel(hotel);
             newFav.setIsHotel(1);
+        } else if ("food".equalsIgnoreCase(target)) {
+            Food food = foodRepository.findById(dto.getTargetId())
+                    .orElseThrow(() -> new IllegalArgumentException("Food not found"));
+            newFav.setFood(food);  
+            newFav.setIsFood(1);
         } else {
             switch (target) {
                 case "event":
                     newFav.setIsEvent(1);
-                    break;
-                case "food":
-                    newFav.setIsFood(1);
                     break;
                 case "sight":
                     newFav.setIsSight(1);
@@ -102,6 +107,10 @@ public class FavoriteService {
             Hotel hotel = hotelRepository.findById(favorite.getTargetId())
                     .orElseThrow(() -> new IllegalArgumentException("Invalid hotelId"));
             favorite.setHotel(hotel);
+        } else if ("food".equalsIgnoreCase(target) && favorite.getIsFood() == 1) {
+            Food food = foodRepository.findById(favorite.getTargetId())
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid foodId"));
+            favorite.setFood(food);  // Food 설정
         }
 
         return FavoriteDTO.toDTO(favorite);
@@ -139,7 +148,7 @@ public class FavoriteService {
     @Transactional(readOnly = true)
     public String getMemo(Long id, String useremail) {
     	Favorite favorite = favoriteRepository.findById(id)
-    			.orElseThrow(()->new IllegalArgumentException("Favorite not found"));
+    			.orElseThrow(() -> new IllegalArgumentException("Favorite not found"));
     	return favorite.getMemo();
     }
 }

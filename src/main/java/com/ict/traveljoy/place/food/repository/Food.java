@@ -75,6 +75,6 @@ public class Food {
     @Column
     private String tel;
     
-    @Column
+    @Column(length = 1000)
     private String workingTime;
 }

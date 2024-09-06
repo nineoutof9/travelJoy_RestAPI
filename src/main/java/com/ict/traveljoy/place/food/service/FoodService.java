@@ -63,6 +63,13 @@ public class FoodService {
         Food food = foodDto.toEntity();
         food.setRegion(region);  // 저장된 Region 설정
 
+        // 이미지 URL이 있으면 is_has_image를 1로 설정
+        if (foodDto.getImageUrls() != null && !foodDto.getImageUrls().isEmpty()) {
+            food.setIsHasImage(1);  // 이미지가 있으면 is_has_image를 1로 설정
+        } else {
+            food.setIsHasImage(0);  // 이미지가 없으면 is_has_image를 0으로 설정
+        }
+
         // Print 디버깅: 저장할 Food 정보
         System.out.println("Saving food: " + food.getFoodName());
         System.out.println("Food region: " + food.getRegion().getName());
@@ -106,7 +113,13 @@ public class FoodService {
             food.setAverageReviewRate(foodDto.getAverageReviewRate());
             food.setLat(foodDto.getLat());
             food.setLng(foodDto.getLng());
-            food.setIsHasImage(foodDto.getIsHasImage() != null && foodDto.getIsHasImage() ? 1 : 0); // Convert Boolean to Integer
+
+            // 이미지 URL이 있으면 is_has_image를 1로 설정
+            if (foodDto.getImageUrls() != null && !foodDto.getImageUrls().isEmpty()) {
+                food.setIsHasImage(1);  // 이미지가 있으면 is_has_image를 1로 설정
+            } else {
+                food.setIsHasImage(0);  // 이미지가 없으면 is_has_image를 0으로 설정
+            }
 
             Food updatedFood = foodRepository.save(food);
 
