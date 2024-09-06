@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.ict.traveljoy.favorite.repository.Favorite;
+import com.ict.traveljoy.place.food.repository.Food;
 import com.ict.traveljoy.place.hotel.repository.Hotel;
 import com.ict.traveljoy.place.region.repository.Region;
 import com.ict.traveljoy.users.repository.Users;
@@ -32,11 +33,16 @@ public class FavoriteDTO {
     private Boolean isDelete;
     private LocalDateTime createDate;
     private LocalDateTime deleteDate;
-    private String hotelName;  // 추가된 필드
-    private List<String> hotelImageUrls;  // 추가된 필드
-    private String regionName;  // 추가된 필
+    private String hotelName;
+    private List<String> hotelImageUrls;
+    private String regionName;
     private String target;
     private String memo;
+    private String foodName;
+    private String foodAddress;
+    private List<String> foodImageUrls;
+    private String foodTel;
+    private String foodWorkingTime;
 
     public Favorite toEntity() {
         switch (target.toLowerCase()) {
@@ -84,6 +90,13 @@ public class FavoriteDTO {
         List<String> hotelImageUrls = hotel != null ? hotel.getImageUrls() : null;
         String regionName = hotel != null && hotel.getRegion() != null ? hotel.getRegion().getName() : null;
 
+        Food food = favorite.getFood();
+        String foodName = food != null ? food.getFoodName() : null;
+        String foodAddress = food != null ? food.getAddress() : null;
+        List<String> foodImageUrls = food != null ? food.getImageUrls() : null;
+        String foodTel = food != null ? food.getTel() : null;
+        String foodWorkingTime = food != null ? food.getWorkingTime() : null;
+
         return FavoriteDTO.builder()
                 .id(favorite.getId())
                 .user(favorite.getUser())
@@ -97,9 +110,14 @@ public class FavoriteDTO {
                 .createDate(favorite.getCreateDate())
                 .deleteDate(favorite.getDeleteDate())
                 .target(target)
-                .hotelName(hotelName)  // 추가된 필드 설정
-                .hotelImageUrls(hotelImageUrls)  // 추가된 필드 설정
-                .regionName(regionName)  // 추가된 필드 설정
+                .hotelName(hotelName)
+                .hotelImageUrls(hotelImageUrls)
+                .regionName(regionName)
+                .foodName(foodName)
+                .foodAddress(foodAddress)
+                .foodImageUrls(foodImageUrls)
+                .foodTel(foodTel)
+                .foodWorkingTime(foodWorkingTime)
                 .memo(favorite.getMemo())
                 .build();
     }
