@@ -41,11 +41,11 @@ public class SearchHistory {
 	@Column(name="SEARCH_HISTORY_ID")
 	private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "USER_ID", nullable = false)
 	private Users user;
 
-	@Column(name="SEARCH_WORD")
+	@Column(name="SEARCH_WORD",length = 2000)
 	private String searchWord;
 
 	@Column(name="SEARCH_DATE")
