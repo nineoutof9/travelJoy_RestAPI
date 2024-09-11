@@ -43,6 +43,8 @@ public class FavoriteDTO {
     private List<String> foodImageUrls;
     private String foodTel;
     private String foodWorkingTime;
+    private Float lat;  // 추가된 필드
+    private Float lng;  // 추가된 필드
 
     public Favorite toEntity() {
         switch (target.toLowerCase()) {
@@ -89,6 +91,8 @@ public class FavoriteDTO {
         String hotelName = hotel != null ? hotel.getHotelName() : null;
         List<String> hotelImageUrls = hotel != null ? hotel.getImageUrls() : null;
         String regionName = hotel != null && hotel.getRegion() != null ? hotel.getRegion().getName() : null;
+        Float lat = hotel != null ? hotel.getLat() : null;
+        Float lng = hotel != null ? hotel.getLng() : null;
 
         Food food = favorite.getFood();
         String foodName = food != null ? food.getFoodName() : null;
@@ -97,10 +101,17 @@ public class FavoriteDTO {
         String foodTel = food != null ? food.getTel() : null;
         String foodWorkingTime = food != null ? food.getWorkingTime() : null;
 
+        if (food != null) {
+            lat = food.getLat();
+            lng = food.getLng();
+        }
+
         return FavoriteDTO.builder()
                 .id(favorite.getId())
                 .user(favorite.getUser())
                 .targetId(favorite.getTargetId())
+                .lat(lat)  // 추가된 필드
+                .lng(lng)  // 추가된 필드
                 .isEvent(favorite.getIsEvent() == 1)
                 .isFood(favorite.getIsFood() == 1)
                 .isSight(favorite.getIsSight() == 1)
