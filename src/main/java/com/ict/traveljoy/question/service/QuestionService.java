@@ -26,15 +26,14 @@ public class QuestionService {
 	private final ObjectMapper objectMapper;
 	
 	
-	public QuestionDTO createQuestion(String useremail,String category, QuestionDTO questionDTO) {
-		
-		Question question = questionDTO.toEntity();
-		
+	public QuestionDTO createQuestion(String useremail,String category, String title,String content) {
+				
 		Users user = userRepository.findByEmail(useremail).get();
-		question.setUser(user);
+		QuestionDTO newQuestion = QuestionDTO.builder().user(user).questionTitle(title).questionContent(content).isHasAnswer(false).build();
 		QuestionCategory questionCategory = questionCategoryService.findCategoryByCategoryName(category);
 		if(questionCategory!=null) {
-			question.setQuestionCategory(questionCategory);
+			newQuestion.setQuestionCategory(questionCategory);
+			Question question = newQuestion.toEntity();
 			Question afterSave = questionRepostiory.save(question);
 			return QuestionDTO.toDTO(afterSave);
 		}
@@ -86,8 +85,12 @@ public class QuestionService {
 	public QuestionDTO updateById(long questionId,QuestionDTO questionDTO) {
 		if(questionRepostiory.existsById(questionId)) {
 			Question beforeQuestion = questionRepostiory.findById(questionId).get();
-			beforeQuestion.setQuestionCategory(questionDTO.getQuestionCategory());
 			beforeQuestion.setQuestionContent(questionDTO.getQuestionContent());
+			
+			QuestionCategory updateCategory = questionCategoryService.findCategoryByCategoryName(questionDTO.getQuestionCategory().getQuestionCategoryName());
+			beforeQuestion.setQuestionCategory(updateCategory);
+			
+			
 			Question updatedQuestion = questionRepostiory.save(beforeQuestion);
 			return QuestionDTO.toDTO(updatedQuestion);
 		}
@@ -104,20 +107,24 @@ public class QuestionService {
 		else return 0;
 	}
 
-	public QuestionDTO deleteById(long questionId) {
+	public Boolean deleteById(long questionId) {
 		if(questionRepostiory.existsById(questionId)) {
 			Question question = questionRepostiory.findById(questionId).orElseThrow(() -> new RuntimeException("Question not found"));
-			boolean answerDeleted = false;
+			boolean questionDeleteProceed = false;
 			if(question.getIsHasAnswer()==1) {
-				answerDeleted = answerService.deleteByQuestionId(questionId);
-				if(answerDeleted) {
-					questionRepostiory.delete(question);
-					return QuestionDTO.toDTO(question);
-				}
+				questionDeleteProceed = answerService.deleteByQuestionId(questionId);
+			}
+			else {
+				questionDeleteProceed=true;
+			}
+			if(questionDeleteProceed) {
+				questionRepostiory.delete(question);
+				System.out.println("지웟따.");
+				return true;
 			}
 		}
 		else throw new IllegalArgumentException("삭제 실패");
-		return null;
+		return false;
 	}
 
 	
