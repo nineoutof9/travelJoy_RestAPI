@@ -1,5 +1,8 @@
 package com.ict.traveljoy.notice.service;
 
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,14 +40,22 @@ public class ViewCountService {
 	
 	// 단순 횟수 받아오기
 	@Transactional(readOnly = true) //notice id별 sum(count), datetime에 따라 증가
-	public ViewCountDTO findbyNoticeId(long noticeId) {
-		if(noticeRepository.existsById(noticeId) && viewCountRepository.existsByNotice_Id(noticeId)) {
-			ViewCount viewCountEntity = viewCountRepository.findByNotice_Id(noticeId);
-			return ViewCountDTO.toDTO(viewCountEntity);
-	
-		}
-		else throw new IllegalArgumentException("오류");
-	}
+	public ViewCount findbyNoticeId(Long noticeId) {
+        if (noticeId == null || noticeId <= 0) {
+            throw new IllegalArgumentException("Invalid noticeId: " + noticeId);
+        }
+
+        // NoticeId로 조회하는 로직
+        // 예: 데이터베이스에서 조회
+        Optional<ViewCount> viewCount = viewCountRepository.findById(noticeId);
+        
+        if (viewCount.isPresent()) {
+            return viewCount.get();
+        } else {
+            // 필요한 경우, 공지사항 ID에 해당하는 뷰 카운트가 없을 때의 처리
+            throw new NoSuchElementException("No view count found for noticeId: " + noticeId);
+        }
+    }
 	
 	// 횟수 증가
 //	 //notice id별, user id별 방문횟수 증가

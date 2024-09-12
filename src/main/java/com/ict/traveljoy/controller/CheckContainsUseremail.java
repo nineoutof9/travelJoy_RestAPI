@@ -14,9 +14,9 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class CheckContainsUseremail {
-	
-	
-	private final JwtUtility jwtUtil;
+   
+   
+   private final JwtUtility jwtUtil;
 
 	public String checkContainsUseremail(HttpServletRequest request) {
 	    String authorization = request.getHeader("Authorization");
@@ -56,3 +56,4 @@ public class CheckContainsUseremail {
 	    return useremail;
 	}
 }
+

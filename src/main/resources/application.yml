@@ -5,12 +5,14 @@ jwt:
 spring:
   datasource:
     driver-class-name: oracle.jdbc.OracleDriver
-#    url: jdbc:oracle:thin:@211.109.103.98:51521/XEPDB1
-#    username: ICTUSER
-#    password: ICT1234
-    url: jdbc:oracle:thin:@localhost:1521/XEPDB1
-    username: skstudy
-    password: sk1234
+
+   url: jdbc:oracle:thin:@211.109.103.98:51521/XEPDB1
+   username: ICTUSER
+   password: ICT1234
+  # url: jdbc:oracle:thin:@localhost:1521/XEPDB1
+  # username: STUDY
+  # password: STUDY
+
 
 
 

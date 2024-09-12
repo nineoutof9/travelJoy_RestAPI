@@ -32,6 +32,7 @@ public class FavoriteService {
 
         Favorite newFav = dto.toEntity();
         newFav.setUser(user);
+        newFav.setIsActive(1);
 
         if ("hotel".equalsIgnoreCase(target)) {
             Hotel hotel = hotelRepository.findById(dto.getTargetId())

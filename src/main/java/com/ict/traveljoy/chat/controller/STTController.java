@@ -6,6 +6,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
+
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +36,7 @@ public class STTController {
 	private final CheckContainsUseremail checkUser;
 
 	//음성파일 업로드 되는지 확인하기. 파일 저장 물어보기(서정덕)
+
 	@PostMapping(value="/record", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<String> speechToText(HttpServletRequest request, @RequestBody byte[] fileData){
 		
@@ -65,8 +67,8 @@ public class STTController {
 	    }
 		
 		/*
-		String clientId = "800jqz8tkl"; //공유금지
-        String clientSecret = "mxiFlgJY7DHGYOLRF9t9ucNWeZTXUeYuK15cHEq0";
+		String clientId = ""; //공유금지
+        String clientSecret = "";
 
         try {
             String imgFile = "음성 파일 경로";
@@ -137,8 +139,8 @@ public class STTController {
         }
         
 		
-		String clientId = "800jqz8tkl";  //공유금지
-        String clientSecret = "mxiFlgJY7DHGYOLRF9t9ucNWeZTXUeYuK15cHEq0"; 
+		String clientId = "";  //공유금지
+        String clientSecret = ""; 
 
         try {
             File voiceFile = new File(System.getProperty("java.io.tmpdir") + "/" + incomingFile.getOriginalFilename());
@@ -149,12 +151,14 @@ public class STTController {
             URL url = new URL(apiURL);
 
             HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+
             conn.setUseCaches(false);
             conn.setDoOutput(true);
             conn.setDoInput(true);
             conn.setRequestProperty("Content-Type", "application/octet-stream");
             conn.setRequestProperty("X-NCP-APIGW-API-KEY-ID", clientId);
             conn.setRequestProperty("X-NCP-APIGW-API-KEY", clientSecret);
+
 
             OutputStream outputStream = conn.getOutputStream();
             FileInputStream inputStream = new FileInputStream(voiceFile);
@@ -190,5 +194,6 @@ public class STTController {
             System.out.println(e);
         }
         return ResponseEntity.status(500).body(null);
+
     }
 }
