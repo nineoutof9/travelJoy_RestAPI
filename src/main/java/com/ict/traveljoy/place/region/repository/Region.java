@@ -32,7 +32,7 @@ public class Region {
     @Column(nullable = false, length = 100)
     private String name;
 
-    @Column(name="region_info",nullable = false, length = 2000)
+    @Column(name="region_info",length = 2000)
     private String regionInfo;
 
 	}

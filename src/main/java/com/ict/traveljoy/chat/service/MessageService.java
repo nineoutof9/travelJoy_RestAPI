@@ -63,6 +63,7 @@ public class MessageService {
 		// 채팅방아이디로 구분, 채팅방 있으면 돌려주기
 		
 		Users user = userRepository.findByEmail(useremail).get();
+		System.out.println(useremail + (user.getPermission()));
 		if(user.getPermission().equalsIgnoreCase("ROLE_ADMIN")) {
 			if(chatRoomRepository.existsById(chatroomId)) {
 				List<Message> messages = messageRepository.findAllByChatRoom_Id(chatroomId);

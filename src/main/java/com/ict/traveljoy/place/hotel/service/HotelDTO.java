@@ -17,23 +17,28 @@ public class HotelDTO {
     private Boolean isHasImage;
     private String averagePrice;
     private String hotelName;
-    private String address;
-    private Float averageReviewRate; 
+    private String regionName; 
+    private Float averageReviewRate;
     private List<String> imageUrls;
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
+    private Float lat;
+    private Float lng;
+    
 
-    public Hotel toEntity() {
+    public Hotel toEntity(Region region) {
         return Hotel.builder()
                 .id(id)
                 .isHasImage(isHasImage != null && isHasImage ? 1 : 0)
                 .averagePrice(averagePrice)
                 .hotelName(hotelName)
-                .address(address)
+                .region(region)
                 .imageUrls(imageUrls)
                 .averageReviewRate(averageReviewRate)
                 .checkInDate(checkInDate)
                 .checkOutDate(checkOutDate)
+                .lat(lat)
+                .lng(lng)
                 .build();
     }
 
@@ -43,11 +48,13 @@ public class HotelDTO {
                 .isHasImage(hotel.getIsHasImage() == 1 ? true : false)
                 .averagePrice(hotel.getAveragePrice())
                 .hotelName(hotel.getHotelName())
-                .address(hotel.getAddress())
+                .regionName(hotel.getRegion() != null ? hotel.getRegion().getName() : null) // Region의 name을 설정
                 .imageUrls(hotel.getImageUrls())
                 .averageReviewRate(hotel.getAverageReviewRate())
                 .checkInDate(hotel.getCheckInDate())
                 .checkOutDate(hotel.getCheckOutDate())
+                .lat(hotel.getLat())
+                .lng(hotel.getLng())
                 .build();
     }
 }

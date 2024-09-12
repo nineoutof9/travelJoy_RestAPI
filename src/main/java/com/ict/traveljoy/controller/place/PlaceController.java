@@ -30,6 +30,7 @@ import java.util.List;
 
 @Tag(name="Place 관리", description = "이벤트, 식당, 숙박, 명소, 교통수단, 지역에 대한 CRUD.")
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api/places")
 public class PlaceController {
 	
@@ -281,14 +282,14 @@ public class PlaceController {
                 checkIn = LocalDate.parse(checkInDate);
                 checkOut = LocalDate.parse(checkOutDate);
                 System.out.println("Parsed dates successfully.");
-            } catch (Exception e) {
+            } catch (DateTimeParseException e) {
                 System.out.println("Failed to parse dates: " + e.getMessage());
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
 
             // Step 3: HotelService 호출
             System.out.println("Calling HotelService to find hotels...");
-            List<HotelDTO> hotels = hotelService.findHotelsByAddressAndDates(address, checkIn, checkOut);
+            List<HotelDTO> hotels = hotelService.findHotelsByRegionNameAndDates(address, checkIn, checkOut);
             System.out.println("HotelService returned " + hotels.size() + " hotels.");
 
             return new ResponseEntity<>(hotels, HttpStatus.OK);

@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ict.traveljoy.chat.service.ChatRoomDTO;
 import com.ict.traveljoy.chat.service.ChatRoomService;
+import com.ict.traveljoy.chat.service.EnterChatRoomDTO;
 import com.ict.traveljoy.chat.service.MessageDTO;
 import com.ict.traveljoy.chat.service.MessageService;
 import com.ict.traveljoy.controller.CheckContainsUseremail;
@@ -66,14 +66,15 @@ public class ChatController {
 	
 	// 채팅 내역 불러오기 - 회원 목록
 	@GetMapping("/users")
-	public ResponseEntity<List<ChatRoomDTO>> getAllChatRoom(HttpServletRequest request) {
+	public ResponseEntity<List<EnterChatRoomDTO>> getAllChatRoom(HttpServletRequest request) {
 		String useremail = checkUser.checkContainsUseremail(request);
 		// 권한 확인하기
 
 		try {
-			List<ChatRoomDTO> chatrooms = chatroomService.getAllChatRoom(useremail);
 
-			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(chatrooms);
+			List<EnterChatRoomDTO> enteredChatrooms = chatroomService.getAllChatRoom(useremail);
+			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(enteredChatrooms);
+
 		}catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

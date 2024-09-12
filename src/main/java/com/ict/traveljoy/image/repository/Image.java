@@ -57,6 +57,6 @@ public class Image {
 	@CreationTimestamp
     private LocalDateTime deleteDate;
 	
-	@OneToOne(mappedBy = "profileImage")
-	private Users user;
+	@Column(length = 50)
+    private String imageType;
 }
