@@ -22,6 +22,7 @@ public class QuestionDTO {
 	private Long id;
 	private Users user;
 	private QuestionCategory questionCategory;
+	private String category;
 	private LocalDateTime questionDate;
 	private String questionTitle;
 	private String questionContent;
