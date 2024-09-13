@@ -1,17 +1,14 @@
 package com.ict.traveljoy.tripReview.service;
 
-import com.ict.traveljoy.image.repository.Image;
-import com.ict.traveljoy.image.repository.ImageRepository;
 import com.ict.traveljoy.plan.repository.Plan;
 import com.ict.traveljoy.plan.repository.PlanRepository;
 import com.ict.traveljoy.tripReview.repository.TripReview;
-import com.ict.traveljoy.tripReview.repository.TripReviewPhoto;
-import com.ict.traveljoy.tripReview.repository.TripReviewPhotoRepository;
 import com.ict.traveljoy.tripReview.repository.TripReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
@@ -20,59 +17,68 @@ import java.util.Optional;
 public class TripReviewService {
 
     private final TripReviewRepository tripReviewRepository;
-    private final TripReviewPhotoRepository tripReviewPhotoRepository;
     private final PlanRepository planRepository;
 
     @Autowired
-    public TripReviewService(TripReviewRepository tripReviewRepository, TripReviewPhotoRepository tripReviewPhotoRepository, PlanRepository planRepository) {
+    public TripReviewService(TripReviewRepository tripReviewRepository, PlanRepository planRepository) {
         this.tripReviewRepository = tripReviewRepository;
-        this.tripReviewPhotoRepository = tripReviewPhotoRepository;
         this.planRepository = planRepository;
     }
 
     @Transactional
-    public TripReviewDTO createReview(TripReviewDTO TripReviewDTO) {
+    public TripReviewDTO createReview(TripReviewDTO tripReviewDTO) {
         // planId를 기반으로 Plan 객체를 설정
-        if (TripReviewDTO.getPlanId() != null) {
-            Optional<Plan> planOptional = planRepository.findById(TripReviewDTO.getPlanId());
+        if (tripReviewDTO.getPlanId() != null) {
+            Optional<Plan> planOptional = planRepository.findById(tripReviewDTO.getPlanId());
             if (planOptional.isPresent()) {
-                TripReviewDTO.setPlan(planOptional.get());
+                tripReviewDTO.setPlan(planOptional.get());
             } else {
-                throw new IllegalArgumentException("Plan with ID " + TripReviewDTO.getPlanId() + " does not exist.");
+                throw new IllegalArgumentException("Plan with ID " + tripReviewDTO.getPlanId() + " does not exist.");
             }
         }
 
-        TripReview tripReview = TripReviewDTO.toEntity();
+        // Validate rating
+        if (tripReviewDTO.getRating() == null || tripReviewDTO.getRating().compareTo(BigDecimal.ZERO) < 0 || tripReviewDTO.getRating().compareTo(BigDecimal.valueOf(5.0)) > 0 || tripReviewDTO.getRating().scale() > 1) {
+            throw new IllegalArgumentException("Rating must be between 0.0 and 5.0 with up to one decimal place.");
+        }
+
+        TripReview tripReview = tripReviewDTO.toEntity();
         TripReview savedTripReview = tripReviewRepository.save(tripReview);
         return TripReviewDTO.toDto(savedTripReview);
     }
 
     @Transactional
-    public TripReviewDTO updateReview(Long tripReviewId, TripReviewDTO TripReviewDTO) {
+    public TripReviewDTO updateReview(Long tripReviewId, TripReviewDTO tripReviewDTO) {
         Optional<TripReview> tripReviewOptional = tripReviewRepository.findById(tripReviewId);
         if (tripReviewOptional.isEmpty()) {
             throw new IllegalArgumentException("TripReview with ID " + tripReviewId + " does not exist.");
         }
 
         TripReview tripReview = tripReviewOptional.get();
-        tripReview.setWriter(TripReviewDTO.getWriter());
-        tripReview.setTitle(TripReviewDTO.getTitle());
-        tripReview.setReviewContent(TripReviewDTO.getReviewContent());
-        tripReview.setUrl(TripReviewDTO.getUrl());
-        tripReview.setPostDate(TripReviewDTO.getPostDate());
-        tripReview.setIsActive(TripReviewDTO.getIsActive() ? 1 : 0);
-        tripReview.setIsDelete(TripReviewDTO.getIsDelete() ? 1 : 0);
-        tripReview.setDeleteDate(TripReviewDTO.getDeleteDate());
+        tripReview.setWriter(tripReviewDTO.getWriter());
+        tripReview.setTitle(tripReviewDTO.getTitle());
+        tripReview.setReviewContent(tripReviewDTO.getReviewContent());
+        tripReview.setUrl(tripReviewDTO.getUrl());
+        tripReview.setPostDate(tripReviewDTO.getPostDate());
+        tripReview.setIsActive(tripReviewDTO.getIsActive() ? 1 : 0);
+        tripReview.setIsDelete(tripReviewDTO.getIsDelete() ? 1 : 0);
+        tripReview.setDeleteDate(tripReviewDTO.getDeleteDate());
 
-        if (TripReviewDTO.getPlan() != null) {
-            Optional<Plan> planOptional = planRepository.findById(TripReviewDTO.getPlan().getId());
+        if (tripReviewDTO.getPlan() != null) {
+            Optional<Plan> planOptional = planRepository.findById(tripReviewDTO.getPlan().getId());
             if (planOptional.isEmpty()) {
-                throw new IllegalArgumentException("Plan with ID " + TripReviewDTO.getPlan().getId() + " does not exist.");
+                throw new IllegalArgumentException("Plan with ID " + tripReviewDTO.getPlan().getId() + " does not exist.");
             }
             tripReview.setPlan(planOptional.get());
         } else {
             tripReview.setPlan(null);
         }
+
+        // Validate rating
+        if (tripReviewDTO.getRating() == null || tripReviewDTO.getRating().compareTo(BigDecimal.ZERO) < 0 || tripReviewDTO.getRating().compareTo(BigDecimal.valueOf(5.0)) > 0 || tripReviewDTO.getRating().scale() > 1) {
+            throw new IllegalArgumentException("Rating must be between 0.0 and 5.0 with up to one decimal place.");
+        }
+        tripReview.setRating(tripReviewDTO.getRating());
 
         TripReview updatedTripReview = tripReviewRepository.save(tripReview);
         return TripReviewDTO.toDto(updatedTripReview);
@@ -89,11 +95,10 @@ public class TripReviewService {
         tripReview.setDeleteDate(new Timestamp(System.currentTimeMillis()));
         tripReviewRepository.save(tripReview);
         System.out.println("Deleted review with ID: " + tripReviewId);
-        
     }
     
     public List<TripReviewDTO> getAllReviews() {
-        List<TripReview> tripReviews = tripReviewRepository.findAllActiveReviews();
+        List<TripReview> tripReviews = tripReviewRepository.findAll();
         return tripReviews.stream().map(TripReviewDTO::toDto).toList();
     }
 

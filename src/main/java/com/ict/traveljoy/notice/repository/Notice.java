@@ -63,5 +63,8 @@ public class Notice {
 	@ManyToOne
 	@JoinColumn(name = "USER_ID")
 	private Users user;
-
+	
+	public boolean isDeleted() {
+        return this.isDelete != null && this.isDelete == 1;
+    }
 }
