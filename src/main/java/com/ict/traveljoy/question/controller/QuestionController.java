@@ -1,6 +1,7 @@
 package com.ict.traveljoy.question.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,13 +38,15 @@ public class QuestionController {
 	
 
 	@PostMapping
-	public ResponseEntity<QuestionDTO> createQuestion(@RequestBody QuestionDTO questionDTO, HttpServletRequest request){
+	public ResponseEntity<QuestionDTO> createQuestion(@RequestBody Map<String, String> map , HttpServletRequest request){
 		//질문한사람 user 설정,questionCategory받기,questionContent,questionTitle
 		String useremail = checkUser.checkContainsUseremail(request);
-		String category = request.getParameter("category");
+		String category = (String)map.get("category");
+		String title = (String)map.get("title");
+		String content = (String)map.get("content");
 				
 		try {
-			QuestionDTO createdQuestion = questionService.createQuestion(useremail,category,questionDTO);
+			QuestionDTO createdQuestion = questionService.createQuestion(useremail,category,title,content);
 			if(createdQuestion == null) {
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			}
@@ -109,6 +113,9 @@ public class QuestionController {
 	//문의글 수정
 	@PutMapping("/{question_id}")
 	public ResponseEntity<QuestionDTO> updateQuestion(@PathVariable("question_id") String question_id,@RequestBody QuestionDTO questionDTO){
+		System.out.println(questionDTO.getQuestionTitle());
+		System.out.println(questionDTO.getQuestionContent());
+		System.out.println(questionDTO.getQuestionCategory().getQuestionCategoryName());
 		try {
 			QuestionDTO updatedQuestionDTO = questionService.updateById(Long.parseLong(question_id),questionDTO);
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(updatedQuestionDTO);
@@ -122,12 +129,14 @@ public class QuestionController {
 	
 	//문의글 삭제
 	@DeleteMapping("/{question_id}")
-	public ResponseEntity<QuestionDTO> deleteQuestion(@PathVariable("question_id") String question_id){
+	public ResponseEntity<String> deleteQuestion(@PathVariable("question_id") String question_id){
 		try {
-			QuestionDTO deletedQuestionDTO = questionService.deleteById(Long.parseLong(question_id));
-			if(deletedQuestionDTO!=null) 
-				return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(deletedQuestionDTO);
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			boolean deleted = questionService.deleteById(Long.parseLong(question_id));
+			if(deleted==true) 
+				return ResponseEntity.status(200).body("Success");
+			else {
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
 		}
 		catch(Exception e) {
 			System.out.print("question_delete: ");

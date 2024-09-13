@@ -1,10 +1,14 @@
 package com.ict.traveljoy.place.sight.repository;
 
+import java.util.List;
+
 import org.hibernate.annotations.ColumnDefault;
 
 import com.ict.traveljoy.place.region.repository.Region;
 
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -42,7 +46,7 @@ public class Sight {
 	@Column(name = "entrance_fee")
 	private Float entranceFee;
 	
-	@Column(name="sight_name",length = 50, nullable = false)
+	@Column(name="sight_name",length = 50, nullable = false, unique = true)
 	private String sightName;
 	
 	@Column(length = 2000)
@@ -50,6 +54,11 @@ public class Sight {
 	
 	@Column(nullable = false, length = 200)
 	private String address;
+	
+	@ElementCollection
+    @CollectionTable(name = "sight_images", joinColumns = @JoinColumn(name = "sight_id"))
+    @Column(name = "image_url",length = 1000)
+    private List<String> imageUrls;
 	
 	@Column
 	private Float lat;

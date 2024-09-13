@@ -1,5 +1,8 @@
 package com.ict.traveljoy.place.sight.service;
 
+import java.util.List;
+import java.util.StringJoiner;
+
 import com.ict.traveljoy.place.region.repository.Region;
 import com.ict.traveljoy.place.region.repository.RegionRepository;
 import com.ict.traveljoy.place.sight.repository.Sight;
@@ -16,7 +19,7 @@ import lombok.Setter;
 @Builder
 public class SightDTO {
     private Long id;
-    private Long regionId; 
+    private Region region; 
     private Boolean isHasImage;
     private Float entranceFee;
     private String sightName;
@@ -26,10 +29,12 @@ public class SightDTO {
     private Float lng;
     private Long totalReviewCount;
     private Float averageReviewRate;
+    private List<String> imageUrls;
 
-    public Sight toEntity(RegionRepository regionRepository) {
-        Region region = regionRepository.findById(regionId)
-                                        .orElseThrow(() -> new IllegalArgumentException("Invalid RegionId"));
+    public Sight toEntity() {
+    	 if (region == null || region.getName() == null || region.getName().isEmpty()) {
+             throw new IllegalArgumentException("Region 정보가 없거나 올바르지 않습니다.");
+         }
 
         return Sight.builder()
                 .id(id)
@@ -41,6 +46,7 @@ public class SightDTO {
                 .address(address)
                 .lat(lat)
                 .lng(lng)
+                .imageUrls(imageUrls)
                 .totalReviewCount(totalReviewCount)
                 .averageReviewRate(averageReviewRate)
                 .build();
@@ -49,7 +55,7 @@ public class SightDTO {
     public static SightDTO toDto(Sight sight) {
         return SightDTO.builder()
                 .id(sight.getId())
-                .regionId(sight.getRegion() != null ? sight.getRegion().getId() : null) 
+                .region(sight.getRegion()) 
                 .isHasImage(sight.getIsHasImage() == 1)
                 .entranceFee(sight.getEntranceFee())
                 .sightName(sight.getSightName())
@@ -57,6 +63,7 @@ public class SightDTO {
                 .address(sight.getAddress())
                 .lat(sight.getLat())
                 .lng(sight.getLng())
+                .imageUrls(sight.getImageUrls())
                 .totalReviewCount(sight.getTotalReviewCount())
                 .averageReviewRate(sight.getAverageReviewRate())
                 .build();

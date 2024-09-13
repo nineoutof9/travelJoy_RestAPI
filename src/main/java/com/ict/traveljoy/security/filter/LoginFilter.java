@@ -50,7 +50,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         this.authenticationManager = authenticationManager;
         this.jwtUtility = jwtUtil;
         refreshExpiredMs = 86400000L;
-        accessExpiredMs = 600000L;
+        accessExpiredMs = 60000000L;
     }
 
     @Override
