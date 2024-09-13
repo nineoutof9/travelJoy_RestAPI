@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ict.traveljoy.controller.CheckContainsUseremail;
 import com.ict.traveljoy.notice.service.NoticeDTO;
 import com.ict.traveljoy.notice.service.NoticeService;
@@ -25,7 +24,6 @@ public class NoticeController {
 
     private static final Logger logger = LoggerFactory.getLogger(NoticeController.class);
     private final NoticeService noticeService;
-    private final ObjectMapper objectMapper;
     private final CheckContainsUseremail checkUser;
 
     @PostMapping
@@ -33,10 +31,10 @@ public class NoticeController {
         String useremail = checkUser.checkContainsUseremail(request);
 
         try {
-            NoticeDTO createdNotice = noticeService.createNotice(useremail, noticeDTO);
-            if (createdNotice == null) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            if (useremail == null) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
+            NoticeDTO createdNotice = noticeService.createNotice(useremail, noticeDTO);
             return new ResponseEntity<>(createdNotice, HttpStatus.CREATED);
         } catch (Exception e) {
             logger.error("Error creating notice", e);
@@ -83,6 +81,9 @@ public class NoticeController {
         String useremail = checkUser.checkContainsUseremail(request);
 
         try {
+            if (useremail == null) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
             NoticeDTO deletedNotice = noticeService.deleteNotice(useremail, notice_id);
             return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "application/json").body(deletedNotice);
         } catch (Exception e) {
