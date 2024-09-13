@@ -4,6 +4,7 @@ import com.ict.traveljoy.plan.repository.Plan;
 import com.ict.traveljoy.tripReview.repository.TripReview;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 @Getter
@@ -23,6 +24,7 @@ public class TripReviewDTO {
     private Boolean isActive;
     private Boolean isDelete;
     private Timestamp deleteDate;
+    private BigDecimal rating;
 
     public TripReview toEntity() {
         return TripReview.builder()
@@ -36,6 +38,7 @@ public class TripReviewDTO {
                 .isActive(isActive != null && isActive ? 1 : 0)
                 .isDelete(isDelete != null && isDelete ? 1 : 0)
                 .deleteDate(deleteDate)
+                .rating(rating)
                 .build();
     }
 
@@ -52,6 +55,7 @@ public class TripReviewDTO {
                 .isActive(tripReview.getIsActive() == 1 ? true : false)
                 .isDelete(tripReview.getIsDelete() == 1 ? true : false)
                 .deleteDate(tripReview.getDeleteDate())
+                .rating(tripReview.getRating())
                 .build();
     }
 }

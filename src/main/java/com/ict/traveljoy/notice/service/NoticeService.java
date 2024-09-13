@@ -37,15 +37,7 @@ public class NoticeService {
         return NoticeDTO.toDTO(afterSave);
     }
 
-    
-//	@Transactional(readOnly = true) //검색
-//	public List<NoticeDTO> findByTitle(String title) {
-//		List<Notice> noticeList = noticeRepository.findByTitleContaining(title);
-//        return noticeList.stream()
-//                      .map(NoticeDTO::toDTO)
-//                      .collect(Collectors.toList());
-//	}
-
+    @Transactional(readOnly = true)
     public NoticeDTO findById(long notice_id) {
         Notice notice = noticeRepository.findById(notice_id)
                 .orElseThrow(() -> new IllegalArgumentException("Notice not found"));
@@ -56,8 +48,23 @@ public class NoticeService {
     }
 
     @Transactional(readOnly = true)
-    public List<NoticeDTO> findAll() {
+    public List<NoticeDTO> findAllForAdmin() {
         List<Notice> noticeList = noticeRepository.findAll();
+        return noticeList.stream().map(notice -> {
+            long count = viewCountService.findbyNoticeId(notice.getId()).getCount();
+            NoticeDTO noticeDTO = NoticeDTO.toDTO(notice);
+            noticeDTO.setViewCount(count);
+            return noticeDTO;
+        }).collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<NoticeDTO> findAllForUser() {
+        List<Notice> noticeList = noticeRepository.findAll()
+                .stream()
+                .filter(notice -> !notice.isDeleted()) // Filter out deleted notices
+                .collect(Collectors.toList());
+
         return noticeList.stream().map(notice -> {
             long count = viewCountService.findbyNoticeId(notice.getId()).getCount();
             NoticeDTO noticeDTO = NoticeDTO.toDTO(notice);
@@ -85,13 +92,9 @@ public class NoticeService {
         if (!"0".equals(user.getPermission())) {
             Notice notice = noticeRepository.findById(notice_id)
                     .orElseThrow(() -> new RuntimeException("Notice not found"));
-            NoticeDTO noticeDTO = NoticeDTO.toDTO(notice);
-            noticeDTO.setIsActive(false);
-            noticeDTO.setIsDelete(true);
-
-            Notice deletedNotice = noticeDTO.toEntity();
-            deletedNotice = noticeRepository.save(deletedNotice);
-
+            notice.setIsDelete(1); // Mark as deleted
+            notice.setIsActive(0); // Optionally mark as inactive
+            Notice deletedNotice = noticeRepository.save(notice);
             return NoticeDTO.toDTO(deletedNotice);
         } else {
             return NoticeDTO.builder().title("수정불가").content("권한없음").build();

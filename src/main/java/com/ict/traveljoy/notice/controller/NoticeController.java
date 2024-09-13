@@ -42,13 +42,25 @@ public class NoticeController {
         }
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<NoticeDTO>> getAllNotices() {
+    @GetMapping("/all/admin")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<List<NoticeDTO>> getAllNoticesForAdmin() {
         try {
-            List<NoticeDTO> noticeList = noticeService.findAll();
+            List<NoticeDTO> noticeList = noticeService.findAllForAdmin();
             return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "application/json").body(noticeList);
         } catch (Exception e) {
-            logger.error("Error fetching all notices", e);
+            logger.error("Error fetching all notices for admin", e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/all/user")
+    public ResponseEntity<List<NoticeDTO>> getAllNoticesForUser() {
+        try {
+            List<NoticeDTO> noticeList = noticeService.findAllForUser();
+            return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "application/json").body(noticeList);
+        } catch (Exception e) {
+            logger.error("Error fetching all notices for user", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
