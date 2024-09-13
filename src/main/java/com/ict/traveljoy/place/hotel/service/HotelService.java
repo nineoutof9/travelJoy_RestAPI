@@ -43,8 +43,12 @@ public class HotelService {
             throw new IllegalArgumentException("숙소 이름이 비어있어요");
         }
 
-        Region region = regionRepository.findByName(hotelDTO.getRegionName())
-                .orElseThrow(() -> new IllegalArgumentException("주어진 지역이 존재하지 않아요"));
+        // 동일한 이름을 가진 첫 번째 Region 사용
+        List<Region> regions = regionRepository.findByName(hotelDTO.getRegionName());
+        if (regions.isEmpty()) {
+            throw new IllegalArgumentException("주어진 지역이 존재하지 않아요");
+        }
+        Region region = regions.get(0);  // 첫 번째 Region을 사용
 
         Hotel hotel = hotelDTO.toEntity(region);
         hotel = hotelRepository.save(hotel);
@@ -61,8 +65,12 @@ public class HotelService {
             Hotel hotel = hotelOpt.get();
 
             if (hotelDTO.getRegionName() != null) {
-                Region region = regionRepository.findByName(hotelDTO.getRegionName())
-                        .orElseThrow(() -> new IllegalArgumentException("주어진 지역이 존재하지 않아요"));
+                // 동일한 이름을 가진 첫 번째 Region 사용
+                List<Region> regions = regionRepository.findByName(hotelDTO.getRegionName());
+                if (regions.isEmpty()) {
+                    throw new IllegalArgumentException("주어진 지역이 존재하지 않아요");
+                }
+                Region region = regions.get(0);  // 첫 번째 Region을 사용
                 hotel.setRegion(region);
             }
 

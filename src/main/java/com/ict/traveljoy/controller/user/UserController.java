@@ -21,6 +21,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -75,6 +77,17 @@ public class UserController {
     @Value("${naver.redirectUri}")
     private String naverRedirectUri;
 	
+    @GetMapping("/checkemail")
+	 public ResponseEntity<Map<String, Boolean>> checkEmail(@RequestParam("email") String email) {
+	        try {
+	            boolean exists = userService.checkEmailExists(email);
+	            return ResponseEntity.ok(Map.of("exists", exists));
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("exists", false));
+	        }
+	  }
+    
 	@PostMapping("/register")
 	public ResponseEntity<UserDTO> signUp(@RequestBody UserDTO dto){
 		try {
@@ -117,12 +130,16 @@ public class UserController {
 	            user.setBirthDate(Date.valueOf((String) updatedProfile.get("birthDate"))); // Date로 변환
 	        }
 	        if (updatedProfile.containsKey("gender")) {
-	            // 문자열을 Boolean으로 변환 후 Integer로 설정
 	            String genderStr = (String) updatedProfile.get("gender");
-	            Boolean gender = Boolean.valueOf(genderStr);
-	            user.setGender(gender);
+	            if(genderStr.equals("null")) {
+	            	user.setGender(null);
+	            }
+	            else {
+		            Boolean gender = Boolean.valueOf(genderStr);
+		            user.setGender(gender);
+	            }
 	        }
-
+	        
 	        // 프로필 정보 업데이트
 	        userService.updateProfile(user);
 
@@ -242,6 +259,8 @@ public class UserController {
 
 	         response.sendRedirect(redirectUrl);
 	     } else {
+	    	 boolean isUser = userRepository.existsByEmail(email);
+	    	 if(!isUser) {
 	    	 UserDTO dto = new UserDTO();
 	    	 dto = dto.builder().email(email).loginType("kakao").password("").build();
 	    	 userService.signUp(dto);
@@ -255,7 +274,11 @@ public class UserController {
 	         HttpEntity<String> logoutRequestEntity = new HttpEntity<>(logoutHeaders);
 	         ResponseEntity<String> logoutResponse = restTemplate.exchange(logoutUrl, HttpMethod.POST, logoutRequestEntity, String.class);
 
-	         response.sendRedirect("http://localhost:3000/user/signin");
+	         response.sendRedirect("http://localhost:3000/user/signin?status=success&message="+URLEncoder.encode("회원가입이 성공하였습니다", StandardCharsets.UTF_8.toString()));
+	    	 }
+	    	 else {
+	    		 response.sendRedirect("http://localhost:3000/user/signin?status=error&message="+URLEncoder.encode("이미 사용중인 이메일입니다", StandardCharsets.UTF_8.toString()));
+	    	 }
 	     }
 	 }
 	 @GetMapping("/google")
@@ -330,6 +353,8 @@ public class UserController {
 
 	         response.sendRedirect(redirectUrl);
 	     } else {
+	    	 boolean isUser = userRepository.existsByEmail(email);
+	    	 if(!isUser) {
 	         UserDTO dto = new UserDTO();
 	         dto = dto.builder().email(email).loginType("google").password("").build();
 	         userService.signUp(dto);
@@ -340,7 +365,12 @@ public class UserController {
 	         HttpEntity<String> logoutRequestEntity = new HttpEntity<>(logoutHeaders);
 	         ResponseEntity<String> logoutResponse = restTemplate.exchange(logoutUrl, HttpMethod.GET, logoutRequestEntity, String.class);
 
-	         response.sendRedirect("http://localhost:3000/user/signin");
+	         response.sendRedirect("http://localhost:3000/user/signin?status=success&message="+URLEncoder.encode("회원가입이 성공하였습니다", StandardCharsets.UTF_8.toString()));
+	    	 }
+	    	 else {
+	    		 response.sendRedirect("http://localhost:3000/user/signin?status=error&message="+URLEncoder.encode("이미 사용중인 이메일입니다", StandardCharsets.UTF_8.toString()));
+
+	    	 }
 	     }
 	 }
 	 
@@ -418,11 +448,18 @@ public class UserController {
 
 	         response.sendRedirect(redirectUrl);
 	     } else {
+	    	 boolean isUser = userRepository.existsByEmail(email);
+	    	 if(!isUser) {
 	         UserDTO dto = new UserDTO();
 	         dto = dto.builder().email(email).loginType("naver").password("").build();
 	         userService.signUp(dto);
 
-	         response.sendRedirect("http://localhost:3000/user/signin");
+	         response.sendRedirect("http://localhost:3000/user/signin?status=success&message="+URLEncoder.encode("회원가입이 성공하였습니다", StandardCharsets.UTF_8.toString()));
+	    	 }
+	    	 else {
+	    		 response.sendRedirect("http://localhost:3000/user/signin?status=error&message="+URLEncoder.encode("이미 사용중인 이메일입니다", StandardCharsets.UTF_8.toString()));
+
+	    	 }
 	     }
 	 }
 

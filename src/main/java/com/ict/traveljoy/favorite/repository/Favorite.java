@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.ict.traveljoy.place.food.repository.Food;
 import com.ict.traveljoy.place.hotel.repository.Hotel;
 import com.ict.traveljoy.users.repository.Users;
 
@@ -44,7 +45,7 @@ public class Favorite {
     private Users user;
 
     @Column(name = "TARGET_ID")
-    private Long targetId;
+    private Long targetId;  
 
     @Column(name = "IS_EVENT", columnDefinition = "NUMBER(1, 0)")
     @ColumnDefault("0")
@@ -65,6 +66,10 @@ public class Favorite {
     @ManyToOne
     @JoinColumn(name = "HOTEL_ID")
     private Hotel hotel;
+    
+    @ManyToOne
+    @JoinColumn(name = "FOOD_ID")
+    private Food food;
 
     @Column(name = "IS_ACTIVE", nullable = false, columnDefinition = "NUMBER(1, 0)")
     @ColumnDefault("1")

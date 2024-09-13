@@ -66,11 +66,11 @@ public class Users {
 	@CreationTimestamp
 	private LocalDateTime signInDate;
 	
-	@Column(columnDefinition = "NUMBER(1, 0)")
+	@Column(columnDefinition = "NUMBER(1, 0) DEFAULT NULL")
     private Integer gender;
 	
 	@Column(length = 30)
-	@ColumnDefault("'local'")
+	@ColumnDefault("'email'")
 	private String loginType;
 	
 	@Column

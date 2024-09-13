@@ -54,7 +54,6 @@ public class Image {
 	private Integer isDelete;
 	
 	@Column(name="DELETE_DATE")
-	@CreationTimestamp
     private LocalDateTime deleteDate;
 	
 	@Column(length = 50)

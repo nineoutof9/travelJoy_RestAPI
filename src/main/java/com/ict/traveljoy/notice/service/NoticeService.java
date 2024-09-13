@@ -21,26 +21,21 @@ import lombok.RequiredArgsConstructor;
 public class NoticeService {
 	
 	private final ViewCountService viewCountService;
-	private final NoticeViewService noticeViewService;
 	private final UserRepository userRepository;
 	private final NoticeRepository noticeRepository;
-	private final NoticeViewRepository noticeViewRepository;
-	
-	private final ObjectMapper objectMapper;
 	
 	@Transactional
 	public NoticeDTO createNotice(String useremail, NoticeDTO noticeDTO) {
-		
 		Notice notice = noticeDTO.toEntity();
 		
 		// user 정하기
-		Users user = userRepository.findByEmail(useremail).get();
+		Users user = userRepository.findByEmail(useremail)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 		notice.setUser(user);
 		Notice afterSave = noticeRepository.save(notice);
 		
 		// 조회수 만들기
 		viewCountService.createByNotice(afterSave);
-		
         return NoticeDTO.toDTO(afterSave);
 	}
 	
@@ -54,37 +49,36 @@ public class NoticeService {
 
 	public NoticeDTO findById(long notice_id) { // 특정 공지 조회
 		if(noticeRepository.existsById(notice_id)) {
-			Notice notice = noticeRepository.findById(notice_id).get();
-			NoticeDTO noticeDTO = NoticeDTO.toDTO(notice);
-			//조회수 증가
-			ViewCountDTO viewcountDTO = viewCountService.updateViewCount(notice_id);
-			noticeDTO.setViewCount(viewcountDTO.getCount());
-			return noticeDTO;
+			Notice notice = noticeRepository.findById(notice_id)
+	                .orElseThrow(() -> new IllegalArgumentException("Notice not found"));
+	        NoticeDTO noticeDTO = NoticeDTO.toDTO(notice);
+	        ViewCountDTO viewCountDTO = viewCountService.updateViewCount(notice_id);
+	        noticeDTO.setViewCount(viewCountDTO.getCount());
+	        return noticeDTO;
+
 		}
 		else throw new IllegalArgumentException("오류");
 	}
 	
 	@Transactional(readOnly = true)
-	public List<NoticeDTO> findAll() { //모든 공지 조회
-		
-		List<Notice> noticeList = noticeRepository.findAll();
-		List<NoticeDTO> noticeDTOList = noticeList.stream().map(NoticeDTO::toDTO).collect(Collectors.toList());
-		long count = 0l;
-		for(int i=0;i<noticeList.size();i++) {
-			// viewcount받아오기
-			count = viewCountService.findbyNoticeId(noticeList.get(i).getId()).getCount();
-			//방문횟수 dto에 추가
-			noticeDTOList.get(i).setViewCount(count);
-		}
-        return noticeDTOList;
-	}
+    public List<NoticeDTO> findAll() {
+        List<Notice> noticeList = noticeRepository.findAll();
+        return noticeList.stream().map(notice -> {
+            long count = viewCountService.findbyNoticeId(notice.getId()).getCount();
+            NoticeDTO noticeDTO = NoticeDTO.toDTO(notice);
+            noticeDTO.setViewCount(count);
+            return noticeDTO;
+        }).collect(Collectors.toList());
+    }
+
 	
 	@Transactional
 	public NoticeDTO updateNotice(Long notice_id,NoticeDTO updateNoticeDTO) {
 		if(noticeRepository.existsById(notice_id)) {
-			Notice beforeNotice = noticeRepository.findById(notice_id).orElseThrow(() -> new RuntimeException("Notice not found"));
-			beforeNotice.setTitle(updateNoticeDTO.getTitle());
-			beforeNotice.setContent(updateNoticeDTO.getContent());
+			Notice beforeNotice = noticeRepository.findById(notice_id)
+	                .orElseThrow(() -> new RuntimeException("Notice not found"));
+	        beforeNotice.setTitle(updateNoticeDTO.getTitle());
+	        beforeNotice.setContent(updateNoticeDTO.getContent());
 			beforeNotice.setUser(updateNoticeDTO.getUser());
 			//제목, 내용만 변경
 //			Notice afterNotice = noticeDTO.toEntity();
@@ -92,14 +86,12 @@ public class NoticeService {
 	        return NoticeDTO.toDTO(updatedNotice);
 		}
 		else throw new IllegalArgumentException("오류");
-		
-
-
 	}
 
 	@Transactional
 	public NoticeDTO deleteNotice(String useremail,Long notice_id) {
-		Users user = userRepository.findByEmail(useremail).get();
+		Users user = userRepository.findByEmail(useremail)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 		if(user.getPermission()!="0") {//권한있으면 수정가능
 			if(noticeRepository.existsById(notice_id)) {
 				Notice notice = noticeRepository.findById(notice_id).orElseThrow(() -> new RuntimeException("Notice not found"));

@@ -34,5 +34,10 @@ public class Region {
 
     @Column(name="region_info",length = 2000)
     private String regionInfo;
-
+    
+	    //String을 입력받는 생성자 추가
+	    public Region(String name) {
+	    	this.name =name;
+	    }
+    
 	}
