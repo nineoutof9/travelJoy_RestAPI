@@ -100,4 +100,30 @@ public class NoticeService {
             return NoticeDTO.builder().title("수정불가").content("권한없음").build();
         }
     }
+    @Transactional(readOnly = true)
+    public NoticeDTO findPreviousNotice(long notice_id, boolean isAdmin) {
+        if (isAdmin) {
+            return noticeRepository.findFirstByIdLessThanOrderByIdDesc(notice_id)
+                    .map(NoticeDTO::toDTO)
+                    .orElseThrow(() -> new RuntimeException("이전 공지사항이 없습니다."));
+        } else {
+            return noticeRepository.findFirstByIdLessThanAndIsDeleteFalseOrderByIdDesc(notice_id)
+                    .map(NoticeDTO::toDTO)
+                    .orElseThrow(() -> new RuntimeException("이전 공지사항이 없습니다."));
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public NoticeDTO findNextNotice(long notice_id, boolean isAdmin) {
+        if (isAdmin) {
+            return noticeRepository.findFirstByIdGreaterThanOrderByIdAsc(notice_id)
+                    .map(NoticeDTO::toDTO)
+                    .orElseThrow(() -> new RuntimeException("다음 공지사항이 없습니다."));
+        } else {
+            return noticeRepository.findFirstByIdGreaterThanAndIsDeleteFalseOrderByIdAsc(notice_id)
+                    .map(NoticeDTO::toDTO)
+                    .orElseThrow(() -> new RuntimeException("다음 공지사항이 없습니다."));
+        }
+    }
+
 }
