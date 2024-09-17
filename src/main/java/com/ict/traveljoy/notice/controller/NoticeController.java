@@ -103,4 +103,30 @@ public class NoticeController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @GetMapping("/{notice_id}/prev")
+    public ResponseEntity<NoticeDTO> getPreviousNotice(@PathVariable("notice_id") long notice_id, HttpServletRequest request) {
+        boolean isAdmin = checkUser.checkContainsUseremail(request) != null; // 관리자 여부 확인
+
+        try {
+            NoticeDTO previousNotice = noticeService.findPreviousNotice(notice_id, isAdmin);
+            return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "application/json").body(previousNotice);
+        } catch (Exception e) {
+            logger.error("Error fetching previous notice for ID: " + notice_id, e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/{notice_id}/next")
+    public ResponseEntity<NoticeDTO> getNextNotice(@PathVariable("notice_id") long notice_id, HttpServletRequest request) {
+        boolean isAdmin = checkUser.checkContainsUseremail(request) != null; // 관리자 여부 확인
+
+        try {
+            NoticeDTO nextNotice = noticeService.findNextNotice(notice_id, isAdmin);
+            return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "application/json").body(nextNotice);
+        } catch (Exception e) {
+            logger.error("Error fetching next notice for ID: " + notice_id, e);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }
