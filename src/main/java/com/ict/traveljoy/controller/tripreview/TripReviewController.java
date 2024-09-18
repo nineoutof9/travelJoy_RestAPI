@@ -1,6 +1,8 @@
 package com.ict.traveljoy.controller.tripreview;
 
 import com.ict.traveljoy.tripReview.service.TripReviewService;
+import com.ict.traveljoy.image.service.ImageDTO;
+import com.ict.traveljoy.image.service.ImageService;
 import com.ict.traveljoy.tripReview.service.TripReviewDTO;
 import com.ict.traveljoy.tripReview.service.TripReviewPhotoDTO;
 import com.ict.traveljoy.tripReview.service.TripReviewPhotoService;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -19,19 +22,40 @@ public class TripReviewController {
 
     private final TripReviewService tripReviewService;
     private final TripReviewPhotoService tripReviewPhotoService;
+    private final ImageService imageService;
 
     @Autowired
-    public TripReviewController(TripReviewService tripReviewService, TripReviewPhotoService tripReviewPhotoService) {
+    public TripReviewController(TripReviewService tripReviewService, TripReviewPhotoService tripReviewPhotoService, ImageService imageService) {
         this.tripReviewService = tripReviewService;
         this.tripReviewPhotoService = tripReviewPhotoService;
+        this.imageService = imageService;
     }
 
     // 리뷰 생성
     @PostMapping("/createReview")
-    public ResponseEntity<TripReviewDTO> createReview(@RequestBody TripReviewDTO TripReviewDTO) {
+    public ResponseEntity<TripReviewDTO> createReview(
+            @RequestPart("tripReviewDTO") TripReviewDTO tripReviewDTO,  // 리뷰 데이터
+            @RequestPart("files") MultipartFile file) {               // 파일
+    	
+    		// 리뷰 생성 로직 호출
+        	TripReviewDTO createdReview = tripReviewService.createReview(tripReviewDTO);
         try {
-            TripReviewDTO createdReview = tripReviewService.createReview(TripReviewDTO);
+        	if (!file.isEmpty()) {
+                // 1. 이미지 저장
+                String dirName = "review-images";  // 이미지가 저장될 디렉토리 이름 설정
+                ImageDTO imageDTO = new ImageDTO();  // 새로운 ImageDTO 객체 생성
+                
+                // ImageService를 사용해 이미지 업로드 및 URL 생성
+                ImageDTO savedImageDTO = imageService.postImage(imageDTO, dirName, file);
+
+                TripReviewPhotoDTO tripReviewPhotoDTO = new TripReviewPhotoDTO();
+                tripReviewPhotoDTO.setImage(savedImageDTO.toEntity());  // 저장된 이미지 설정
+                
+                tripReviewPhotoService.addPhotoToReview(createdReview.getId(), tripReviewPhotoDTO);
+            }
+
             return new ResponseEntity<>(createdReview, HttpStatus.CREATED);
+
         } catch (IllegalArgumentException e) {
             System.err.println("Invalid data provided: " + e.getMessage());
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
