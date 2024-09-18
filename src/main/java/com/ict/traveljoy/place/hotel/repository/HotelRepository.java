@@ -16,12 +16,12 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
             String regionName, LocalDate checkInDate, LocalDate checkOutDate);
     
     
-    @Query(value = "SELECT * FROM (" +
-            "  SELECT id, name, lat, lng, " +
-            "         (6371 * acos(cos(radians(:lat)) * cos(radians(lat)) * " +
-            "                     cos(radians(lng) - radians(:lng)) + " +
-            "                     sin(radians(:lat)) * sin(radians(lat)))) AS distance " +
-            "  FROM your_table_name " +
+    @Query(value = "SELECT hotel_id, hotel_name, average_price, is_has_image, lat, lng, region_id, average_review_rate, check_in_date, check_out_date FROM (" +
+            "  SELECT hotel_id, hotel_name, average_price, is_has_image, lat, lng, region_id, average_review_rate, check_in_date, check_out_date, " +
+            "         (6371 * acos(cos((:lat * (3.14159265359 / 180))) * cos(lat * (3.14159265359 / 180)) * " +
+            "                     cos(lng * (3.14159265359 / 180) - (:lng * (3.14159265359 / 180))) + " +
+            "                     sin((:lat * (3.14159265359 / 180))) * sin(lat * (3.14159265359 / 180)))) AS distance " +
+            "  FROM HOTEL " +
             "  ORDER BY distance" +
             ") WHERE ROWNUM <= 5",
     nativeQuery = true)
