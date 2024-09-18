@@ -125,4 +125,12 @@ public class UserService {
     public List<Users> getAllUser(){
     	return userRepository.findAll();
     }
+
+	public boolean isAdmin(String email) {
+		Optional<Users> userOptional = userRepository.findByEmail(email);
+		if(userOptional.get().getPermission().equalsIgnoreCase("ROLE_ADMIN")) {
+			return true;
+		}
+		else return false;
+	}
 }
