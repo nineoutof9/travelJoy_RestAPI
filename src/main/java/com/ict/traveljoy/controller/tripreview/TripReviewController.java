@@ -59,7 +59,6 @@ public class TripReviewController {
                         tripReviewPhotoService.addPhotoToReview(createdReview.getId(), tripReviewPhotoDTO);
                     }
                 }
-
             }
 
             return new ResponseEntity<>(createdReview, HttpStatus.CREATED);

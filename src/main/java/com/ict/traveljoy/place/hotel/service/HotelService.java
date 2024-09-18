@@ -56,7 +56,6 @@ public class HotelService {
     }
 
     // 숙소 수정
-    @Transactional
     public HotelDTO updateHotel(Long id, HotelDTO hotelDTO) {
         Optional<Hotel> hotelOpt = hotelRepository.findById(id);
 
@@ -88,7 +87,6 @@ public class HotelService {
     }
 
     // 숙소 삭제
-    @Transactional
     public void deleteHotel(Long id) {
         if (hotelRepository.existsById(id)) {
             hotelRepository.deleteById(id);
