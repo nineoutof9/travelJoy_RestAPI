@@ -19,6 +19,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 
 import com.ict.traveljoy.plan.repository.Plan;
 
@@ -54,6 +55,8 @@ public class TripReview {
     private String url;
 
     @Column(name = "POST_DATE")
+    @ColumnDefault("SYSDATE")
+    @CreationTimestamp
     private Timestamp postDate;
 
     @Column(name = "IS_ACTIVE", length = 1, nullable = false, columnDefinition = "NUMBER(1, 0)")
