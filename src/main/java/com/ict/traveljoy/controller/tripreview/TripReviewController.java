@@ -34,24 +34,31 @@ public class TripReviewController {
     // 리뷰 생성
     @PostMapping("/createReview")
     public ResponseEntity<TripReviewDTO> createReview(
-            @RequestPart("tripReviewDTO") TripReviewDTO tripReviewDTO,  // 리뷰 데이터
-            @RequestPart("files") MultipartFile file) {               // 파일
-    	
-    		// 리뷰 생성 로직 호출
-        	TripReviewDTO createdReview = tripReviewService.createReview(tripReviewDTO);
-        try {
-        	if (!file.isEmpty()) {
-                // 1. 이미지 저장
-                String dirName = "review-images";  // 이미지가 저장될 디렉토리 이름 설정
-                ImageDTO imageDTO = new ImageDTO();  // 새로운 ImageDTO 객체 생성
-                
-                // ImageService를 사용해 이미지 업로드 및 URL 생성
-                ImageDTO savedImageDTO = imageService.postImage(imageDTO, dirName, file);
+            @RequestPart("tripReviewDTO") TripReviewDTO tripReviewDTO,
+            @RequestPart(value = "files", required = false) MultipartFile[] files) {  // 파일은 필수 아님
 
-                TripReviewPhotoDTO tripReviewPhotoDTO = new TripReviewPhotoDTO();
-                tripReviewPhotoDTO.setImage(savedImageDTO.toEntity());  // 저장된 이미지 설정
-                
-                tripReviewPhotoService.addPhotoToReview(createdReview.getId(), tripReviewPhotoDTO);
+        // 리뷰 생성 로직 호출
+        TripReviewDTO createdReview = tripReviewService.createReview(tripReviewDTO);
+
+        try {
+            // 파일이 있을 경우에만 파일 업로드 처리
+            if (files != null && files.length > 0) {
+                for (MultipartFile file : files) {
+                    if (!file.isEmpty()) {
+                        // 1. 이미지 저장
+                        String dirName = "review-images";  // 이미지가 저장될 디렉토리 이름 설정
+                        ImageDTO imageDTO = new ImageDTO();  // 새로운 ImageDTO 객체 생성
+
+                        // ImageService를 사용해 이미지 업로드 및 URL 생성
+                        ImageDTO savedImageDTO = imageService.postImage(imageDTO, dirName, file);
+
+                        // 2. 저장된 이미지를 리뷰에 추가
+                        TripReviewPhotoDTO tripReviewPhotoDTO = new TripReviewPhotoDTO();
+                        tripReviewPhotoDTO.setImage(savedImageDTO.toEntity());  // 저장된 이미지 설정
+
+                        tripReviewPhotoService.addPhotoToReview(createdReview.getId(), tripReviewPhotoDTO);
+                    }
+                }
             }
 
             return new ResponseEntity<>(createdReview, HttpStatus.CREATED);
