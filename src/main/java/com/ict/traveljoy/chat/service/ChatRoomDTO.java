@@ -27,8 +27,8 @@ public class ChatRoomDTO {
 				.id(id)
 				.createDate(createDate)
 				.deleteDate(deleteDate)
-				.isActive(isActive != null && !isActive ? 0 : 1)
-				.isDelete(isDelete != null && isDelete ? 1 : 0)
+				.isActive(isActive == null && true ? 1 : 0)
+				.isDelete(isDelete == null || false ? 0 : 1)
 				.build();
 	}
 	

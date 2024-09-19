@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 
 @Tag(name = "pushAlarm", description = "알림")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/pushalarm")
 @CrossOrigin
 @RequiredArgsConstructor
 public class PushAlarmController {
@@ -32,7 +32,7 @@ public class PushAlarmController {
 	@Autowired
     private PushAlarmService pushAlarmService;
 
-    @PostMapping("/pushalarm")
+    @PostMapping
     public ResponseEntity<PushAlarmDTO> savePushAlarm(@RequestBody PushAlarmDTO dto) {
 		try {
 			PushAlarmDTO savePushAlarm = pushAlarmService.savePushAlarm(dto);
@@ -47,8 +47,8 @@ public class PushAlarmController {
     }
 
     	
-    	
-    @GetMapping("/pushalarm/{id}")
+    //특정 알람 조회
+    @GetMapping("/{id}")
     public ResponseEntity<PushAlarmDTO> getPushAlarmById(@PathVariable("id") Long id) {
       
     	try {
@@ -63,12 +63,27 @@ public class PushAlarmController {
     	}
     }
 
-    @GetMapping("/pushalarm/all")
+    //모든 알람 보기
+    @GetMapping("/active")
+    public ResponseEntity<List<PushAlarmDTO>> getActivePushAlarms() {
+    	try {
+    		List<PushAlarmDTO> pushAlarmAll = pushAlarmService.findAllActive();
+    		if(pushAlarmAll == null) {
+    			return new ResponseEntity<>(null,HttpStatus.OK);
+    		}
+    		return new ResponseEntity<>(pushAlarmAll,HttpStatus.OK);
+    	}catch(Exception e) {
+    		e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    	}
+    }
+    
+    @GetMapping("/all")
     public ResponseEntity<List<PushAlarmDTO>> getAllPushAlarms() {
     	try {
     		List<PushAlarmDTO> pushAlarmAll = pushAlarmService.findAll();
     		if(pushAlarmAll == null) {
-    			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    			return new ResponseEntity<>(null,HttpStatus.OK);
     		}
     		return new ResponseEntity<>(pushAlarmAll,HttpStatus.OK);
     	}catch(Exception e) {
@@ -77,7 +92,7 @@ public class PushAlarmController {
     	}
     }
 
-    @PutMapping("/pushalarm/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<PushAlarmDTO> updatePushAlarm(@PathVariable("id") Long id, @RequestBody PushAlarmDTO dto) {
       
     	try {
@@ -96,7 +111,7 @@ public class PushAlarmController {
     	
     }
 
-    @DeleteMapping("/pushalarm/{id}")
+    @DeleteMapping("/{id}")
     public String deletePushAlarm(@PathVariable("id") Long id) {
         pushAlarmService.deleteAlarm(id);
            return "알림 삭제 성공";

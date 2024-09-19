@@ -1,5 +1,6 @@
 package com.ict.traveljoy.pushalarm.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -40,6 +41,20 @@ public class PushAlarmService {
 	                .orElseThrow(() -> new IllegalArgumentException("해당 ID로 푸시 알림을 찾을 수 없습니다: " + id));
 	    }
 
+	    // 모든 active PushAlarm을 조회하는 메서드
+	    public List<PushAlarmDTO> findAllActive() {
+	        List<PushAlarm> pushAlarms = pushAlarmRepository.findAll();
+	        List<PushAlarmDTO> alarmDTOs = new ArrayList<PushAlarmDTO>();
+	        
+	        for(PushAlarm alarm:pushAlarms) {
+	        	if(alarm.getIsActive()==1) {
+	        		alarmDTOs.add(PushAlarmDTO.toDTO(alarm));
+	        		System.out.println("alarm"+alarm.getTitle());
+	        	}
+	        }
+	        return alarmDTOs;
+	    }
+	    
 	    // 모든 PushAlarm을 조회하는 메서드
 	    public List<PushAlarmDTO> findAll() {
 	        List<PushAlarm> pushAlarms = pushAlarmRepository.findAll();
