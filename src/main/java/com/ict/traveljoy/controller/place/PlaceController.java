@@ -337,6 +337,17 @@ public class PlaceController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
+    @GetMapping("/hotels/nearest5")
+    public ResponseEntity<List<HotelDTO>> getNearest5Hotels(@RequestParam("latitude") double latitude, @RequestParam("longitude") double longitude) {
+        try {
+            List<HotelDTO> hotels = hotelService.find5NearestHotel(latitude, longitude);
+            return new ResponseEntity<>(hotels, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @PutMapping("/hotels/{id}")
     public ResponseEntity<HotelDTO> updateHotel(@PathVariable("id") Long id, @RequestBody HotelDTO hotelDto) {

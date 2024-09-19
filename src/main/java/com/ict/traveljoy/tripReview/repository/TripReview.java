@@ -15,9 +15,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 
 import com.ict.traveljoy.plan.repository.Plan;
 
@@ -31,8 +33,8 @@ import com.ict.traveljoy.plan.repository.Plan;
 public class TripReview {
 
     @Id
-    @SequenceGenerator(name = "seq_trip_review",sequenceName = "seq_trip_review",allocationSize = 1,initialValue = 1)
-    @GeneratedValue(generator = "seq_trip_review",strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "seq_trip_review", sequenceName = "seq_trip_review", allocationSize = 1, initialValue = 1)
+    @GeneratedValue(generator = "seq_trip_review", strategy = GenerationType.SEQUENCE)
     @Column(name = "TRIP_REVIEW_ID", nullable = false)
     private Long id;
 
@@ -53,17 +55,21 @@ public class TripReview {
     private String url;
 
     @Column(name = "POST_DATE")
+    @ColumnDefault("SYSDATE")
+    @CreationTimestamp
     private Timestamp postDate;
 
-    @Column(name = "IS_ACTIVE", length = 1, nullable = false,columnDefinition = "NUMBER(1, 0)")
+    @Column(name = "IS_ACTIVE", length = 1, nullable = false, columnDefinition = "NUMBER(1, 0)")
     @ColumnDefault("1")
     private Integer isActive;
 
-    @Column(name = "IS_DELETE", length = 1, nullable = false,columnDefinition = "NUMBER(1, 0)")
+    @Column(name = "IS_DELETE", length = 1, nullable = false, columnDefinition = "NUMBER(1, 0)")
     @ColumnDefault("0")
     private Integer isDelete;
 
     @Column(name = "DELETE_DATE")
     private Timestamp deleteDate;
 
+    @Column(name = "RATING", precision = 3, scale = 1, nullable = false)
+    private BigDecimal rating;  // Rating field added
 }
