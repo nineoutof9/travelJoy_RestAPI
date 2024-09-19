@@ -56,7 +56,6 @@ public class HotelService {
     }
 
     // 숙소 수정
-    @Transactional
     public HotelDTO updateHotel(Long id, HotelDTO hotelDTO) {
         Optional<Hotel> hotelOpt = hotelRepository.findById(id);
 
@@ -90,7 +89,6 @@ public class HotelService {
     }
 
     // 숙소 삭제
-    @Transactional
     public void deleteHotel(Long id) {
         if (hotelRepository.existsById(id)) {
             hotelRepository.deleteById(id);
@@ -112,5 +110,11 @@ public class HotelService {
                 regionName, checkInDate, checkOutDate).stream()
                 .map(HotelDTO::toDto)
                 .collect(Collectors.toList());
+    }
+    
+    public List<HotelDTO> find5NearestHotel(double latitude, double longitude) {
+        return hotelRepository.findTop5ByDistance(latitude, longitude).stream()
+        		.map(HotelDTO::toDto)
+        		.collect(Collectors.toList());
     }
 }

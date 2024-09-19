@@ -47,8 +47,6 @@ public class PushAlarm {
     private Integer isDelete;
 	
 	@Column(name="DELETE_DATE")
-	@ColumnDefault("SYSDATE")
-	@CreationTimestamp
 	private LocalDateTime deleteDate;
 	
 	

@@ -31,8 +31,8 @@ public class ImageDTO {
 				.id(id)
 				.imageUrl(imageUrl)
 				.saveDate(saveDate)
-				.isActive(isActive == true ? 1 : 0)
-				.isDelete(isDelete == true ? 1 : 0)
+				.isActive(isActive != null && isActive ? 1 : 0)
+				.isDelete(isDelete != null && isDelete ? 1 : 0)
 				.deleteDate(deleteDate)
 				.imageType(imageType)
 				.build();

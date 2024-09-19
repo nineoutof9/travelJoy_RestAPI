@@ -41,9 +41,13 @@ public class PushAlarmSend {
     @JoinColumn(name = "push_alarm_id", nullable = false)
 	private PushAlarm pushAlarm;
 	
+    @JoinColumn(name = "sender", nullable = false)
+	private String sender;
+    // system / admin의 useremail
+	
 	@ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-	private Users user;
+    @JoinColumn(name = "receiver_id", nullable = false)
+	private Users receiver;
 	
 	@Column(nullable = false,name="PUSH_ALARM_SEND_DATE")
 	@ColumnDefault("SYSDATE")
