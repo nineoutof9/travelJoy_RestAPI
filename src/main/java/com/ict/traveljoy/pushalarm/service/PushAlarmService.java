@@ -1,5 +1,6 @@
 package com.ict.traveljoy.pushalarm.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -7,69 +8,118 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ict.traveljoy.pushalarm.repository.PushAlarm;
 import com.ict.traveljoy.pushalarm.repository.PushAlarmRepository;
+import com.ict.traveljoy.pushalarm.repository.PushAlarmSend;
+import com.ict.traveljoy.pushalarm.repository.PushAlarmSendRepository;
+import com.ict.traveljoy.question.repository.QuestionRepository;
+import com.ict.traveljoy.question.service.AnswerService;
+import com.ict.traveljoy.question.service.QuestionCategoryService;
+import com.ict.traveljoy.users.repository.UserRepository;
+import com.ict.traveljoy.users.repository.Users;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 @Transactional
 public class PushAlarmService {
 
+	private final PushAlarmRepository pushAlarmRepository;
+	private final PushAlarmSendRepository pushAlarmSendRepository;
+	private final UserRepository userRepository;
 
-	@Autowired
-	private PushAlarmRepository pushAlarmRepository;
+	// 모든 PushAlarm을 조회하는 메서드 - 관리자단
+	public List<PushAlarmSendDTO> findAll() {
+		List<PushAlarmSend> pushAlarms = pushAlarmSendRepository.findAll();
+		List<PushAlarmSendDTO> alarmDTOs = new ArrayList<PushAlarmSendDTO>();
+		String sender="";
 
-	    // 새로운 PushAlarm을 저장하는 메서드
-	    public PushAlarmDTO savePushAlarm(PushAlarmDTO dto) {
-	    	
-	        if(dto.getTitle() == null && dto.getPushAlarmContent() == null) {
-	        	throw new IllegalArgumentException("알림의 제목과 내용을 넣어주세요");
-	    	
-	        	 }
-	        PushAlarm pushAlarm = dto.toEntity();
-	        pushAlarm = pushAlarmRepository.save(pushAlarm);
-	        return PushAlarmDTO.toDTO(pushAlarm);
-	    }
+		try {
+			for(PushAlarmSend alarm:pushAlarms) {
+				PushAlarmSendDTO dto = PushAlarmSendDTO.toDTO(alarm);
+				dto.setReceiveUseremail(alarm.getReceiver().getEmail());
+				if(alarm.getSender().equalsIgnoreCase("SYSTEM")) { // 시스템이 전송
+					sender = "SYSTEM";
+				}
+				else { //관리자가 전송
+					Users user = userRepository.findByEmail(alarm.getSender()).get();
+					sender = user.getEmail();
+				}
+				dto.setSender(sender);
+				alarmDTOs.add(dto);
+				System.out.println("=============="+dto.getId());
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return alarmDTOs;
+	}
 
-	    // ID로 특정 PushAlarm을 조회하는 메서드
-	    public PushAlarmDTO findById(Long id) {
-	        Optional<PushAlarm> pushAlarms = pushAlarmRepository.findById(id);
-	        return pushAlarms.map(pushAlarm->PushAlarmDTO.toDTO(pushAlarm))
-	                .orElseThrow(() -> new IllegalArgumentException("해당 ID로 푸시 알림을 찾을 수 없습니다: " + id));
-	    }
+	public List<PushAlarmSendDTO> findAllforUser(String useremail) {
 
-	    // 모든 PushAlarm을 조회하는 메서드
-	    public List<PushAlarmDTO> findAll() {
-	        List<PushAlarm> pushAlarms = pushAlarmRepository.findAll();
-	        return pushAlarms.stream()
-	                .map(pushAlarm->PushAlarmDTO.toDTO(pushAlarm))
-	                .collect(Collectors.toList());
-	    }
+		Users user = userRepository.findByEmail(useremail).get();
 
-	    // 특정 PushAlarm을 삭제하는 메서드
-	    public void deleteAlarm(Long id) {
-	    	
-	        if (pushAlarmRepository.existsById(id)) {
-	        	pushAlarmRepository.deleteById(id);
-	            
-	        }else {
-	        throw new IllegalArgumentException("푸시 알림을 찾을 수 없습니다 ");
-	        }
-	    }
+		List<PushAlarmSend> pushAlarms = pushAlarmSendRepository.findAllByReceiver_Id(user.getId());
+		List<PushAlarmSendDTO> alarmDTOs = new ArrayList<PushAlarmSendDTO>();
+		String sender="";
 
-	    // 특정 PushAlarm을 업데이트하는 메서드
-	    public PushAlarmDTO updatePushAlarm(Long id, PushAlarmDTO dto) {
-	        PushAlarm existingEntity = pushAlarmRepository.findById(id)
-	                .orElseThrow(() -> new IllegalArgumentException("해당 ID로 푸시 알림을 찾을 수 없습니다: " + id));
+		try {
+			for(PushAlarmSend alarm:pushAlarms) {
+				PushAlarmSendDTO dto = PushAlarmSendDTO.toDTO(alarm);
+				dto.setReceiveUseremail(alarm.getReceiver().getEmail());
+				if(alarm.getSender().equalsIgnoreCase("SYSTEM")) { // 시스템이 전송
+					sender = "SYSTEM";
+				}
+				else { //관리자가 전송
+					sender = "관리자";
+				}
+				dto.setSender(sender);
+				alarmDTOs.add(dto);
+				System.out.println("으어어엉ㅇ"+alarm.getPushAlarm().getTitle());
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return alarmDTOs;
+	}
 
-	        existingEntity.setTitle(dto.getTitle());
-	        existingEntity.setPushAlarmContent(dto.getPushAlarmContent());
-	        existingEntity.setIsActive(dto.getIsActive() != null && dto.getIsActive() ? 1 : 0);
-	        existingEntity.setIsDelete(dto.getIsDelete() != null && dto.getIsDelete() ? 1 : 0);
+	public PushAlarmSendDTO savePushAlarm(String title, String content, String receiveremail, String useremail) {
+		PushAlarmDTO dto = PushAlarmDTO.builder()
+				.title(title).pushAlarmContent(content).isActive(true).isDelete(false).build();
 
-	        PushAlarm updatedEntity = pushAlarmRepository.save(existingEntity);
-	        return PushAlarmDTO.toDTO(updatedEntity);
-	    }
+		if(dto.getTitle().trim().length()==0 || dto.getPushAlarmContent().trim().length()==0) {
+			throw new IllegalArgumentException("알림의 제목과 내용을 넣어주세요");
+		}
+		PushAlarm pushAlarm = dto.toEntity();
+		pushAlarm = pushAlarmRepository.save(pushAlarm);
+		
+		Users receiver = userRepository.findByEmail(receiveremail).get();
+
+		String sender ="";
+		if(userRepository.existsByEmail(useremail)) {
+			sender = useremail;
+		}
+		else {sender = "SYSTEM";}
+
+
+		PushAlarmSendDTO alarmSendDTO = PushAlarmSendDTO.builder()
+				.pushAlarm(pushAlarm).receiver(receiver).sender(sender).build();
+		PushAlarmSend alarmSend = alarmSendDTO.toEntity();
+		alarmSend.setReceiver(receiver);
+		alarmSend.setSender(sender);
+		
+		alarmSend = pushAlarmSendRepository.save(alarmSend);
+		System.out.println("hmmmm"+alarmSend.getPushAlarmSendDate()==null?"null":alarmSend.getPushAlarmSendDate());
+		PushAlarmSendDTO responseDTO = PushAlarmSendDTO.toDTO(alarmSend);
+		responseDTO.setSender(alarmSend.getSender());
+		responseDTO.setReceiveUseremail(alarmSend.getReceiver().getEmail());
+		return responseDTO;
+	}
+
+
 }

@@ -458,5 +458,15 @@ public class UserController {
 	     }
 	 }
 
+    @GetMapping("/isAdmin")
+	 public ResponseEntity<Boolean> isAdmin(@RequestParam("email") String email) {
+	        try {
+	            boolean isAdmin = userService.isAdmin(email);
+	            return ResponseEntity.ok(isAdmin);
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            return ResponseEntity.badRequest().body(false);
+	        }
+	  }
 	 
 }

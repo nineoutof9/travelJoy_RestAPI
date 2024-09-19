@@ -46,7 +46,7 @@ public class CheckContainsUseremail {
 	    } catch (Exception e) {
 	        useremail = "aaa@aaa.com";
 	        e.printStackTrace();
-	        System.out.println(useremail);
+	        System.out.println("Exception");
 	    }
 
 	    System.out.println("check useremail: "+useremail);
