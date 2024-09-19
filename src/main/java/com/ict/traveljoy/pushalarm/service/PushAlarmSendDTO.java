@@ -21,24 +21,26 @@ public class PushAlarmSendDTO {
 
 	private Long id;
 	private PushAlarm pushAlarm;
-	private Users user;
+	private String sender;	//admin 이름
+	private String receiveUseremail;  //useremail
+	private Users receiver;
 	private LocalDateTime pushAlarmSendDate;
 	
 	public PushAlarmSend toEntity() {
 		return PushAlarmSend.builder()
 				.id(id)
 				.pushAlarm(pushAlarm)
-				.user(user)
 				.pushAlarmSendDate(pushAlarmSendDate)
 				.build();
+		//sender, receiver,receiveUser는 service단에서 처리
 	}
 	
 	public static PushAlarmSendDTO toDTO(PushAlarmSend pushAlarmSend) {
 		return PushAlarmSendDTO.builder()
 				.id(pushAlarmSend.getId())
 				.pushAlarm(pushAlarmSend.getPushAlarm())
-				.user(pushAlarmSend.getUser())
 				.pushAlarmSendDate(pushAlarmSend.getPushAlarmSendDate())
 				.build();
+		//sender, receiver는 service단에서 처리
 	}
 }
