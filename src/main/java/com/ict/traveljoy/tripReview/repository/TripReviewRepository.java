@@ -21,4 +21,6 @@ public interface TripReviewRepository extends JpaRepository<TripReview, Long> {
     List<TripReview> findByPlan(Plan plan);
 
     List<TripReview> findByTitleContaining(String title);
+    
+    
 }

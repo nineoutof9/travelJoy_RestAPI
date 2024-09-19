@@ -27,6 +27,8 @@ public class TripReviewDTO {
     private BigDecimal rating;
 
     public TripReview toEntity() {
+    	Plan planE = new Plan();
+    	planE.setId(planId);   	
         return TripReview.builder()
                 .id(id)
                 .plan(plan)  

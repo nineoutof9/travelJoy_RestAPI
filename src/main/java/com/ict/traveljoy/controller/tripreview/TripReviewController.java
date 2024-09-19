@@ -38,8 +38,9 @@ public class TripReviewController {
             @RequestPart(value = "files", required = false) MultipartFile[] files) {  // 파일은 필수 아님
 
         // 리뷰 생성 로직 호출
+    	System.out.println("planID:"+tripReviewDTO.getPlanId());
         TripReviewDTO createdReview = tripReviewService.createReview(tripReviewDTO);
-
+        
         try {
             // 파일이 있을 경우에만 파일 업로드 처리
             if (files != null && files.length > 0) {
