@@ -6,6 +6,7 @@ import java.util.List;
 import com.ict.traveljoy.favorite.repository.Favorite;
 import com.ict.traveljoy.place.food.repository.Food;
 import com.ict.traveljoy.place.hotel.repository.Hotel;
+import com.ict.traveljoy.place.sight.repository.Sight; 
 import com.ict.traveljoy.place.region.repository.Region;
 import com.ict.traveljoy.users.repository.Users;
 
@@ -43,8 +44,11 @@ public class FavoriteDTO {
     private List<String> foodImageUrls;
     private String foodTel;
     private String foodWorkingTime;
-    private Float lat;  // 추가된 필드
-    private Float lng;  // 추가된 필드
+    private Float lat;  
+    private Float lng;  
+    private String sightName;  
+    private List<String> sightImageUrls;  
+    private String sightAddress; 
 
     public Favorite toEntity() {
         switch (target.toLowerCase()) {
@@ -106,12 +110,21 @@ public class FavoriteDTO {
             lng = food.getLng();
         }
 
+        Sight sight = favorite.getSight(); 
+        String sightName = sight != null ? sight.getSightName() : null; // 관광지 이름 가져오기
+        String sightAddress = sight != null ? sight.getAddress() : null; // 관광지 주소 가져오기
+        List<String> sightImageUrls = sight != null ? sight.getImageUrls() : null; // 관광지 이미지 URL 가져오기
+        if (sight != null) {
+            lat = sight.getLat(); 
+            lng = sight.getLng(); 
+        }
+
         return FavoriteDTO.builder()
                 .id(favorite.getId())
                 .user(favorite.getUser())
                 .targetId(favorite.getTargetId())
-                .lat(lat)  // 추가된 필드
-                .lng(lng)  // 추가된 필드
+                .lat(lat)  
+                .lng(lng)  
                 .isEvent(favorite.getIsEvent() == 1)
                 .isFood(favorite.getIsFood() == 1)
                 .isSight(favorite.getIsSight() == 1)
@@ -129,6 +142,9 @@ public class FavoriteDTO {
                 .foodImageUrls(foodImageUrls)
                 .foodTel(foodTel)
                 .foodWorkingTime(foodWorkingTime)
+                .sightName(sightName) 
+                .sightImageUrls(sightImageUrls) 
+                .sightAddress(sightAddress) 
                 .memo(favorite.getMemo())
                 .build();
     }

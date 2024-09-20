@@ -226,7 +226,7 @@ public class UserController {
 	         userRepository.save(user);
 
 	         // JWT 토큰 발급
-	         Long accessExpiredMs = 600000L;
+	         Long accessExpiredMs = 60000000L;
 	         String accessTokenJwt = jwtUtility.generateToken(email, "access", accessExpiredMs);
 	         Long refreshExpiredMs = 86400000L;
 	         String refreshTokenJwt = jwtUtility.generateToken(email, "refresh", refreshExpiredMs);
@@ -320,7 +320,7 @@ public class UserController {
 	         userRepository.save(user);
 
 	         // JWT 토큰 발급
-	         Long accessExpiredMs = 600000L;
+	         Long accessExpiredMs = 60000000L;
 	         String accessTokenJwt = jwtUtility.generateToken(email, "access", accessExpiredMs);
 	         Long refreshExpiredMs = 86400000L;
 	         String refreshTokenJwt = jwtUtility.generateToken(email, "refresh", refreshExpiredMs);
@@ -415,7 +415,7 @@ public class UserController {
 	         userRepository.save(user);
 
 	         // JWT 토큰 발급
-	         Long accessExpiredMs = 600000L;
+	         Long accessExpiredMs = 60000000L;
 	         String accessTokenJwt = jwtUtility.generateToken(email, "access", accessExpiredMs);
 	         Long refreshExpiredMs = 86400000L;
 	         String refreshTokenJwt = jwtUtility.generateToken(email, "refresh", refreshExpiredMs);

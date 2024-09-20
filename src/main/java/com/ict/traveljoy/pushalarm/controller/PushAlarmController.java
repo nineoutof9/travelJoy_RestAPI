@@ -2,6 +2,7 @@ package com.ict.traveljoy.pushalarm.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -67,28 +68,79 @@ public class PushAlarmController {
 
 	}
 	
+
+	@GetMapping("/active/user") // 안읽은 알람 내역 -유저단
+	public ResponseEntity<List<PushAlarmSendDTO>> getActivePushAlarms(HttpServletRequest request) {
+		String useremail = checkUser.checkContainsUseremail(request);
+
+		try {
+			List<PushAlarmSendDTO> pushAlarmAll = pushAlarmService.findActiveforUser(useremail);
+			if(pushAlarmAll == null) {
+				return new ResponseEntity<>(null,HttpStatus.OK);
+			}
+			return new ResponseEntity<>(pushAlarmAll,HttpStatus.OK);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+
+	}
+
 	
 	@PostMapping // 알람 전송 - 관리자단
-	public ResponseEntity<PushAlarmSendDTO> savePushAlarm(@RequestBody Map<String, String> map ,HttpServletRequest request) {
+	public ResponseEntity<PushAlarmSendDTO> savePushAlarm(@RequestBody Map<String, Object> map ,HttpServletRequest request) {
 		String useremail = checkUser.checkContainsUseremail(request);
 		String title = (String)map.get("title");
 		String content = (String)map.get("content");
-		String receiveremail = (String)map.get("receiver"); //수신자의 useremail
+		String receiveremails = (String)map.get("receiver"); //수신자의 useremail, 배열로 받기
 		
 		try {
-			PushAlarmSendDTO savePushAlarm = pushAlarmService.savePushAlarm(title,content,receiveremail,useremail);
+			PushAlarmSendDTO savePushAlarm = pushAlarmService.savePushAlarm(title,content,receiveremails,useremail);
 			if(savePushAlarm == null) {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			}
 			return new ResponseEntity<>(savePushAlarm,HttpStatus.CREATED);
-//			return new ResponseEntity<>(HttpStatus.CREATED);
+		} catch(NoSuchElementException e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); //400
 		} catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
-	
+	@PostMapping("/readAll") //알람 읽기
+	public ResponseEntity<PushAlarmSendDTO> readAllAlarm(HttpServletRequest request) {
+		String useremail = checkUser.checkContainsUseremail(request);
+		
+		try {
+			boolean success = pushAlarmService.readAllAlarm(useremail);
+			if(success) return new ResponseEntity<>(HttpStatus.OK);
+			else return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			
+//			return new ResponseEntity<>(HttpStatus.CREATED);
+		} catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 
+	
+	@GetMapping("/users")
+	public ResponseEntity<List<Map<String,String>>> getUsers(HttpServletRequest request){
+		String adminemail = checkUser.checkContainsUseremail(request);
+		
+		try {
+			List<Map<String,String>> response = pushAlarmService.getUsers(adminemail);
+			if(response!=null) {
+				 return new ResponseEntity<>(response,HttpStatus.ACCEPTED);
+			}
+			else return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		} catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
 
 }
