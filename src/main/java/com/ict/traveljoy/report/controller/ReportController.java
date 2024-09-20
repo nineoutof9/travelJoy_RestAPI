@@ -35,113 +35,89 @@ public class ReportController {
 	private final ObjectMapper objectMapper;
 	private final CheckContainsUseremail checkUser;
 	
-	
-	//신고 넣기
-	//신고한 사람(useremail로 받음), reportCategory(is...로 구분), content,
+	// 신고 넣기
 	@PostMapping
-	public ResponseEntity<ReportDTO> createReport(HttpServletRequest request,@RequestBody ReportDTO reportDTO){
+	public ResponseEntity<ReportDTO> createReport(HttpServletRequest request, @RequestBody ReportDTO reportDTO) {
 		String useremail = checkUser.checkContainsUseremail(request);
 		String category = request.getParameter("category");
+
 		try {
-			ReportDTO createReport = reportService.createReport(useremail,category,reportDTO);
-			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(createReport);
-		}
-		catch(Exception e) {
+			ReportDTO createReport = reportService.createReport(useremail, category, reportDTO);
+			return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "application/json").body(createReport);
+		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-	}	
-	
-	//모든 신고
+	}
+
+	// 모든 신고 조회
 	@GetMapping("/all")
-	public ResponseEntity<List<ReportDTO>> getReportAll(HttpServletRequest request){
+	public ResponseEntity<List<ReportDTO>> getReportAll(HttpServletRequest request) {
 		String useremail = checkUser.checkContainsUseremail(request);
 		try {
 			List<ReportDTO> reportList = reportService.getAll(useremail);
-			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(reportList);
-		}
-		catch(Exception e) {
+			return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "application/json").body(reportList);
+		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 	}
-	
-	//신고 카테고리
+
+	// 신고 카테고리 조회
 	@GetMapping("/category")
-	public ResponseEntity<List<ReportCategoryDTO>> getReportCategoryNames(){
+	public ResponseEntity<List<ReportCategoryDTO>> getReportCategoryNames() {
 		try {
 			List<ReportCategoryDTO> reportCategories = reportCategoryService.getAllCategory();
-			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(reportCategories);
-		}
-		catch(Exception e) {
+			return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "application/json").body(reportCategories);
+		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 	}
-	
-	//특정 신고가져오기
+
+	// 특정 신고 조회
 	@GetMapping("/{reportId}")
-	public ResponseEntity<ReportDTO> getReportById(@PathVariable("reportId") String reportId,HttpServletRequest request){
+	public ResponseEntity<ReportDTO> getReportById(@PathVariable Long reportId, HttpServletRequest request) {
 		String useremail = checkUser.checkContainsUseremail(request);
 		try {
-			ReportDTO report = reportService.getReportById(Long.parseLong(reportId),useremail);
-			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(report);
-		}
-		catch(Exception e) {
+			ReportDTO report = reportService.getReportById(reportId, useremail);
+			return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "application/json").body(report);
+		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 	}
-	
-	//특정 사용자 신고가져오기
-	//당한신고
-//	@GetMapping("/reported/{user_id}")
-//	public ResponseEntity<List<ReportDTO>> getReportedHistory(@PathVariable String user_id){
-//		try {
-//			List<ReportDTO> reportList = reportService.getReportedAllByUserId(Long.parseLong(user_id));
-//			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(reportList);
-//		}
-//		catch(Exception e) {
-//			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-//		}
-//	}
-	
-	//한신고
+
+	// 한 신고 조회
 	@GetMapping("/myreport")
-	public ResponseEntity<List<ReportDTO>> getReportHistory(HttpServletRequest request){
+	public ResponseEntity<List<ReportDTO>> getReportHistory(HttpServletRequest request) {
 		String useremail = checkUser.checkContainsUseremail(request);
 		try {
 			List<ReportDTO> reportList = reportService.getReportAllByUserId(useremail);
-			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(reportList);
-		}
-		catch(Exception e) {
+			return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "application/json").body(reportList);
+		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 	}
-	
-	//신고를 처리
-	// reportHandlerId, reportHandlerName,reportResult
+
+	// 신고 처리
 	@PutMapping("/{reportId}")
-	public ResponseEntity<ReportDTO> handleReport(@PathVariable("reportId") String reportId,HttpServletRequest request,@RequestBody ReportDTO reportDTO){
+	public ResponseEntity<ReportDTO> handleReport(@PathVariable Long reportId, HttpServletRequest request, @RequestBody ReportDTO reportDTO) {
 		String useremail = checkUser.checkContainsUseremail(request);
 		try {
-			ReportDTO updatedReport = reportService.updateReport(Long.parseLong(reportId),useremail,reportDTO);
-			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(updatedReport);
-		}
-		catch(Exception e) {
-			System.out.print("report_handled: ");
+			ReportDTO updatedReport = reportService.updateReport(reportId, useremail, reportDTO);
+			return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "application/json").body(updatedReport);
+		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
-	//신고 삭제
+
+	// 신고 삭제
 	@DeleteMapping("/{reportId}")
-	public ResponseEntity<ReportDTO> deleteReport(@PathVariable("reportId") String reportId,HttpServletRequest request){
+	public ResponseEntity<ReportDTO> deleteReport(@PathVariable Long reportId, HttpServletRequest request) {
 		String useremail = checkUser.checkContainsUseremail(request);
 		try {
-			ReportDTO deletereportDTO = reportService.deleteById(Long.parseLong(reportId),useremail);
-			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(deletereportDTO);
-		}
-		catch(Exception e) {
-			System.out.print("report_delete: ");
+			ReportDTO deletereportDTO = reportService.deleteById(reportId, useremail);
+			return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "application/json").body(deletereportDTO);
+		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}

@@ -468,5 +468,19 @@ public class UserController {
 	            return ResponseEntity.badRequest().body(false);
 	        }
 	  }
+    
+    @GetMapping("/getmembers")
+    public ResponseEntity<List<UserDTO>> getmember(){
+       try {
+         List<UserDTO> users = userService.getAllUser().stream().map(user->UserDTO.toDTO(user)).toList();
+         if(users.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+         }
+         return new ResponseEntity<>(users,HttpStatus.OK);
+      }catch(Exception e) {
+         e.printStackTrace();
+         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+    }
 	 
 }
