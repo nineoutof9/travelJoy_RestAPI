@@ -79,7 +79,6 @@ public class PushAlarmService {
 				}
 				dto.setSender(sender);
 				alarmDTOs.add(dto);
-				System.out.println("으어어엉ㅇ"+alarm.getPushAlarm().getTitle());
 			}
 		}
 		catch(Exception e) {

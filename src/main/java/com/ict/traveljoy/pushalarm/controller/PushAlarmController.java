@@ -74,7 +74,6 @@ public class PushAlarmController {
 		String title = (String)map.get("title");
 		String content = (String)map.get("content");
 		String receiveremail = (String)map.get("receiver"); //수신자의 useremail
-		System.out.println("==============="+receiveremail);
 		
 		try {
 			PushAlarmSendDTO savePushAlarm = pushAlarmService.savePushAlarm(title,content,receiveremail,useremail);
@@ -88,6 +87,8 @@ public class PushAlarmController {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+	
 
 
 }
