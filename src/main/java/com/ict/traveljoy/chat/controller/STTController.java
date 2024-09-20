@@ -106,7 +106,6 @@ public class STTController {
 					response.append(inputLine);
 				}
 				br.close();
-				System.out.println("아아악 아아악 아아악" + response.toString());
 				return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE, "application/json")
 						.body(response.toString());
 			} else {
@@ -182,7 +181,6 @@ public class STTController {
 					response.append(inputLine);
 				}
 				br.close();
-				System.out.println("아아악 아아악 아아악" + response.toString());
 				return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE, "application/json")
 						.body(response.toString());
 			} else {
