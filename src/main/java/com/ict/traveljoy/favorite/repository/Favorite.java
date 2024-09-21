@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import com.ict.traveljoy.place.food.repository.Food;
 import com.ict.traveljoy.place.hotel.repository.Hotel;
+import com.ict.traveljoy.place.sight.repository.Sight; 
 import com.ict.traveljoy.users.repository.Users;
 
 import jakarta.persistence.Column;
@@ -66,10 +67,14 @@ public class Favorite {
     @ManyToOne
     @JoinColumn(name = "HOTEL_ID")
     private Hotel hotel;
-    
+
     @ManyToOne
     @JoinColumn(name = "FOOD_ID")
     private Food food;
+
+    @ManyToOne 
+    @JoinColumn(name = "SIGHT_ID") 
+    private Sight sight;
 
     @Column(name = "IS_ACTIVE", nullable = false, columnDefinition = "NUMBER(1, 0)")
     @ColumnDefault("1")

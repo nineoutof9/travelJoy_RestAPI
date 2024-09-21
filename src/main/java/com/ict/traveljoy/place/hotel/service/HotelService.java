@@ -98,11 +98,11 @@ public class HotelService {
     }
 
     // 숙소 이름으로 검색
-    //public List<HotelDTO> findHotelsByName(String hotelName) {
-    //    return hotelRepository.findByHotelName(hotelName).stream()
-    //            .map(HotelDTO::toDto)
-    //            .collect(Collectors.toList());
-    //}
+    public List<HotelDTO> findHotelsByName(String hotelName) {
+        return hotelRepository.findByHotelName(hotelName).stream()
+               .map(HotelDTO::toDto)
+                .collect(Collectors.toList());
+    }
 
     // 지역 이름과 날짜를 기반으로 숙소 검색
     public List<HotelDTO> findHotelsByRegionNameAndDates(String regionName, LocalDate checkInDate, LocalDate checkOutDate) {

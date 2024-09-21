@@ -64,8 +64,8 @@ public class FavoriteController {
         String useremail = checkUser.checkContainsUseremail(request);
 
         try {
-            List<FavoriteDTO> favorietEventList = favoriteService.getFavoriteAll(useremail);
-            return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE, "application/json").body(favorietEventList);
+            List<FavoriteDTO> favoriteList = favoriteService.getFavoriteAll(useremail);
+            return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE, "application/json").body(favoriteList);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
@@ -77,8 +77,8 @@ public class FavoriteController {
         String target = request.getParameter("target");
 
         try {
-            List<FavoriteDTO> favorietEventList = favoriteService.getFavoriteAllByTarget(target, useremail);
-            return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE, "application/json").body(favorietEventList);
+            List<FavoriteDTO> favoriteList = favoriteService.getFavoriteAllByTarget(target, useremail);
+            return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE, "application/json").body(favoriteList);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
@@ -114,8 +114,8 @@ public class FavoriteController {
         String useremail = checkUser.checkContainsUseremail(request);
 
         try {
-            FavoriteDTO favorite = favoriteService.removeAll();
-            return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE, "application/json").body(favorite);
+            favoriteService.removeAll(); // 변경: 반환값 제거
+            return ResponseEntity.status(204).build(); // No Content
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }

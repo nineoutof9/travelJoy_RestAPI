@@ -327,18 +327,7 @@ public class PlaceController {
     }
 
     // 숙소 이름으로 검색
-<<<<<<< HEAD
-//    @GetMapping("/hotels/name/{hotelName}")
-//    public ResponseEntity<List<HotelDTO>> getHotelsByName(@PathVariable("hotelName") String hotelName) {
-//        try {
-//            List<HotelDTO> hotels = hotelService.findHotelsByName(hotelName);
-//            return new ResponseEntity<>(hotels, HttpStatus.OK);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
-=======
+
     @GetMapping("/hotels/name/{hotelName}")
     public ResponseEntity<List<HotelDTO>> getHotelsByName(@PathVariable("hotelName") String hotelName) {
         try {
@@ -360,7 +349,7 @@ public class PlaceController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
->>>>>>> ee1274819237185d66e3aef6f1264a7be6c4e889
+
 
     @PutMapping("/hotels/{id}")
     public ResponseEntity<HotelDTO> updateHotel(@PathVariable("id") Long id, @RequestBody HotelDTO hotelDto) {

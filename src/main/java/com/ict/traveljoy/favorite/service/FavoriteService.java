@@ -9,9 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ict.traveljoy.favorite.repository.Favorite;
 import com.ict.traveljoy.favorite.repository.FavoriteRepository;
 import com.ict.traveljoy.place.food.repository.Food;
-import com.ict.traveljoy.place.food.repository.FoodRepository;  // FoodRepository 추가
+import com.ict.traveljoy.place.food.repository.FoodRepository;
 import com.ict.traveljoy.place.hotel.repository.Hotel;
 import com.ict.traveljoy.place.hotel.repository.HotelRepository;
+import com.ict.traveljoy.place.sight.repository.Sight; // Sight 엔티티 import
+import com.ict.traveljoy.place.sight.repository.SightRepository; // SightRepository 추가
 import com.ict.traveljoy.users.repository.UserRepository;
 import com.ict.traveljoy.users.repository.Users;
 
@@ -24,7 +26,8 @@ public class FavoriteService {
     private final FavoriteRepository favoriteRepository;
     private final UserRepository userRepository;
     private final HotelRepository hotelRepository;
-    private final FoodRepository foodRepository;  
+    private final FoodRepository foodRepository;
+    private final SightRepository sightRepository; // SightRepository 추가
 
     public FavoriteDTO addFavorite(String useremail, FavoriteDTO dto, String target) {
         Users user = userRepository.findByEmail(useremail)
@@ -44,13 +47,15 @@ public class FavoriteService {
                     .orElseThrow(() -> new IllegalArgumentException("Food not found"));
             newFav.setFood(food);  
             newFav.setIsFood(1);
+        } else if ("sight".equalsIgnoreCase(target)) { // 관광지 처리 추가
+            Sight sight = sightRepository.findById(dto.getTargetId())
+                    .orElseThrow(() -> new IllegalArgumentException("Sight not found"));
+            newFav.setSight(sight);
+            newFav.setIsSight(1);
         } else {
             switch (target) {
                 case "event":
                     newFav.setIsEvent(1);
-                    break;
-                case "sight":
-                    newFav.setIsSight(1);
                     break;
                 default:
                     throw new IllegalArgumentException("Invalid target type: " + target);
@@ -111,7 +116,11 @@ public class FavoriteService {
         } else if ("food".equalsIgnoreCase(target) && favorite.getIsFood() == 1) {
             Food food = foodRepository.findById(favorite.getTargetId())
                     .orElseThrow(() -> new IllegalArgumentException("Invalid foodId"));
-            favorite.setFood(food);  // Food 설정
+            favorite.setFood(food);
+        } else if ("sight".equalsIgnoreCase(target) && favorite.getIsSight() == 1) { // 관광지 처리 추가
+            Sight sight = sightRepository.findById(favorite.getTargetId())
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid sightId"));
+            favorite.setSight(sight);
         }
 
         return FavoriteDTO.toDTO(favorite);
