@@ -8,20 +8,29 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
 import java.util.Map;
 
 
 public class AlarmPublish {
 	
-	public boolean sendAlarm(String senderemail, String receiveremail,String title,LocalDateTime sendDate) {
+
+	public boolean sendAlarm(String senderemail, String[] emailsToSend,String title,LocalDateTime sendDate) {
+
 		
 		String url = "http://localhost:8000/alarms";
 		RestTemplate restTemplate = new RestTemplate();
 		
-		String topic = receiveremail.substring(0, receiveremail.indexOf('@'));
+		List<String> topic = new ArrayList<String>();
+		for(String email:emailsToSend) {
+			topic.add(email.substring(0,email.indexOf('@')));
+		}
 		String sender = "ADMIN"; //"SYSTEM
-		String receiver = receiveremail;
+		String[] receiver = emailsToSend;
+
 		
 		HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -34,16 +43,15 @@ public class AlarmPublish {
         //sender, recipient, content
         Map<String,Object> message = new HashMap<>();
         message.put("sender",sender);
-        message.put("recipient", receiveremail);
+        message.put("recipient", emailsToSend);
+
         
         // title, sendDate
         Map<String, String> content = new HashMap<>();
         
         content.put("title", title);
         content.put("sendDate", sendDate.toString());
-        
-        System.out.println("sender,recipient,title,sendDate:"+senderemail+receiveremail+title+sendDate.toString());
-        
+
         message.put("content", content);
         
         requestBody.put("message", message);
@@ -54,17 +62,14 @@ public class AlarmPublish {
         //Post 요청 전송 및 응답 처리
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, request, String.class);
         if(response.getStatusCode().is2xxSuccessful()) {
-        	System.out.println("성공이당당당숭구리당당 "+response.getBody());
+        	System.out.println(response.getBody());
         }
         else {
-        	System.out.println("ㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠ"+response.getStatusCode());
+        	System.out.println(response.getStatusCode());
+
         }
 		
 		return true;
 	}
 
 }
-
-//		sender: str
-//	    recipient: str
-//      content: str

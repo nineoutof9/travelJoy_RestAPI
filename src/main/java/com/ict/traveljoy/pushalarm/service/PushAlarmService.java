@@ -124,7 +124,11 @@ public class PushAlarmService {
 
 	//알람 전송하기 - mqtt연결하기 필요
 	public PushAlarmSendDTO savePushAlarm(String title, String content, String receiveremails, String senderemail) {
-		
+		String[] emailsToSend = receiveremails.split(",");
+		String sender =senderemail;
+		LocalDateTime now = LocalDateTime.now();
+		PushAlarmSendDTO responseDTO = new PushAlarmSendDTO();
+
 		//알람 Database에 저장
 		PushAlarmDTO dto = PushAlarmDTO.builder()
 				.title(title).pushAlarmContent(content).isActive(true).isDelete(false).build();
@@ -134,38 +138,38 @@ public class PushAlarmService {
 		}
 		PushAlarm pushAlarm = dto.toEntity();
 		pushAlarm = pushAlarmRepository.save(pushAlarm);
-
-		//고치기
+    
 		Users receiver = new Users();
-		if(userRepository.existsByEmail(receiveremails)) {
-			receiver = userRepository.findByEmail(receiveremails).get();
+		for(int i=0; i<emailsToSend.length;i++) {
+			if(userRepository.existsByEmail(emailsToSend[i])) {
+				receiver = userRepository.findByEmail(emailsToSend[i]).get();
+			}
+			else {	throw new NoSuchElementException("존재하지 않는 수신자가 있습니다.");	}
+
+			PushAlarmSendDTO alarmSendDTO = PushAlarmSendDTO.builder()
+					.pushAlarm(pushAlarm).receiver(receiver).sender(sender).build();
+			PushAlarmSend alarmSend = alarmSendDTO.toEntity();
+			alarmSend.setReceiver(receiver);
+			alarmSend.setSender(sender);
+			alarmSend.setPushAlarmSendDate(now);
+
+			alarmSend = pushAlarmSendRepository.save(alarmSend);
+			
+			if(i==emailsToSend.length-1) {
+				responseDTO = PushAlarmSendDTO.toDTO(alarmSend);
+				responseDTO.setSender(alarmSend.getSender());
+				responseDTO.setReceiveUseremail(alarmSend.getReceiver().getEmail());
+				//전송내역 돌려주기
+			}
 		}
-		else {	throw new NoSuchElementException("존재하지 않는 수신자입니다.");	}
-
-		String sender =senderemail;
-		LocalDateTime now = LocalDateTime.now();
-
-		PushAlarmSendDTO alarmSendDTO = PushAlarmSendDTO.builder()
-				.pushAlarm(pushAlarm).receiver(receiver).sender(sender).build();
-		PushAlarmSend alarmSend = alarmSendDTO.toEntity();
-		alarmSend.setReceiver(receiver);
-		alarmSend.setSender(sender);
-		alarmSend.setPushAlarmSendDate(now);
-
-		alarmSend = pushAlarmSendRepository.save(alarmSend);
-		
-		PushAlarmSendDTO responseDTO = PushAlarmSendDTO.toDTO(alarmSend);
-		responseDTO.setSender(alarmSend.getSender());
-		responseDTO.setReceiveUseremail(alarmSend.getReceiver().getEmail());
-		//전송내역 돌려주기
 		
 		//Fast-API로 pub요청
 		AlarmPublish pub = new AlarmPublish();
-		System.out.println(alarmSend.getPushAlarmSendDate().toString());
-		boolean success = pub.sendAlarm(sender,receiveremails, title,now);
+		boolean success = pub.sendAlarm(sender,emailsToSend, title,now);
 		
-		System.out.println("did it work?? "+success);
+		//System.out.println("did it work?? "+success);
 		return responseDTO;
+
 	}
 
 	//모든 알람읽기 처리
@@ -214,5 +218,6 @@ public class PushAlarmService {
 		}
 		else throw new IllegalArgumentException("관리자가 아닙니다.접근권한이 없습니다.");
 	}
+
 
 }
