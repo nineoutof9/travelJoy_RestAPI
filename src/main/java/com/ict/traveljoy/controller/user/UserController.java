@@ -36,8 +36,11 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -54,6 +57,7 @@ public class UserController {
 	private final UserRepository userRepository;
 	private final JwtUtility jwtUtility;
 	private final RefreshService refreshService;
+	private final UserDetailsService userDetailService;
 	
 	@Value("${kakao.clientId}")
     private String kakaoClientId;
@@ -436,7 +440,9 @@ public class UserController {
 	         refreshCookie.setPath("/");
 	         refreshCookie.setMaxAge(refreshExpiredMs.intValue() / 1000);
 	         response.addCookie(refreshCookie);
-
+	         
+	         setAuthentication(user.getEmail());
+	         
 	         // 로그인 성공 후 URL에 토큰 정보 포함
 	         String redirectUrl = String.format("http://localhost:3000/user/signin?access=%s&isAdmin=%s&email=%s",
 	                 accessTokenJwt, user.getPermission().equalsIgnoreCase("ROLE_ADMIN"), email);
@@ -457,6 +463,16 @@ public class UserController {
 	    	 }
 	     }
 	 }
+	 
+	 private void setAuthentication(String email) {
+		    // 사용자 정보 로드 및 Authentication 객체 생성
+		    UserDetails userDetails = userDetailService.loadUserByUsername(email);
+		    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+		        userDetails, null, userDetails.getAuthorities());
+
+		    // SecurityContextHolder에 인증 정보 설정
+		    SecurityContextHolder.getContext().setAuthentication(authentication);
+		}
 
     @GetMapping("/isAdmin")
 	 public ResponseEntity<Boolean> isAdmin(@RequestParam("email") String email) {
