@@ -76,7 +76,8 @@ public class SecurityConfig {
                 // HTTP 요청에 대한 접근 권한을 설정합니다.
                 .authorizeHttpRequests(auth -> auth
 
-                        .requestMatchers("/api/**","/register","/getprofile","/logout", "/login", "/reissue", "/checkemail", "/validemail", "/kakao", "/google", "/naver", "/error"
+                        .requestMatchers("/api/**","/register","/getprofile","/getmembers","/logout", "/login", "/reissue", "/checkemail", "/validemail", "/kakao", "/google", "/naver", "/error"
+
                               , "/swagger-ui/**","/v3/api-docs/**" //swagger관련 링크
                               ,"/statistics/**","/reviewList/**","/places/**","/feedbacks/**","/notice/**","/ask/**","/bookmark/**").permitAll() // 해당 경로들은 인증 없이 접근 가능합니다.
 

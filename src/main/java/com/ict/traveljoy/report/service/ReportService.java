@@ -24,7 +24,6 @@ public class ReportService {
 	//신고하기
 	public ReportDTO createReport(String useremail,String category,ReportDTO reportDTO) {
 		Users user = userRepository.findByEmail(useremail).get();
-		
 		reportDTO.setUser(user);
 		Report report = reportDTO.toEntity();
 		
