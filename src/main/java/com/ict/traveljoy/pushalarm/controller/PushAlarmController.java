@@ -88,7 +88,7 @@ public class PushAlarmController {
 
 	
 	@PostMapping // 알람 전송 - 관리자단
-	public ResponseEntity<PushAlarmSendDTO> savePushAlarm(@RequestBody Map<String, Object> map ,HttpServletRequest request) {
+	public ResponseEntity<PushAlarmSendDTO> savePushAlarm(@RequestBody Map<String, String> map ,HttpServletRequest request) {
 		String useremail = checkUser.checkContainsUseremail(request);
 		String title = (String)map.get("title");
 		String content = (String)map.get("content");
