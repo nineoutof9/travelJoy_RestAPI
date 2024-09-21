@@ -21,6 +21,7 @@ import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -115,6 +116,11 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         responseBody.put("username", username);
         responseBody.put("isAdmin", isAdmin);
         responseBody.put("success", true);
+        
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                customUserDetails, null, customUserDetails.getAuthorities()
+        );
+        SecurityContextHolder.getContext().setAuthentication(authToken);
 
         String responseBodyJson = new ObjectMapper().writeValueAsString(responseBody);
         response.setContentType("application/json");
