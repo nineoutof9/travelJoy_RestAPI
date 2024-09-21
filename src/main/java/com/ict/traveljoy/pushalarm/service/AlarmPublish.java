@@ -11,12 +11,15 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import java.util.Map;
 
 
 public class AlarmPublish {
 	
+
 	public boolean sendAlarm(String senderemail, String[] emailsToSend,String title,LocalDateTime sendDate) {
+
 		
 		String url = "http://localhost:8000/alarms";
 		RestTemplate restTemplate = new RestTemplate();
@@ -27,6 +30,7 @@ public class AlarmPublish {
 		}
 		String sender = "ADMIN"; //"SYSTEM
 		String[] receiver = emailsToSend;
+
 		
 		HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -40,13 +44,14 @@ public class AlarmPublish {
         Map<String,Object> message = new HashMap<>();
         message.put("sender",sender);
         message.put("recipient", emailsToSend);
+
         
         // title, sendDate
         Map<String, String> content = new HashMap<>();
         
         content.put("title", title);
         content.put("sendDate", sendDate.toString());
-                
+
         message.put("content", content);
         
         requestBody.put("message", message);
@@ -61,13 +66,10 @@ public class AlarmPublish {
         }
         else {
         	System.out.println(response.getStatusCode());
+
         }
 		
 		return true;
 	}
 
 }
-
-//		sender: str
-//	    recipient: str
-//      content: str

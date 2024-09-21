@@ -124,13 +124,10 @@ public class PushAlarmService {
 
 	//알람 전송하기 - mqtt연결하기 필요
 	public PushAlarmSendDTO savePushAlarm(String title, String content, String receiveremails, String senderemail) {
-		
 		String[] emailsToSend = receiveremails.split(",");
 		String sender =senderemail;
 		LocalDateTime now = LocalDateTime.now();
 		PushAlarmSendDTO responseDTO = new PushAlarmSendDTO();
-		
-		System.out.println("왜 계속 111이 찍히지?"+title+content+receiveremails+senderemail);
 
 		//알람 Database에 저장
 		PushAlarmDTO dto = PushAlarmDTO.builder()
@@ -141,7 +138,7 @@ public class PushAlarmService {
 		}
 		PushAlarm pushAlarm = dto.toEntity();
 		pushAlarm = pushAlarmRepository.save(pushAlarm);
-
+    
 		Users receiver = new Users();
 		for(int i=0; i<emailsToSend.length;i++) {
 			if(userRepository.existsByEmail(emailsToSend[i])) {
@@ -221,5 +218,6 @@ public class PushAlarmService {
 		}
 		else throw new IllegalArgumentException("관리자가 아닙니다.접근권한이 없습니다.");
 	}
+
 
 }
