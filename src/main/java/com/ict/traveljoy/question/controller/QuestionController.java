@@ -1,5 +1,6 @@
 package com.ict.traveljoy.question.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -140,6 +141,25 @@ public class QuestionController {
 		}
 		catch(Exception e) {
 			System.out.print("question_delete: ");
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@GetMapping("/users")
+	public ResponseEntity<Map<String,Object>> getQuestionByUser(HttpServletRequest request){
+		String useremail = checkUser.checkContainsUseremail(request);
+		try {
+			List<QuestionDTO> questionDTOs = questionService.findAllByUser(useremail);
+			List<Long> questionIds = questionService.findIdsByUser(useremail);
+			Map<String,Object> response = new HashMap<String,Object>();
+			
+			response.put("QuestionList", questionDTOs);
+			response.put("AnswerIdList", questionIds);
+			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(response);
+		}
+		catch(Exception e) {
+			System.out.print("question_get: ");
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
