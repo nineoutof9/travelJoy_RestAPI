@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AllergyController {
 	
-    private AllergyService allergyService;
+    private final AllergyService allergyService;
 
     @GetMapping
     public List<AllergyDTO> getAllergies() {
