@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ict.traveljoy.plan.service.PlanDTO;
 import com.ict.traveljoy.plan.service.PlanService;
 
@@ -235,6 +236,70 @@ public class PlanController {
 
 	    return new double[]{latSum / count, lngSum / count};  // [평균 위도, 평균 경도]
 	}
+	
+	@PostMapping("/plan/ai")
+	public ResponseEntity<?> generateAIPlan(@RequestBody Map<String, Object> plan) {
+	    try {
+	        String flaskUrl = "http://localhost:8000/ai/plan";
+	        
+	        // 프롬프트 생성
+	        String prompt = "You are a travel assistant. The user has provided a 3-day travel plan with destinations. "
+	                      + "For each day, distribute the times for each destination considering optimal travel routes and realistic time spent at each location. "
+	                      + "Based on this initial plan, create two additional optimized travel plans that follow similar routes but offer slight variations for better time management or alternative activities. "
+	                      + "The format should be as follows: { \"plan\": [ { \"day\": 1, \"contents\": [ { \"index\": 1, \"title\": \"Destination Name\", \"addr\": \"Address\", \"time\": \"YYYY-MM-DD HH:MM\", \"lat\": Latitude, \"lng\": Longitude, \"activity\": \"Type of activity\" } ] }, "
+	                      + "{ \"day\": 2, \"contents\": [ { \"index\": 1, \"title\": \"Destination Name\", \"addr\": \"Address\", \"time\": \"YYYY-MM-DD HH:MM\", \"lat\": Latitude, \"lng\": Longitude, \"activity\": \"Type of activity\" } ] } ] } "
+	                      + "Based on the initial plan provided by the user, create two additional suggested plans for comparison. "
+	                      + "The output should be a JSON response with three plans, each with distributed times for each day’s destinations. "
+	                      + "For each destination, assign appropriate times based on optimal travel routes and time spent at each location. "
+	                      + "Please return only the JSON response, with the initial plan and two additional recommended plans.";
+
+	        // 요청 데이터 준비
+	        Map<String, Object> request = new HashMap<>();
+	        request.put("name", plan.get("name"));
+
+	        // description에 프롬프트와 plan 데이터를 함께 포함
+	        if (plan.get("plan") != null) {
+	            String planJson = new ObjectMapper().writeValueAsString(plan.get("plan"));
+	            String fullPrompt = prompt + " Initial plan: " + planJson;
+	            request.put("description", fullPrompt);
+	        } else {
+	            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("plan 값이 비어 있습니다.");
+	        }
+
+	        // Flask로 요청 전송
+	        ResponseEntity<Map> aiResponse = restTemplate.postForEntity(flaskUrl, request, Map.class);
+	        Map<String, Object> aiResponseBody = aiResponse.getBody();
+
+	        if (aiResponseBody == null || !aiResponseBody.containsKey("content")) {
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("AI 서버 응답이 올바르지 않습니다.");
+	        }
+
+	        String aiGeneratedPlanText = (String) aiResponseBody.get("content");
+	        List<Map<String, Object>> generatedPlans = parseAIResponseToPlans(aiGeneratedPlanText);
+
+	        return ResponseEntity.ok(generatedPlans);
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("AI 플랜 생성 중 오류 발생: " + e.getMessage());
+	    }
+	}
+
+	// AI 응답을 JSON으로 변환하는 메서드
+	private List<Map<String, Object>> parseAIResponseToPlans(String aiResponse) {
+	    List<Map<String, Object>> plans = new ArrayList<>();
+	    
+	    try {
+	        // JSON 문자열을 파싱하여 List<Map<String, Object>>로 변환
+	        ObjectMapper objectMapper = new ObjectMapper();
+	        Map<String, Object> parsedResponse = objectMapper.readValue(aiResponse, Map.class);
+	        plans = (List<Map<String, Object>>) parsedResponse.get("plan");
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    
+	    return plans;
+	}
+
 
 
 }/////////////
