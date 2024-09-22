@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserHandicapController {
 
-    private UserHandicapService userHandicapService;
+    private final UserHandicapService userHandicapService;
 
     @GetMapping
     public List<UserHandicapDTO> getAllUserHandicaps() {
