@@ -6,5 +6,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface HandicapRepository extends JpaRepository<Handicap, Long>{
+
+	Handicap findByHandicapType(String added);
+	
+	
 	
 }

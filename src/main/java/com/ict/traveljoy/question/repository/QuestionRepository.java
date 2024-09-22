@@ -8,4 +8,6 @@ public interface QuestionRepository extends JpaRepository<Question, Long>{
 
 	List<Question> findAllByQuestionCategory_Id(Long categoryId);
 
+	List<Question> findAllByUser_Id(Long id);
+
 }

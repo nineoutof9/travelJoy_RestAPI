@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ict.traveljoy.question.repository.AnswerRepository;
 import com.ict.traveljoy.question.repository.Question;
 import com.ict.traveljoy.question.repository.QuestionCategory;
 import com.ict.traveljoy.question.repository.QuestionRepository;
@@ -22,6 +23,7 @@ public class QuestionService {
 	private final QuestionRepository questionRepostiory;
 	private final QuestionCategoryService questionCategoryService;
 	private final AnswerService answerService;
+	private final AnswerRepository answerRepository;
 	private final UserRepository userRepository;
 	private final ObjectMapper objectMapper;
 	
@@ -125,6 +127,29 @@ public class QuestionService {
 		}
 		else throw new IllegalArgumentException("삭제 실패");
 		return false;
+	}
+
+
+	public List<QuestionDTO> findAllByUser(String useremail) {
+		Users user = userRepository.findByEmail(useremail).get();
+		
+		List<Question> questions = questionRepostiory.findAllByUser_Id(user.getId());
+		return questions.stream().map(question->QuestionDTO.toDTO(question)).collect(Collectors.toList());
+	}
+
+
+	public List<Long> findIdsByUser(String useremail) {
+		Users user = userRepository.findByEmail(useremail).get();
+		List<Question> questions = questionRepostiory.findAllByUser_Id(user.getId());
+		List<Long> qids = new ArrayList<>(); 
+		for(Question question:questions) {
+			long tempId=0;
+			if(question.getIsHasAnswer()==1) {
+				tempId = answerRepository.findByQuestion_Id(question.getId()).getId();
+				qids.add(tempId);
+			}
+		}
+		return qids;
 	}
 
 	
