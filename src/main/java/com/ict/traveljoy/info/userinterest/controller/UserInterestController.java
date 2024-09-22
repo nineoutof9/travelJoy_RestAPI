@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserInterestController {
 
-    private UserInterestService userInterestService;
+    private final UserInterestService userInterestService;
 
     @PostMapping
     public UserInterestDTO createUserInterest(@RequestBody UserInterestDTO dto) {
