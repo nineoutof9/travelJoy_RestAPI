@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class QuestionService {
 
-	private final QuestionRepository questionRepostiory;
+	private final QuestionRepository questionRepository;
 	private final QuestionCategoryService questionCategoryService;
 	private final AnswerService answerService;
 	private final AnswerRepository answerRepository;
@@ -36,7 +36,7 @@ public class QuestionService {
 		if(questionCategory!=null) {
 			newQuestion.setQuestionCategory(questionCategory);
 			Question question = newQuestion.toEntity();
-			Question afterSave = questionRepostiory.save(question);
+			Question afterSave = questionRepository.save(question);
 			return QuestionDTO.toDTO(afterSave);
 		}
 		else return null;
@@ -45,27 +45,26 @@ public class QuestionService {
 
 
 	public List<QuestionDTO> findAll() {
-		List<Question> questionList = questionRepostiory.findAll();
-		List<QuestionDTO> questionDTOList = new ArrayList<QuestionDTO>();
-		for(Question question:questionList) {
-			System.out.println("-----------------------"+question.getQuestionTitle()+question.getIsHasAnswer());
-			if(!question.getQuestionCategory().getQuestionCategoryName().equalsIgnoreCase("FAQ")) {
-				QuestionDTO dto = QuestionDTO.toDTO(question);
-				dto.setCategory(question.getQuestionCategory().getQuestionCategoryName());
-				System.out.println("-----------------------"+dto.getCategory()+dto.getIsHasAnswer());
-				questionDTOList.add(dto);
-			}
-		}
-		
-		return questionDTOList;
+	    List<Question> questionList = questionRepository.findAll();
+	    List<QuestionDTO> questionDTOList = new ArrayList<QuestionDTO>();
+	    for(Question question : questionList) {
+	        System.out.println("Processing question ID: " + question.getId()); // 로그 추가
+	        if(!question.getQuestionCategory().getQuestionCategoryName().equalsIgnoreCase("FAQ")) {
+	            QuestionDTO dto = QuestionDTO.toDTO(question);
+	            dto.setCategory(question.getQuestionCategory().getQuestionCategoryName());
+	            questionDTOList.add(dto);
+	        }
+	    }
+	    return questionDTOList;
 	}
+
 
 	public List<QuestionDTO> findAllByCategory(String category) {
 		// category name으로 해당 category question 다 받아오기
 		// category 객체 받아와서 그걸로 찾기
 		QuestionCategory questionCategory = questionCategoryService.findCategoryByCategoryName(category);
 		if(questionCategory!=null) {
-			List<Question> questionList = questionRepostiory.findAllByQuestionCategory_Id(questionCategory.getId());
+			List<Question> questionList = questionRepository.findAllByQuestionCategory_Id(questionCategory.getId());
 			return questionList.stream().map(question->QuestionDTO.toDTO(question)).collect(Collectors.toList());
 		}
 		else throw new IllegalArgumentException("오류");
@@ -80,8 +79,8 @@ public class QuestionService {
 	
 	//본인꺼외에는 안보이게 할지 말지
 	public QuestionDTO findById(long questionId) {
-		if(questionRepostiory.existsById(questionId)) {
-			Question question = questionRepostiory.findById(questionId).get();
+		if(questionRepository.existsById(questionId)) {
+			Question question = questionRepository.findById(questionId).get();
 			return QuestionDTO.toDTO(question);
 		}
 		return null;
@@ -89,8 +88,8 @@ public class QuestionService {
 
 
 	public QuestionDTO updateById(long questionId,String title, String content, String category) {
-		if(questionRepostiory.existsById(questionId)) {
-			Question beforeQuestion = questionRepostiory.findById(questionId).get();
+		if(questionRepository.existsById(questionId)) {
+			Question beforeQuestion = questionRepository.findById(questionId).get();
 			
 			beforeQuestion.setQuestionTitle(title);
 			beforeQuestion.setQuestionContent(content);
@@ -99,25 +98,25 @@ public class QuestionService {
 			beforeQuestion.setQuestionCategory(updateCategory);
 			
 			
-			Question updatedQuestion = questionRepostiory.save(beforeQuestion);
+			Question updatedQuestion = questionRepository.save(beforeQuestion);
 			return QuestionDTO.toDTO(updatedQuestion);
 		}
 		else throw new IllegalArgumentException("해당 id와 일치하는 question 없음");
 	}
 	
 	public int answerCompleted(long questionId) {
-		if(questionRepostiory.existsById(questionId)) {
-			Question answeredQuestion = questionRepostiory.findById(questionId).orElseThrow(() -> new RuntimeException("Question not found"));
+		if(questionRepository.existsById(questionId)) {
+			Question answeredQuestion = questionRepository.findById(questionId).orElseThrow(() -> new RuntimeException("Question not found"));
 			answeredQuestion.setIsHasAnswer(1);
-			questionRepostiory.save(answeredQuestion);
+			questionRepository.save(answeredQuestion);
 			return 1;
 		}
 		else return 0;
 	}
 
 	public Boolean deleteById(long questionId) {
-		if(questionRepostiory.existsById(questionId)) {
-			Question question = questionRepostiory.findById(questionId).orElseThrow(() -> new RuntimeException("Question not found"));
+		if(questionRepository.existsById(questionId)) {
+			Question question = questionRepository.findById(questionId).orElseThrow(() -> new RuntimeException("Question not found"));
 			boolean questionDeleteProceed = false;
 			if(question.getIsHasAnswer()==1) {
 				questionDeleteProceed = answerService.deleteByQuestionId(questionId);
@@ -126,7 +125,7 @@ public class QuestionService {
 				questionDeleteProceed=true;
 			}
 			if(questionDeleteProceed) {
-				questionRepostiory.delete(question);
+				questionRepository.delete(question);
 				System.out.println("지웟따.");
 				return true;
 			}
@@ -139,14 +138,14 @@ public class QuestionService {
 	public List<QuestionDTO> findAllByUser(String useremail) {
 		Users user = userRepository.findByEmail(useremail).get();
 		
-		List<Question> questions = questionRepostiory.findAllByUser_Id(user.getId());
+		List<Question> questions = questionRepository.findAllByUser_Id(user.getId());
 		return questions.stream().map(question->QuestionDTO.toDTO(question)).collect(Collectors.toList());
 	}
 
 
 	public List<Long> findIdsByUser(String useremail) {
 		Users user = userRepository.findByEmail(useremail).get();
-		List<Question> questions = questionRepostiory.findAllByUser_Id(user.getId());
+		List<Question> questions = questionRepository.findAllByUser_Id(user.getId());
 		List<Long> qids = new ArrayList<>(); 
 		for(Question question:questions) {
 			long tempId=0;

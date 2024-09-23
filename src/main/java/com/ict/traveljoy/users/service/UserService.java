@@ -80,6 +80,12 @@ public class UserService {
 	        	user.setGender(userDTO.getGender() ? 1 : 0);
 	        if (userDTO.getGender() == null)
 	        	user.setGender(null);
+	        if(userDTO.getInterestAllow()==true)
+	        	user.setInterestAllow(1);
+	        if(userDTO.getAllergyAllow()==true)
+	        	user.setAllergyAllow(1);
+	        if(userDTO.getHandicapAllow()==true)
+	        	user.setHandicapAllow(1);
 	        // 필요한 경우 다른 필드도 추가 가능
 
 	        // 데이터베이스에 업데이트된 사용자 정보 저장

@@ -126,7 +126,12 @@ public class UserController {
 	            user.setIntroduce((String) updatedProfile.get("introduce"));
 	        }
 	        if (updatedProfile.containsKey("birthDate")) {
-	            user.setBirthDate(Date.valueOf((String) updatedProfile.get("birthDate"))); // Date로 변환
+	            String birthDateStr = (String) updatedProfile.get("birthDate");
+	            try {
+	                user.setBirthDate(Date.valueOf(birthDateStr)); // Expecting "YYYY-MM-DD"
+	            } catch (IllegalArgumentException e) {
+	                System.err.println("Invalid date format: " + birthDateStr);
+	            }
 	        }
 	        if (updatedProfile.containsKey("gender")) {
 	            String genderStr = (String) updatedProfile.get("gender");
@@ -137,6 +142,20 @@ public class UserController {
 		            Boolean gender = Boolean.valueOf(genderStr);
 		            user.setGender(gender);
 	            }
+	        }
+	        if(updatedProfile.containsKey("interestAllow")) {
+	            String interestAllow = (String) updatedProfile.get("interestAllow");
+	            user.setInterestAllow(interestAllow.equals("true"));
+	        }
+
+	        if(updatedProfile.containsKey("allergyAllow")) {
+	            String allergyAllow = (String) updatedProfile.get("allergyAllow");
+	            user.setAllergyAllow(allergyAllow.equals("true"));
+	        }
+
+	        if(updatedProfile.containsKey("handicapAllow")) {
+	            String handicapAllow = (String) updatedProfile.get("handicapAllow");
+	            user.setHandicapAllow(handicapAllow.equals("true"));
 	        }
 	        
 	        // 프로필 정보 업데이트
@@ -179,7 +198,10 @@ public class UserController {
 	            profileData.put("profileImageUrl", imageUrl);
 	        }
 
-	        profileData.keySet().retainAll(List.of("birthDate", "gender", "name", "nickname", "introduce", "profileImageUrl", "email"));
+	        profileData.keySet().retainAll(List.of(
+	        	    "birthDate", "gender", "name", "nickname", "introduce", "profileImageUrl", "email",
+	        	    "handicapAllow", "allergyAllow", "interestAllow"
+	        	));
 
 	        return ResponseEntity.ok(profileData);
 	    } catch (Exception e) {
