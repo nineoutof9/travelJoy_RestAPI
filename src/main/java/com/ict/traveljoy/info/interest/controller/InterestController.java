@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class InterestController {
 
-    private InterestService interestService;
+    private final InterestService interestService;
 
     @PostMapping
     public InterestDTO createInterest(@RequestBody InterestDTO dto) {

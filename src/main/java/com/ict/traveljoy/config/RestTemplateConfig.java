@@ -19,8 +19,8 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 public class RestTemplateConfig {
 
-	static final int READ_TIMEOUT = 1500;
-	static final int CONN_TIMEOUT = 3000;
+	static final int READ_TIMEOUT = 20000;
+	static final int CONN_TIMEOUT = 20000;
 
 	@Bean
 	public RestTemplate restTemplate() {
