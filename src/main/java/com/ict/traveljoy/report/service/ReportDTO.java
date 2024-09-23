@@ -24,7 +24,7 @@ public class ReportDTO {
 
 	private Users user; //신고자
 	private ReportCategory reportCategory; //신고대상 유형
-	private Long targetId; //신고대상 id
+	private Long targetId; //신고상대 id
 
 	private Boolean isUser;
 	private Boolean isNotice;
@@ -37,6 +37,7 @@ public class ReportDTO {
 	
 	private LocalDateTime reportDate;
 	private String reportContent;
+	private String reportTitle;
 	private Long reportHandlerId;
 	private String reportHandlerName;
 	private String reportResult;
@@ -62,6 +63,7 @@ public class ReportDTO {
 				.reportHandlerName(reportHandlerName)
 				.reportResult(reportResult)
 				.reportResultDate(reportResultDate)
+				.reportTitle(reportTitle)
 				.build();
 	}
 	
@@ -85,6 +87,7 @@ public class ReportDTO {
 				.reportHandlerName(report.getReportHandlerName())
 				.reportResult(report.getReportResult())
 				.reportResultDate(report.getReportResultDate())
+				.reportTitle(report.getReportTitle())
 				.build();
 	}
 	

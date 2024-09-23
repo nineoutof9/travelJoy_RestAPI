@@ -34,13 +34,13 @@ public class Report {
 
 
 	@Id
-	@Column(name="REPORT_ID")
+	@Column(name="REPORT_ID") //신고ID
 	@SequenceGenerator(name = "seq_report",sequenceName = "seq_report",allocationSize = 1,initialValue = 1)
 	@GeneratedValue(generator = "seq_report",strategy = GenerationType.SEQUENCE)
     private Long id;
     
 	@ManyToOne
-    @JoinColumn(name = "USER_ID")
+    @JoinColumn(name = "USER_ID") //신고자 ID
 	private Users user;
     
 
@@ -49,7 +49,7 @@ public class Report {
 	private ReportCategory reportCategory;
     
 
-	@Column(name="TARGET_ID",nullable=false)
+	@JoinColumn(name = "TARGET_ID", nullable = false)//신고상대ID
     private Long targetId;
 	
 	@Column(name="IS_USER", columnDefinition = "NUMBER(1, 0)")
@@ -98,6 +98,8 @@ public class Report {
 	@Column(name="REPORT_RESULT",length=2000)
     private String reportResult;
     
+	@Column(name="REPORT_TITLE",length=2000)
+    private String reportTitle;
 
     @Column(name="REPORT_RESULT_DATE")
 	@ColumnDefault("SYSDATE")

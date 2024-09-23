@@ -6,5 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface InterestRepository extends JpaRepository<Interest, Long>{
+
+	Interest findByInterestTopic(String added);
 	
 }
