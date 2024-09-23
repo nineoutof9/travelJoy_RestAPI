@@ -1,6 +1,7 @@
 package com.ict.traveljoy.chat.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -52,7 +53,7 @@ public class ChatController {
 	// 채팅 종료 시
 	// chatroom.isActive(0)으로 바꾸기
 	@PutMapping("/topic")
-	public ResponseEntity closeChatRoom(HttpServletRequest request) {
+	public ResponseEntity<Object> closeChatRoom(HttpServletRequest request) {
 		String useremail = checkUser.checkContainsUseremail(request);
 		try {
 			boolean success = chatroomService.closeChatRoom(useremail);
@@ -66,12 +67,13 @@ public class ChatController {
 	
 	// 채팅 내역 불러오기 - 회원 목록
 	@GetMapping("/users")
-	public ResponseEntity<List<EnterChatRoomDTO>> getAllChatRoom(HttpServletRequest request) {
+	public ResponseEntity<List<Map<String,Object>>> getAllChatRoom(HttpServletRequest request) {
 		String useremail = checkUser.checkContainsUseremail(request);
 		// 권한 확인하기
-
+//		List<Map<String,Object>>
 		try {
-			List<EnterChatRoomDTO> enteredChatrooms = chatroomService.getAllChatRoom(useremail);
+			List<Map<String,Object>> enteredChatrooms = chatroomService.getAllChatRoom(useremail);
+			System.out.println(enteredChatrooms.get(0).get("chatroom"));
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(enteredChatrooms);
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -97,11 +99,11 @@ public class ChatController {
 	
 	// 채팅 내역 불러오기 - 관리자 뷰, 채팅방 아이디로 불러오기
 	@GetMapping("/{chatroom_id}")
-	public ResponseEntity<List<MessageDTO>> getMessagesByChatRoomId(@PathVariable("chatroom_id") String chatroom_id, HttpServletRequest request){
+	public ResponseEntity<List<Map<String,Object>>> getMessagesByChatRoomId(@PathVariable("chatroom_id") String chatroom_id, HttpServletRequest request){
 		String useremail = checkUser.checkContainsUseremail(request);
 		
 		try {
-			List<MessageDTO> messages = messageService.getAllMessagesByChatRoom(Long.parseLong(chatroom_id),useremail);
+			List<Map<String,Object>> messages = messageService.getAllMessagesByChatRoom(Long.parseLong(chatroom_id),useremail);
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(messages);
 		}catch(Exception e) {
 			e.printStackTrace();

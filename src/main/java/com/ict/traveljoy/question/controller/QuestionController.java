@@ -113,12 +113,13 @@ public class QuestionController {
 	
 	//문의글 수정
 	@PutMapping("/{question_id}")
-	public ResponseEntity<QuestionDTO> updateQuestion(@PathVariable("question_id") String question_id,@RequestBody QuestionDTO questionDTO){
-		System.out.println(questionDTO.getQuestionTitle());
-		System.out.println(questionDTO.getQuestionContent());
-		System.out.println(questionDTO.getQuestionCategory().getQuestionCategoryName());
+	public ResponseEntity<QuestionDTO> updateQuestion(@PathVariable("question_id") String question_id,@RequestBody Map<String, String> map){
+		String title = (String)map.get("title");
+		String content = (String)map.get("content");
+		String category = (String)map.get("category");
+		
 		try {
-			QuestionDTO updatedQuestionDTO = questionService.updateById(Long.parseLong(question_id),questionDTO);
+			QuestionDTO updatedQuestionDTO = questionService.updateById(Long.parseLong(question_id),title,content,category);
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(updatedQuestionDTO);
 		}
 		catch(Exception e) {

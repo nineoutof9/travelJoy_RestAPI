@@ -1,6 +1,7 @@
 package com.ict.traveljoy.question.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -15,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ict.traveljoy.controller.CheckContainsUseremail;
 import com.ict.traveljoy.question.service.AnswerDTO;
 import com.ict.traveljoy.question.service.AnswerService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -26,12 +29,18 @@ import lombok.RequiredArgsConstructor;
 public class AnswerController {
 
 	private final AnswerService answerService;
+	private final CheckContainsUseremail checkUser;
 	private final ObjectMapper objectMapper;
 	
 	@PostMapping
-	public ResponseEntity<AnswerDTO> createAnswer(@RequestBody AnswerDTO answerDTO){
+	public ResponseEntity<AnswerDTO> createAnswer(@RequestBody Map<String, String> map, HttpServletRequest request){
+		String useremail = checkUser.checkContainsUseremail(request);
+		Long questionId = Long.parseLong(map.get("qid"));
+		String answerContent = (String)map.get("answer");
+		String answerHandlerName = (String)map.get("handler");
+		
 		try {
-			AnswerDTO createdAnswer = answerService.createAnswer(answerDTO);
+			AnswerDTO createdAnswer = answerService.createAnswer(useremail,questionId,answerContent,answerHandlerName);
 			if(createdAnswer == null) {
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			}
