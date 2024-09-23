@@ -10,6 +10,8 @@ import com.ict.traveljoy.question.repository.Answer;
 import com.ict.traveljoy.question.repository.AnswerRepository;
 import com.ict.traveljoy.question.repository.Question;
 import com.ict.traveljoy.question.repository.QuestionRepository;
+import com.ict.traveljoy.users.repository.UserRepository;
+import com.ict.traveljoy.users.repository.Users;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,13 +20,22 @@ import lombok.RequiredArgsConstructor;
 public class AnswerService {
 	private final AnswerRepository answerRepository;
 	private final QuestionRepository questionRepository;
+	private final UserRepository userRepository;
 	private final ObjectMapper objectMapper;
 	
 
 	// 질문 답변달기
-	public AnswerDTO createAnswer(AnswerDTO answerDTO) {
-		Answer answer = answerDTO.toEntity();
+	public AnswerDTO createAnswer(String useremail,long questionId,String answerContent,String answerHandlerName) {
+		
+		Users user = userRepository.findByEmail(useremail).get();
+		Question question = questionRepository.findById(questionId).get();
+		Answer answer = Answer.builder()
+				.answerContent(answerContent).answerHandlerName(answerHandlerName)
+				.user(user).question(question)
+				.build();
 		Answer aftersave = answerRepository.save(answer);
+		question.setIsHasAnswer(1);
+		questionRepository.save(question);
 		return AnswerDTO.toDTO(aftersave);
 	}
 	

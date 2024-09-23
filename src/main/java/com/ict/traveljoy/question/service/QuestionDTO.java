@@ -37,19 +37,20 @@ public class QuestionDTO {
 				.questionDate(questionDate)
 				.questionTitle(questionTitle)
 				.questionContent(questionContent)
-				.isHasAnswer(isHasAnswer!=null && isHasAnswer? 1:0)
+				.isHasAnswer(isHasAnswer == null || !isHasAnswer ? 0 : 1)
 				.build();
 	}
 
 	public static QuestionDTO toDTO(Question question) {
+		System.out.println("test"+question.getIsHasAnswer());
 		return QuestionDTO.builder()
 				.id(question.getId())
-				.user(question.getUser())
-				.questionCategory(question.getQuestionCategory())
-				.questionDate(question.getQuestionDate())
-				.questionTitle(question.getQuestionTitle())
-				.questionContent(question.getQuestionContent())
-				.isHasAnswer(question.getIsHasAnswer() == 1 ? true : false)
-				.build();
+		        .user(question.getUser())
+		        .questionCategory(question.getQuestionCategory())
+		        .questionDate(question.getQuestionDate())
+		        .questionTitle(question.getQuestionTitle())
+		        .questionContent(question.getQuestionContent())
+		        .isHasAnswer(question.getIsHasAnswer() != null && question.getIsHasAnswer() == 1)
+		        .build();
 	}
 }

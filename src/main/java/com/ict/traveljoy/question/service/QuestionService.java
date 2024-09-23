@@ -48,8 +48,12 @@ public class QuestionService {
 		List<Question> questionList = questionRepostiory.findAll();
 		List<QuestionDTO> questionDTOList = new ArrayList<QuestionDTO>();
 		for(Question question:questionList) {
+			System.out.println("-----------------------"+question.getQuestionTitle()+question.getIsHasAnswer());
 			if(!question.getQuestionCategory().getQuestionCategoryName().equalsIgnoreCase("FAQ")) {
-				questionDTOList.add(QuestionDTO.toDTO(question));
+				QuestionDTO dto = QuestionDTO.toDTO(question);
+				dto.setCategory(question.getQuestionCategory().getQuestionCategoryName());
+				System.out.println("-----------------------"+dto.getCategory()+dto.getIsHasAnswer());
+				questionDTOList.add(dto);
 			}
 		}
 		
@@ -84,12 +88,14 @@ public class QuestionService {
 	}
 
 
-	public QuestionDTO updateById(long questionId,QuestionDTO questionDTO) {
+	public QuestionDTO updateById(long questionId,String title, String content, String category) {
 		if(questionRepostiory.existsById(questionId)) {
 			Question beforeQuestion = questionRepostiory.findById(questionId).get();
-			beforeQuestion.setQuestionContent(questionDTO.getQuestionContent());
 			
-			QuestionCategory updateCategory = questionCategoryService.findCategoryByCategoryName(questionDTO.getQuestionCategory().getQuestionCategoryName());
+			beforeQuestion.setQuestionTitle(title);
+			beforeQuestion.setQuestionContent(content);
+			
+			QuestionCategory updateCategory = questionCategoryService.findCategoryByCategoryName(category);
 			beforeQuestion.setQuestionCategory(updateCategory);
 			
 			
