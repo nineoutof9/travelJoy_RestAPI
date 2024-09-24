@@ -25,24 +25,24 @@ public class PushAlarmDTO {
 	private LocalDateTime deleteDate;
 	
 	public PushAlarm toEntity() {
-		return PushAlarm.builder()
-				.id(id)
-				.title(title)
-				.pushAlarmContent(pushAlarmContent)
-				.isActive(isActive==null || isActive ? 1 : 0)
-				.isDelete(isDelete== null || false ? 0 : 1)
-				.deleteDate(deleteDate)
-				.build();
+	    return PushAlarm.builder()
+	            .id(id)
+	            .title(title)
+	            .pushAlarmContent(pushAlarmContent)
+	            .isActive(isActive == null || isActive ? 1 : 0)
+	            .isDelete(isDelete == null || isDelete == false ? 0 : 1) 
+	            .deleteDate(deleteDate)
+	            .build();
 	}
-	
+
 	public static PushAlarmDTO toDTO(PushAlarm pushAlarm) {
-		return PushAlarmDTO.builder()
-				.id(pushAlarm.getId())
-				.title(pushAlarm.getTitle())
-				.pushAlarmContent(pushAlarm.getPushAlarmContent())
-				.isActive(pushAlarm.getIsActive()!=null &&pushAlarm.getIsActive() == 1 ? true : false)
-				.isDelete(pushAlarm.getIsDelete()!=null &&pushAlarm.getIsDelete() == 1 ? true : false)
-				.deleteDate(pushAlarm.getDeleteDate())
-				.build();
+	    return PushAlarmDTO.builder()
+	            .id(pushAlarm.getId())
+	            .title(pushAlarm.getTitle())
+	            .pushAlarmContent(pushAlarm.getPushAlarmContent())
+	            .isActive(pushAlarm.getIsActive() == null || pushAlarm.getIsActive() == 1 ? true : false)
+	            .isDelete(pushAlarm.getIsDelete() == null || pushAlarm.getIsDelete() == 0 ? false : true)
+	            .deleteDate(pushAlarm.getDeleteDate())
+	            .build();
 	}
 }
