@@ -29,10 +29,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -53,7 +56,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class UserController {
 	
+	@Autowired
 	private final UserService userService;
+	@Autowired
 	private final ObjectMapper objectMapper;
 	private final UserRepository userRepository;
 	private final JwtUtility jwtUtility;
@@ -540,5 +545,19 @@ public class UserController {
 	            return ResponseEntity.badRequest().body(false);
 	        }
 	  }
+    
+    @GetMapping("/getmembers")
+    public ResponseEntity<List<UserDTO>> getmember(){
+       try {
+         List<UserDTO> users = userService.getAllUser().stream().map(user->UserDTO.toDTO(user)).toList();
+         if(users.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+         }
+         return new ResponseEntity<>(users,HttpStatus.OK);
+      }catch(Exception e) {
+         e.printStackTrace();
+         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+    }
 	 
 }

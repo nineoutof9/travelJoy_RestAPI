@@ -13,9 +13,12 @@ public interface EnterChatRoomRepository extends JpaRepository<EnterChatRoom, Lo
 
 	EnterChatRoom findByUser_Id(Long userid);
 
+
 	int countByUser_Id(Long id);
 
+
 	EnterChatRoom findByChatRoom_Id(Long id);
+
 
 	
 }

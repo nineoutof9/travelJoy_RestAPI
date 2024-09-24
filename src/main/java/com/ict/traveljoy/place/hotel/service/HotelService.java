@@ -60,6 +60,7 @@ public class HotelService {
         Optional<Hotel> hotelOpt = hotelRepository.findById(id);
 
         if (hotelOpt.isPresent()) {
+
             Hotel hotel = hotelOpt.get();
 
             if (hotelDTO.getRegionName() != null) {
@@ -79,6 +80,7 @@ public class HotelService {
             hotel.setCheckInDate(hotelDTO.getCheckInDate());
             hotel.setCheckOutDate(hotelDTO.getCheckOutDate());
 
+           
             Hotel updatedHotel = hotelRepository.save(hotel);
             return HotelDTO.toDto(updatedHotel);
         } else {
@@ -98,7 +100,7 @@ public class HotelService {
     // 숙소 이름으로 검색
     public List<HotelDTO> findHotelsByName(String hotelName) {
         return hotelRepository.findByHotelName(hotelName).stream()
-                .map(HotelDTO::toDto)
+               .map(HotelDTO::toDto)
                 .collect(Collectors.toList());
     }
 
