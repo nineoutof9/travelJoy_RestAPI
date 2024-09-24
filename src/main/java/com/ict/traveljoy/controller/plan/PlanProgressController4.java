@@ -36,10 +36,12 @@ public class PlanProgressController4 {
 	
 	@PostMapping("/progress4")
 	@Operation(summary = "4단계 저장", description = "4단계 저장 컨트롤러")
+
 	public ResponseEntity<PlanProgress4DTO> savePlanProgress4(@RequestBody PlanProgress4DTO PlanProgress4DTO){
 		
 		try {
 		PlanProgress4DTO savePlanProgress4 = planProgress4Service.savePlanProgress4(PlanProgress4DTO);
+
 		if(savePlanProgress4 == null) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -52,10 +54,12 @@ public class PlanProgressController4 {
 	
 	@PutMapping("/progress4")
 	@Operation(summary = "4단계 수정", description = "4단계 수정 컨트롤러")
+
 	public ResponseEntity<PlanProgress4DTO> updatePlanProgress4(@RequestBody PlanProgress4DTO PlanProgress4DTO){
 		
 		try {
 		PlanProgress4DTO updatePlanProgress4 = planProgress4Service.updatePlanProgress4(PlanProgress4DTO);
+
 		if(updatePlanProgress4 == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -84,10 +88,12 @@ public class PlanProgressController4 {
 	
 	@GetMapping("/progress4/{planProgressByPlanId}")
 	@Operation(summary = "4단계 조회(계획ID)", description = "특정 계획ID로 조회")
+
 	public ResponseEntity<PlanProgress4DTO> getPlanProgressesByPlanId(Long plan_Id){
 		
 		try {
 		List<PlanProgress4DTO> planProgressByPlanId = planProgress4Service.getPlanProgressesByPlanId(plan_Id);
+
 		if(planProgressByPlanId.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -101,10 +107,12 @@ public class PlanProgressController4 {
 	
 	@GetMapping("/progress4/{planProgressByAiMade}")
 	@Operation(summary = "4단계 조회(AI계획)", description = "AI 생성계획ID로 조회")
+
 	public ResponseEntity<PlanProgress4DTO> getPlanProgressesByAiMadePlanId(Long aiMadePlan_Id){
 		
 		try {
 		List<PlanProgress4DTO> getPlanProgressesByAiMadePlanId = planProgress4Service.getPlanProgressesByAiMadePlanId(aiMadePlan_Id);
+
 		if(getPlanProgressesByAiMadePlanId.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -118,10 +126,12 @@ public class PlanProgressController4 {
 	
 	@GetMapping("/progress4/{planProgressByPlanIdAiMade}")
 	@Operation(summary = "4단계 조회(PlanId, AI계획)", description = "PlanId와 AI 생성계획ID로 조회")
+
 	public ResponseEntity<PlanProgress4DTO> getPlanProgressesByPlanIdAndAiMadePlanId(Long plan_Id, Long aiMadePlan_Id){
 		
 		try {
 		List<PlanProgress4DTO> getPlanProgressesByPlanIdAndAiMadePlanId = planProgress4Service.getPlanProgressesByPlanIdAndAiMadePlanId(plan_Id,aiMadePlan_Id);
+
 		if(getPlanProgressesByPlanIdAndAiMadePlanId.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}

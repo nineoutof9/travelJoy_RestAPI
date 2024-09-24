@@ -34,6 +34,7 @@ public class EventService {
         return eventRepository.findById(id)
                 .map(EventDTO::toDto);
     }
+    
 
     // 이벤트 저장
     @Transactional
@@ -54,6 +55,7 @@ public class EventService {
         Optional<Event> eventOpt = eventRepository.findById(id);
 
         if (eventOpt.isPresent()) {
+
            Event event = eventOpt.get();
            event.setEventName(eventDto.getEventName());
            event.setEntranceFee(eventDto.getEntranceFee());
@@ -64,6 +66,7 @@ public class EventService {
            event.setAverageReviewRate(eventDto.getAverageReviewRate());
            event.setEventStartDate(eventDto.getEventStartDate());
            event.setEventEndDate(eventDto.getEventEndDate());
+
             
             Event updatedEvent = eventRepository.save(event);
             return EventDTO.toDto(updatedEvent);
@@ -83,6 +86,7 @@ public class EventService {
     }
 
     // 특정 지역의 이벤트 검색
+
     public List<EventDTO> findEventsByRegionId(Long regionId) {
         return eventRepository.findAllByRegionId(regionId).stream()
                 .map(EventDTO::toDto)
@@ -97,7 +101,7 @@ public class EventService {
     }
 
     // 특정 리뷰 평점 이상의 이벤트 검색
-    public List<EventDTO> findEventsByReviewRate(float reviewRate) {
+    public List<EventDTO> findEventsByReviewRate(Float reviewRate) {
         return eventRepository.findByAverageReviewRateGreaterThanEqual(reviewRate).stream()
                 .map(EventDTO::toDto)
                 .collect(Collectors.toList());

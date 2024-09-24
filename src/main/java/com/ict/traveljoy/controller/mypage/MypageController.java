@@ -109,7 +109,8 @@ public class MypageController {
                 Optional<HotelDTO> dto = hotelService.findHotelById(id);
                 dto.ifPresent(dtos::add);
             }  else if (name != null) {
-                dtos = hotelService.findHotelsByName(name);
+
+                //dtos = hotelService.findHotelsByName(name);
             }  
 
             if (dtos.isEmpty()) {
@@ -126,7 +127,7 @@ public class MypageController {
    //숙소 수정
 
    @PutMapping("/hotel/{id}")
-   public ResponseEntity<HotelDTO> updateHotel(@PathVariable Long id, @RequestBody HotelDTO hotelDTO) {
+   public ResponseEntity<HotelDTO> updateHotel(@PathVariable("id") Long id, @RequestBody HotelDTO hotelDTO) {
        try {
     	   HotelDTO updatedHotel = hotelService.updateHotel(id, hotelDTO);
            return new ResponseEntity<>(updatedHotel, HttpStatus.OK);
@@ -140,7 +141,7 @@ public class MypageController {
    
    //숙소 삭제
    @DeleteMapping("/hotel/{id}")
-   public String deleteHotel(@PathVariable Long id) {
+   public String deleteHotel(@PathVariable("id") Long id) {
       hotelService.deleteHotel(id);
       return "숙소 삭제 성공";
    }

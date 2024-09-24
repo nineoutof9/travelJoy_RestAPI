@@ -124,6 +124,20 @@ public class PushAlarmController {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+	@PostMapping("/read/{alarm_id}") //알람 읽기
+	public ResponseEntity<PushAlarmSendDTO> readAlarm(@PathVariable("alarm_id") String alarm_id) {
+		
+		try {
+			boolean success = pushAlarmService.readAlarm(Long.parseLong(alarm_id));
+			if(success) return new ResponseEntity<>(HttpStatus.OK);
+			else return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 
 	
 	@GetMapping("/users")
