@@ -7,12 +7,15 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class AlarmPublish {
@@ -71,5 +74,25 @@ public class AlarmPublish {
 		
 		return true;
 	}
+	
+	public void scheduleAlarm(String senderemail, String[] emailsToSend, String title, LocalDateTime sendDate) {
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                sendAlarm(senderemail, emailsToSend, title, sendDate);
+                timer.cancel();
+            }
+        };
+
+        // 현재 시간과 예약 시간의 차이를 계산하여 타이머 설정
+        LocalDateTime now = LocalDateTime.now();
+        long delay = Duration.between(now, sendDate).toMillis();
+
+        // 타이머에 작업 예약 (한 번만 실행)
+        timer.schedule(task, delay);
+
+        System.out.println("Alarm scheduled for: " + sendDate.toString());
+    }
 
 }
