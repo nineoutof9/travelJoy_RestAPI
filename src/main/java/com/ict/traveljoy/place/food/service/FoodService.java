@@ -170,4 +170,26 @@ public class FoodService {
                 .map(FoodDTO::toDto)
                 .collect(Collectors.toList());
     }
+    
+    public List<FoodDTO> findFoodsByNameAndAddress(String foodName, String address) {
+        // 음식 이름과 주소가 모두 주어진 경우
+        if (foodName != null && address != null) {
+            return foodRepository.findByFoodNameAndAddress(foodName, address).stream()
+                    .map(FoodDTO::toDto)
+                    .collect(Collectors.toList());
+        } else if (foodName != null) {
+            // 음식 이름만 주어진 경우
+            return foodRepository.findByFoodName(foodName).stream()
+                    .map(FoodDTO::toDto)
+                    .collect(Collectors.toList());
+        } else if (address != null) {
+            // 주소만 주어진 경우
+            return foodRepository.findByAddress(address).stream()
+                    .map(FoodDTO::toDto)
+                    .collect(Collectors.toList());
+        } else {
+            // 둘 다 주어지지 않은 경우
+            return findAllFoods(); // 모든 음식 반환
+        }
+    }
 }

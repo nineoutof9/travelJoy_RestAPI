@@ -188,16 +188,20 @@ public class PlaceController {
     }
 
     // 음식 이름으로 검색
-    @GetMapping("/foods/name/{foodName}")
-    public ResponseEntity<List<FoodDTO>> getFoodsByName(@PathVariable("foodName") String foodName) {
+    @GetMapping("/foods")
+    public ResponseEntity<List<FoodDTO>> getFoodsByName(
+            @RequestParam(required = false) String foodName,
+            @RequestParam(required = false) String address) {
         try {
-            List<FoodDTO> foods = foodService.findFoodsByName(foodName);
+            List<FoodDTO> foods = foodService.findFoodsByNameAndAddress(foodName, address);
             return new ResponseEntity<>(foods, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
 
     // 특정 가격 이하의 음식 검색
     @GetMapping("/foods/price/{maxPrice}")
