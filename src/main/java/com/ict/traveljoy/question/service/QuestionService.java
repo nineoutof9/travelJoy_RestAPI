@@ -48,11 +48,9 @@ public class QuestionService {
 		List<Question> questionList = questionRepostiory.findAll();
 		List<QuestionDTO> questionDTOList = new ArrayList<QuestionDTO>();
 		for(Question question:questionList) {
-			System.out.println("-----------------------"+question.getQuestionTitle()+question.getIsHasAnswer());
 			if(!question.getQuestionCategory().getQuestionCategoryName().equalsIgnoreCase("FAQ")) {
 				QuestionDTO dto = QuestionDTO.toDTO(question);
 				dto.setCategory(question.getQuestionCategory().getQuestionCategoryName());
-				System.out.println("-----------------------"+dto.getCategory()+dto.getIsHasAnswer());
 				questionDTOList.add(dto);
 			}
 		}
