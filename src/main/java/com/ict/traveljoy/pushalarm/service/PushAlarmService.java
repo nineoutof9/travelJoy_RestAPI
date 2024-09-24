@@ -210,7 +210,7 @@ public class PushAlarmService {
 					response.put("name", userlist.get(i).getName());
 					response.put("email", userlist.get(i).getEmail());
 					response.put("loginType", userlist.get(i).getLoginType());
-					response.put("lastLogin", userlist.get(i).getLastLogin().toString());
+					response.put("lastLogin", userlist.get(i).getLastLogin()!=null?userlist.get(i).getLastLogin().toString():userlist.get(i).getSignInDate().toString());
 					responses.add(response);
 				}	
 			}
