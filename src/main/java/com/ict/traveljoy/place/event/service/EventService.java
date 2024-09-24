@@ -1,11 +1,14 @@
 package com.ict.traveljoy.place.event.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.ict.traveljoy.place.event.repository.Event;
 import com.ict.traveljoy.place.event.repository.EventRepository;
+import com.ict.traveljoy.place.hotel.service.HotelDTO;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -99,4 +102,10 @@ public class EventService {
                 .map(EventDTO::toDto)
                 .collect(Collectors.toList());
     }
+
+	public List<EventDTO> findDestination(double latitude, double longitude, double distance, LocalDate startDate, LocalDate endDate) {
+		return eventRepository.findEventsWithinDistanceAndDateRange(latitude,longitude, distance, startDate, endDate).stream()
+				.map(EventDTO::toDto)
+        		.collect(Collectors.toList());
+	}
 }

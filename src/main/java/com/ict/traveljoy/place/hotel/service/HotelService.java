@@ -115,4 +115,10 @@ public class HotelService {
         		.map(HotelDTO::toDto)
         		.collect(Collectors.toList());
     }
+
+	public List<HotelDTO> findDestination(double latitude, double longitude, double distance) {
+		return hotelRepository.findHotelsWithinDistance(latitude, longitude, distance).stream()
+				.map(HotelDTO::toDto)
+        		.collect(Collectors.toList());
+	}
 }

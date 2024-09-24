@@ -13,6 +13,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ict.traveljoy.info.userinterest.service.UserInterestService;
 import com.ict.traveljoy.plan.service.PlanDTO;
 import com.ict.traveljoy.plan.service.PlanService;
 
@@ -45,6 +48,9 @@ public class PlanController {
 	
 	@Autowired
 	private final RestTemplate restTemplate;
+	
+	@Autowired
+	private final UserInterestService userInterestService;
 	
 	@PostMapping("/plan")
 	@Operation(summary = "plan 저장", description = "plan 저장 컨트롤러")
@@ -241,16 +247,38 @@ public class PlanController {
 	public ResponseEntity<?> generateAIPlan(@RequestBody Map<String, Object> plan) {
 	    try {
 	        String flaskUrl = "http://localhost:8000/ai/plan";
-	        
+
+	        // 현재 로그인한 유저 정보 가져오기
+	        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	        String userEmail = authentication.getName(); // 유저 이메일 가져오기
+
+	        // 유저 관심사 조회
+	        List<String> userInterests = userInterestService.findInterestsByUser(userEmail);
+
+	        // 관심사 문자열 생성
+	        String interestsString = userInterests.isEmpty() 
+	            ? "The user has no specific interests."
+	            : "The user is interested in: " + String.join(", ", userInterests) + ".";
+
+	        // 여행자 수 받아오기
+	        Map<String, Object> travelerCounts = (Map<String, Object>) plan.get("travler");
+	        int adult = (int) travelerCounts.getOrDefault("adult", 0);
+	        int senior = (int) travelerCounts.getOrDefault("senior", 0);
+	        int teen = (int) travelerCounts.getOrDefault("teen", 0);
+	        int child = (int) travelerCounts.getOrDefault("child", 0);
+
+	        String travelerString = "The group consists of " + adult + " adults, " + senior + " seniors, " 
+	                              + teen + " teens, and " + child + " children.";
+
 	        // 프롬프트 생성
 	        String prompt = "You are a travel assistant. The user has provided a 3-day travel plan with destinations. "
-	                      + "For each day, distribute the times for each destination considering optimal travel routes and realistic time spent at each location. "
+	                      + "For each day, distribute the times for each destination considering optimal travel routes, realistic time spent at each location, and transportation between destinations. "
+	                      + "For each day, suggest a transportation option between the first and third destination, with the transportation information being added as 'index 2' between them. "
+	                      + "The user's preferences and interests should also be considered: " + interestsString + " "
+	                      + travelerString + " "
 	                      + "Based on this initial plan, create two additional optimized travel plans that follow similar routes but offer slight variations for better time management or alternative activities. "
-	                      + "The format should be as follows: { \"plan\": [ { \"day\": 1, \"contents\": [ { \"index\": 1, \"title\": \"Destination Name\", \"addr\": \"Address\", \"time\": \"YYYY-MM-DD HH:MM\", \"lat\": Latitude, \"lng\": Longitude, \"activity\": \"Type of activity\" } ] }, "
+	                      + "The format should be as follows: { \"plan\": [ { \"day\": 1, \"contents\": [ { \"index\": 1, \"title\": \"Destination Name\", \"addr\": \"Address\", \"time\": \"YYYY-MM-DD HH:MM\", \"lat\": Latitude, \"lng\": Longitude, \"activity\": \"Type of activity\" }, { \"index\": 2, \"title\": \"Transportation\", \"addr\": \"From: Start Destination, To: End Destination\", \"time\": \"YYYY-MM-DD HH:MM\", \"lat\": null, \"lng\": null, \"activity\": \"Transport\" }, { \"index\": 3, \"title\": \"Destination Name\", \"addr\": \"Address\", \"time\": \"YYYY-MM-DD HH:MM\", \"lat\": Latitude, \"lng\": Longitude, \"activity\": \"Type of activity\" } ] }, "
 	                      + "{ \"day\": 2, \"contents\": [ { \"index\": 1, \"title\": \"Destination Name\", \"addr\": \"Address\", \"time\": \"YYYY-MM-DD HH:MM\", \"lat\": Latitude, \"lng\": Longitude, \"activity\": \"Type of activity\" } ] } ] } "
-	                      + "Based on the initial plan provided by the user, create two additional suggested plans for comparison. "
-	                      + "The output should be a JSON response with three plans, each with distributed times for each day’s destinations. "
-	                      + "For each destination, assign appropriate times based on optimal travel routes and time spent at each location. "
 	                      + "Please return only the JSON response, with the initial plan and two additional recommended plans.";
 
 	        // 요청 데이터 준비
