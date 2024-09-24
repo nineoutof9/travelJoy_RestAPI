@@ -41,6 +41,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -76,6 +77,39 @@ public class UserController {
     @Value("${naver.redirectUri}")
     private String naverRedirectUri;
 	
+    @PostMapping("/pwchange")
+    public ResponseEntity<String> pwChange(@RequestBody Map<String, String> passwordData) {
+        try {
+            // 현재 인증된 사용자 정보 가져오기
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+            String email = userDetails.getUsername();
+            
+            UserDTO user = userService.findByEmail(email);
+            
+            String currentPassword = passwordData.get("currentPassword");
+            String newPassword = passwordData.get("newPassword");
+            
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            
+            if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("현재 비밀번호가 일치하지 않습니다.");
+            }
+            
+            String encodedNewPassword = passwordEncoder.encode(newPassword);
+            user.setPassword(encodedNewPassword);
+            
+            userService.updatePassword(user);
+            
+            return ResponseEntity.ok("비밀번호가 성공적으로 변경되었습니다.");
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("비밀번호 변경 중 오류가 발생했습니다.");
+        }
+    }
+    
+    
     @GetMapping("/checkemail")
 	 public ResponseEntity<Map<String, Boolean>> checkEmail(@RequestParam("email") String email) {
 	        try {
@@ -275,8 +309,8 @@ public class UserController {
 	         response.addCookie(refreshCookie);
 	         
 	         // 로그인 성공 후 URL에 토큰 정보 포함
-	         String redirectUrl = String.format("http://localhost:3000/user/signin?access=%s&isAdmin=%s&email=%s",
-	                 accessTokenJwt, user.getPermission().equalsIgnoreCase("ROLE_ADMIN"), email);
+	         String redirectUrl = String.format("http://localhost:3000/user/signin?access=%s&isAdmin=%s&email=%s&loginType=%s",
+	                 accessTokenJwt, user.getPermission(), email, "kakao");
 
 	         response.sendRedirect(redirectUrl);
 	     } else {
@@ -369,8 +403,8 @@ public class UserController {
 	         response.addCookie(refreshCookie);
 
 	         // 로그인 성공 후 URL에 토큰 정보 포함
-	         String redirectUrl = String.format("http://localhost:3000/user/signin?access=%s&isAdmin=%s&email=%s",
-	                 accessTokenJwt, user.getPermission().equalsIgnoreCase("ROLE_ADMIN"), email);
+	         String redirectUrl = String.format("http://localhost:3000/user/signin?access=%s&isAdmin=%s&email=%s&loginType=%s",
+	                 accessTokenJwt, user.getPermission(), email, "google");
 
 	         response.sendRedirect(redirectUrl);
 	     } else {
@@ -466,8 +500,8 @@ public class UserController {
 	         setAuthentication(user.getEmail());
 	         
 	         // 로그인 성공 후 URL에 토큰 정보 포함
-	         String redirectUrl = String.format("http://localhost:3000/user/signin?access=%s&isAdmin=%s&email=%s",
-	                 accessTokenJwt, user.getPermission().equalsIgnoreCase("ROLE_ADMIN"), email);
+	         String redirectUrl = String.format("http://localhost:3000/user/signin?access=%s&isAdmin=%s&email=%s&loginType=%s",
+	                 accessTokenJwt, user.getPermission(), email, "naver");
 
 	         response.sendRedirect(redirectUrl);
 	     } else {
