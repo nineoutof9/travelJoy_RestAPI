@@ -32,23 +32,24 @@ import lombok.Setter;
 @Builder
 public class Report {
 
-    //기본키, 일련번호
+
 	@Id
-	@Column(name="REPORT_ID")
+	@Column(name="REPORT_ID") //신고ID
 	@SequenceGenerator(name = "seq_report",sequenceName = "seq_report",allocationSize = 1,initialValue = 1)
 	@GeneratedValue(generator = "seq_report",strategy = GenerationType.SEQUENCE)
     private Long id;
     
 	@ManyToOne
-    @JoinColumn(name = "USER_ID")
+    @JoinColumn(name = "USER_ID") //신고자 ID
 	private Users user;
     
-    //신고대상
+
 	@ManyToOne
     @JoinColumn(name = "REPORT_CATEGORY_ID")
 	private ReportCategory reportCategory;
     
-	@Column(name="TARGET_ID",nullable=false)
+
+	@JoinColumn(name = "TARGET_ID", nullable = false)//신고상대ID
     private Long targetId;
 	
 	@Column(name="IS_USER", columnDefinition = "NUMBER(1, 0)")
@@ -70,18 +71,19 @@ public class Report {
 	@Column(name="IS_REVIEW", columnDefinition = "NUMBER(1, 0)")
 	@ColumnDefault("0")
 	private Integer isReview;
-	
+
 	@Column(name="IS_Answered", columnDefinition = "NUMBER(1, 0)")
 	@ColumnDefault("0")
 	private Integer isAnswered;
+
     
-    //신고일자
+
 	@Column(name="REPORT_DATE", nullable = false)
 	@ColumnDefault("SYSDATE")
 	@CreationTimestamp
     private LocalDateTime reportDate;
     
-    //신고내용
+
 	@Column(name="REPORT_CONTENT", nullable = false,length=2000)
     private String reportContent;
     
@@ -92,11 +94,13 @@ public class Report {
 	@Column(name="REPORT_HANDLER_NAME",length=50)
     private String reportHandlerName;
     
-	//신고처리 결과
+
 	@Column(name="REPORT_RESULT",length=2000)
     private String reportResult;
     
-    //신고처리 일자
+	@Column(name="REPORT_TITLE",length=2000)
+    private String reportTitle;
+
     @Column(name="REPORT_RESULT_DATE")
 	@ColumnDefault("SYSDATE")
 	@CreationTimestamp

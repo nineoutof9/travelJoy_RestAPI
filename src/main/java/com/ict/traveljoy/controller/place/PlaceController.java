@@ -327,6 +327,7 @@ public class PlaceController {
     }
 
     // 숙소 이름으로 검색
+
     @GetMapping("/hotels/name/{hotelName}")
     public ResponseEntity<List<HotelDTO>> getHotelsByName(@PathVariable("hotelName") String hotelName) {
         try {
@@ -348,6 +349,7 @@ public class PlaceController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     @PutMapping("/hotels/{id}")
     public ResponseEntity<HotelDTO> updateHotel(@PathVariable("id") Long id, @RequestBody HotelDTO hotelDto) {

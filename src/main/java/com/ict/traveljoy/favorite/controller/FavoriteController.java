@@ -58,6 +58,7 @@ public class FavoriteController {
         }
     }
 
+
     @GetMapping("/all")
     public ResponseEntity<List<FavoriteDTO>> getAllFav(HttpServletRequest request) {
         String useremail = checkUser.checkContainsUseremail(request);

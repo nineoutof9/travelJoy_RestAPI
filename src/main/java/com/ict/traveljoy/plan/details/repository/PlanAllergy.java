@@ -24,7 +24,7 @@ public class PlanAllergy {
     @JoinColumn(name = "PLAN_ID")
     private Plan plan;
 
-    @ManyToOne
-    @JoinColumn(name = "ALLERGY_ID")
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "ALLERGY_ID", nullable = true)
     private Allergy allergy;
 }
