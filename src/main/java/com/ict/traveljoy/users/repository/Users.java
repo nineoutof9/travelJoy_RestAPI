@@ -7,6 +7,7 @@ import java.util.List;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ict.traveljoy.converter.PermissionToNumberConverter;
 import com.ict.traveljoy.image.repository.Image;
 import com.ict.traveljoy.info.userallergy.repository.UserAllergy;
@@ -134,11 +135,14 @@ public class Users {
 	
 	
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore // 순환 참조 방지를 위해 추가
     private List<UserInterest> userInterest;
-	
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore // 순환 참조 방지를 위해 추가
     private List<UserAllergy> userAllergy;
-	
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore // 순환 참조 방지를 위해 추가
     private List<UserHandicap> userHandicap;
 }
