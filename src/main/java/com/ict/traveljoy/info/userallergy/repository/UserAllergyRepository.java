@@ -16,6 +16,8 @@ public interface UserAllergyRepository extends JpaRepository<UserAllergy, Long>{
 
 	boolean existsByUserAndAllergy(Users user, Allergy allergy);
 
+	boolean existsByUser(Users user);
+
 
 
 	
