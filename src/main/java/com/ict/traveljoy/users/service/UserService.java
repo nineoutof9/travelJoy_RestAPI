@@ -133,4 +133,10 @@ public class UserService {
 		}
 		else return false;
 	}
+
+	public void updatePassword(UserDTO userDto) {
+	    Users userEntity = userRepository.findByEmail(userDto.getEmail()).get();
+	    userEntity.setPassword(userDto.getPassword());
+	    userRepository.save(userEntity);
+	}
 }

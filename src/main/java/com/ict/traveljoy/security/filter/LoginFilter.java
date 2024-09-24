@@ -20,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -30,6 +31,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 // Lombok의 @Slf4j 어노테이션을 사용하여 로깅을 간편하게 합니다.
 @Slf4j
@@ -111,10 +113,11 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         // 클라이언트가 Authorization 헤더를 읽을 수 있도록, 해당 헤더를 노출
         response.setHeader("Access-Control-Expose-Headers", "Authorization");
 
-        boolean isAdmin = customUserDetails.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        String isAdmin = customUserDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(", "));
         Map<String, Object> responseBody = new HashMap<>();
         responseBody.put("username", username);
         responseBody.put("isAdmin", isAdmin);
+        responseBody.put("loginType", "email");
         responseBody.put("success", true);
         
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
