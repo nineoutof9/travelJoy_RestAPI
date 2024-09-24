@@ -64,13 +64,16 @@ public class NoticeService {
                 .stream()
                 .filter(notice -> !notice.isDeleted()) // Filter out deleted notices
                 .collect(Collectors.toList());
-
-        return noticeList.stream().map(notice -> {
+        
+        List<NoticeDTO> noticeDTOList = noticeList.stream().map(notice -> {
             long count = viewCountService.findbyNoticeId(notice.getId()).getCount();
             NoticeDTO noticeDTO = NoticeDTO.toDTO(notice);
             noticeDTO.setViewCount(count);
             return noticeDTO;
         }).collect(Collectors.toList());
+        
+
+        return noticeDTOList;
     }
 
     @Transactional

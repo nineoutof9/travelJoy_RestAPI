@@ -39,7 +39,7 @@ public class ViewCount {
 	@GeneratedValue(generator = "seq_view_count",strategy = GenerationType.SEQUENCE)
 	private Long id;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "NOTICE_ID", nullable = false)
 	private Notice notice;
 	
