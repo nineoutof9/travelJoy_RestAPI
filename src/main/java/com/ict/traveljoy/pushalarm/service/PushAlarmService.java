@@ -210,13 +210,28 @@ public class PushAlarmService {
 					response.put("name", userlist.get(i).getName());
 					response.put("email", userlist.get(i).getEmail());
 					response.put("loginType", userlist.get(i).getLoginType());
-					response.put("lastLogin", userlist.get(i).getLastLogin().toString());
+					response.put("lastLogin", userlist.get(i).getLastLogin()!=null?userlist.get(i).getLastLogin().toString():userlist.get(i).getSignInDate().toString());
 					responses.add(response);
 				}	
 			}
 			return responses;
 		}
 		else throw new IllegalArgumentException("관리자가 아닙니다.접근권한이 없습니다.");
+	}
+
+	public boolean readAlarm(long alarmId) {
+		PushAlarm success = new PushAlarm();
+		try {
+			PushAlarm alarm = pushAlarmRepository.findById(alarmId).get();
+			alarm.setIsActive(0);
+			success = pushAlarmRepository.save(alarm);
+			System.out.println("=============================="+success.getTitle()+success.getIsActive());
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return success==null?false:true;
+		
+		
 	}
 
 
