@@ -13,18 +13,27 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-@Builder
+@Builder(toBuilder = true)
 public class RegionDTO {
 	
 	private Long id;
 	private String name;
 	private String regionInfo;
+	private Float lat;
+	private Float lng;
+	private String imageUrl;
+	private Float dist;
+	
 	//DTO를 Entity로 변환하는 메소드 
 		public Region toEntity() {
 			return Region.builder()
 					.id(id)
 					.name(name)
 					.regionInfo(regionInfo)
+					.lat(lat)
+					.lng(lng)
+					.imageUrl(imageUrl)
+					.dist(dist)
 					.build();
 		}
 		//Entity를 DTO로 변환하는 메소드
@@ -33,6 +42,10 @@ public class RegionDTO {
 							.id(region.getId())
 							.name(region.getName())
 							.regionInfo(region.getRegionInfo())
+							.lat(region.getLat())
+							.lng(region.getLng())
+							.imageUrl(region.getImageUrl())
+							.dist(region.getDist())
 							.build();
 		}
 		
