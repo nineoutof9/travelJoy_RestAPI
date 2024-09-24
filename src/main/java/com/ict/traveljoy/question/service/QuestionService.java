@@ -45,17 +45,17 @@ public class QuestionService {
 
 
 	public List<QuestionDTO> findAll() {
-	    List<Question> questionList = questionRepository.findAll();
-	    List<QuestionDTO> questionDTOList = new ArrayList<QuestionDTO>();
-	    for(Question question : questionList) {
-	        System.out.println("Processing question ID: " + question.getId()); // 로그 추가
-	        if(!question.getQuestionCategory().getQuestionCategoryName().equalsIgnoreCase("FAQ")) {
-	            QuestionDTO dto = QuestionDTO.toDTO(question);
-	            dto.setCategory(question.getQuestionCategory().getQuestionCategoryName());
-	            questionDTOList.add(dto);
-	        }
-	    }
-	    return questionDTOList;
+
+		List<Question> questionList = questionRepostiory.findAll();
+		List<QuestionDTO> questionDTOList = new ArrayList<QuestionDTO>();
+		for(Question question:questionList) {
+			if(!question.getQuestionCategory().getQuestionCategoryName().equalsIgnoreCase("FAQ")) {
+				QuestionDTO dto = QuestionDTO.toDTO(question);
+				dto.setCategory(question.getQuestionCategory().getQuestionCategoryName());
+				questionDTOList.add(dto);
+			}
+		}
+		return questionDTOList;
 	}
 
 
