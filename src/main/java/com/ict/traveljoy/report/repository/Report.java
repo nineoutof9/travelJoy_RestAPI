@@ -49,7 +49,7 @@ public class Report {
 	private ReportCategory reportCategory;
     
 
-	@JoinColumn(name = "TARGET_ID", nullable = false)//신고상대ID
+	@Column(name = "TARGET_ID", nullable = false)//신고상대ID
     private Long targetId;
 	
 	@Column(name="IS_USER", columnDefinition = "NUMBER(1, 0)")

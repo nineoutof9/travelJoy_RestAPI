@@ -30,4 +30,12 @@ public class ReportCategory {
 	
 	@Column(name="REPORT_CATEGORY_NAME",length=50,nullable=false)
 	private String reportCategoryName;
+	
+	@Override
+	public String toString() {
+	    return "ReportCategory{" +
+	           "id=" + id +
+	           ", name='" + reportCategoryName + '\'' +
+	           '}';
+	}
 }

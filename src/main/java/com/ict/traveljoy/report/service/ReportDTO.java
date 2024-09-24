@@ -3,6 +3,7 @@ package com.ict.traveljoy.report.service;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ict.traveljoy.report.repository.Report;
 import com.ict.traveljoy.report.repository.ReportCategory;
 import com.ict.traveljoy.users.repository.Users;
@@ -24,6 +25,7 @@ public class ReportDTO {
 
 	private Users user; // 신고자
 	private ReportCategory reportCategory; // 신고대상 유형 (기존 필드)
+	@JsonProperty("reportCategoryId")
 	private Long reportCategoryId; // 신고대상 유형의 ID (프론트엔드에서 넘어올 값)
 	private Long targetId; // 신고상대 id
 
@@ -68,11 +70,14 @@ public class ReportDTO {
 
 	// Entity에서 DTO로 변환
 	public static ReportDTO toDTO(Report report) {
+		
+	    Long reportCategoryId = (report.getReportCategory() != null) ? report.getReportCategory().getId() : null;
+	    
+	    
 		return ReportDTO.builder()
 				.id(report.getId())
-				.user(report.getUser())
-				.reportCategory(report.getReportCategory()) // 기존 필드
-				.reportCategoryId(report.getReportCategory().getId()) // 새로 추가한 필드
+				.user(report.getUser())// 기존 필드
+				.reportCategoryId(reportCategoryId) // 새로 추가한 필드
 				.targetId(report.getTargetId())
 				.isUser(report.getIsUser() == 1 ? true : false)
 				.isNotice(report.getIsNotice() == 1 ? true : false)

@@ -25,6 +25,8 @@ import com.ict.traveljoy.report.service.ReportCategoryDTO;
 import com.ict.traveljoy.report.service.ReportCategoryService;
 import com.ict.traveljoy.report.service.ReportDTO;
 import com.ict.traveljoy.report.service.ReportService;
+import com.ict.traveljoy.users.repository.Users;
+import com.ict.traveljoy.users.service.UserDTO;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -42,43 +44,42 @@ public class ReportController {
 	private final CheckContainsUseremail checkUser;
 	
 	// 신고 넣기
-	/*@PostMapping
-	public ResponseEntity<ReportDTO> createReport(HttpServletRequest request, @RequestBody ReportDTO reportDTO) {
-		String useremail = checkUser.checkContainsUseremail(request);
-		String category = request.getParameter("category");
-
-		try {
-			ReportDTO createReport = reportService.createReport(useremail, category, reportDTO);
-			return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "application/json").body(createReport);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}*/
-	
 	@PostMapping
-	public ResponseEntity<ReportDTO> createReport(@RequestBody ReportDTO reportDTO) {
+	public ResponseEntity<ReportDTO> createReport(@RequestBody ReportDTO reportDTO, HttpServletRequest request) {
+		System.out.println("==========Report Category ID: " + reportDTO.getReportCategoryId());
 	    Report report = new Report();
+	    System.out.println("==========Report Category ID: " + reportDTO.getReportCategoryId());
+	    String email = checkUser.checkContainsUseremail(request);
 	    
-	    // reportCategoryId로 ReportCategory 객체를 조회
+	    
+	 // reportCategoryId로 ReportCategory 객체를 조회
+	   // ReportCategory reportCategory = reportCategoryRepository.findById(reportDTO.getReportCategoryId())
+	     //   .orElseThrow(() -> new IllegalArgumentException("Invalid report category ID: " + reportDTO.getReportCategoryId()));
 	    ReportCategory reportCategory = reportCategoryRepository.findById(reportDTO.getReportCategoryId())
-	        .orElseThrow(() -> new IllegalArgumentException("Invalid report category ID: " + reportDTO.getReportCategoryId()));
-	    
+	    	    .orElseThrow(() -> new IllegalArgumentException("Invalid report category ID: " + reportDTO.getReportCategoryId()));
+	    	System.out.println("Report Category: " + reportCategory); // 여기서 reportCategory가 잘 출력되는지 확인
+	    	
+	    	
 	    // 조회한 ReportCategory 객체를 Report에 설정
 	    report.setReportCategory(reportCategory);
-	    System.out.println("리포트카테고리:"+reportCategory.toString());
+	    System.out.println("리포트카테고리:"+reportCategory.getId().toString());
+	    System.out.println("==========Report Category ID: " + reportDTO.getReportCategoryId());
 	    report.setReportContent(reportDTO.getReportContent());
 	    System.out.println("내용:"+reportDTO.getReportContent());
 	    report.setReportDate(reportDTO.getReportDate());
 	    System.out.println("날짜:"+reportDTO.getReportDate());
 	    report.setTargetId(reportDTO.getTargetId());
 	    System.out.println("타겟:"+reportDTO.getTargetId());
+	    System.out.println("메일:"+email);
 	    
 	    // Report 저장
-	    Report savedReport = reportRepository.save(report);
+
+	    Report savedReport = reportService.createReport(email, reportCategory.getId().toString(), reportDTO);
 	    
 	    // 저장된 Report를 ReportDTO로 변환하여 반환
 	    return ResponseEntity.ok(ReportDTO.toDTO(savedReport));
+	    
+	    
 	}
 
 

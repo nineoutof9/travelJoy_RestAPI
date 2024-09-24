@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ict.traveljoy.report.repository.Report;
+import com.ict.traveljoy.report.repository.ReportCategory;
+import com.ict.traveljoy.report.repository.ReportCategoryRepository;
 import com.ict.traveljoy.report.repository.ReportRepository;
 import com.ict.traveljoy.users.repository.UserRepository;
 import com.ict.traveljoy.users.repository.Users;
@@ -21,18 +23,27 @@ public class ReportService {
 	private final ReportRepository reportRepository;
 	private final UserRepository userRepository;
 	private final ObjectMapper objectMapper;
+	private final ReportCategoryRepository reportCategoryRepository;
 	
 	//신고하기
-	public ReportDTO createReport(String useremail, String category, ReportDTO reportDTO) {
-	    // 값을 찾지 못하면 예외 던지기
+	public Report createReport(String useremail, String categoryId, ReportDTO reportDTO) {
+	 
+	    // reportCategoryId로 ReportCategory 조회
+	    
 	    Users user = userRepository.findByEmail(useremail)
-	                    .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + useremail));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + useremail));
 	    
 	    reportDTO.setUser(user);
 	    Report report = reportDTO.toEntity();
 	    
+	    ReportCategory reportCategory = reportCategoryRepository.findById(Long.parseLong(categoryId))
+	        .orElseThrow(() -> new IllegalArgumentException("Invalid report category ID: " + categoryId));
+
+	    report.setReportCategory(reportCategory); // ReportCategory 설정
+
+	    // Report 저장
 	    Report afterSave = reportRepository.save(report);
-	    return ReportDTO.toDTO(afterSave);
+	    return afterSave;
 	}
 	
 	// 모든 신고건
