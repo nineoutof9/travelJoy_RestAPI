@@ -64,9 +64,6 @@ public class QuestionController {
 	public ResponseEntity<List<QuestionDTO>> getAllQuestion(){
 		try {
 			List<QuestionDTO> questionList = questionService.findAll();
-			for(QuestionDTO q:questionList) {
-				System.out.println(q.getQuestionTitle());
-			}
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(questionList);
 		}
 		catch(Exception e) {

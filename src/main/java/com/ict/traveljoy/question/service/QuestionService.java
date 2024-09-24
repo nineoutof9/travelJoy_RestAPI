@@ -46,7 +46,7 @@ public class QuestionService {
 
 	public List<QuestionDTO> findAll() {
 
-		List<Question> questionList = questionRepostiory.findAll();
+		List<Question> questionList = questionRepository.findAll();
 		List<QuestionDTO> questionDTOList = new ArrayList<QuestionDTO>();
 		for(Question question:questionList) {
 			if(!question.getQuestionCategory().getQuestionCategoryName().equalsIgnoreCase("FAQ")) {
