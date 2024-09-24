@@ -37,8 +37,14 @@ public class RegionService {
 
         if (existingRegionOpt.isPresent()) {
             Region existingRegion = existingRegionOpt.get();
-            existingRegion.setName(regionDto.getName());
-            existingRegion.setRegionInfo(regionDto.getRegionInfo());
+            RegionDTO.toDto(existingRegion).toBuilder()
+            .name(regionDto.getName())
+            .regionInfo(regionDto.getRegionInfo())
+            .lat(regionDto.getLat())
+            .lng(regionDto.getLng())
+            .imageUrl(regionDto.getImageUrl())
+            .dist(regionDto.getDist())
+            .build();
             Region updatedRegion = regionRepository.save(existingRegion);
             return RegionDTO.toDto(updatedRegion);
         } else {
