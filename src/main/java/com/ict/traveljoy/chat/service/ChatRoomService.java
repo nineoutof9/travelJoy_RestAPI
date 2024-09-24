@@ -8,7 +8,9 @@ import com.ict.traveljoy.users.repository.UserRepository;
 import com.ict.traveljoy.users.repository.Users;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -69,23 +71,38 @@ public class ChatRoomService {
 	}
 
 
-	public List<EnterChatRoomDTO> getAllChatRoom(String useremail) {
+	public List<Map<String,Object>> getAllChatRoom(String useremail) {
 		Users user = userRepository.findByEmail(useremail).get();
 		
 		if(user.getPermission().equalsIgnoreCase("ROLE_ADMIN")) {
 			
 			List<EnterChatRoom> enteredRooms = enterChatRoomRepository.findAll();
-			List<EnterChatRoomDTO> enteredRoomDTOs = new ArrayList<EnterChatRoomDTO>();
+			List<Map<String,Object>> response = new ArrayList<Map<String,Object>>();
 			
-			for(int i=0;i<enteredRooms.size();i++) {
-				if(enteredRooms.get(i).getChatRoom().getIsDelete()==0
-						&& enteredRooms.get(i).getUser().getId()!=user.getId()) {
-					// delete 상태가 아니고, user(admin 입장)와 같지 않은 채팅방만 가져오기(중복방지)
-					enteredRoomDTOs.add(EnterChatRoomDTO.toDTO(enteredRooms.get(i)));
+//			for(int i=0;i<enteredRooms.size();i++) {
+//				if(enteredRooms.get(i).getChatRoom().getIsDelete()==0
+//						&& enteredRooms.get(i).getUser().getId()!=user.getId()) {
+//					// delete 상태가 아니고, user(admin 입장)와 같지 않은 채팅방만 가져오기(중복방지)
+//					enteredRoomDTOs.add(EnterChatRoomDTO.toDTO(enteredRooms.get(i)));
+//					System.out.println("enteredRooms"+enteredRooms.get(i).getUser().getName());
+//				}
+//			}
+			
+			for(EnterChatRoom chatroom : enteredRooms) {
+				Map<String,Object> data = new HashMap<>();
+				Map<String,String> userdata = new HashMap<>();
+				if(chatroom.getUser().getPermission().equalsIgnoreCase("ROLE_USER")){
+					userdata.put("email", chatroom.getUser().getEmail());
+					userdata.put("name", chatroom.getUser().getName());
+					
+					data.put("chatRoom", chatroom.getChatRoom().getId());
+					data.put("user",userdata);
+					System.out.println(data.get("chatRoom"));
+					response.add(data);
 				}
 			}
 
-			return enteredRoomDTOs;
+			return response;
 		}
 		else
 			throw new IllegalArgumentException("권한이 없습니다.");

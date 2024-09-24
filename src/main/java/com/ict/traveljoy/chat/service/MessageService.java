@@ -12,7 +12,9 @@ import com.ict.traveljoy.users.repository.UserRepository;
 import com.ict.traveljoy.users.repository.Users;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -53,17 +55,33 @@ public class MessageService {
 		
 		return null;
 	}
-	public List<MessageDTO> getAllMessagesByChatRoom(long chatroomId, String useremail) {
+	public List<Map<String,Object>> getAllMessagesByChatRoom(long chatroomId, String useremail) {
 		// 채팅방아이디로 구분, 채팅방 있으면 돌려주기
 		
+		List<Map<String,Object>> response = new ArrayList<>();
+		
 		Users user = userRepository.findByEmail(useremail).get();
+		
 		System.out.println(useremail + (user.getPermission()));
+		
 		if(user.getPermission().equalsIgnoreCase("ROLE_ADMIN")) {
 			if(chatRoomRepository.existsById(chatroomId)) {
 				List<Message> messages = messageRepository.findAllByChatRoom_Id(chatroomId);
-				return messages.stream().map(msg->MessageDTO.toDTO(msg)).collect(Collectors.toList());
+				for(Message msg:messages) {
+					Map<String,Object> data = new HashMap<>();
+					Map<String,Object> userdata = new HashMap<>();
+					
+					userdata.put("email", msg.getUser().getEmail());
+					
+					data.put("user", userdata);
+					data.put("messageSendDate",msg.getMessageSendDate());
+					data.put("messageContent",msg.getMessageContent());
+					
+					response.add(data);
+					
+				}
 			}
-			return null;
+			return response;
 		}
 		else
 			throw new IllegalArgumentException("권한이 없습니다.");
