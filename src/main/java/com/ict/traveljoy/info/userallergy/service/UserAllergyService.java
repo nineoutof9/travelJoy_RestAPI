@@ -103,6 +103,13 @@ public class UserAllergyService {
 	            response.add(UserAllergyDTO.toDTO(newUserAllergy));
 	        }
 	    }
+	    
+	    if(userAllergyRepository.existsByUser(user)) {
+            user.setAllergy(1);
+        } else {
+            user.setAllergy(0);
+        }
+	    userRepository.save(user);
 
 	    return response;
 	}

@@ -142,6 +142,13 @@ public class UserInterestService {
                 response.add(UserInterestDTO.toDTO(newUserInterest));
             }
         }
+        
+        if(userInterestRepository.existsByUser(user)) {
+            user.setAllergy(1);
+        } else {
+            user.setAllergy(0);
+        }
+	    userRepository.save(user);
 
         return response;
     }

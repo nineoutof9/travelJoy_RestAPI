@@ -15,5 +15,7 @@ public interface UserHandicapRepository extends JpaRepository<UserHandicap, Long
 	List<UserHandicap> findAllByUser_Id(Long id);
 
 	boolean existsByUserAndHandicap(Users user, Handicap handicap);
+
+	boolean existsByUser(Users user);
 	
 }
