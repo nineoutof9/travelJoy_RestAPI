@@ -2,6 +2,7 @@ package com.ict.traveljoy.tripReview.repository;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,6 +23,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.ict.traveljoy.plan.repository.Plan;
+import com.ict.traveljoy.users.repository.Users;
 
 @Entity
 @Table(name = "trip_review")
@@ -42,8 +44,9 @@ public class TripReview {
     @JoinColumn(name = "PLAN_ID")
     private Plan plan;
 
-    @Column(name = "WRITER", length = 30)
-    private String writer;
+    @ManyToOne
+	@JoinColumn(name = "user_id", nullable = false)
+	private Users user;
 
     @Column(name = "TITLE", length = 50)
     private String title;
