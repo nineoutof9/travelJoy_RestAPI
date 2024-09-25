@@ -37,7 +37,7 @@ public class Image {
 	private Long id;
 
 	//@Column(length = 200,name="image_url")
-	@Column(name="IMAGE_URL",length = 200)
+	@Column(name="IMAGE_URL",length = 1000)
 	private String imageUrl;
 	
 	@Column(name="SAVE_DATE")
