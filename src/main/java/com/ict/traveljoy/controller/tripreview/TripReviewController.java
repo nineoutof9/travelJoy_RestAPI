@@ -1,45 +1,72 @@
 package com.ict.traveljoy.controller.tripreview;
 
 import com.ict.traveljoy.tripReview.service.TripReviewService;
+import com.ict.traveljoy.users.repository.Users;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ict.traveljoy.controller.CheckContainsUseremail;
 import com.ict.traveljoy.image.service.ImageDTO;
 import com.ict.traveljoy.image.service.ImageService;
+import com.ict.traveljoy.question.service.QuestionCategoryService;
+import com.ict.traveljoy.question.service.QuestionService;
 import com.ict.traveljoy.tripReview.service.TripReviewDTO;
 import com.ict.traveljoy.tripReview.service.TripReviewPhotoDTO;
 import com.ict.traveljoy.tripReview.service.TripReviewPhotoService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 @Tag(name="TripReviewPage", description = "여행 리뷰 페이지")
 @RestController
 @RequestMapping("/api/reviewList")
+@RequiredArgsConstructor
 public class TripReviewController {
 
     private final TripReviewService tripReviewService;
     private final TripReviewPhotoService tripReviewPhotoService;
     private final ImageService imageService;
+    private final CheckContainsUseremail checkUser;
 
-    @Autowired
-    public TripReviewController(TripReviewService tripReviewService, TripReviewPhotoService tripReviewPhotoService, ImageService imageService) {
-        this.tripReviewService = tripReviewService;
-        this.tripReviewPhotoService = tripReviewPhotoService;
-        this.imageService = imageService;
-    }
+//    @Autowired
+//    public TripReviewController(TripReviewService tripReviewService, TripReviewPhotoService tripReviewPhotoService, ImageService imageService) {
+//        this.tripReviewService = tripReviewService;
+//        this.tripReviewPhotoService = tripReviewPhotoService;
+//        this.imageService = imageService;
+//    }
 
     // 리뷰 생성
     @PostMapping("/createReview")
     public ResponseEntity<TripReviewDTO> createReview(
-            @RequestPart("tripReviewDTO") TripReviewDTO tripReviewDTO,
-            @RequestPart(value = "files", required = false) MultipartFile[] files) {  // 파일은 필수 아님
+    		@RequestParam Map<String, Object> newReview,
+            @RequestPart(value = "files", required = false) MultipartFile[] files
+            ,HttpServletRequest request) {  // 파일은 필수 아님
 
+    	Long planId = 0l;
+    	String title = (String)newReview.get("title");
+    	String reviewContent = (String)newReview.get("reviewContent");
+    	if(newReview.containsKey("planId")) {
+    		planId = Long.parseLong((String)newReview.get("planId"));
+    	}
+    	BigDecimal rating = new BigDecimal((String)newReview.get("rating"));
+    	String useremail = checkUser.checkContainsUseremail(request);
+    	
+    	TripReviewDTO dto = TripReviewDTO.builder().title(title).reviewContent(reviewContent)
+				.rating(rating).planId(planId).build();
+    	
+    	
+    	
         // 리뷰 생성 로직 호출
-    	System.out.println("planID:"+tripReviewDTO.getPlanId());
-        TripReviewDTO createdReview = tripReviewService.createReview(tripReviewDTO);
+//    	System.out.println("planID:"+tripReviewDTO.getPlanId());
+        TripReviewDTO createdReview = tripReviewService.createReview(dto,useremail);
         
         try {
             // 파일이 있을 경우에만 파일 업로드 처리
