@@ -3,6 +3,7 @@ package com.ict.traveljoy.controller.plan;
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -252,7 +253,7 @@ public class PlanController {
 	        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	        String userEmail = authentication.getName(); // 유저 이메일 가져오기
 
-	        // 유저 관심사 조회
+	     // 유저 관심사 조회
 	        List<String> userInterests = userInterestService.findInterestsByUser(userEmail);
 
 	        // 관심사 문자열 생성
@@ -271,17 +272,33 @@ public class PlanController {
 	                              + teen + " teens, and " + child + " children.";
 
 	        // 프롬프트 생성
-	        String prompt = "You are a travel assistant. The user has provided a 3-day travel plan with destinations. "
-	                      + "For each day, distribute the times for each destination considering optimal travel routes, realistic time spent at each location, and transportation between destinations. "
-	                      + "For each day, suggest a transportation option between the first and third destination, with the transportation information being added as 'index 2' between them. "
-	                      + "The user's preferences and interests should also be considered: " + interestsString + " "
+	        String prompt = "You are a travel assistant. The user has provided a travel plan with destinations. "
+	                      + "For each day, distribute the times for each destination considering optimal travel routes and realistic time spent at each location."
+	                      + " The user's preferences and interests should also be considered: " + interestsString + " "
 	                      + travelerString + " "
-	                      + "Based on this initial plan, create two additional optimized travel plans that follow similar routes but offer slight variations for better time management or alternative activities. "
-	                      + "The format should be as follows: { \"plan\": [ { \"day\": 1, \"contents\": [ { \"index\": 1, \"title\": \"Destination Name\", \"addr\": \"Address\", \"time\": \"YYYY-MM-DD HH:MM\", \"lat\": Latitude, \"lng\": Longitude, \"activity\": \"Type of activity\" }, { \"index\": 2, \"title\": \"Transportation\", \"addr\": \"From: Start Destination, To: End Destination\", \"time\": \"YYYY-MM-DD HH:MM\", \"lat\": null, \"lng\": null, \"activity\": \"Transport\" }, { \"index\": 3, \"title\": \"Destination Name\", \"addr\": \"Address\", \"time\": \"YYYY-MM-DD HH:MM\", \"lat\": Latitude, \"lng\": Longitude, \"activity\": \"Type of activity\" } ] }, "
-	                      + "{ \"day\": 2, \"contents\": [ { \"index\": 1, \"title\": \"Destination Name\", \"addr\": \"Address\", \"time\": \"YYYY-MM-DD HH:MM\", \"lat\": Latitude, \"lng\": Longitude, \"activity\": \"Type of activity\" } ] } ] } "
-	                      + "Please return only the JSON response, with the initial plan and two additional recommended plans.";
+	                      + "Based on this initial plan, create three travel plans: A, B, and C.";
 
-	        // 요청 데이터 준비
+	        // A 플랜 조건
+	        prompt += " Plan A must maintain the provided destination sequence and distribute times for each destination."
+	                + " The format should be as follows: "
+	                + "{ \"plan\": [ { \"day\": 1, \"contents\": [ { \"index\": 1, \"title\": \"Destination Name\", \"addr\": \"Address\", \"time\": \"YYYY-MM-DD HH:MM\", \"lat\": Latitude, \"lng\": Longitude, \"activity\": \"Type of activity\" } ] }, "
+	                + "{ \"day\": 2, \"contents\": [ { \"index\": 1, \"title\": \"Destination Name\", \"addr\": \"Address\", \"time\": \"YYYY-MM-DD HH:MM\", \"lat\": Latitude, \"lng\": Longitude, \"activity\": \"Type of activity\" } ] } ] }";
+
+	        // B 플랜 조건
+	        prompt += " Plan B allows reordering the destinations for optimal time management and travel efficiency."
+	                + " Ensure that the last activity of the day is always a hotel or accommodation."
+	                + " The user's preferences and group composition must also be considered: " + interestsString + " "
+	                + travelerString + ". Provide appropriate timing between destinations. Return the output in JSON format.";
+
+	        // C 플랜 조건
+	        prompt += " Plan C not only uses the provided destination data but also recommends additional destinations or activities based on the region and user interests: " + interestsString + "."
+	                + " This plan can reorder the destinations and include new destinations or activities that are relevant to the trip."
+	                + " Return the output in JSON format.";
+
+	        prompt += " Please return only the JSON response with three plans: Plan A, Plan B, and Plan C, each considering user interests, traveler group composition, and optimized scheduling.";
+
+
+	     // 요청 데이터 준비
 	        Map<String, Object> request = new HashMap<>();
 	        request.put("name", plan.get("name"));
 
@@ -294,7 +311,7 @@ public class PlanController {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("plan 값이 비어 있습니다.");
 	        }
 
-	        // Flask로 요청 전송
+	        // FastAPI로 요청 전송
 	        ResponseEntity<Map> aiResponse = restTemplate.postForEntity(flaskUrl, request, Map.class);
 	        Map<String, Object> aiResponseBody = aiResponse.getBody();
 
@@ -303,6 +320,8 @@ public class PlanController {
 	        }
 
 	        String aiGeneratedPlanText = (String) aiResponseBody.get("content");
+	        System.out.println("AI 응답 내용: " + aiGeneratedPlanText);
+	        
 	        List<Map<String, Object>> generatedPlans = parseAIResponseToPlans(aiGeneratedPlanText);
 
 	        return ResponseEntity.ok(generatedPlans);
@@ -314,19 +333,29 @@ public class PlanController {
 	// AI 응답을 JSON으로 변환하는 메서드
 	private List<Map<String, Object>> parseAIResponseToPlans(String aiResponse) {
 	    List<Map<String, Object>> plans = new ArrayList<>();
-	    
+
 	    try {
-	        // JSON 문자열을 파싱하여 List<Map<String, Object>>로 변환
+	        // JSON 문자열을 파싱하여 Map<String, Object>로 변환
 	        ObjectMapper objectMapper = new ObjectMapper();
 	        Map<String, Object> parsedResponse = objectMapper.readValue(aiResponse, Map.class);
-	        plans = (List<Map<String, Object>>) parsedResponse.get("plan");
 
+	        // Plan A, Plan B, Plan C 등 플랜 데이터 파싱
+	        List<String> planKeys = Arrays.asList("Plan A", "Plan B", "Plan C");
+	        
+	        for (String planKey : planKeys) {
+	            if (parsedResponse.containsKey(planKey)) {
+	                Map<String, Object> planData = (Map<String, Object>) parsedResponse.get(planKey);
+	                plans.add(planData);
+	            }
+	        }
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
-	    
+
 	    return plans;
 	}
+
+
 
 
 
