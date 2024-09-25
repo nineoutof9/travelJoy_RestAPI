@@ -16,10 +16,15 @@ public interface SightRepository extends JpaRepository<Sight, Long> {
     @Query(value = "SELECT * FROM SIGHT WHERE 6371 * ACOS(" +
             "COS(:lat * 3.141592653589793 / 180) * COS(LAT * 3.141592653589793 / 180) * " +
             "COS(LNG * 3.141592653589793 / 180 - :lng * 3.141592653589793 / 180) + " +
-            "SIN(:lat * 3.141592653589793 / 180) * SIN(LAT * 3.141592653589793 / 180)) <= :dist",
+            "SIN(:lat * 3.141592653589793 / 180) * SIN(LAT * 3.141592653589793 / 180)) <= :dist " +
+            "ORDER BY 6371 * ACOS(" +
+            "COS(:lat * 3.141592653589793 / 180) * COS(LAT * 3.141592653589793 / 180) * " +
+            "COS(LNG * 3.141592653589793 / 180 - :lng * 3.141592653589793 / 180) + " +
+            "SIN(:lat * 3.141592653589793 / 180) * SIN(LAT * 3.141592653589793 / 180))",
     nativeQuery = true)
-	List<Sight> findSightsWithinDistance(
-	     @Param("lat") double latitude, 
-	     @Param("lng") double longitude, 
-	     @Param("dist") double distance);
+List<Sight> findSightsWithinDistance(
+     @Param("lat") double latitude, 
+     @Param("lng") double longitude, 
+     @Param("dist") double distance);
+
 }
