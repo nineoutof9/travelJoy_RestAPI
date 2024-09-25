@@ -74,7 +74,10 @@ public class ViewCountService {
 			
 			// 추가적으로 check NoticeView
 			ViewCount viewCount = viewCountRepository.findByNotice_Id(noticeId);
-			viewCount.setCount(viewCount.getCount()+1);
+			System.out.println(viewCount.getCount());
+			long update = viewCount.getCount()+1;
+			viewCount.setCount(update);
+			System.out.println("==============="+viewCount.getCount());
 			ViewCount updatedViewCount = viewCountRepository.save(viewCount);
 			return ViewCountDTO.toDTO(updatedViewCount);
 		}
