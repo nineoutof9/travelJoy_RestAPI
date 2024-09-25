@@ -1,5 +1,6 @@
 package com.ict.traveljoy.pushalarm.service;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -172,6 +175,62 @@ public class PushAlarmService {
 
 	}
 
+	public PushAlarmSendDTO sendScheduledPushAlarm(String title, String content, String receiveremails, String senderemail, LocalDateTime sendDate) {
+		
+		String[] emailsToSend = receiveremails.split(",");
+		String sender =senderemail;
+		PushAlarmSendDTO responseDTO = new PushAlarmSendDTO();
+		
+		LocalDateTime now = LocalDateTime.now();
+
+	    // 유효성 검사: sendDate가 현재 시간보다 미래여야 함
+	    if (sendDate.isBefore(now)) {
+	        throw new IllegalArgumentException("sendDate");	
+	    }
+
+		//알람 Database에 저장
+		PushAlarmDTO dto = PushAlarmDTO.builder()
+				.title(title).pushAlarmContent(content).isActive(true).isDelete(false).build();
+
+		if(dto.getTitle().trim().length()==0 || dto.getPushAlarmContent().trim().length()==0) {
+			throw new IllegalArgumentException("알림의 제목과 내용을 넣어주세요");
+		}
+		PushAlarm pushAlarm = dto.toEntity();
+		pushAlarm = pushAlarmRepository.save(pushAlarm);
+    
+		Users receiver = new Users();
+		for(int i=0; i<emailsToSend.length;i++) {
+			if(userRepository.existsByEmail(emailsToSend[i])) {
+				receiver = userRepository.findByEmail(emailsToSend[i]).get();
+			}
+			else {	throw new NoSuchElementException("존재하지 않는 수신자가 있습니다.");	}
+
+			PushAlarmSendDTO alarmSendDTO = PushAlarmSendDTO.builder()
+					.pushAlarm(pushAlarm).receiver(receiver).sender(sender).build();
+			PushAlarmSend alarmSend = alarmSendDTO.toEntity();
+			alarmSend.setReceiver(receiver);
+			alarmSend.setSender(sender);
+			alarmSend.setPushAlarmSendDate(sendDate);
+
+			alarmSend = pushAlarmSendRepository.save(alarmSend);
+			
+			if(i==emailsToSend.length-1) {
+				responseDTO = PushAlarmSendDTO.toDTO(alarmSend);
+				responseDTO.setSender(alarmSend.getSender());
+				responseDTO.setReceiveUseremail(alarmSend.getReceiver().getEmail());
+				//전송내역 돌려주기
+			}
+		}
+		
+		//Fast-API로 pub요청
+		AlarmPublish pub = new AlarmPublish();
+		boolean success = pub.scheduledAlarm(sender,emailsToSend, title,sendDate);
+		
+		//System.out.println("did it work?? "+success);
+		return responseDTO;
+	}
+
+
 	//모든 알람읽기 처리
 	public boolean readAllAlarm(String useremail) {
 
@@ -233,6 +292,8 @@ public class PushAlarmService {
 		
 		
 	}
+
+
 
 
 }
