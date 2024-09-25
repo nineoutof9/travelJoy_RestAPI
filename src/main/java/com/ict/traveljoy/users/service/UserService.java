@@ -1,5 +1,6 @@
 package com.ict.traveljoy.users.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -144,5 +145,12 @@ public class UserService {
 	    Users userEntity = userRepository.findByEmail(userDto.getEmail()).get();
 	    userEntity.setPassword(userDto.getPassword());
 	    userRepository.save(userEntity);
+	}
+	
+	public LocalDateTime userLastLogin(String email) {
+		Users user = userRepository.findByEmail(email).get();
+		user.setLastLogin(LocalDateTime.now());
+		Users afteruser = userRepository.save(user);
+		return afteruser.getLastLogin();
 	}
 }

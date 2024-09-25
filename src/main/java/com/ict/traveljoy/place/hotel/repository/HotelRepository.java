@@ -40,7 +40,11 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
     @Query(value = "SELECT * FROM HOTEL WHERE 6371 * ACOS(" +
             "COS(:lat * 3.141592653589793 / 180) * COS(LAT * 3.141592653589793 / 180) * " +
             "COS(LNG * 3.141592653589793 / 180 - :lng * 3.141592653589793 / 180) + " +
-            "SIN(:lat * 3.141592653589793 / 180) * SIN(LAT * 3.141592653589793 / 180)) <= :dist", 
+            "SIN(:lat * 3.141592653589793 / 180) * SIN(LAT * 3.141592653589793 / 180)) <= :dist " +
+            "ORDER BY 6371 * ACOS(" +
+            "COS(:lat * 3.141592653589793 / 180) * COS(LAT * 3.141592653589793 / 180) * " +
+            "COS(LNG * 3.141592653589793 / 180 - :lng * 3.141592653589793 / 180) + " +
+            "SIN(:lat * 3.141592653589793 / 180) * SIN(LAT * 3.141592653589793 / 180)) ASC", 
     nativeQuery = true)
 List<Hotel> findHotelsWithinDistance(@Param("lat") double latitude, @Param("lng") double longitude, @Param("dist") double distance);
 

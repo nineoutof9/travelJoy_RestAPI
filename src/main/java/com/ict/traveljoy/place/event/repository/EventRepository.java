@@ -26,12 +26,17 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             "COS(LNG * 3.141592653589793 / 180 - :lng * 3.141592653589793 / 180) + " +
             "SIN(:lat * 3.141592653589793 / 180) * SIN(LAT * 3.141592653589793 / 180)) <= :dist " +
             "AND (event_start_date BETWEEN :startDate AND :endDate " +
-            "OR event_end_date BETWEEN :startDate AND :endDate)",
+            "OR event_end_date BETWEEN :startDate AND :endDate) " +
+            "ORDER BY 6371 * ACOS(" +
+            "COS(:lat * 3.141592653589793 / 180) * COS(LAT * 3.141592653589793 / 180) * " +
+            "COS(LNG * 3.141592653589793 / 180 - :lng * 3.141592653589793 / 180) + " +
+            "SIN(:lat * 3.141592653589793 / 180) * SIN(LAT * 3.141592653589793 / 180)) ASC",
     nativeQuery = true)
-    List<Event> findEventsWithinDistanceAndDateRange(
-     @Param("lat") double latitude, 
-     @Param("lng") double longitude, 
-     @Param("dist") double distance,
-     @Param("startDate") LocalDate startDate, 
-     @Param("endDate") LocalDate endDate);
+	List<Event> findEventsWithinDistanceAndDateRange(
+	     @Param("lat") double latitude, 
+	     @Param("lng") double longitude, 
+	     @Param("dist") double distance,
+	     @Param("startDate") LocalDate startDate, 
+	     @Param("endDate") LocalDate endDate);
+
 }

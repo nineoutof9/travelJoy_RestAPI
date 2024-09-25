@@ -289,7 +289,7 @@ public class UserController {
 	         user.setLastLogin(LocalDateTime.now());
 	         user.setSnsAccessToken(accessToken);
 	         userRepository.save(user);
-
+	         
 	         // JWT 토큰 발급
 	         Long accessExpiredMs = 60000000L;
 	         String accessTokenJwt = jwtUtility.generateToken(email, "access", accessExpiredMs);
