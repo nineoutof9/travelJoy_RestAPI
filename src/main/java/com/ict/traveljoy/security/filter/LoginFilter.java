@@ -90,6 +90,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         // RefreshToken 저장 로직
         
         Users user = userService.findEntityByEmail(username);
+        userService.userLastLogin(username);
         LocalDateTime now = LocalDateTime.now();
         RefreshToken refreshToken = RefreshToken.builder()
                     .status("activated")

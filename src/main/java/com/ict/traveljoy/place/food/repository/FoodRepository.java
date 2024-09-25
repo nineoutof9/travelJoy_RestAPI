@@ -29,7 +29,14 @@ public interface FoodRepository extends JpaRepository<Food, Long> {
     @Query(value = "SELECT * FROM FOOD WHERE 6371 * ACOS(" +
             "COS(:lat * 3.141592653589793 / 180) * COS(LAT * 3.141592653589793 / 180) * " +
             "COS(LNG * 3.141592653589793 / 180 - :lng * 3.141592653589793 / 180) + " +
-            "SIN(:lat * 3.141592653589793 / 180) * SIN(LAT * 3.141592653589793 / 180)) <= :dist", 
+            "SIN(:lat * 3.141592653589793 / 180) * SIN(LAT * 3.141592653589793 / 180)) <= :dist " +
+            "ORDER BY 6371 * ACOS(" +
+            "COS(:lat * 3.141592653589793 / 180) * COS(LAT * 3.141592653589793 / 180) * " +
+            "COS(LNG * 3.141592653589793 / 180 - :lng * 3.141592653589793 / 180) + " +
+            "SIN(:lat * 3.141592653589793 / 180) * SIN(LAT * 3.141592653589793 / 180)) ASC",
     nativeQuery = true)
-    List<Food> findFoodsWithinDistance(@Param("lat") double latitude, @Param("lng") double longitude, @Param("dist") double distance);
+	List<Food> findFoodsWithinDistance(
+	     @Param("lat") double latitude, 
+	     @Param("lng") double longitude, 
+	     @Param("dist") double distance);
 }
