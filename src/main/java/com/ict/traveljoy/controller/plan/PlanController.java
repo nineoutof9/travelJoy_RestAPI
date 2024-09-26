@@ -294,21 +294,26 @@ public class PlanController {
 	                      + optionsString + " "
 	                      + "Based on this initial plan, create three travel plans: A, B, and C.";
 
-	        // A 플랜 조건
+	     // A 플랜 조건
 	        prompt += " Plan A must maintain the provided destination sequence and distribute times for each destination."
+	                + " The plan should cover each day from the start date to the end date, dividing the provided destinations evenly across the days."
+	                + " If there are more days than destinations, adjust the time spent at each destination to fill the day."
 	                + " The format should be as follows: "
 	                + "{ \"plan\": [ { \"day\": 1, \"contents\": [ { \"index\": 1, \"title\": \"Destination Name\", \"addr\": \"Address\", \"time\": \"YYYY-MM-DD HH:MM\", \"lat\": Latitude, \"lng\": Longitude, \"activity\": \"Type of activity\" } ] }, "
-	                + "{ \"day\": 2, \"contents\": [ { \"index\": 1, \"title\": \"Destination Name\", \"addr\": \"Address\", \"time\": \"YYYY-MM-DD HH:MM\", \"lat\": Latitude, \"lng\": Longitude, \"activity\": \"Type of activity\" } ] } ] }";
+	                + "{ \"day\": 2, \"contents\": [ { \"index\": 1, \"title\": \"Destination Name\", \"addr\": \"Address\", \"time\": \"YYYY-MM-DD HH:MM\", \"lat\": Latitude, \"lng\": Longitude, \"activity\": \"Type of activity\" } ] } ] }, continuing for each day until the end of the trip.";
 
 	        // B 플랜 조건
 	        prompt += " Plan B allows reordering the destinations for optimal time management and travel efficiency."
-	                + " Ensure that the last activity of the day is always a hotel or accommodation."
+	                + " Ensure that the last activity of each day is always a hotel or accommodation."
+	                + " The trip should span the entire date range from " + startDate + " to " + endDate + ", covering all days."
 	                + " The user's preferences and group composition must also be considered: " + interestsString + " "
-	                + travelerString + ". Provide appropriate timing between destinations. Return the output in JSON format.";
+	                + travelerString + ". Provide appropriate timing between destinations, and distribute them across all days."
+	                + " Return the output in JSON format.";
 
 	        // C 플랜 조건
 	        prompt += " Plan C not only uses the provided destination data but also recommends additional destinations or activities based on the region and user interests: " + interestsString + "."
-	                + " This plan can reorder the destinations and include new destinations or activities that are relevant to the trip."
+	                + " This plan should also span the entire trip from " + startDate + " to " + endDate + "."
+	                + " You can reorder the destinations, and include new destinations or activities relevant to the trip."
 	                + " Return the output in JSON format.";
 
 	        prompt += " Please return only the JSON response with three plans: Plan A, Plan B, and Plan C, each considering user interests, traveler group composition, and optimized scheduling.";
@@ -333,10 +338,11 @@ public class PlanController {
 	        if (aiResponseBody == null || !aiResponseBody.containsKey("content")) {
 	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("AI 서버 응답이 올바르지 않습니다.");
 	        }
-
+	        
 	        String aiGeneratedPlanText = (String) aiResponseBody.get("content");
+	        System.out.println(aiGeneratedPlanText);
 	        List<Map<String, Object>> generatedPlans = parseAIResponseToPlans(aiGeneratedPlanText);
-
+	        
 	        return ResponseEntity.ok(generatedPlans);
 	    } catch (Exception e) {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("AI 플랜 생성 중 오류 발생: " + e.getMessage());

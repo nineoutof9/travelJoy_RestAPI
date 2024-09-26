@@ -1,5 +1,6 @@
 package com.ict.traveljoy.tripReview.service;
 
+import com.ict.traveljoy.newplan.NewPlan;
 import com.ict.traveljoy.plan.repository.Plan;
 import com.ict.traveljoy.tripReview.repository.TripReview;
 import com.ict.traveljoy.users.repository.Users;
@@ -17,7 +18,9 @@ import java.sql.Timestamp;
 public class TripReviewDTO {
     private Long id;
     private Long planId; 
+    private Long newPlanId;
     private Plan plan;
+    private NewPlan newPlan;
     private Users user;
     private String title;
     private String reviewContent;
@@ -31,9 +34,13 @@ public class TripReviewDTO {
     public TripReview toEntity() {
     	Plan planE = new Plan();
     	planE.setId(planId);   	
+    	
+    	NewPlan newPlan = new NewPlan();
+    	newPlan.setId(newPlanId);
         return TripReview.builder()
                 .id(id)
                 .plan(plan)  
+                .newPlan(newPlan)
                 .user(user)
                 .title(title)
                 .reviewContent(reviewContent)
@@ -51,6 +58,8 @@ public class TripReviewDTO {
                 .id(tripReview.getId())
                 .plan(tripReview.getPlan())
                 .planId(tripReview.getPlan() != null ? tripReview.getPlan().getId() : null) 
+                .newPlan(tripReview.getNewPlan())
+                .newPlanId(tripReview.getPlan() != null ? tripReview.getNewPlan().getId() : null)
                 .user(tripReview.getUser())
                 .title(tripReview.getTitle())
                 .reviewContent(tripReview.getReviewContent())
