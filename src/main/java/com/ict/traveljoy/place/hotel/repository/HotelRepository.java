@@ -23,8 +23,7 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
     // 지역 이름과 날짜를 기준으로 호텔 검색
     List<Hotel> findByRegionNameContainingAndCheckInDateLessThanEqualAndCheckOutDateGreaterThanEqual(
             String regionName, LocalDate checkInDate, LocalDate checkOutDate);
- 
-    //중심좌표 가까운순 5개
+
     @Query(value = "SELECT hotel_id, hotel_name, average_price, is_has_image, lat, lng, region_id, average_review_rate, check_in_date, check_out_date FROM (" +
             "  SELECT hotel_id, hotel_name, average_price, is_has_image, lat, lng, region_id, average_review_rate, check_in_date, check_out_date, " +
             "         (6371 * acos(cos((:lat * (3.14159265359 / 180))) * cos(lat * (3.14159265359 / 180)) * " +
@@ -47,5 +46,6 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
             "SIN(:lat * 3.141592653589793 / 180) * SIN(LAT * 3.141592653589793 / 180)) ASC", 
     nativeQuery = true)
 List<Hotel> findHotelsWithinDistance(@Param("lat") double latitude, @Param("lng") double longitude, @Param("dist") double distance);
+
 
 }
