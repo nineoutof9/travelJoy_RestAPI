@@ -1,6 +1,8 @@
 package com.ict.traveljoy.tripReview.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ict.traveljoy.newplan.NewPlan;
+import com.ict.traveljoy.newplan.NewPlanRepository;
 import com.ict.traveljoy.plan.repository.Plan;
 import com.ict.traveljoy.plan.repository.PlanRepository;
 import com.ict.traveljoy.question.repository.AnswerRepository;
@@ -30,6 +32,7 @@ public class TripReviewService {
     private final TripReviewRepository tripReviewRepository;
     private final UserRepository userRepository;
     private final PlanRepository planRepository;
+    private final NewPlanRepository newPlanRepository;
 
 
     @Transactional
@@ -43,6 +46,14 @@ public class TripReviewService {
             Optional<Plan> planOptional = planRepository.findById(tripReviewDTO.getPlanId());
             if (planOptional.isPresent()) {
                 tripReviewDTO.setPlan(planOptional.get());
+            } 
+        }
+        
+        // newPlanId를 기반으로 NewPlan 객체를 설정
+        if (tripReviewDTO.getNewPlanId() != null) {
+            Optional<NewPlan> newPlanOptional = newPlanRepository.findById(tripReviewDTO.getNewPlanId());
+            if (newPlanOptional.isPresent()) {
+                tripReviewDTO.setNewPlan(newPlanOptional.get());
             } 
         }
 
@@ -83,6 +94,16 @@ public class TripReviewService {
             tripReview.setPlan(planOptional.get());
         } else {
             tripReview.setPlan(null);
+        }
+        
+        if (tripReviewDTO.getNewPlan() != null) {
+            Optional<NewPlan> newPlanOptional = newPlanRepository.findById(tripReviewDTO.getNewPlan().getId());
+            if (newPlanOptional.isEmpty()) {
+                throw new IllegalArgumentException("NewPlan with ID " + tripReviewDTO.getNewPlan().getId() + " does not exist.");
+            }
+            tripReview.setNewPlan(newPlanOptional.get());
+        } else {
+            tripReview.setNewPlan(null);
         }
 
         // Validate rating
@@ -133,7 +154,14 @@ public class TripReviewService {
         List<TripReview> tripReviews = tripReviewRepository.findByPlan(plan);
         return tripReviews.stream().map(TripReviewDTO::toDto).toList();
     }
-
+    
+    public List<TripReviewDTO> getReviewsByNewPlanId(Long newPlanId) {
+        NewPlan newPlan = new NewPlan();
+        newPlan.setId(newPlanId);
+        List<TripReview> tripReviews = tripReviewRepository.findByNewPlan(newPlan);
+        return tripReviews.stream().map(TripReviewDTO::toDto).toList();
+    }
+    
     public List<TripReviewDTO> getReviewsByTitleContaining(String title) {
         List<TripReview> tripReviews = tripReviewRepository.findByTitleContaining(title);
         return tripReviews.stream().map(TripReviewDTO::toDto).toList();

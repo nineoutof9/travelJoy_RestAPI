@@ -1,5 +1,8 @@
 server:
   port: 8080
+  tomcat:
+    max-http-form-post-size: 52428800
+      
 jwt:
   secret: asfewyahew231daaqaasdWEFfwersdf3erwWet24easdf234aWEsdfwewrsWF56FeWGSWQR1qwetfzew23afwawqr31dAQ
 spring:

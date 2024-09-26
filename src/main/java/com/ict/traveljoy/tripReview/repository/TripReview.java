@@ -22,6 +22,7 @@ import java.sql.Timestamp;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.ict.traveljoy.newplan.NewPlan;
 import com.ict.traveljoy.plan.repository.Plan;
 import com.ict.traveljoy.users.repository.Users;
 
@@ -43,6 +44,10 @@ public class TripReview {
     @ManyToOne
     @JoinColumn(name = "PLAN_ID")
     private Plan plan;
+    
+    @ManyToOne
+    @JoinColumn(name = "NEW_PLAN_ID")
+    private NewPlan newPlan;
 
     @ManyToOne
 	@JoinColumn(name = "user_id", nullable = false)

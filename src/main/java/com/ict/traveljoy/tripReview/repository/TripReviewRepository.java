@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import com.ict.traveljoy.newplan.NewPlan;
 import com.ict.traveljoy.plan.repository.Plan;
 
 import java.util.List;
@@ -23,6 +24,9 @@ public interface TripReviewRepository extends JpaRepository<TripReview, Long> {
 
 
 	List<TripReview> findAllByUser_Id(Long id);
+
+
+	List<TripReview> findByNewPlan(NewPlan newPlan);
     
     
 }
