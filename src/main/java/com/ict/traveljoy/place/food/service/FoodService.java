@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.ict.traveljoy.place.food.repository.Food;
 import com.ict.traveljoy.place.food.repository.FoodRepository;
+import com.ict.traveljoy.place.hotel.service.HotelDTO;
 import com.ict.traveljoy.place.region.repository.Region;
 import com.ict.traveljoy.place.region.repository.RegionRepository;
 
@@ -192,4 +193,10 @@ public class FoodService {
             return findAllFoods(); // 모든 음식 반환
         }
     }
+
+	public List<FoodDTO> findDestination(double latitude, double longitude, double distance) {
+		return foodRepository.findFoodsWithinDistance(latitude, longitude, distance).stream()
+				.map(FoodDTO::toDto)
+        		.collect(Collectors.toList());
+	}
 }

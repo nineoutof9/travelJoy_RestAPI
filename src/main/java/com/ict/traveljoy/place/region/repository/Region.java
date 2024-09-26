@@ -35,6 +35,18 @@ public class Region {
     @Column(name="region_info",length = 2000)
     private String regionInfo;
     
+    @Column
+    private Float lat;
+    
+    @Column
+    private Float lng;
+    
+    @Column(name="IMAGE_URL",length = 1000)
+	private String imageUrl;
+    
+    @Column
+    private Float dist;
+    
 	    //String을 입력받는 생성자 추가
 	    public Region(String name) {
 	    	this.name =name;

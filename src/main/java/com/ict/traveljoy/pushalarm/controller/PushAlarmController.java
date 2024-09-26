@@ -1,5 +1,7 @@
 package com.ict.traveljoy.pushalarm.controller;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -109,6 +111,35 @@ public class PushAlarmController {
 		}
 	}
 	
+	@PostMapping("/scheduleAlarm") // 알람 예약 전송 - 관리자단
+	public ResponseEntity<PushAlarmSendDTO> schedulePushAlarm(@RequestBody Map<String, Object> map, HttpServletRequest request) {
+		String useremail = checkUser.checkContainsUseremail(request);
+		String title = (String)map.get("title");
+		String content = (String)map.get("content");
+		String receiveremails = (String)map.get("receiver"); //수신자의 useremail, 배열로 받기
+		
+		String sendDatestr = (String)map.get("sendDate");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+		LocalDateTime sendDate = LocalDateTime.parse(sendDatestr, formatter);
+		
+		try {
+			PushAlarmSendDTO savePushAlarm = pushAlarmService.sendScheduledPushAlarm(title,content,receiveremails,useremail,sendDate);
+			if(savePushAlarm == null) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+			return new ResponseEntity<>(savePushAlarm,HttpStatus.CREATED);
+		} catch(NoSuchElementException e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST); //400
+		} catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
+	
+	
+	
 	@PostMapping("/readAll") //알람 읽기
 	public ResponseEntity<PushAlarmSendDTO> readAllAlarm(HttpServletRequest request) {
 		String useremail = checkUser.checkContainsUseremail(request);
@@ -119,6 +150,20 @@ public class PushAlarmController {
 			else return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			
 //			return new ResponseEntity<>(HttpStatus.CREATED);
+		} catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@PostMapping("/read/{alarm_id}") //알람 읽기
+	public ResponseEntity<PushAlarmSendDTO> readAlarm(@PathVariable("alarm_id") String alarm_id) {
+		
+		try {
+			boolean success = pushAlarmService.readAlarm(Long.parseLong(alarm_id));
+			if(success) return new ResponseEntity<>(HttpStatus.OK);
+			else return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			
 		} catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

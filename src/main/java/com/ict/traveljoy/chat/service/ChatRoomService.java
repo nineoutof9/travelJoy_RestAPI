@@ -44,6 +44,7 @@ public class ChatRoomService {
 			EnterChatRoom isEntered = enterChatRoomRepository.findByUser_Id(user.getId());
 			ChatRoom chatroom = isEntered.getChatRoom();
 			chatroom.setIsActive(1);
+			chatroom.setIsDelete(0);
 			chatroom = chatRoomRepository.save(chatroom);
 			return chatroom.getId().toString();
 		}

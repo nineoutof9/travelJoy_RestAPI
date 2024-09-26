@@ -17,7 +17,7 @@ import com.ict.traveljoy.notice.service.ViewCountService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/viewcount")
+@RequestMapping("/api/viewcount")
 @RequiredArgsConstructor
 public class ViewCountController {
 
@@ -27,7 +27,7 @@ public class ViewCountController {
 //	@PostMapping("/") //조회수 생성은 게시글에서 만들때 같이 만들기
 	
 	@GetMapping("/{notice_id}")
-	public ResponseEntity getViewCount(@PathVariable String noticeId){
+	public ResponseEntity getViewCount(@PathVariable("notice_id") String noticeId){
 		try {
 			long viewCount = viewCountService.findbyNoticeId(Long.parseLong(noticeId)).getCount();
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(viewCount);
@@ -39,10 +39,11 @@ public class ViewCountController {
 		}
 	}
 	
-	@PutMapping("/{notice_id}")
-	public ResponseEntity<ViewCountDTO> updateViewCount(@PathVariable String noticeId){
+	@GetMapping("/update/{notice_id}")
+	public ResponseEntity<ViewCountDTO> updateViewCount(@PathVariable("notice_id") String noticeId){
 		try {
 			ViewCountDTO viewCountDTO = viewCountService.updateViewCount(Long.parseLong(noticeId));
+			System.out.println("================================viewCountController:"+viewCountDTO.getCount());
 			return ResponseEntity.status(200).header(HttpHeaders.CONTENT_TYPE,"application/json").body(viewCountDTO);
 		}
 		catch(Exception e) {
