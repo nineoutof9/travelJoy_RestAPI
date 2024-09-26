@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/stt")
 @RequiredArgsConstructor
-@Tag(name = "STT, TTS 관련 API", description = "STT, TTS Open API관련 컨트롤러")
+@Tag(name = "STT 관련 API", description = "STT Open API관련 컨트롤러")
 public class STTController {
 
 	private final CheckContainsUseremail checkUser;
