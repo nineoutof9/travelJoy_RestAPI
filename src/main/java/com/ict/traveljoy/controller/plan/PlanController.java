@@ -30,8 +30,13 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ict.traveljoy.info.userinterest.service.UserInterestService;
+import com.ict.traveljoy.newplan.NewPlan;
+import com.ict.traveljoy.newplan.NewPlanDTO;
+import com.ict.traveljoy.newplan.NewPlanService;
 import com.ict.traveljoy.plan.service.PlanDTO;
 import com.ict.traveljoy.plan.service.PlanService;
+import com.ict.traveljoy.users.repository.UserRepository;
+import com.ict.traveljoy.users.repository.Users;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -44,32 +49,32 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PlanController {
 	
-	@Autowired
 	private final PlanService planService;
-	
-	@Autowired
 	private final RestTemplate restTemplate;
-	
-	@Autowired
 	private final UserInterestService userInterestService;
+	private final UserRepository userRepository;
 	
-	@PostMapping("/plan")
-	@Operation(summary = "plan 저장", description = "plan 저장 컨트롤러")
-	public ResponseEntity<PlanDTO> savePlan(@RequestBody PlanDTO planDTO){
-		
-		try {
-			PlanDTO savePlan = planService.savePlan(planDTO);
-			if(savePlan == null) {
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-			}
-			return new ResponseEntity<>(savePlan,HttpStatus.OK);
-		}catch(Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-			
-		}
-		
-	}
+    private final NewPlanService newPlanService;
+
+
+
+    @PostMapping("/plan/newplan")
+    public ResponseEntity<NewPlan> createNewPlan(@RequestBody NewPlanDTO newPlanDTO) {
+        NewPlan savedPlan = newPlanService.createNewPlan(newPlanDTO);
+        return ResponseEntity.ok(savedPlan);
+    }
+
+    @GetMapping("/plan/newplan/{id}")
+    public ResponseEntity<NewPlanDTO> getNewPlan(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(newPlanService.getNewPlan(id));
+    }
+    
+    @GetMapping("/plan/newplan/email/{email}")
+    public ResponseEntity<List<NewPlanDTO>> getNewPlan(@PathVariable("email") String email) {
+        List<NewPlanDTO> newPlans = newPlanService.getNewPlanByEmail(email);  // 여러 계획을 가져옴
+        return ResponseEntity.ok(newPlans);  // 리스트를 반환
+    }
+	
 	
 	@PutMapping("/plan")
 	@Operation(summary = "plan 수정", description = "plan 수정 컨트롤러")
@@ -243,7 +248,6 @@ public class PlanController {
 
 	    return new double[]{latSum / count, lngSum / count};  // [평균 위도, 평균 경도]
 	}
-	
 	@PostMapping("/plan/ai")
 	public ResponseEntity<?> generateAIPlan(@RequestBody Map<String, Object> plan) {
 	    try {
@@ -253,7 +257,7 @@ public class PlanController {
 	        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	        String userEmail = authentication.getName(); // 유저 이메일 가져오기
 
-	     // 유저 관심사 조회
+	        // 유저 관심사 조회
 	        List<String> userInterests = userInterestService.findInterestsByUser(userEmail);
 
 	        // 관심사 문자열 생성
@@ -268,14 +272,26 @@ public class PlanController {
 	        int teen = (int) travelerCounts.getOrDefault("teen", 0);
 	        int child = (int) travelerCounts.getOrDefault("child", 0);
 
+	        // 여행 날짜 받아오기
+	        String startDate = (String) plan.get("startDate");
+	        String endDate = (String) plan.get("endDate");
+
+	        // 옵션 받아오기
+	        List<String> options = (List<String>) plan.get("options");
+	        String optionsString = options.isEmpty()
+	            ? "No specific options were selected."
+	            : "The user has selected the following options: " + String.join(", ", options) + ".";
+
 	        String travelerString = "The group consists of " + adult + " adults, " + senior + " seniors, " 
 	                              + teen + " teens, and " + child + " children.";
 
 	        // 프롬프트 생성
 	        String prompt = "You are a travel assistant. The user has provided a travel plan with destinations. "
-	                      + "For each day, distribute the times for each destination considering optimal travel routes and realistic time spent at each location."
-	                      + " The user's preferences and interests should also be considered: " + interestsString + " "
+	                      + "For each day, distribute the times for each destination considering optimal travel routes and realistic time spent at each location. "
+	                      + "The user's preferences and interests should also be considered: " + interestsString + " "
 	                      + travelerString + " "
+	                      + "The trip will take place from " + startDate + " to " + endDate + ". "
+	                      + optionsString + " "
 	                      + "Based on this initial plan, create three travel plans: A, B, and C.";
 
 	        // A 플랜 조건
@@ -297,8 +313,7 @@ public class PlanController {
 
 	        prompt += " Please return only the JSON response with three plans: Plan A, Plan B, and Plan C, each considering user interests, traveler group composition, and optimized scheduling.";
 
-
-	     // 요청 데이터 준비
+	        // 요청 데이터 준비
 	        Map<String, Object> request = new HashMap<>();
 	        request.put("name", plan.get("name"));
 
@@ -311,7 +326,7 @@ public class PlanController {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("plan 값이 비어 있습니다.");
 	        }
 
-	        // FastAPI로 요청 전송
+	        // Flask로 요청 전송
 	        ResponseEntity<Map> aiResponse = restTemplate.postForEntity(flaskUrl, request, Map.class);
 	        Map<String, Object> aiResponseBody = aiResponse.getBody();
 
@@ -320,8 +335,6 @@ public class PlanController {
 	        }
 
 	        String aiGeneratedPlanText = (String) aiResponseBody.get("content");
-	        System.out.println("AI 응답 내용: " + aiGeneratedPlanText);
-	        
 	        List<Map<String, Object>> generatedPlans = parseAIResponseToPlans(aiGeneratedPlanText);
 
 	        return ResponseEntity.ok(generatedPlans);
@@ -329,6 +342,7 @@ public class PlanController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("AI 플랜 생성 중 오류 발생: " + e.getMessage());
 	    }
 	}
+
 
 	// AI 응답을 JSON으로 변환하는 메서드
 	private List<Map<String, Object>> parseAIResponseToPlans(String aiResponse) {
