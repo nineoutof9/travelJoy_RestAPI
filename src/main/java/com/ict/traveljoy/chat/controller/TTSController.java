@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -35,11 +36,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Tag(name = "TTS 관련 API", description = "TTS Open API관련 컨트롤러")
 public class TTSController {
+	
+	@Value("${stt-api-key.clientId}")
+	private String clientId;
+	@Value("${stt-api-key.clientSecret}")
+    private String clientSecret;
+    
 
     @PostMapping
     public ResponseEntity<byte[]> getTTS(@RequestBody String text) {	
-    	String clientId = "800jqz8tkl"; 
-        String clientSecret = "mxiFlgJY7DHGYOLRF9t9ucNWeZTXUeYuK15cHEq0";
+    	
         
         try {
             String encodedText = URLEncoder.encode(text, "UTF-8");
