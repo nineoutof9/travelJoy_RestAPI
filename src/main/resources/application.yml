@@ -6,13 +6,13 @@ spring:
   datasource:
     driver-class-name: oracle.jdbc.OracleDriver
 
-    url: jdbc:oracle:thin:@211.109.103.98:51521/XEPDB1
-    #url: jdbc:oracle:thin:@localhost:1521/XEPDB1
+#    url: jdbc:oracle:thin:@211.109.103.98:51521/XEPDB1
+    url: jdbc:oracle:thin:@localhost:1521/XEPDB1
 
-    username: ICTUSER
-    password: ICT1234
-    # username: STUDY
-    # password: STUDY
+#    username: ICTUSER
+#    password: ICT1234
+    username: STUDY
+    password: STUDY
 
     hikari:
       auto-commit: true # default(false)
@@ -90,3 +90,7 @@ cloud:
       auto: false
     s3:
       bucket: traveljoy-bucket-1
+      
+stt-api-key:
+  clientId: 800jqz8tkl
+  clientSecret: mxiFlgJY7DHGYOLRF9t9ucNWeZTXUeYuK15cHEq0
