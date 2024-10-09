@@ -1,0 +1,148 @@
+package com.ict.traveljoy.users.repository;
+
+import java.sql.Date;
+import java.time.LocalDateTime;
+import java.util.List;
+
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ict.traveljoy.converter.PermissionToNumberConverter;
+import com.ict.traveljoy.image.repository.Image;
+import com.ict.traveljoy.info.userallergy.repository.UserAllergy;
+import com.ict.traveljoy.info.userhandicap.repository.UserHandicap;
+import com.ict.traveljoy.info.userinterest.repository.UserInterest;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Entity
+@Table(name = "users")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class Users {
+	
+	@Id
+	@SequenceGenerator(name = "seq_users",sequenceName = "seq_users",allocationSize = 1,initialValue = 1)
+	@GeneratedValue(generator = "seq_users",strategy = GenerationType.SEQUENCE)
+	@Column(name="user_id")
+	private Long id;
+	
+	@Column(length = 320, unique = true, nullable = false)
+	private String email;
+	
+	@Column(length = 64,nullable = false)
+	private String password;
+	
+	@Column(length = 30)
+	private String name;
+	
+	@Column(length = 30)
+	private String nickname;
+	
+	@Column
+	private Date birthDate;
+	
+	@Column(nullable = false)
+	@ColumnDefault("SYSDATE")
+	@CreationTimestamp
+	private LocalDateTime signInDate;
+	
+	@Column(columnDefinition = "NUMBER(1, 0) DEFAULT NULL")
+    private Integer gender;
+	
+	@Column(length = 30)
+	@ColumnDefault("'email'")
+	private String loginType;
+	
+	@Column
+	private String snsAccessToken;
+	
+	@Column
+	private LocalDateTime lastLogin;
+	
+	@Convert(converter = PermissionToNumberConverter.class)
+	@Column
+	@ColumnDefault("1")
+	private String permission;
+	
+	@Column(columnDefinition = "NUMBER(1, 0)")
+    private Integer handicap;
+	
+	@Column(nullable = false,columnDefinition = "NUMBER(1, 0)")
+    @ColumnDefault("0")
+    private Integer handicapAllow;
+	
+	@Column(columnDefinition = "NUMBER(1, 0)")
+    private Integer allergy;
+	
+	@Column(nullable = false,columnDefinition = "NUMBER(1, 0)")
+    @ColumnDefault("0")
+    private Integer allergyAllow;
+	
+	@Column(columnDefinition = "NUMBER(1, 0)")
+    private Integer interest;
+	
+	@Column(nullable = false,columnDefinition = "NUMBER(1, 0)")
+    @ColumnDefault("0")
+    private Integer interestAllow;
+	
+	@Column
+	private Long reported;
+	
+	@Column(nullable = false,columnDefinition = "NUMBER(1, 0)")
+    @ColumnDefault("0")
+    private Integer isDeleteId;
+	
+	@Column
+	private LocalDateTime deleteIdDate;
+	
+	@Column(nullable = false,columnDefinition = "NUMBER(1, 0)")
+    @ColumnDefault("1")
+    private Integer isActive;
+	
+	@Column
+	@ColumnDefault("SYSDATE")
+	@CreationTimestamp
+	private LocalDateTime updateDate;
+	
+	@Column
+	@ColumnDefault("'안녕하세요.'")
+	private String introduce;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "profile_image_id", referencedColumnName = "image_id")
+    private Image profileImage;
+	
+	
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore // 순환 참조 방지를 위해 추가
+    private List<UserInterest> userInterest;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore // 순환 참조 방지를 위해 추가
+    private List<UserAllergy> userAllergy;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore // 순환 참조 방지를 위해 추가
+    private List<UserHandicap> userHandicap;
+}
