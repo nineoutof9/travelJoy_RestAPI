@@ -794,5 +794,48 @@ public class PlaceController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    
+    @GetMapping("/hotels/dest")
+    public ResponseEntity<List<HotelDTO>> getDestHotel(@RequestParam("latitude") double latitude, @RequestParam("longitude") double longitude, @RequestParam("distance") double distance) {
+        try {
+            List<HotelDTO> hotels = hotelService.findDestination(latitude, longitude, distance);
+            return new ResponseEntity<>(hotels, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @GetMapping("/sights/dest")
+    public ResponseEntity<List<SightDTO>> getDestSight(@RequestParam("latitude") double latitude, @RequestParam("longitude") double longitude, @RequestParam("distance") double distance) {
+        try {
+            List<SightDTO> sights = sightService.findDestination(latitude, longitude, distance);
+            return new ResponseEntity<>(sights, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @GetMapping("/foods/dest")
+    public ResponseEntity<List<FoodDTO>> getDestFood(@RequestParam("latitude") double latitude, @RequestParam("longitude") double longitude, @RequestParam("distance") double distance) {
+        try {
+            List<FoodDTO> foods = foodService.findDestination(latitude, longitude, distance);
+            return new ResponseEntity<>(foods, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    @GetMapping("/events/dest")
+    public ResponseEntity<List<EventDTO>> getDestAndActiveEvent(@RequestParam("latitude") double latitude, @RequestParam("longitude") double longitude, @RequestParam("distance") double distance, @RequestParam("startDate") LocalDate startDate,@RequestParam("endDate") LocalDate endDate) {
+        try {
+            List<EventDTO> events = eventService.findDestination(latitude, longitude, distance, startDate, endDate);
+            return new ResponseEntity<>(events, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

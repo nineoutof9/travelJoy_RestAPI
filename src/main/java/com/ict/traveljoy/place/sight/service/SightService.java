@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ict.traveljoy.place.hotel.service.HotelDTO;
 import com.ict.traveljoy.place.region.repository.Region;
 import com.ict.traveljoy.place.region.repository.RegionRepository;
 import com.ict.traveljoy.place.sight.repository.Sight;
@@ -168,5 +169,11 @@ public class SightService {
 	public List<SightDTO> findSightsByRegionId(Long regionId) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public List<SightDTO> findDestination(double latitude, double longitude, double distance) {
+		return sightRepository.findSightsWithinDistance(latitude, longitude, distance).stream()
+				.map(SightDTO::toDto)
+        		.collect(Collectors.toList());
 	}
 }

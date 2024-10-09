@@ -1,7 +1,10 @@
 package com.ict.traveljoy.tripReview.service;
 
+import com.ict.traveljoy.newplan.NewPlan;
 import com.ict.traveljoy.plan.repository.Plan;
 import com.ict.traveljoy.tripReview.repository.TripReview;
+import com.ict.traveljoy.users.repository.Users;
+
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -15,8 +18,10 @@ import java.sql.Timestamp;
 public class TripReviewDTO {
     private Long id;
     private Long planId; 
+    private Long newPlanId;
     private Plan plan;
-    private String writer;
+    private NewPlan newPlan;
+    private Users user;
     private String title;
     private String reviewContent;
     private String url;
@@ -29,10 +34,14 @@ public class TripReviewDTO {
     public TripReview toEntity() {
     	Plan planE = new Plan();
     	planE.setId(planId);   	
+    	
+    	NewPlan newPlan = new NewPlan();
+    	newPlan.setId(newPlanId);
         return TripReview.builder()
                 .id(id)
                 .plan(plan)  
-                .writer(writer)
+                .newPlan(newPlan)
+                .user(user)
                 .title(title)
                 .reviewContent(reviewContent)
                 .url(url)
@@ -49,7 +58,9 @@ public class TripReviewDTO {
                 .id(tripReview.getId())
                 .plan(tripReview.getPlan())
                 .planId(tripReview.getPlan() != null ? tripReview.getPlan().getId() : null) 
-                .writer(tripReview.getWriter())
+                .newPlan(tripReview.getNewPlan())
+                .newPlanId(tripReview.getPlan() != null ? tripReview.getNewPlan().getId() : null)
+                .user(tripReview.getUser())
                 .title(tripReview.getTitle())
                 .reviewContent(tripReview.getReviewContent())
                 .url(tripReview.getUrl())

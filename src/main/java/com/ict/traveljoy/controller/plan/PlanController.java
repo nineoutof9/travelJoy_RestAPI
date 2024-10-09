@@ -3,6 +3,7 @@ package com.ict.traveljoy.controller.plan;
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,8 +29,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ict.traveljoy.info.userinterest.service.UserInterestService;
+import com.ict.traveljoy.newplan.NewPlan;
+import com.ict.traveljoy.newplan.NewPlanDTO;
+import com.ict.traveljoy.newplan.NewPlanService;
 import com.ict.traveljoy.plan.service.PlanDTO;
 import com.ict.traveljoy.plan.service.PlanService;
+import com.ict.traveljoy.users.repository.UserRepository;
+import com.ict.traveljoy.users.repository.Users;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -40,29 +49,32 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PlanController {
 	
-	@Autowired
 	private final PlanService planService;
-	
-	@Autowired
 	private final RestTemplate restTemplate;
+	private final UserInterestService userInterestService;
+	private final UserRepository userRepository;
 	
-	@PostMapping("/plan")
-	@Operation(summary = "plan 저장", description = "plan 저장 컨트롤러")
-	public ResponseEntity<PlanDTO> savePlan(@RequestBody PlanDTO planDTO){
-		
-		try {
-			PlanDTO savePlan = planService.savePlan(planDTO);
-			if(savePlan == null) {
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-			}
-			return new ResponseEntity<>(savePlan,HttpStatus.OK);
-		}catch(Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-			
-		}
-		
-	}
+    private final NewPlanService newPlanService;
+
+
+
+    @PostMapping("/plan/newplan")
+    public ResponseEntity<NewPlan> createNewPlan(@RequestBody NewPlanDTO newPlanDTO) {
+        NewPlan savedPlan = newPlanService.createNewPlan(newPlanDTO);
+        return ResponseEntity.ok(savedPlan);
+    }
+
+    @GetMapping("/plan/newplan/{id}")
+    public ResponseEntity<NewPlanDTO> getNewPlan(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(newPlanService.getNewPlan(id));
+    }
+    
+    @GetMapping("/plan/newplan/email/{email}")
+    public ResponseEntity<List<NewPlanDTO>> getNewPlan(@PathVariable("email") String email) {
+        List<NewPlanDTO> newPlans = newPlanService.getNewPlanByEmail(email);  // 여러 계획을 가져옴
+        return ResponseEntity.ok(newPlans);  // 리스트를 반환
+    }
+	
 	
 	@PutMapping("/plan")
 	@Operation(summary = "plan 수정", description = "plan 수정 컨트롤러")
@@ -236,22 +248,75 @@ public class PlanController {
 
 	    return new double[]{latSum / count, lngSum / count};  // [평균 위도, 평균 경도]
 	}
-	
 	@PostMapping("/plan/ai")
 	public ResponseEntity<?> generateAIPlan(@RequestBody Map<String, Object> plan) {
 	    try {
 	        String flaskUrl = "http://localhost:8000/ai/plan";
-	        
+
+	        // 현재 로그인한 유저 정보 가져오기
+	        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	        String userEmail = authentication.getName(); // 유저 이메일 가져오기
+
+	        // 유저 관심사 조회
+	        List<String> userInterests = userInterestService.findInterestsByUser(userEmail);
+
+	        // 관심사 문자열 생성
+	        String interestsString = userInterests.isEmpty() 
+	            ? "The user has no specific interests."
+	            : "The user is interested in: " + String.join(", ", userInterests) + ".";
+
+	        // 여행자 수 받아오기
+	        Map<String, Object> travelerCounts = (Map<String, Object>) plan.get("travler");
+	        int adult = (int) travelerCounts.getOrDefault("adult", 0);
+	        int senior = (int) travelerCounts.getOrDefault("senior", 0);
+	        int teen = (int) travelerCounts.getOrDefault("teen", 0);
+	        int child = (int) travelerCounts.getOrDefault("child", 0);
+
+	        // 여행 날짜 받아오기
+	        String startDate = (String) plan.get("startDate");
+	        String endDate = (String) plan.get("endDate");
+
+	        // 옵션 받아오기
+	        List<String> options = (List<String>) plan.get("options");
+	        String optionsString = options.isEmpty()
+	            ? "No specific options were selected."
+	            : "The user has selected the following options: " + String.join(", ", options) + ".";
+
+	        String travelerString = "The group consists of " + adult + " adults, " + senior + " seniors, " 
+	                              + teen + " teens, and " + child + " children.";
+
 	        // 프롬프트 생성
-	        String prompt = "You are a travel assistant. The user has provided a 3-day travel plan with destinations. "
+	        String prompt = "You are a travel assistant. The user has provided a travel plan with destinations. "
 	                      + "For each day, distribute the times for each destination considering optimal travel routes and realistic time spent at each location. "
-	                      + "Based on this initial plan, create two additional optimized travel plans that follow similar routes but offer slight variations for better time management or alternative activities. "
-	                      + "The format should be as follows: { \"plan\": [ { \"day\": 1, \"contents\": [ { \"index\": 1, \"title\": \"Destination Name\", \"addr\": \"Address\", \"time\": \"YYYY-MM-DD HH:MM\", \"lat\": Latitude, \"lng\": Longitude, \"activity\": \"Type of activity\" } ] }, "
-	                      + "{ \"day\": 2, \"contents\": [ { \"index\": 1, \"title\": \"Destination Name\", \"addr\": \"Address\", \"time\": \"YYYY-MM-DD HH:MM\", \"lat\": Latitude, \"lng\": Longitude, \"activity\": \"Type of activity\" } ] } ] } "
-	                      + "Based on the initial plan provided by the user, create two additional suggested plans for comparison. "
-	                      + "The output should be a JSON response with three plans, each with distributed times for each day’s destinations. "
-	                      + "For each destination, assign appropriate times based on optimal travel routes and time spent at each location. "
-	                      + "Please return only the JSON response, with the initial plan and two additional recommended plans.";
+	                      + "The user's preferences and interests should also be considered: " + interestsString + " "
+	                      + travelerString + " "
+	                      + "The trip will take place from " + startDate + " to " + endDate + ". "
+	                      + optionsString + " "
+	                      + "Based on this initial plan, create three travel plans: A, B, and C.";
+
+	     // A 플랜 조건
+	        prompt += " Plan A must maintain the provided destination sequence and distribute times for each destination."
+	                + " The plan should cover each day from the start date to the end date, dividing the provided destinations evenly across the days."
+	                + " If there are more days than destinations, adjust the time spent at each destination to fill the day."
+	                + " The format should be as follows: "
+	                + "{ \"plan\": [ { \"day\": 1, \"contents\": [ { \"index\": 1, \"title\": \"Destination Name\", \"addr\": \"Address\", \"time\": \"YYYY-MM-DD HH:MM\", \"lat\": Latitude, \"lng\": Longitude, \"activity\": \"Type of activity\" } ] }, "
+	                + "{ \"day\": 2, \"contents\": [ { \"index\": 1, \"title\": \"Destination Name\", \"addr\": \"Address\", \"time\": \"YYYY-MM-DD HH:MM\", \"lat\": Latitude, \"lng\": Longitude, \"activity\": \"Type of activity\" } ] } ] }, continuing for each day until the end of the trip.";
+
+	        // B 플랜 조건
+	        prompt += " Plan B allows reordering the destinations for optimal time management and travel efficiency."
+	                + " Ensure that the last activity of each day is always a hotel or accommodation."
+	                + " The trip should span the entire date range from " + startDate + " to " + endDate + ", covering all days."
+	                + " The user's preferences and group composition must also be considered: " + interestsString + " "
+	                + travelerString + ". Provide appropriate timing between destinations, and distribute them across all days."
+	                + " Return the output in JSON format.";
+
+	        // C 플랜 조건
+	        prompt += " Plan C not only uses the provided destination data but also recommends additional destinations or activities based on the region and user interests: " + interestsString + "."
+	                + " This plan should also span the entire trip from " + startDate + " to " + endDate + "."
+	                + " You can reorder the destinations, and include new destinations or activities relevant to the trip."
+	                + " Return the output in JSON format.";
+
+	        prompt += " Please return only the JSON response with three plans: Plan A, Plan B, and Plan C, each considering user interests, traveler group composition, and optimized scheduling.";
 
 	        // 요청 데이터 준비
 	        Map<String, Object> request = new HashMap<>();
@@ -273,32 +338,44 @@ public class PlanController {
 	        if (aiResponseBody == null || !aiResponseBody.containsKey("content")) {
 	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("AI 서버 응답이 올바르지 않습니다.");
 	        }
-
+	        
 	        String aiGeneratedPlanText = (String) aiResponseBody.get("content");
+	        System.out.println(aiGeneratedPlanText);
 	        List<Map<String, Object>> generatedPlans = parseAIResponseToPlans(aiGeneratedPlanText);
-
+	        
 	        return ResponseEntity.ok(generatedPlans);
 	    } catch (Exception e) {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("AI 플랜 생성 중 오류 발생: " + e.getMessage());
 	    }
 	}
 
+
 	// AI 응답을 JSON으로 변환하는 메서드
 	private List<Map<String, Object>> parseAIResponseToPlans(String aiResponse) {
 	    List<Map<String, Object>> plans = new ArrayList<>();
-	    
+
 	    try {
-	        // JSON 문자열을 파싱하여 List<Map<String, Object>>로 변환
+	        // JSON 문자열을 파싱하여 Map<String, Object>로 변환
 	        ObjectMapper objectMapper = new ObjectMapper();
 	        Map<String, Object> parsedResponse = objectMapper.readValue(aiResponse, Map.class);
-	        plans = (List<Map<String, Object>>) parsedResponse.get("plan");
 
+	        // Plan A, Plan B, Plan C 등 플랜 데이터 파싱
+	        List<String> planKeys = Arrays.asList("Plan A", "Plan B", "Plan C");
+	        
+	        for (String planKey : planKeys) {
+	            if (parsedResponse.containsKey(planKey)) {
+	                Map<String, Object> planData = (Map<String, Object>) parsedResponse.get(planKey);
+	                plans.add(planData);
+	            }
+	        }
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
-	    
+
 	    return plans;
 	}
+
+
 
 
 

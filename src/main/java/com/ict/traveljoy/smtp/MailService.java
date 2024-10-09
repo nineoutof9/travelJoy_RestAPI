@@ -31,15 +31,6 @@ public class MailService {
 
         for (int i = 0; i < 5; i++) { // 인증 코드 5자리
             key.append(random.nextInt(10)); // 숫자 5자리로
-            /*
-            int index = random.nextInt(3); // 0~2까지 랜덤, 랜덤값으로 switch문 실행
-
-            switch (index) {
-                case 0 -> key.append((char) (random.nextInt(26) + 97)); // 소문자
-                case 1 -> key.append((char) (random.nextInt(26) + 65)); // 대문자
-                case 2 -> key.append(random.nextInt(10)); // 숫자
-            }
-            */
         }
         return key.toString();
     }
