@@ -14,7 +14,8 @@
 ### application.yml 파일:
 - src/main/resources/application.yml는 보안상 제외하여 올림
 - 내용 : server 기본정보, jwt, spring 기본정보 등
-`
+
+```
 server:
   port: 8080
   tomcat:
@@ -96,4 +97,4 @@ cloud:
 stt-api-key:
   clientId: key
   clientSecret: key
-`
+```
